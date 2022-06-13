@@ -3,6 +3,7 @@ import 'package:advices/screens/authentication/authentication.dart';
 import 'package:advices/screens/authentication/sign_in.dart';
 import 'package:advices/services/auth.dart';
 import 'package:flutter/material.dart';
+import '../services/database.dart';
 import 'floating_footer_btns.dart';
 
 class Home extends StatefulWidget {
@@ -77,6 +78,7 @@ class _HomeState extends State<Home> {
             label: Text('      Lets talk...    '),
             heroTag: "settingsBtn",
             onPressed: () => {
+              // DatabaseService.saveLawAreasForLawyerAsArray();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => Laws()),

@@ -48,7 +48,17 @@ class DatabaseService {
     return user;
   }
 
-  static Future<void> saveLawAreasForLawyer(String uid, List<Law?> newLawAreas) async {
+  static saveLawAreasForLawyerAsArray(List<String> lawAreasIds, String uid) async {
+    DocumentReference lawyerRef = FirebaseFirestore.instance
+        .collection('lawyers')
+        .doc(uid);
+    await lawyerRef.update({
+      "lawAreas": lawAreasIds
+    });
+  }
+
+  static Future<void> saveLawAreasForLawyer(
+      String uid, List<Law?> newLawAreas) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     CollectionReference lawAreas = FirebaseFirestore.instance
         .collection('lawyers')
@@ -57,15 +67,21 @@ class DatabaseService {
         .collection("lawAreas");
 
     if (newLawAreas.isNotEmpty) {
+      List<String> selectedLawsIds = [];
       for (int i = 0; i < newLawAreas.length; i++) {
         Law selectedLaw = Law.fromJson(jsonDecode(newLawAreas[i].toString()));
         print(selectedLaw);
-        await lawAreas.doc(selectedLaw.id).set({
-          "id": selectedLaw.id,
-          "index": selectedLaw.index,
-          "name": selectedLaw.name,
-        });
+        selectedLawsIds.add(selectedLaw.id);
+        // await lawAreas.doc(selectedLaw.id).set({
+        //   "id": selectedLaw.id,
+        //   "index": selectedLaw.index,
+        //   "name": selectedLaw.name,
+        // });
       }
+      print(selectedLawsIds);
+      await saveLawAreasForLawyerAsArray(selectedLawsIds, uid);
+
+
     }
   }
 
@@ -123,10 +139,12 @@ class DatabaseService {
   }
 
   static Stream<Iterable<FlutterUser>> getFilteredLawyers(String lawId) {
+    print("++++++++++++LAW AREAA: $lawId");
     //.collection('lasw').doc(lawId).
     CollectionReference lawyers =
         FirebaseFirestore.instance.collection("lawyers");
-    var filteredLawyers = lawyers.where("experience", isEqualTo: "exp");
+    var filteredLawyers = lawyers.where("lawAreas", arrayContains: lawId);
+    // .where("experience", isEqualTo: "exp");
     final snapshots = filteredLawyers.snapshots();
     var flutterUsers = snapshots.map((snapshot) =>
         snapshot.docs.map((doc) => FlutterUser.fromJson(doc.data())));

@@ -16,9 +16,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case '/':
       return MaterialPageRoute(builder: (context) => Home());
     case 'areas':
-      return MaterialPageRoute(builder: (context) => JoinChannelVideo());
+      return MaterialPageRoute(builder: (context) => Laws());
     case 'lawyers':
-      return MaterialPageRoute(builder: (context) => Lawyers());
+      return MaterialPageRoute(builder: (context) => Lawyers(lawArea: "ednakvostId")); // TODO this is not right
     case 'lawyers_profile':
       return MaterialPageRoute(builder: (context) => Call());
     case 'selectDate':

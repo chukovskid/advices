@@ -9,15 +9,15 @@ String get appId {
 String get token {
   // Allow pass a `token` as an environment variable with name `TEST_TOKEN` by using --dart-define
   return const String.fromEnvironment('TEST_TOKEN',
-      defaultValue: '00603f0c2c7973949b3afe5e475f15a350eIABWTOidWpT37TC4d83SFeOhwUAGGCMdkKI/WEgQYlWMqwea+tQAAAAAEABMB+AnVcigYgEAAQBUyKBi');
+      defaultValue: '00603f0c2c7973949b3afe5e475f15a350eIAAfyVHecwJzt2VDKid7ATqEUtPLtYcx6epji/K34CyFLruiVPAAAAAAEACa6fgN1TanYgEAAQDXNqdi');
 }
 
 /// Your channel ID
 String get channelId {
   // Allow pass a `channelId` as an environment variable with name `TEST_CHANNEL_ID` by using --dart-define
   return const String.fromEnvironment(
-    'TEST_CHANNEL_ID',
-    defaultValue: 'TEST_CHANNEL_ID',
+    'test123',
+    defaultValue: 'test123',
   );
 }
 

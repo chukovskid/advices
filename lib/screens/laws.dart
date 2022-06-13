@@ -1,4 +1,5 @@
 import 'package:advices/models/law.dart';
+import 'package:advices/screens/call/call.dart';
 import 'package:advices/screens/lawyerProfile.dart';
 import 'package:advices/screens/lawyers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -42,7 +43,7 @@ class _LawsState extends State<Laws>
   _navigateToAuth() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Authenticate()),
+      MaterialPageRoute(builder: (context) => Call()),
     );
   }
 
@@ -114,7 +115,7 @@ class _LawsState extends State<Laws>
     );
   }
 
-  Widget _card(Law fUser) {
+  Widget _card(Law law) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
@@ -124,12 +125,12 @@ class _LawsState extends State<Laws>
         children: <Widget>[
           ListTile(
             leading: const Icon(Icons.person),
-            title: Text(fUser.name.toString()),
+            title: Text(law.name.toString()),
             subtitle:
                 const Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Lawyers()),
+              MaterialPageRoute(builder: (context) => Lawyers(lawArea: law.id)),
             ),
           ),
           const SizedBox(

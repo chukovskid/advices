@@ -6,6 +6,6 @@ import 'package:advices/examples/basic/string_uid/string_uid.dart';
 final basic = [
   {'name': 'Basic'},
   {'name': 'JoinChannelAudio', 'widget': const JoinChannelAudio()},
-  {'name': 'JoinChannelVideo', 'widget': const JoinChannelVideo()},
+  // {'name': 'JoinChannelVideo', 'widget': const JoinChannelVideo()},
   {'name': 'StringUid', 'widget': const StringUid()}
 ];
