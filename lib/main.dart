@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
     precacheImage(AssetImage("lib/assets/images/background.jpg"), context);
-
+ 
     return StreamProvider.value(
       value: AuthService().user,
       initialData: null,

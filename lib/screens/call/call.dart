@@ -1,4 +1,5 @@
 import 'package:advices/screens/call/callMethods.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -45,31 +46,19 @@ class _CallState extends State<Call> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => JoinChannelVideo(
-                    token: result['token'],
-                    channelId: result['channelId'],
-                  )));
+              builder: (context) => 
+              // JoinChannelVideo(
+              //       token: result['token'],
+              //       channelId: result['channelId'],
+              //     )));
 
-      // Scaffold(
-      //       // appBar: AppBar(
-      //       //   backgroundColor: Color.fromRGBO(23, 34, 59, 1),
-      //       //   elevation: 0.0,
-      //       //   actions: <Widget>[
-      //       //     FlatButton.icon(
-      //       //       textColor: Colors.white,
-      //       //       icon: Icon(Icons.person_outline_sharp),
-      //       //       label: Text(''),
-      //       //       onPressed: _navigateToAuth,
-      //       //     ),
-      //       //   ],
-      //       // ),
-      //       body: JoinChannelVideo(
-      //         token: result['token'],
-      //         channelId: result['channelId'],
-      //         // token:'00603f0c2c7973949b3afe5e475f15a350eIABUh8z3DMl/M5q2IKvf5vINOkb/PVMt3wWcglH+O5HehkWdgdgAAAAAIgDRPt4cEeaoYgQAAQChoqdiAgChoqdiAwChoqdiBAChoqdi',
-      //         // channelId: '13',
-      //       ),
-      //     )));
+      Scaffold(
+           
+            body: JoinChannelVideo(
+              token: result['token'],
+              channelId: result['channelId'],
+            ),
+          )));
     }
     ;
   }
@@ -104,10 +93,7 @@ class _CallState extends State<Call> {
         actions: <Widget>[
           FlatButton.icon(
             textColor: Colors.white,
-            icon: FaIcon(
-              FontAwesomeIcons.gavel,
-              semanticLabel: "label",
-            ),
+            icon: Icon(Icons.person_outline_sharp),
             label: Text(''),
             onPressed: _navigateToAuth,
           ),
@@ -206,9 +192,11 @@ class _CallState extends State<Call> {
           ? _validateError = true
           : _validateError = false;
     });
-
-    await _handleCameraAndMic(Permission.camera);
-    await _handleCameraAndMic(Permission.microphone);
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      await [Permission.microphone, Permission.camera].request();
+    }
+    // await _handleCameraAndMic(Permission.camera);
+    // await _handleCameraAndMic(Permission.microphone);
 
     await openCall();
     // Navigator.push(
