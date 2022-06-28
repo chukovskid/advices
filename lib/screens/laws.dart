@@ -43,7 +43,7 @@ class _LawsState extends State<Laws>
   _navigateToAuth() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Call()),
+      MaterialPageRoute(builder: (context) => Authenticate()),
     );
   }
 

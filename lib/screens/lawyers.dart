@@ -129,7 +129,7 @@ class _LawyersState extends State<Lawyers>
                 const Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => LawyerProfile()),
+              MaterialPageRoute(builder: (context) => LawyerProfile(fUser.uid)),
             ),
           ),
           const SizedBox(

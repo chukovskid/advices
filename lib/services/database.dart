@@ -97,11 +97,21 @@ class DatabaseService {
   static Future<FlutterUser?> getUser(String userId) async {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     final snapshot = await users.doc(userId).get();
-    if (snapshot.exists) {
+    // if (snapshot.exists) {
       var flutterUser = await FlutterUser.fromJson(snapshot.data()!);
       return flutterUser;
-    }
-    return null;
+    // }
+    // return null;
+  }
+
+    static Future<FlutterUser?> getLawyer(String lawyerId) async {
+    CollectionReference users = FirebaseFirestore.instance.collection('lawyers');
+    final snapshot = await users.doc(lawyerId).get();
+    // if (snapshot.exists) {
+      var flutterUser = await FlutterUser.fromJson(snapshot.data()!);
+      return flutterUser;
+    // }
+    // return null;
   }
 
   static readUsers() => FirebaseFirestore.instance

@@ -19,8 +19,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => Laws());
     case 'lawyers':
       return MaterialPageRoute(builder: (context) => Lawyers(lawArea: "ednakvostId")); // TODO this is not right
-    case 'lawyers_profile':
-      return MaterialPageRoute(builder: (context) => Call());
+    // case 'lawyers_profile':
+    //   return MaterialPageRoute(builder: (context) => LawyerProfile());
     case 'selectDate':
       return MaterialPageRoute(builder: (context) => SelectDateTime());
     case 'sign_in':
