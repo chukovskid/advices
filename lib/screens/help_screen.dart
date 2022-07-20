@@ -55,16 +55,16 @@ class HelpScreenState extends State<HelpScreen> {
           onTap: () => FocusScope.of(context).unfocus(),
           child: Stack(
             children: <Widget>[
-              Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("lib/assets/images/login_background.jpg"),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
+              // Container(
+              //   height: double.infinity,
+              //   width: double.infinity,
+              //   decoration: BoxDecoration(
+              //     image: DecorationImage(
+              //       image: AssetImage("lib/assets/images/login_background.jpg"),
+              //       fit: BoxFit.cover,
+              //     ),
+              //   ),
+              // ),
               Container(
                 height: double.infinity,
                 child: SingleChildScrollView(

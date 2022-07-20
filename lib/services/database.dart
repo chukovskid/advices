@@ -1,9 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:advices/models/law.dart';
 import 'package:advices/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/rendering.dart';
+
+import '../models/call.dart';
 
 class DatabaseService {
   // // collection reference
@@ -48,13 +53,11 @@ class DatabaseService {
     return user;
   }
 
-  static saveLawAreasForLawyerAsArray(List<String> lawAreasIds, String uid) async {
-    DocumentReference lawyerRef = FirebaseFirestore.instance
-        .collection('lawyers')
-        .doc(uid);
-    await lawyerRef.update({
-      "lawAreas": lawAreasIds
-    });
+  static saveLawAreasForLawyerAsArray(
+      List<String> lawAreasIds, String uid) async {
+    DocumentReference lawyerRef =
+        FirebaseFirestore.instance.collection('lawyers').doc(uid);
+    await lawyerRef.update({"lawAreas": lawAreasIds});
   }
 
   static Future<void> saveLawAreasForLawyer(
@@ -80,8 +83,6 @@ class DatabaseService {
       }
       print(selectedLawsIds);
       await saveLawAreasForLawyerAsArray(selectedLawsIds, uid);
-
-
     }
   }
 
@@ -98,18 +99,19 @@ class DatabaseService {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     final snapshot = await users.doc(userId).get();
     // if (snapshot.exists) {
-      var flutterUser = await FlutterUser.fromJson(snapshot.data()!);
-      return flutterUser;
+    var flutterUser = await FlutterUser.fromJson(snapshot.data()!);
+    return flutterUser;
     // }
     // return null;
   }
 
-    static Future<FlutterUser?> getLawyer(String lawyerId) async {
-    CollectionReference users = FirebaseFirestore.instance.collection('lawyers');
+  static Future<FlutterUser?> getLawyer(String lawyerId) async {
+    CollectionReference users =
+        FirebaseFirestore.instance.collection('lawyers');
     final snapshot = await users.doc(lawyerId).get();
     // if (snapshot.exists) {
-      var flutterUser = await FlutterUser.fromJson(snapshot.data()!);
-      return flutterUser;
+    var flutterUser = await FlutterUser.fromJson(snapshot.data()!);
+    return flutterUser;
     // }
     // return null;
   }
@@ -161,6 +163,53 @@ class DatabaseService {
     return flutterUsers;
   }
 
+  static Future<String> saveOpenCallForUsers(lawyerId, clientId) async {
+    CollectionReference calls = FirebaseFirestore.instance.collection("calls");
+    String channelName = lawyerId + "+" + clientId;
+    // save call for lawyer
+    calls.doc(lawyerId).collection("open").doc(clientId).set({
+      "channelName": channelName,
+      "DateOpened": DateTime.now().millisecondsSinceEpoch
+    });
+
+    // save call for client
+    calls.doc(clientId).collection("open").doc(lawyerId).set({
+      "channelName": channelName,
+      "DateOpened": DateTime.now().millisecondsSinceEpoch
+    });
+
+    return channelName;
+  }
+
+  static Stream<Iterable<Call>> getOpenCallForUsers(uid) {
+    CollectionReference calls = FirebaseFirestore.instance.collection("calls");
+
+    var filteredCalls = calls.doc(uid).collection("open");
+
+    // const q = query(calls, where("open", ">", uid), orderBy("channelName"));
+
+    // .where("experience", isEqualTo: "exp");
+    final snapshots = filteredCalls.snapshots();
+    var userCalls = snapshots.map(
+        (snapshot) => snapshot.docs.map((doc) => Call.fromJson(doc.data())));
+    return userCalls;
+  }
+
+  static Future<void> closeCall(channellName) async {
+    List<String> lawyerIdandclientId = channellName.split("+");
+    String lawyerId = lawyerIdandclientId[0];
+    String clientId = lawyerIdandclientId[1];
+
+    print(lawyerId);
+    print(clientId);
+    CollectionReference calls = FirebaseFirestore.instance.collection("calls");
+
+    await calls.doc(lawyerId).collection("open").doc(clientId).delete();
+    await calls.doc(clientId).collection("open").doc(lawyerId).delete();
+
+    return null;
+  }
+
   // user data from snapshots
   // UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
   //   return UserData(
@@ -174,5 +223,33 @@ class DatabaseService {
   // Stream<UserData> get userData {
   //   return brewCollection.document(uid).snapshots().map(_userDataFromSnapshot);
   // }
+
+  static Future<void> saveDeviceToken() async {
+  final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+
+
+        CollectionReference users = FirebaseFirestore.instance.collection("users");
+
+    // Get the current user
+    String uid = 'Nn0z19OZbmVhsg6GCpiDe186b4c2';
+
+    // FirebaseUser user = await _auth.currentUser();
+
+    // Get the token for this device
+    String? fcmToken = await _fcm.getToken();
+
+    // Save it to Firestore
+    if (fcmToken != null) {
+      var tokens = users
+          .doc(uid)
+          .collection('tokens');
+
+      await tokens.doc(fcmToken).set({
+        'token': fcmToken,
+        'createdAt': DateTime.now().millisecondsSinceEpoch, // optional
+        'platform': Platform.operatingSystem // optional
+      });
+    }
+  }
 
 }

@@ -1,4 +1,5 @@
 import 'package:advices/screens/call/callMethods.dart';
+import 'package:advices/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -66,13 +67,13 @@ class _CallState extends State<Call> {
     );
   }
 
-  Future<void> openCall() async {
+  Future<void> openCall(channelName) async {
     if (user == null) {
       return null;
     }
 
-    String channelName = widget.uid + user!.uid;
-
+    // String channelName = widget.uid + "+" + user!.uid;
+print("Jou will join with this channelName : $channelName");
     Map<String, dynamic>? result = await CallMethods.makeCloudCall(channelName);
     if (result!['token'] != null) {
       Navigator.push(
@@ -155,37 +156,6 @@ class _CallState extends State<Call> {
                       fontWeight: FontWeight.bold),
                 ),
                 Padding(padding: EdgeInsets.symmetric(vertical: 20)),
-                // Container(
-                //   width: MediaQuery.of(context).size.width * 0.8,
-                //   child: TextFormField(
-                //     controller: myController,
-                //     decoration: InputDecoration(
-                //       labelText: 'Channel Name: ${widget.uid}',
-                //       labelStyle: TextStyle(color: orangeColor),
-                //       hintText: 'test',
-                //       hintStyle: TextStyle(color: Colors.black45),
-                //       errorText:
-                //           _validateError ? 'Channel name is mandatory' : null,
-                //       border: OutlineInputBorder(
-                //         borderSide: BorderSide(color: orangeColor),
-                //         borderRadius: BorderRadius.circular(20),
-                //       ),
-                //       enabledBorder: OutlineInputBorder(
-                //         borderSide: BorderSide(color: orangeColor),
-                //         borderRadius: BorderRadius.circular(20),
-                //       ),
-                //       disabledBorder: OutlineInputBorder(
-                //         borderSide: BorderSide(color: orangeColor),
-                //         borderRadius: BorderRadius.circular(20),
-                //       ),
-                //       focusedBorder: OutlineInputBorder(
-                //         borderSide: BorderSide(color: orangeColor),
-                //         borderRadius: BorderRadius.circular(20),
-                //       ),
-                //     ),
-                //   ),
-
-                // ),
                 Padding(padding: EdgeInsets.symmetric(vertical: 30)),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.55,
@@ -225,9 +195,10 @@ class _CallState extends State<Call> {
     if (defaultTargetPlatform == TargetPlatform.android) {
       await [Permission.microphone, Permission.camera].request();
     }
-    // Save this call in the lawyer profile  ... lawyerId/calls/lawyerUID+clientUID/
+    // TODO secure user?
+    String channelName = await DatabaseService.saveOpenCallForUsers(widget.uid, user?.uid);
 
-    await openCall();
+    await openCall(channelName);
   }
 
   Future<void> _handleCameraAndMic(Permission permission) async {
@@ -235,183 +206,3 @@ class _CallState extends State<Call> {
     print(status);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return MaterialApp(
-  //     theme: ThemeData(
-  //       primarySwatch: Colors.blue,
-  //     ),
-  //     home: Scaffold(
-  //         // appBar: AppBar(
-  //         //   backgroundColor: Color.fromRGBO(23, 34, 59, 1),
-  //         //   elevation: 0.0,
-  //         //   actions: <Widget>[
-  //         //     FlatButton.icon(
-  //         //       textColor: Colors.white,
-  //         //       icon: Icon(Icons.person_outline_sharp),
-  //         //       label: Text(''),
-  //         //       onPressed: _navigateToAuth,
-  //         //     ),
-  //         //   ],
-  //         // ),
-  //         body: ListTile(
-  //           onTap: () async {
-  //             openCall();
-  //           },
-  //           title: Text(
-  //             'JoinChannelVideo',
-  //             style: const TextStyle(fontSize: 24, color: Colors.black),
-  //           ),
-  //         )
-
-          //  _isConfigInvalid()
-          //     ? const InvalidConfigWidget()
-          //     : ListView.builder(
-          //         itemCount: _data.length,
-          //         itemBuilder: (context, index) {
-          //           return _data[index]['widget'] == null
-          //               ? Ink(
-          //                   color: Colors.grey,
-          //                   child: ListTile(
-          //                     title: Text(_data[index]['name'] as String,
-          //                         style: const TextStyle(
-          //                             fontSize: 24, color: Colors.white)),
-          //                   ),
-          //                 )
-          //               : ListTile(
-          //                   onTap: () {
-          //                     Navigator.push(
-          //                         context,
-          //                         MaterialPageRoute(
-          //                             builder: (context) => Scaffold(
-          //                                   appBar: AppBar(
-          //                                     title: Text("JoinChannelVideo"),
-          //                                     // ignore: prefer_const_literals_to_create_immutables
-          //                                     actions: [const LogActionWidget()],
-          //                                   ),
-          //                                   body: JoinChannelVideo(),
-          //                                 )));
-          //                   },
-          //                   title: Text(
-          //                     'JoinChannelVideo',
-          //                     style: const TextStyle(
-          //                         fontSize: 24, color: Colors.black),
-          //                   ),
-          //                 );
-          //           // _data[index]['widget'] == null
-          //           //     ? Ink(
-          //           //         color: Colors.grey,
-          //           //         child: ListTile(
-          //           //           title: Text(_data[index]['name'] as String,
-          //           //               style: const TextStyle(
-          //           //                   fontSize: 24, color: Colors.white)),
-          //           //         ),
-          //           //       )
-          //           //     : ListTile(
-          //           //         onTap: () {
-          //           //           Navigator.push(
-          //           //               context,
-          //           //               MaterialPageRoute(
-          //           //                   builder: (context) => Scaffold(
-          //           //                         appBar: AppBar(
-          //           //                           title: Text(
-          //           //                               _data[index]['name'] as String),
-          //           //                           // ignore: prefer_const_literals_to_create_immutables
-          //           //                           actions: [const LogActionWidget()],
-          //           //                         ),
-          //           //                         body:
-          //           //                             _data[index]['widget'] as Widget?,
-          //           //                       )));
-          //           //         },
-          //           //         title: Text(
-          //           //           _data[index]['name'] as String,
-          //           //           style: const TextStyle(
-          //           //               fontSize: 24, color: Colors.black),
-          //           //         ),
-          //           //       );
-          //         },
-//           //       ),
-
-//           ),
-//     );
-//   }
-// }
-
-// /// This widget is used to indicate the configuration is invalid
-// class InvalidConfigWidget extends StatelessWidget {
-//   /// Construct the [InvalidConfigWidget]
-//   const InvalidConfigWidget({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       color: Colors.red,
-//       child: const Text(
-//           'Make sure you set the correct appId, token, channelId, etc.. in the lib/config/agora.config.dart file.'),
-//     );
-//   }
-// }

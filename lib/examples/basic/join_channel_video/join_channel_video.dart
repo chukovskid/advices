@@ -9,6 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../screens/call/callMethods.dart';
+import '../../../services/database.dart';
 
 /// MultiChannel Example
 class JoinChannelVideo extends StatefulWidget {
@@ -49,6 +50,11 @@ class _State extends State<JoinChannelVideo> {
   void dispose() {
     super.dispose();
     _engine.destroy();
+    closeCall();
+  }
+
+  Future<void> closeCall() async {
+    await DatabaseService.closeCall(channelName);
   }
 
   Future<void> getUserUid() async {
@@ -296,7 +302,10 @@ class _State extends State<JoinChannelVideo> {
     return Container();
   }
 
-  void _onCallEnd(BuildContext context) {
+  Future<void> _onCallEnd(BuildContext context) async {
+    print("Call ENDED ++++++++++++++++ ${channelName}");
+        await DatabaseService.closeCall(channelName);
+
     Navigator.pop(context);
   }
 
