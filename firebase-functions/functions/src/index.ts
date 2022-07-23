@@ -10,10 +10,10 @@ const fcm = admin.messaging();
 export const notifyNewCalls = functions.firestore
   .document('calls/{callerId}/open/{channelName}')
   // .document('users/{userId}/tokens/{tokenId}')
-  .onUpdate(async (snapshot, context) => {
-
+  .onWrite(async (snapshot, context) => {
     // let { userId, tokenId }
     let callerId = context.params.callerId;
+    let channelName = context.params.channelName;
     let displayName = "A user";
     // const token = snapshot.after.data() 
 
@@ -61,8 +61,9 @@ export const notifyNewCalls = functions.firestore
         body: `${displayName} has starter a call with you.`,
         icon: 'your-icon-url',
         click_action: 'FLUTTER_NOTIFICATION_CLICK',
-        channelId: "ChannelId_Test_123"
-
+      },
+      data : {
+        channelName: channelName
       }
     };
 
@@ -161,3 +162,35 @@ export const testFunction = functions.https.onCall((data) => {
 
 
 });
+
+
+
+
+/////// VERY IMPORTANT
+// exports.createCallsWithTokens = functions.https.onCall((data, context) => {
+
+//   // console.log("context.auth.uid===========: ", context.auth.uid);
+//   console.log("context.auth.data=========: ", data);
+
+//   try {
+//       const appId = "03f0c2c7973949b3afe5e475f15a350e";
+//       const appCertificate = "3c274947f08447ebb0a83f1ecc43beda";
+//       const role = agora_access_token_1.RtcRole.PUBLISHER;
+//       const expirationTimeInSeconds = 3600;
+//       const currentTimestamp = Math.floor(Date.now() / 1000);
+//       const privilegeExpired = currentTimestamp + expirationTimeInSeconds;
+//       const uid = 0;
+//       // const channelName = Math.floor(Math.random() * 100).toString();
+//       const channelName = data.channelName.toString();
+//       const token = agora_access_token_1.RtcTokenBuilder.buildTokenWithUid(appId, appCertificate, channelName, uid, role, privilegeExpired);
+//       return {
+//           data: {
+//               token: token,
+//               channelId: channelName,
+//           },
+//       };
+//   }
+//   catch (error) {
+//       console.log(error);
+//   }
+// });

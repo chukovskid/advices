@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:advices/screens/call/calls.dart';
 import 'package:advices/screens/laws.dart';
 import 'package:advices/screens/authentication/authentication.dart';
@@ -5,9 +7,12 @@ import 'package:advices/screens/authentication/sign_in.dart';
 import 'package:advices/services/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import '../examples/basic/join_channel_video/join_channel_video.dart';
 import '../services/database.dart';
+import 'call/callMethods.dart';
 import 'floating_footer_btns.dart';
 
 class Home extends StatefulWidget {
@@ -18,6 +23,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  User? user;
+
   @override
   void initState() {
     super.initState();
@@ -33,21 +40,18 @@ class _HomeState extends State<Home> {
     _saveDeviceToken();
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-
-      print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}'); // TODO firebase dunctions should get receaver id
-
+      String channelName = message.data["channelName"];
       if (message.notification != null) {
         print('Message also contained a notification: ${message.notification}');
       }
-
-      print('A new onMessageOpenedApp event was published!');
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Authenticate()),
-      );
-      //   Navigator.pushNamed(context, '/message',
-      //       arguments: MessageArguments(message, true));
+      openCall(channelName);
+    });
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      String channelName = message.data["channelName"];
+      if (message.notification != null) {
+        print('Message also contained a notification: ${message.notification}');
+      }
+      openCall(channelName);
     });
   }
 
@@ -56,15 +60,30 @@ class _HomeState extends State<Home> {
 
   /// Get the token, save it to the database for current user
   _saveDeviceToken() async {
-    await DatabaseService.saveDeviceToken();
+    user = await _auth.getCurrentUser();
+    bool userExist = user != null ? true : false;
+    if (userExist) {
+      await DatabaseService.saveDeviceToken(user!.uid);
+    }
   }
 
-  Future<void> _checkIfLogedIn() async {
-    String? token = await _auth.getToken();
-    print("token: $token");
-    if (token != null) {
-      setState(() {});
+  Future<void> openCall(channelName) async {
+    if (user == null) {
+      return null;
     }
+    Map<String, dynamic>? result = await CallMethods.makeCloudCall(channelName);
+    if (result!['token'] != null) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  Scaffold(
+                    body: JoinChannelVideo(
+                      token: result['token'],
+                      channelId: result['channelId'],
+                    ),
+                  )));
+    };
   }
 
   Future<void> getFruit() async {
@@ -115,6 +134,7 @@ class _HomeState extends State<Home> {
 
   Widget _next() {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Align(
           alignment: Alignment.bottomCenter,
@@ -153,26 +173,6 @@ class _HomeState extends State<Home> {
                     context,
                     MaterialPageRoute(builder: (context) => Calls()),
                   )
-                },
-                backgroundColor: Color.fromRGBO(107, 119, 141, 1),
-                elevation: 0,
-              ),
-            ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: SizedBox(
-            width: 250,
-            height: 80,
-            child: FittedBox(
-              child: FloatingActionButton.extended(
-                label: Text('      Call function on firebase...    '),
-                heroTag: "settingsBtn",
-                onPressed: () => {
-                  // DatabaseService.saveLawAreasForLawyerAsArray();
-                  // getFruit()
-                  _saveDeviceToken()
                 },
                 backgroundColor: Color.fromRGBO(107, 119, 141, 1),
                 elevation: 0,

@@ -75,11 +75,13 @@ class DatabaseService {
         Law selectedLaw = Law.fromJson(jsonDecode(newLawAreas[i].toString()));
         print(selectedLaw);
         selectedLawsIds.add(selectedLaw.id);
-        // await lawAreas.doc(selectedLaw.id).set({
-        //   "id": selectedLaw.id,
-        //   "index": selectedLaw.index,
-        //   "name": selectedLaw.name,
-        // });
+
+        // TODO delete the collection before adding the this
+        await lawAreas.doc(selectedLaw.id).set({
+          "id": selectedLaw.id,
+          "index": selectedLaw.index,
+          "name": selectedLaw.name,
+        });
       }
       print(selectedLawsIds);
       await saveLawAreasForLawyerAsArray(selectedLawsIds, uid);
@@ -167,14 +169,16 @@ class DatabaseService {
     CollectionReference calls = FirebaseFirestore.instance.collection("calls");
     String channelName = lawyerId + "+" + clientId;
     // save call for lawyer
-    calls.doc(lawyerId).collection("open").doc(clientId).set({
+    calls.doc(lawyerId).collection("open").doc(channelName).set({
       "channelName": channelName,
+      "clientId": clientId,
       "DateOpened": DateTime.now().millisecondsSinceEpoch
     });
 
     // save call for client
-    calls.doc(clientId).collection("open").doc(lawyerId).set({
+    calls.doc(clientId).collection("open").doc(channelName).set({
       "channelName": channelName,
+      "lawyerId": lawyerId,
       "DateOpened": DateTime.now().millisecondsSinceEpoch
     });
 
@@ -224,14 +228,14 @@ class DatabaseService {
   //   return brewCollection.document(uid).snapshots().map(_userDataFromSnapshot);
   // }
 
-  static Future<void> saveDeviceToken() async {
+  static Future<void> saveDeviceToken(String uid) async {
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
 
         CollectionReference users = FirebaseFirestore.instance.collection("users");
 
     // Get the current user
-    String uid = 'Nn0z19OZbmVhsg6GCpiDe186b4c2';
+    // String uid = 'Nn0z19OZbmVhsg6GCpiDe186b4c2';
 
     // FirebaseUser user = await _auth.currentUser();
 

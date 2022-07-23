@@ -5,10 +5,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../examples/basic/join_channel_video/join_channel_video.dart';
 import '../../models/user.dart';
 import '../../services/auth.dart';
 import '../../services/database.dart';
 import '../authentication/authentication.dart';
+import 'callMethods.dart';
 
 class Calls extends StatefulWidget {
   const Calls({
@@ -42,15 +44,25 @@ class _CallsState extends State<Calls>
       _navigateToAuth();
     }
   }
-  // @override
-  // void dispose() {
-  //   // Remove the observer
-  //   WidgetsBinding.instance!.removeObserver(this);
 
-  //   super.dispose();
-  // }
-
-  // }
+  Future<void> openCall(channelName) async {
+    if (user == null) {
+      return null;
+    }
+    Map<String, dynamic>? result = await CallMethods.makeCloudCall(channelName);
+    if (result!['token'] != null) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  Scaffold(
+                    body: JoinChannelVideo(
+                      token: result['token'],
+                      channelId: result['channelId'],
+                    ),
+                  )));
+    };
+  }
 
   _navigateToAuth() {
     Navigator.push(
@@ -132,10 +144,7 @@ class _CallsState extends State<Calls>
             title: Text(call.channelName.toString()),
             subtitle:
                 const Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => LawyerProfile(call.channelName)),
-            ),
+            onTap: () => openCall(call.channelName),
           ),
           const SizedBox(
             height: 20,

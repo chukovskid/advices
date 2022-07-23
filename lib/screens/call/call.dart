@@ -73,7 +73,7 @@ class _CallState extends State<Call> {
     }
 
     // String channelName = widget.uid + "+" + user!.uid;
-print("Jou will join with this channelName : $channelName");
+    print("Jou will join with this channelName : $channelName");
     Map<String, dynamic>? result = await CallMethods.makeCloudCall(channelName);
     if (result!['token'] != null) {
       Navigator.push(
