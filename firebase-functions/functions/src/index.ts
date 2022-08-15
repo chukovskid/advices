@@ -9,30 +9,18 @@ const fcm = admin.messaging();
 
 export const notifyNewCalls = functions.firestore
   .document('calls/{callerId}/open/{channelName}')
-  // .document('users/{userId}/tokens/{tokenId}')
   .onWrite(async (snapshot, context) => {
-    // let { userId, tokenId }
     let callerId = context.params.callerId;
     let channelName = context.params.channelName;
     let displayName = "A user";
-    // const token = snapshot.after.data() 
-
-    // const tokens = token!.docs.map((snap: any) => snap.id); // TODO check the  token!
-
-    console.log("context.params.callerId ==== ", callerId);
-
-
-    /////
     const querySnapshot = await db
       .collection('users')
       .doc(callerId)
       .collection('tokens')
       .get();
-
     const userRef = await db
       .collection('users')
       .doc(callerId);
-
     userRef.get().then((doc) => {
       if (doc.exists) {
         let data = doc.data()
@@ -47,14 +35,8 @@ export const notifyNewCalls = functions.firestore
     }).catch((error) => {
       console.log("Error getting document:", error);
     });
-
-
-
     const tokens = querySnapshot.docs.map((snap: any) => snap.id); // TODO check the  token!
-
     console.log("tokens ==== ", tokens);
-
-
     const payload: admin.messaging.MessagingPayload = {
       notification: {
         title: 'Tap to join call!',
@@ -66,9 +48,15 @@ export const notifyNewCalls = functions.firestore
         channelName: channelName
       }
     };
-
     return fcm.sendToDevice(tokens, payload);
   });
+
+
+// This is a PAID feature and be carefull with this
+  // export const scheduledFunctionCrontab = functions.pubsub.schedule('5 11 * * *').onRun((context) => {
+  //     console.log('This will be run every day at 11:05 AM UTC!');
+  // });
+  
 
 
 
@@ -194,3 +182,9 @@ export const testFunction = functions.https.onCall((data) => {
 //       console.log(error);
 //   }
 // });
+
+
+
+
+
+

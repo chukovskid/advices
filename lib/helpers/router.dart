@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 
 import '../examples/basic/join_channel_video/join_channel_video.dart';
 import '../screens/authentication/authentication.dart';
+import '../screens/calendar/add_event.dart';
+import '../screens/calendar/calendar.dart';
 import '../screens/call/call.dart';
 import '../screens/selectDateTime.dart';
 
@@ -22,7 +24,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     // case 'lawyers_profile':
     //   return MaterialPageRoute(builder: (context) => LawyerProfile());
     case 'selectDate':
-      return MaterialPageRoute(builder: (context) => SelectDateTime());
+      return MaterialPageRoute(builder: (context) => CalendarPage());
     case 'sign_in':
       return MaterialPageRoute(builder: (context) => SignIn());
     case 'register':

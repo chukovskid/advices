@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:advices/models/event.dart';
 import 'package:advices/models/law.dart';
 import 'package:advices/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,6 +12,10 @@ import 'package:flutter/rendering.dart';
 import '../models/call.dart';
 
 class DatabaseService {
+  DatabaseService(String s,
+      {required EventModel Function(dynamic id, dynamic data) fromDS,
+      required Function(dynamic event) toMap});
+
   // // collection reference
   // final CollectionReference brewCollection =
   //     Firestore.instance.collection('brews');
@@ -141,6 +146,25 @@ class DatabaseService {
     return flutterLaw;
   }
 
+  static List<EventModel> getAllLEvents() {
+    List<EventModel> data = [];
+    CollectionReference events = FirebaseFirestore.instance.collection('events');
+    events.get().then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        data.add(EventModel.fromJson(doc.data()));
+      });
+    });
+    return data.toList();
+  }
+
+    static Stream<List<EventModel>> getAllEventsStream() {
+    CollectionReference events = FirebaseFirestore.instance.collection('events');
+    final snapshots = events.orderBy('title').snapshots();
+    var flutterEvents = snapshots.map(
+        (snapshot) => snapshot.docs.map((doc) => EventModel.fromJson(doc.data())).toList());
+    return flutterEvents;
+  }
+
   static Stream<Iterable<Law>> getLawAreasForLawyer(String uid) {
     CollectionReference laws = FirebaseFirestore.instance
         .collection('lawyers')
@@ -229,10 +253,9 @@ class DatabaseService {
   // }
 
   static Future<void> saveDeviceToken(String uid) async {
-  final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+    final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
-
-        CollectionReference users = FirebaseFirestore.instance.collection("users");
+    CollectionReference users = FirebaseFirestore.instance.collection("users");
 
     // Get the current user
     // String uid = 'Nn0z19OZbmVhsg6GCpiDe186b4c2';
@@ -244,9 +267,7 @@ class DatabaseService {
 
     // Save it to Firestore
     if (fcmToken != null) {
-      var tokens = users
-          .doc(uid)
-          .collection('tokens');
+      var tokens = users.doc(uid).collection('tokens');
 
       await tokens.doc(fcmToken).set({
         'token': fcmToken,
@@ -255,5 +276,4 @@ class DatabaseService {
       });
     }
   }
-
 }
