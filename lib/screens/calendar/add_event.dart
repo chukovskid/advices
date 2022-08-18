@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../models/event.dart';
-import 'event_firestore_service.dart';
+// import '../../models/event.dart';
+// import 'event_firestore_service.dart';
+import 'package:date_time_picker/date_time_picker.dart';
+import 'package:time_picker_widget/time_picker_widget.dart';
 
 class AddEventPage extends StatefulWidget {
   // final EventModel note;
@@ -20,6 +22,8 @@ class _AddEventPageState extends State<AddEventPage> {
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
   late bool processing;
+  String? selectedTime;
+  final TextEditingController _timeController = TextEditingController();
 
   @override
   void initState() {
@@ -79,23 +83,144 @@ class _AddEventPageState extends State<AddEventPage> {
                 ),
               ),
               const SizedBox(height: 10.0),
-              ListTile(
-                title: Text("Date (YYYY-MM-DD)"),
-                subtitle: Text(
-                    "${_eventDate.year} - ${_eventDate.month} - ${_eventDate.day}"),
-                onTap: () async {
-                  DateTime? picked = await showDatePicker(
-                      context: context,
-                      initialDate: _eventDate,
-                      firstDate: DateTime(_eventDate.year - 5),
-                      lastDate: DateTime(_eventDate.year + 5));
-                  if (picked != null) {
-                    setState(() {
-                      _eventDate = picked;
-                    });
-                  }
-                },
+              // ListTile(
+              //   title: Text("Date (YYYY-MM-DD)"),
+              //   subtitle: Text(
+              //       "${_eventDate.year} - ${_eventDate.month} - ${_eventDate.day}"),
+              //   onTap: () async {
+              //     DateTimePicker(
+              //       initialValue: '',
+              //       firstDate: DateTime(2000),
+              //       lastDate: DateTime(2100),
+              //       dateLabelText: 'Date',
+              //       onChanged: (val) => print(val),
+              //       validator: (val) {
+              //         print(val);
+              //         return null;
+              //       },
+              //       onSaved: (val) => print(val),
+              //     );
+              //     DateTime? picked = await showDatePicker(
+              //       context: context,
+              //       initialDate: DateTime.now(),
+              //       firstDate: DateTime(_eventDate.year - 5),
+              //       lastDate: DateTime(_eventDate.year + 5),
+              //       initialDatePickerMode: DatePickerMode.day,
+              //     );
+              //     if (picked != null) {
+              //       DateTime selectdate = picked;
+              //       // final selIOS = DateTime('dd-MMM-yyyy - HH:mm').format(selectdate);
+              //       print(selectdate);
+              //       setState(() {
+              //         _eventDate = picked;
+              //       });
+              //     }
+              //   },
+              // ),
+
+              SizedBox(height: 10.0),
+
+              Row(
+                children: [
+                  Flexible(
+                    child: DateTimePicker(
+                      type: DateTimePickerType.date,
+                      dateMask: 'd MMM, yyyy  ',
+                      autocorrect: true,
+                      dateHintText: "12 12 12",
+                      initialValue: DateTime.now().toString(),
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime(2100),
+                      icon: Icon(Icons.event),
+                      dateLabelText: 'Date',
+                      timeLabelText: "Time",
+                      selectableDayPredicate: (date) {
+                        // Disable weekend days to select from the calendar
+                        if (date.weekday == 6 || date.weekday == 7) {
+                          return false;
+                        }
+                        return true;
+                      },
+                      onChanged: (val) async => {
+                        print("onChanged $val"),
+                        await showCustomTimePicker(
+                            context: context,
+                            // It is a must if you provide selectableTimePredicate
+                            onFailValidation: (context) =>
+                                print('Unavailable selection'),
+                            initialTime: TimeOfDay(hour: 2, minute: 0),
+                            selectableTimePredicate: (time) =>
+                                time!.hour > 1 &&
+                                time.hour < 14 &&
+                                time.minute % 5 == 0).then((time) => {
+                              setState(() => {
+                                    selectedTime = time?.format(context),
+                                  }),
+                              // if (selectedTime != null)
+                              //   {
+                              //     {
+                              //       // _timeController.text =
+                              //       //     selectedTime.toString()
+                              //     }
+                              //   }
+                            })
+                      },
+                      validator: (val) {
+                        print("validator $val");
+                        return null;
+                      },
+                      onSaved: (val) async => {
+                        print("onSaved $val"),
+                      },
+                    ),
+                  ),
+                  Flexible(
+                      child: SizedBox(
+                    width: 50,
+                  )),
+                  Flexible(
+                    child: TextFormField(
+                      // initialValue:
+                      //     "${selectedTime != null ? selectedTime : 'select date'}",
+                      // controller: _timeController,
+                      enabled: false,
+                      decoration:  InputDecoration(
+                          errorStyle: TextStyle(
+                            color: Color.fromRGBO(225, 103, 104, 1),
+                          ),
+                          fillColor: Colors.orange,
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromRGBO(225, 103, 104, 1)),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 255, 255, 255)),
+                          ),
+                          labelText: "${selectedTime != null ? selectedTime : 'select date'}",
+                          labelStyle: TextStyle(
+                            color: Color.fromARGB(209, 0, 0, 0),
+                          )),
+                      // title: Text("Time: "),
+                      // subtitle: Text("${selectedTime != null ? selectedTime : '${_eventDate.year} - ${_eventDate.month} - ${_eventDate.day}'}"),
+                    ),
+                  ),
+                ],
               ),
+              //////////////////////////////////////
+              ///
+              ///
+              ///
+              // ListTile(
+              //   title: Text("Time: "),
+              //   subtitle: Text(
+              //       "${selectedTime != null ? selectedTime : '${_eventDate.year} - ${_eventDate.month} - ${_eventDate.day}'}"),
+              // ),
+              // SizedBox(height: 10.0),
+/////////////////////////
+              ///
+              ///
+              ///
               SizedBox(height: 10.0),
               processing
                   ? Center(child: CircularProgressIndicator())
@@ -115,7 +240,7 @@ class _AddEventPageState extends State<AddEventPage> {
                                 "title": _title.text,
                                 "description": _description.text,
                                 // "event_date": widget.note.eventDate
-                              }; 
+                              };
                               // if (widget.note != null) {
                               //   // await eventDBS.updateData(widget.note.id, data);
                               //   print("UPDATA DATA +++");
@@ -143,6 +268,41 @@ class _AddEventPageState extends State<AddEventPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _selectTime() {
+    return ListTile(
+      title: Text("Date (YYYY-MM-DD)"),
+      subtitle: Text(
+          "${selectedTime != null ? selectedTime : '${_eventDate.year} - ${_eventDate.month} - ${_eventDate.day}'}"),
+      onTap: () async {
+        DateTimePicker(
+          initialValue: '',
+          firstDate: DateTime(2000),
+          lastDate: DateTime(2100),
+          dateLabelText: 'Date',
+          onChanged: (val) => print(val),
+          validator: (val) {
+            print(val);
+            return null;
+          },
+          onSaved: (val) => print(val),
+        );
+
+        List<int> _availableHours = [1, 4, 6, 8, 12];
+        List<int> _availableMinutes = [0, 10, 30, 45, 50];
+        await showCustomTimePicker(
+            context: context,
+            // It is a must if you provide selectableTimePredicate
+            onFailValidation: (context) => print('Unavailable selection'),
+            initialTime: TimeOfDay(hour: 2, minute: 0),
+            selectableTimePredicate: (time) =>
+                time!.hour > 1 && time.hour < 14 && time.minute % 5 == 0).then(
+            (time) => setState(() => selectedTime = time?.format(context)));
+
+        print(selectedTime);
+      },
     );
   }
 

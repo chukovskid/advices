@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:advices/models/event.dart';
+import 'package:advices/screens/calendar/add_event.dart';
 import 'package:advices/services/database.dart';
 // import 'package:firebase_helpers/firebase_helpers.dart';
 // import 'package:firebasestarter/core/presentation/providers/providers.dart';
@@ -42,8 +43,8 @@ class _CalendarPageState extends State<CalendarPage> {
   _groupEvents(List<EventModel> events) {
     _groupedEvents = LinkedHashMap(equals: isSameDay, hashCode: getHashCode);
     events.forEach((event) {
-      DateTime date =
-          DateTime.utc(event.eventDate.year, event.eventDate.month, event.eventDate.day, 12);
+      DateTime date = DateTime.utc(
+          event.eventDate.year, event.eventDate.month, event.eventDate.day, 12);
       if (_groupedEvents[date] == null) _groupedEvents[date] = [];
       _groupedEvents[date]!.add(event);
     });
@@ -59,11 +60,9 @@ class _CalendarPageState extends State<CalendarPage> {
       appBar: AppBar(
         title: Text('Firebase starter'),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.person),
-            onPressed: () => {}
-            //Navigator.pushNamed(context, AppRoutes.profile),
-          )
+          IconButton(icon: Icon(Icons.person), onPressed: () => {}
+              //Navigator.pushNamed(context, AppRoutes.profile),
+              )
         ],
       ),
       body: SingleChildScrollView(
@@ -150,14 +149,13 @@ class _CalendarPageState extends State<CalendarPage> {
                         //     context, AppRoutes.viewEvent,
                         //     arguments: event),
                         trailing: IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () => {}
-                          // Navigator.pushNamed(
-                          //   context,
-                          //   AppRoutes.editEvent,
-                          //   arguments: event,
-                          // ),
-                        ),
+                            icon: Icon(Icons.edit), onPressed: () => {}
+                            // Navigator.pushNamed(
+                            //   context,
+                            //   AppRoutes.editEvent,
+                            //   arguments: event,
+                            // ),
+                            ),
                       );
                     },
                   ),
@@ -171,8 +169,12 @@ class _CalendarPageState extends State<CalendarPage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          // Navigator.pushNamed(context, Router.addEvent,
-          //     arguments: _selectedDay);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddEventPage()),
+          );
+          //   Navigator.pushNamed(context, Router.addEvent,
+          //       arguments: _selectedDay);
         },
       ),
     );

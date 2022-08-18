@@ -20,11 +20,15 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case 'areas':
       return MaterialPageRoute(builder: (context) => Laws());
     case 'lawyers':
-      return MaterialPageRoute(builder: (context) => Lawyers(lawArea: "ednakvostId")); // TODO this is not right
+      return MaterialPageRoute(
+          builder: (context) =>
+              Lawyers(lawArea: "ednakvostId")); // TODO this is not right
     // case 'lawyers_profile':
     //   return MaterialPageRoute(builder: (context) => LawyerProfile());
     case 'selectDate':
       return MaterialPageRoute(builder: (context) => CalendarPage());
+    case 'addEvent':
+      return MaterialPageRoute(builder: (context) => AddEventPage());
     case 'sign_in':
       return MaterialPageRoute(builder: (context) => SignIn());
     case 'register':
