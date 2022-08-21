@@ -19,12 +19,25 @@ class _AddEventPageState extends State<AddEventPage> {
   final TextEditingController _title = TextEditingController();
   final TextEditingController _description = TextEditingController();
   late DateTime _eventDate;
+  late DateTime _eventTime;
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
   late bool processing;
   String? selectedTime;
   final TextEditingController _timeController = TextEditingController();
+  late String _selectedEventHour;
+  late String _selectedEventMinutes;
+  List<TimeOfDay> _busyHours = [
+    TimeOfDay(hour: 1, minute: 30),
+    TimeOfDay(hour: 4, minute: 40),
+    // TimeOfDay(hour: 4, minute: 40),
+    // TimeOfDay(hour: 4, minute: 50),
+    // TimeOfDay(hour: 4, minute: 00),
+  ];
+  List<TimeOfDay> _unavailableTimePeriods = [];
 
+  bool _bbusyHoursBool = true;
+// List<int> = [1,2,4]
   @override
   void initState() {
     super.initState();
@@ -32,8 +45,33 @@ class _AddEventPageState extends State<AddEventPage> {
     //     text: widget.note != null ? widget.note.title : "");
     // _description = TextEditingController(
     //     text: widget.note != null ? widget.note.description : "");
+    _getBusyHoursForDisabeling();
     _eventDate = DateTime.now();
     processing = false;
+  }
+
+  // TimeOfDay add({int hour = 0, int minute = 0}) {
+  //   return this.replacing(hour: this.hour + hour, minute: this.minute + minute);
+  // }
+
+  void _getBusyHoursForDisabeling() {
+    _busyHours.forEach((element) {
+      int lateHour;
+      String hour = element.hour < 10
+          ? '0' + element.hour.toString()
+          : element.hour.toString();
+      String minute = element.minute < 10
+          ? '0' + element.minute.toString()
+          : element.minute.toString();
+      DateTime dateTime =
+          DateTime.parse('2022-08-21' + ' ' + hour + ':' + minute + ':00.000');
+
+      for (int i = 0; i <= 5; i++) {
+        dateTime = dateTime.add(new Duration(minutes: 10));
+        _unavailableTimePeriods.add(TimeOfDay.fromDateTime(dateTime));
+      }
+      print(_unavailableTimePeriods);
+    });
   }
 
   @override
@@ -136,26 +174,49 @@ class _AddEventPageState extends State<AddEventPage> {
                       timeLabelText: "Time",
                       selectableDayPredicate: (date) {
                         // Disable weekend days to select from the calendar
-                        if (date.weekday == 6 || date.weekday == 7) {
-                          return false;
-                        }
+                        // if (date.weekday == 6 || date.weekday == 7) {
+                        //   return false;
+                        // }
                         return true;
                       },
                       onChanged: (val) async => {
                         print("onChanged $val"),
+                        // TODO get val.date and
+
                         await showCustomTimePicker(
                             context: context,
+                            //  builder: (BuildContext context, Widget child) {},
+                            // initialEntryMode: TimePickerEntryMode. ,
                             // It is a must if you provide selectableTimePredicate
                             onFailValidation: (context) =>
                                 print('Unavailable selection'),
-                            initialTime: TimeOfDay(hour: 2, minute: 0),
+                            initialTime: TimeOfDay(hour: 8, minute: 0),
                             selectableTimePredicate: (time) =>
-                                time!.hour > 1 &&
-                                time.hour < 14 &&
-                                time.minute % 5 == 0).then((time) => {
+                                time!.minute % 10 == 0 &&
+                                !_unavailableTimePeriods
+                                    .contains(time)).then((time) => {
+                              print(time?.format(context)),
+                              print(time?.hour),
+                              _selectedEventHour = time!.hour < 10
+                                  ? '0' + time!.hour.toString()
+                                  : time!.hour.toString(),
+
+                              _selectedEventMinutes = time!.minute < 10
+                                  ? '0' + time!.minute.toString()
+                                  : time!.minute.toString(),
+
+                              _eventTime = DateTime.parse(val +
+                                  ' ' +
+                                  _selectedEventHour +
+                                  ':' +
+                                  _selectedEventMinutes +
+                                  ':00.000'),
+                              print(_eventTime.hour),
+
                               setState(() => {
                                     selectedTime = time?.format(context),
                                   }),
+
                               // if (selectedTime != null)
                               //   {
                               //     {
@@ -184,7 +245,7 @@ class _AddEventPageState extends State<AddEventPage> {
                       //     "${selectedTime != null ? selectedTime : 'select date'}",
                       // controller: _timeController,
                       enabled: false,
-                      decoration:  InputDecoration(
+                      decoration: InputDecoration(
                           errorStyle: TextStyle(
                             color: Color.fromRGBO(225, 103, 104, 1),
                           ),
@@ -197,7 +258,8 @@ class _AddEventPageState extends State<AddEventPage> {
                             borderSide: BorderSide(
                                 color: Color.fromARGB(255, 255, 255, 255)),
                           ),
-                          labelText: "${selectedTime != null ? selectedTime : 'select date'}",
+                          labelText:
+                              "${selectedTime != null ? selectedTime : 'select date'}",
                           labelStyle: TextStyle(
                             color: Color.fromARGB(209, 0, 0, 0),
                           )),
