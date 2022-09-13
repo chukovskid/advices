@@ -5,15 +5,15 @@ class EventModel{
   final String? id;
   final String title;
   final String description;
-  final DateTime eventDate;
+  final DateTime startDate;
 
-  EventModel({this.id,required this.title, required this.description, required this.eventDate});
+  EventModel({this.id,required this.title, required this.description, required this.startDate});
 
   factory EventModel.fromMap(Map data) {
     return EventModel(
       title: data['title'],
       description: data['description'],
-      eventDate: data['event_date'],
+      startDate: data['startDate'],
     );
   }
 
@@ -22,14 +22,14 @@ class EventModel{
       id: id,
       title: data['title'],
       description: data['description'],
-      eventDate: data['event_date'].toDate(),
+      startDate: data['startDate'].toDate(),
     );
   }
 
     static EventModel fromJson(json) => EventModel(
         id: json['id'] as String? ?? "",
         title: json['title'] as String? ?? "",
-        eventDate: json['event_date'].toDate(),
+        startDate: json['startDate'].toDate(),
         description: json['description'] as String? ?? "",
       );
 
@@ -38,7 +38,7 @@ class EventModel{
     return {
       "title":title,
       "description": description,
-      "event_date":eventDate,
+      "startDate":startDate,
       "id":id,
     };
   }

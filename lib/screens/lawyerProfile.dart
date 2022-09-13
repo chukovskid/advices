@@ -1,13 +1,10 @@
-import 'package:advices/config/agora.config.dart';
+import 'package:advices/screens/calendar/add_event.dart';
 import 'package:advices/screens/call/call.dart';
-import 'package:advices/screens/selectDateTime.dart';
 import 'package:advices/services/database.dart';
 import 'package:flutter/material.dart';
-import 'package:advices/screens/laws.dart';
 import '../models/user.dart';
 import '../utilities/constants.dart';
 import 'authentication/authentication.dart';
-import 'floating_footer_btns.dart';
 
 class LawyerProfile extends StatefulWidget {
   final String uid;
@@ -30,10 +27,6 @@ class _LawyerProfileState extends State<LawyerProfile> {
 
   Future<void> _getLawyer() async {
     lawyer = await DatabaseService.getLawyer(widget.uid);
-    print(lawyer?.displayName);
-
-    //  FlutterUser? user = await _auth.getMyProfileInfo();
-    print(lawyer?.education);
     if (lawyer != null) {
       setState(() {
         lawyer = lawyer;
@@ -42,13 +35,13 @@ class _LawyerProfileState extends State<LawyerProfile> {
     }
   }
 
-  _redirectToCall() async{
+  _redirectToCall() async {
     if (lawyer != null) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => Call(widget.uid)),
       );
-    } 
+    }
   }
 
   _navigateToAuth() {
@@ -75,21 +68,25 @@ class _LawyerProfileState extends State<LawyerProfile> {
       ),
       floatingActionButton: _openProfileBtn(),
       body: Container(
-        height: double.maxFinite,
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color.fromRGBO(107, 119, 141, 1),
-              Color.fromRGBO(38, 56, 89, 1),
-            ],
-            stops: [-1, 2],
+          height: double.maxFinite,
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.fromRGBO(107, 119, 141, 1),
+                Color.fromRGBO(38, 56, 89, 1),
+              ],
+              stops: [-1, 2],
+            ),
           ),
-        ),
-        child: _card(),
-      ),
+          child: Row(
+            children: [
+              Flexible(flex: 2, child: _card()),
+              Flexible(child: _dateAndPrice())
+            ],
+          )),
     );
   }
 
@@ -102,26 +99,17 @@ class _LawyerProfileState extends State<LawyerProfile> {
           child: Stack(
             children: [_next()],
           ),
+        ),
+        Expanded(
+          flex: 1,
+          child: Stack(
+            children: [_calendar()],
+          ),
         )
       ],
     );
   }
 
-  // Widget _lawyerProfile() {
-  //   return StreamBuilder<FlutterUser>(
-  //     stream: DatabaseService.getUser(widget.uid),
-  //     builder: ((context, snapshot) {
-  //       if (!snapshot.hasData) return Text("loading data ...");
-  //       if (snapshot.hasData) {
-  //         final firebaseUser = snapshot.data!;
-  //         return Text(firebaseUser.displayName);
-  //       } else {
-  //         _navigateToAuth();
-  //         return Text("something wrong");
-  //       }
-  //     }),
-  //   );
-  // }
 
   Widget _card() {
     return SingleChildScrollView(
@@ -146,6 +134,141 @@ class _LawyerProfileState extends State<LawyerProfile> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _dateAndPrice() {
+    return SingleChildScrollView(
+      child: Card(
+          margin:
+              const EdgeInsets.only(top: 35, left: 10, right: 10, bottom: 10),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25.0),
+          ),
+          child: Table(
+            border: TableBorder.all(
+                color: Colors.red, borderRadius: BorderRadius.circular(20.0)),
+            columnWidths: const <int, TableColumnWidth>{
+              // 0: IntrinsicColumnWidth(),
+              0: FlexColumnWidth(),
+              1: FlexColumnWidth(),
+              // 2: FixedColumnWidth(154),
+            },
+            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+            children: <TableRow>[
+              TableRow(
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(1, 38, 65, 1),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20)),
+                ),
+                children: <Widget>[
+                  Container(
+                    height: 100,
+                    child: Center(
+                      child: Text(
+                        "Service",
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                    ),
+                  ),
+                  // TableCell(
+                  //   verticalAlignment: TableCellVerticalAlignment.top,
+                  //   child: Container(
+                  //     height: 32,
+                  //     width: 32,
+                  //     color: Colors.red,
+                  //   ),
+                  // ),
+                  Center(
+                    child: Text(
+                      "VISA",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+              TableRow(
+                decoration: const BoxDecoration(
+                  color: Color.fromRGBO(1, 38, 65, 1),
+                ),
+                children: <Widget>[
+                  Container(
+                    height: 100,
+                    child: Center(
+                      child: Text(
+                        "Service",
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                    ),
+                  ),
+                  // TableCell(
+                  //   verticalAlignment: TableCellVerticalAlignment.top,
+                  //   child: Container(
+                  //     height: 32,
+                  //     width: 32,
+                  //     color: Colors.red,
+                  //   ),
+                  // ),
+                  Center(
+                    child: Text(
+                      "VISA",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+              TableRow(
+                decoration: const BoxDecoration(
+                  color: Color.fromRGBO(1, 38, 65, 1),
+                ),
+                children: <Widget>[
+                  Container(
+                    height: 50,
+                    child: Center(
+                      child: Text("Service"),
+                    ),
+                  ),
+                  Center(
+                    child: Text("Service"),
+                  ),
+                ],
+              ),
+              TableRow(
+                decoration: const BoxDecoration(
+                  color: Color.fromRGBO(1, 38, 65, 1),
+                ),
+                children: <Widget>[
+                  Container(
+                    height: 50,
+                    child: Center(
+                      child: Text("Service"),
+                    ),
+                  ),
+                  Center(
+                    child: Text("Service"),
+                  ),
+                ],
+              ),
+              TableRow(
+                decoration: const BoxDecoration(
+                  color: Color.fromRGBO(1, 38, 65, 1),
+                ),
+                children: <Widget>[
+                  Container(
+                    height: 50,
+                    child: Center(
+                      child: Text("Service"),
+                    ),
+                  ),
+                  Center(
+                    child: Text("Service"),
+                  ),
+                ],
+              ),
+            ],
+          )),
     );
   }
 
@@ -178,5 +301,39 @@ class _LawyerProfileState extends State<LawyerProfile> {
     );
   }
 
-  
+  Widget _calendar() {
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: FloatingActionButton(
+        heroTag: "settingsBtn",
+        onPressed: () => {
+          showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                    content: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(child: AddEventPage(widget.uid)),
+                      ],
+                    ), 
+                  ))
+
+          // showModalBottomSheet<void>(
+          //   backgroundColor: Colors.amber,
+          //   context: context,
+          //   builder: (BuildContext context) {
+          //     return Container(
+          //         // height: 200,
+
+          //         color: Colors.amber,
+          //         child: AddEventPage());
+          //   },
+          // )
+        },
+        backgroundColor: Color.fromARGB(255, 226, 105, 105),
+        elevation: 0,
+        child: const Icon(Icons.calendar_month),
+      ),
+    );
+  }
 }

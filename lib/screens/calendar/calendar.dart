@@ -44,7 +44,7 @@ class _CalendarPageState extends State<CalendarPage> {
     _groupedEvents = LinkedHashMap(equals: isSameDay, hashCode: getHashCode);
     events.forEach((event) {
       DateTime date = DateTime.utc(
-          event.eventDate.year, event.eventDate.month, event.eventDate.day, 12);
+          event.startDate.year, event.startDate.month, event.startDate.day, 12);
       if (_groupedEvents[date] == null) _groupedEvents[date] = [];
       _groupedEvents[date]!.add(event);
     });
@@ -68,12 +68,6 @@ class _CalendarPageState extends State<CalendarPage> {
       body: SingleChildScrollView(
         child: StreamBuilder(
           stream: DatabaseService.getAllEventsStream(),
-          //  eventDBS.streamQueryList(args: [
-          //   QueryArgsV2(
-          //     "user_id",
-          //     isEqualTo: context.read(userRepoProvider).user.id,
-          //   ),
-          // ]),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.hasData) {
               final List<EventModel> events = snapshot.data;
@@ -143,7 +137,7 @@ class _CalendarPageState extends State<CalendarPage> {
                       return ListTile(
                         title: Text(event.title),
                         subtitle: Text(DateFormat("EEEE, dd MMMM, yyyy")
-                            .format(event.eventDate)),
+                            .format(event.startDate)),
                         onTap: () => {},
                         // // Navigator.pushNamed(
                         //     context, AppRoutes.viewEvent,
@@ -169,10 +163,10 @@ class _CalendarPageState extends State<CalendarPage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => AddEventPage()),
-          );
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => AddEventPage()),
+          // );
           //   Navigator.pushNamed(context, Router.addEvent,
           //       arguments: _selectedDay);
         },

@@ -146,9 +146,35 @@ class DatabaseService {
     return flutterLaw;
   }
 
+  static Future<List<DateTime>> getAllLEventsDateTIme(lawyerId, DateTime date) async {
+    List<EventModel> data = [];
+    List<DateTime> dataDateTime = [];
+
+    CollectionReference pendingCalls = FirebaseFirestore.instance
+        .collection("users")
+        .doc(lawyerId)
+        .collection("pendingCalls");
+DateTime endDate = date.add(Duration(days: 1));
+
+    var calls = pendingCalls
+        .where("startDate", isGreaterThan: date)
+        .where("startDate", isLessThan: endDate);
+
+    await calls.get().then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        data.add(EventModel.fromJson(doc.data()));
+      });
+    });
+    data.toList().forEach((element) {
+      dataDateTime.add(element.startDate);
+    });
+    return dataDateTime;
+  }
+
   static List<EventModel> getAllLEvents() {
     List<EventModel> data = [];
-    CollectionReference events = FirebaseFirestore.instance.collection('events');
+    CollectionReference events =
+        FirebaseFirestore.instance.collection('events');
     events.get().then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
         data.add(EventModel.fromJson(doc.data()));
@@ -157,11 +183,12 @@ class DatabaseService {
     return data.toList();
   }
 
-    static Stream<List<EventModel>> getAllEventsStream() {
-    CollectionReference events = FirebaseFirestore.instance.collection('events');
+  static Stream<List<EventModel>> getAllEventsStream() {
+    CollectionReference events =
+        FirebaseFirestore.instance.collection('events');
     final snapshots = events.orderBy('title').snapshots();
-    var flutterEvents = snapshots.map(
-        (snapshot) => snapshot.docs.map((doc) => EventModel.fromJson(doc.data())).toList());
+    var flutterEvents = snapshots.map((snapshot) =>
+        snapshot.docs.map((doc) => EventModel.fromJson(doc.data())).toList());
     return flutterEvents;
   }
 
@@ -177,12 +204,9 @@ class DatabaseService {
   }
 
   static Stream<Iterable<FlutterUser>> getFilteredLawyers(String lawId) {
-    print("++++++++++++LAW AREAA: $lawId");
-    //.collection('lasw').doc(lawId).
     CollectionReference lawyers =
         FirebaseFirestore.instance.collection("lawyers");
     var filteredLawyers = lawyers.where("lawAreas", arrayContains: lawId);
-    // .where("experience", isEqualTo: "exp");
     final snapshots = filteredLawyers.snapshots();
     var flutterUsers = snapshots.map((snapshot) =>
         snapshot.docs.map((doc) => FlutterUser.fromJson(doc.data())));
@@ -214,9 +238,6 @@ class DatabaseService {
 
     var filteredCalls = calls.doc(uid).collection("open");
 
-    // const q = query(calls, where("open", ">", uid), orderBy("channelName"));
-
-    // .where("experience", isEqualTo: "exp");
     final snapshots = filteredCalls.snapshots();
     var userCalls = snapshots.map(
         (snapshot) => snapshot.docs.map((doc) => Call.fromJson(doc.data())));
@@ -238,31 +259,13 @@ class DatabaseService {
     return null;
   }
 
-  // user data from snapshots
-  // UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
-  //   return UserData(
-  //       uid: uid,
-  //       name: snapshot.data['name'],
-  //       sugars: snapshot.data['sugars'],
-  //       strength: snapshot.data['strength']);
-  // }
-
-  // // get user doc stream
-  // Stream<UserData> get userData {
-  //   return brewCollection.document(uid).snapshots().map(_userDataFromSnapshot);
-  // }
 
   static Future<void> saveDeviceToken(String uid) async {
     final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
     CollectionReference users = FirebaseFirestore.instance.collection("users");
 
-    // Get the current user
-    // String uid = 'Nn0z19OZbmVhsg6GCpiDe186b4c2';
 
-    // FirebaseUser user = await _auth.currentUser();
-
-    // Get the token for this device
     String? fcmToken = await _fcm.getToken();
 
     // Save it to Firestore
@@ -275,5 +278,20 @@ class DatabaseService {
         'platform': Platform.operatingSystem // optional
       });
     }
+  }
+
+  static Future<void> saveEvent(
+      lawyerId, title, description, DateTime dateTime) async {
+    CollectionReference pendingCalls = FirebaseFirestore.instance
+        .collection("users")
+        .doc(lawyerId)
+        .collection("pendingCalls");
+    // save call for lawyer
+    pendingCalls.doc(dateTime.microsecondsSinceEpoch.toString()).set({
+      "title": title,
+      "description": description,
+      "dateCreated": DateTime.now().millisecondsSinceEpoch,
+      "startDate": dateTime
+    });
   }
 }
