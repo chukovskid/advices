@@ -94,25 +94,24 @@ class _LawyersState extends State<Lawyers>
         if (snapshot.hasData) {
           final users = snapshot.data!;
           return Container(
-            margin:
-                const EdgeInsets.only(top: 35, left: 30, right: 50, bottom: 10),
-            child: GridView.count(
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              crossAxisCount: 6,
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              primary: false,
-              children: users.map(_card).toList(),
-            ),
-          );
-          // ListView(
-          //     padding: const EdgeInsets.symmetric(
-          //       horizontal: 10.0,
-          //       vertical: 40.0,
-          //     ),
-          //     children: users.map(_card).toList());
-
+              margin: const EdgeInsets.only(
+                  top: 35, left: 30, right: 50, bottom: 10),
+              child: MediaQuery.of(context).size.width < 850.0
+                  ? ListView(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0,
+                        vertical: 40.0,
+                      ),
+                      children: users.map(_card).toList())
+                  : GridView.count(
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      crossAxisCount: (MediaQuery.of(context).size.width < 950.0 ? 3 : 6),
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      primary: false,
+                      children: users.map(_card).toList(),
+                    ));
         } else {
           return Center(
             child: CircularProgressIndicator(
@@ -127,7 +126,7 @@ class _LawyersState extends State<Lawyers>
   }
 
   // Widget _gridTile() { // TODO not working but it would be usefull
-  //   return GridTile( 
+  //   return GridTile(
   //     header: Icon(
   //       Icons.person,
   //       size: 60,
@@ -202,6 +201,4 @@ class _LawyersState extends State<Lawyers>
       ),
     );
   }
-
-
 }

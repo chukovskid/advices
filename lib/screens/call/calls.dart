@@ -1,6 +1,6 @@
 import 'package:advices/config/agora.config.dart';
-import 'package:advices/models/call.dart';
 import 'package:advices/models/event.dart';
+import 'package:advices/screens/call/call.dart';
 import 'package:advices/screens/profile/lawyerProfile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -53,16 +53,21 @@ class _CallsState extends State<Calls>
     Map<String, dynamic>? result = await CallMethods.makeCloudCall(channelName);
     if (result!['token'] != null) {
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  Scaffold(
-                    body: JoinChannelVideo(
-                      token: result['token'],
-                      channelId: result['channelId'],
-                    ),
-                  )));
-    };
+        context,
+        MaterialPageRoute(builder: (context) => Call(channelName)),
+      );
+
+      // Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //         builder: (context) => Scaffold(
+      //               body: JoinChannelVideo(
+      //                 token: result['token'],
+      //                 channelId: result['channelId'],
+      //               ),
+      //             )));
+
+    }
   }
 
   _navigateToAuth() {
@@ -108,7 +113,7 @@ class _CallsState extends State<Calls>
 
   Widget _cardsList() {
     return StreamBuilder<Iterable<EventModel>>(
-      stream: DatabaseService.getPendingEventsForUsers(user?.uid),
+      stream: DatabaseService.getAllLEvents(user?.uid),
       builder: ((context, snapshot) {
         if (!snapshot.hasData) return Text("loading data ...");
         if (snapshot.hasData) {
@@ -143,20 +148,25 @@ class _CallsState extends State<Calls>
           ListTile(
             leading: const Icon(Icons.person),
             title: Text(call.title.toString()),
-            subtitle:
-                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize : MainAxisSize.min,
-                   children: [
-                     Column(
-                       children: [
-                         Text('Description: ${call.description}'),
-                         Text('DateTime: ${call.startDate.toString()}'),
-
-                       ],
-                     ),
-                   ],
-                 ),
+            subtitle: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Column(
+                  children: [
+                    Text('Description: ${call.description}'),
+                    Text('DateTime: ${call.startDate.toString()}'),
+                  ],
+                ),
+                call.open == true
+                    ? Text(
+                        'tap here to Open',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.green),
+                      )
+                    : Text('Empty:')
+              ],
+            ),
             onTap: () => openCall(call.channelName),
           ),
           const SizedBox(

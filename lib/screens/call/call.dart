@@ -18,10 +18,10 @@ import '../authentication/authentication.dart';
 
 /// This widget is the root of your application.
 class Call extends StatefulWidget {
-  final String uid;
+  final String channellName;
 
   /// Construct the [Call]
-  const Call(this.uid, {Key? key}) : super(key: key);
+  const Call(this.channellName, {Key? key}) : super(key: key);
 
   @override
   State<Call> createState() => _CallState();
@@ -195,9 +195,14 @@ class _CallState extends State<Call> {
     if (defaultTargetPlatform == TargetPlatform.android) {
       await [Permission.microphone, Permission.camera].request();
     }
+
+        List<String> lawyerIdandclientId = widget.channellName.split("+");
+    String lawyerId = lawyerIdandclientId[0];
+    String clientId = lawyerIdandclientId[1];
+
     // TODO secure user?
     String channelName =
-        await DatabaseService.saveOpenCallForUsers(widget.uid, user?.uid);
+        await DatabaseService.updateAsOpenCallForUsers(lawyerId, clientId);
 // TODO instead of saveOpenCallForUser, create a function setCallToOpen()
 // // meaning there is someone at the call and is WAITING
     await openCall(channelName);

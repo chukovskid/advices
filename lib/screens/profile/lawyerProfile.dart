@@ -172,6 +172,8 @@ class _LawyerProfileState extends State<LawyerProfile> {
           Text("${lawyer?.experience}", style: helpTextStyle),
           SizedBox(height: 15),
           Text("", style: helpTextStyle),
+          SizedBox(height: 40),
+
         ],
       ),
     );

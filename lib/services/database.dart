@@ -164,14 +164,16 @@ class DatabaseService {
         .collection("users")
         .doc(client?.uid)
         .collection("pendingCalls");
-    pendingCallsClient.doc(dateTime.microsecondsSinceEpoch.toString()).set({
+    pendingCallsClient.doc(channelName).set({
       "cleintId": client?.uid,
       "lawyerId": lawyerId,
       "channelName": channelName,
       "title": title,
       "description": description,
       "dateCreated": DateTime.now().millisecondsSinceEpoch,
-      "startDate": dateTime
+      "startDate": dateTime,
+      "open": false
+
     });
 
     // save call for lawyer
@@ -179,19 +181,18 @@ class DatabaseService {
         .collection("users")
         .doc(lawyerId)
         .collection("pendingCalls");
-    lawyerPendingCalls.doc(dateTime.microsecondsSinceEpoch.toString()).set({
+    lawyerPendingCalls.doc(channelName).set({
       "cleintId": client?.uid,
       "lawyerId": lawyerId,
       "channelName": channelName,
       "title": title,
       "description": description,
       "dateCreated": DateTime.now().millisecondsSinceEpoch,
-      "startDate": dateTime
+      "open": false
     });
   }
 
-  static Future<List<DateTime>> getAllLEventsDateTIme(
-      lawyerId, DateTime date) async {
+  static Future<List<DateTime>> getAllLEventsDateTIme(lawyerId, DateTime date) async {
     List<EventModel> data = [];
     List<DateTime> dataDateTime = [];
     DateTime endDate = date.add(Duration(days: 1));
@@ -213,18 +214,6 @@ class DatabaseService {
     return dataDateTime;
   }
 
-  static List<EventModel> getAllLEvents() {
-    List<EventModel> data = [];
-    CollectionReference events =
-        FirebaseFirestore.instance.collection('events');
-    events.get().then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        data.add(EventModel.fromJson(doc.data()));
-      });
-    });
-    return data.toList();
-  }
-
   static Stream<List<EventModel>> getAllEventsStream() {
     CollectionReference events =
         FirebaseFirestore.instance.collection('events');
@@ -234,15 +223,15 @@ class DatabaseService {
     return flutterEvents;
   }
 
-  static Stream<Iterable<EventModel>> getPendingEventsForUsers(uid) {
+  static Stream<Iterable<EventModel>> getAllLEvents(uid) {
     CollectionReference calls = FirebaseFirestore.instance
         .collection("users")
         .doc(uid)
         .collection('pendingCalls');
 
     // var filteredCalls = calls.doc(uid).collection("open");
-
-    final snapshots = calls.snapshots();
+final orderedCalls = calls.orderBy("open");
+    final snapshots = orderedCalls.snapshots();
     var userCalls = snapshots.map((snapshot) =>
         snapshot.docs.map((doc) => EventModel.fromJson(doc.data())));
     return userCalls;
@@ -281,25 +270,68 @@ class DatabaseService {
   /// Calls
   ///
 
-  static Future<String> saveOpenCallForUsers(lawyerId, clientId) async {
-    CollectionReference calls = FirebaseFirestore.instance.collection("calls");
+  static Future<String> updateAsOpenCallForUsers(lawyerId, clientId) async {
+    // final AuthService _auth = AuthService();
+    // User? user = await _auth.getCurrentUser();
     String channelName = lawyerId + "+" + clientId;
-    // save call for lawyer
-    calls.doc(lawyerId).collection("open").doc(channelName).set({
-      "channelName": channelName,
-      "clientId": clientId,
-      "DateOpened": DateTime.now().millisecondsSinceEpoch
+
+    CollectionReference clientCalls = FirebaseFirestore.instance
+        .collection("users")
+        .doc(clientId)
+        .collection("pendingCalls");
+
+    CollectionReference lawyerCalls = FirebaseFirestore.instance
+        .collection("users")
+        .doc(lawyerId)
+        .collection("pendingCalls");
+
+    // save call for client 
+    clientCalls.doc(channelName).update({
+      "dateOpened": DateTime.now().millisecondsSinceEpoch,
+      "open": true
+      // TODO ADD collection of users that are inside this call
     });
 
-    // save call for client
-    calls.doc(clientId).collection("open").doc(channelName).set({
-      "channelName": channelName,
-      "lawyerId": lawyerId,
-      "DateOpened": DateTime.now().millisecondsSinceEpoch
+        // save call for lawyer 
+    lawyerCalls.doc(channelName).update({
+      "dateOpened": DateTime.now().millisecondsSinceEpoch,
+      "open": true
     });
 
+    
     return channelName;
   }
+
+  static Future<String> updateAsClosedCallForUsers(lawyerId, clientId) async {
+    String channelName = lawyerId + "+" + clientId;
+
+    CollectionReference clientCalls = FirebaseFirestore.instance
+        .collection("users")
+        .doc(clientId)
+        .collection("pendingCalls");
+
+    CollectionReference lawyerCalls = FirebaseFirestore.instance
+        .collection("users")
+        .doc(lawyerId)
+        .collection("pendingCalls");
+
+    // save call for client 
+    clientCalls.doc(channelName).update({
+      "dateOpened": DateTime.now().millisecondsSinceEpoch,
+      "open": false
+    });
+
+        // save call for lawyer 
+    lawyerCalls.doc(channelName).update({
+      "dateOpened": DateTime.now().millisecondsSinceEpoch,
+      "open": false
+    });
+
+    
+    return channelName;
+  }
+
+
 
   static Stream<Iterable<Call>> getOpenCallForUsers(uid) {
     CollectionReference calls = FirebaseFirestore.instance.collection("calls");
@@ -319,10 +351,12 @@ class DatabaseService {
 
     print(lawyerId);
     print(clientId);
-    CollectionReference calls = FirebaseFirestore.instance.collection("calls");
+    // CollectionReference calls = FirebaseFirestore.instance.collection("calls");
 
-    await calls.doc(lawyerId).collection("open").doc(clientId).delete();
-    await calls.doc(clientId).collection("open").doc(lawyerId).delete();
+    // await calls.doc(lawyerId).collection("open").doc(clientId).delete();
+    // await calls.doc(clientId).collection("open").doc(lawyerId).delete();
+
+    await updateAsClosedCallForUsers(lawyerId, clientId);
 
     return null;
   }

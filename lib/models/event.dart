@@ -7,8 +7,9 @@ class EventModel{
   final String channelName;
   final String description;
   final DateTime startDate;
+  final bool open;
 
-  EventModel( {this.id,required this.title,required this.channelName, required this.description, required this.startDate});
+  EventModel( {this.id,required this.title,required this.channelName, required this.description, required this.startDate,required this.open});
 
   factory EventModel.fromMap(Map data) {
     return EventModel(
@@ -16,6 +17,7 @@ class EventModel{
       channelName: data['channelName'],
       description: data['description'],
       startDate: data['startDate'],
+      open: data['open'],
     );
   }
 
@@ -26,6 +28,8 @@ class EventModel{
       channelName: data['channelName'],
       description: data['description'],
       startDate: data['startDate'].toDate(),
+      open: data['open'],
+
     );
   }
 
@@ -35,6 +39,7 @@ class EventModel{
         channelName: json['channelName'] as String? ?? "",
         startDate: json['startDate'].toDate(),
         description: json['description'] as String? ?? "",
+        open: json['open'] as bool? ?? false,
       );
 
 
@@ -45,6 +50,7 @@ class EventModel{
       "description": description,
       "startDate":startDate,
       "id":id,
+      "open":open,
     };
   }
 }

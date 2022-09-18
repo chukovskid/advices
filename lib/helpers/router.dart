@@ -11,7 +11,6 @@ import '../screens/authentication/authentication.dart';
 import '../screens/calendar/add_event.dart';
 import '../screens/calendar/calendar.dart';
 import '../screens/call/call.dart';
-import '../screens/selectDateTime.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {

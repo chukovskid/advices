@@ -62,9 +62,9 @@ class MyApp extends StatelessWidget {
       initialData: null,
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: "Named Routing",
+        title: "Advices",
         onGenerateRoute: router.generateRoute,
-        initialRoute: 'lawyers_profile', 
+        initialRoute: 'calls', 
       ),
     );
   }

@@ -32,7 +32,7 @@ class _CreateEventState extends State<CreateEvent> {
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
   late bool processing;
-  late String _selectedDate = "select a date";
+  late String _selectedDate = "select date";
   String selectedTime = "time";
   List<TimeOfDay> _unavailableTimePeriods = [];
 
@@ -73,7 +73,7 @@ class _CreateEventState extends State<CreateEvent> {
           );
         },
         onFailValidation: (context) => print('Unavailable selection'),
-        initialTime: TimeOfDay(hour: 13, minute: 0),
+        initialTime: TimeOfDay(hour: 6, minute: 10),
         selectableTimePredicate: (time) =>
             time!.minute % 10 == 0 &&
             !_unavailableTimePeriods.contains(time)).then((time) => {
@@ -203,6 +203,7 @@ class _CreateEventState extends State<CreateEvent> {
                           "$_selectedDate $selectedTime",
                           style: TextStyle(
                             decoration: TextDecoration.underline,
+                            color: selectedTime == 'time' ? Color(0xff5bc9bf) : Colors.black
                           ),
                         ),
                       ],
@@ -286,8 +287,9 @@ class _CreateEventState extends State<CreateEvent> {
                   Center(
                     child: ElevatedButton(
                       style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.white)),
+                          backgroundColor: selectedTime == 'time'
+                              ? MaterialStateProperty.all(Color(0xff5bc9bf))
+                              : MaterialStateProperty.all(Colors.white)),
                       onPressed: () {
                         showDialog(
                             context: context,
@@ -304,7 +306,9 @@ class _CreateEventState extends State<CreateEvent> {
                       child: Text(
                         "VISA",
                         style: TextStyle(
-                            color: Color.fromRGBO(1, 38, 65, 1),
+                            color: selectedTime == 'time'
+                                ? Colors.white
+                                : Color.fromRGBO(1, 38, 65, 1),
                             fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -328,8 +332,9 @@ class _CreateEventState extends State<CreateEvent> {
                   Center(
                     child: ElevatedButton(
                       style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.white)),
+                          backgroundColor: selectedTime == 'time'
+                              ? MaterialStateProperty.all(Color(0xff5bc9bf))
+                              : MaterialStateProperty.all(Colors.white)),
                       onPressed: () {
                         showDialog(
                             context: context,
@@ -340,8 +345,11 @@ class _CreateEventState extends State<CreateEvent> {
                       },
                       child: Text(
                         "$_selectedDate $selectedTime",
+                        textAlign: TextAlign.center,
                         style: TextStyle(
-                            color: Color.fromRGBO(1, 38, 65, 1),
+                            color: selectedTime == 'time'
+                                ? Colors.white
+                                : Color.fromRGBO(1, 38, 65, 1),
                             fontWeight: FontWeight.bold),
                       ),
                     ),

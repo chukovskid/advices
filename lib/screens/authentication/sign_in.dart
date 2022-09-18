@@ -36,23 +36,23 @@ class _SignInState extends State<SignIn> {
 
   _submitForm() {
     // if (_formKey.currentState!.validate()) {
-      var user = {
-        'email': _emailController.text,
-        'password': _passwordController.text,
-      };
-      FlutterUser fUser = FlutterUser(
-          email: _emailController.text, password: _passwordController.text);
-      print(user.toString());
+    var user = {
+      'email': _emailController.text,
+      'password': _passwordController.text,
+    };
+    FlutterUser fUser = FlutterUser(
+        email: _emailController.text, password: _passwordController.text);
+    print(user.toString());
 
-      _signInUser(fUser);
+    _signInUser(fUser);
 
-      // If the form passes validation, display a Snackbar.
-      Scaffold.of(context)
-          .showSnackBar(SnackBar(content: Text('Registration sent')));
+    // If the form passes validation, display a Snackbar.
+    Scaffold.of(context)
+        .showSnackBar(SnackBar(content: Text('Registration sent')));
 
-      _formKey.currentState?.save();
-      _formKey.currentState?.reset();
-      _nextFocus(_emailFocusNode);
+    _formKey.currentState?.save();
+    _formKey.currentState?.reset();
+    _nextFocus(_emailFocusNode);
     // }
   }
 
@@ -101,7 +101,7 @@ class _SignInState extends State<SignIn> {
 
   Future<void> _googleSignIn() async {
     await _auth.googleSignIn();
-    _navigateToAuth();
+    await _navigateToAuth();
     print(email);
   }
 
@@ -284,7 +284,6 @@ class _SignInState extends State<SignIn> {
             labelStyle: TextStyle(
               color: Color.fromARGB(209, 255, 255, 255),
             )),
-
       ),
       const SizedBox(height: 20.0),
       TextFormField(
@@ -320,7 +319,6 @@ class _SignInState extends State<SignIn> {
           ),
           onPressed: () async {
             await _submitForm();
-
           })
     ]);
   }
