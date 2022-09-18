@@ -141,8 +141,10 @@ class DatabaseService {
 
   static Stream<Iterable<Law>> getAllLaws() {
     CollectionReference laws = FirebaseFirestore.instance.collection('laws');
-    final snapshots = laws.orderBy('name').snapshots();
-    var flutterLaw = snapshots.map(
+    var filteredLaws = laws.where("id", isNotEqualTo: "notRealId").snapshots();
+
+    // final snapshots = filteredLaws.orderBy('name').snapshots();
+    var flutterLaw = filteredLaws.map(
         (snapshot) => snapshot.docs.map((doc) => Law.fromJson(doc.data())));
     return flutterLaw;
   }

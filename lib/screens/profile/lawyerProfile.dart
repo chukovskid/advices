@@ -68,6 +68,9 @@ class _LawyerProfileState extends State<LawyerProfile> {
           ),
         ],
       ),
+       bottomSheet: Container(
+            child:  MediaQuery.of(context).size.width < 850.0 ? CreateEvent(widget.uid): SizedBox() ,
+        ),
       floatingActionButton: _openProfileBtn(),
       body: Container(
           height: double.maxFinite,
@@ -85,9 +88,9 @@ class _LawyerProfileState extends State<LawyerProfile> {
           ),
           child: Row(
             children: [
-              Flexible(flex: 2, child: _card()),
+              Flexible(flex: 3, child: _card()),
               // Flexible(child: _dateAndPrice())
-              Flexible(child: CreateEvent(widget.uid))
+              MediaQuery.of(context).size.width < 850.0 ? SizedBox(): Flexible(flex: 2, child: CreateEvent(widget.uid)),
             ],
           )),
     );
@@ -152,194 +155,6 @@ class _LawyerProfileState extends State<LawyerProfile> {
         ),
       ),
     );
-  }
-
-  Widget _dateAndPrice() {
-    return SingleChildScrollView(
-        child: Card(
-      shadowColor: Color(0xff5bc9bf),
-      elevation: 10.0,
-      color: Color.fromRGBO(1, 38, 65, 1),
-      margin: const EdgeInsets.only(top: 35, left: 30, right: 50, bottom: 10),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(25.0),
-      ),
-      child: Column(
-        children: [
-          Table(
-            columnWidths: const <int, TableColumnWidth>{
-              // 0: IntrinsicColumnWidth(),
-              0: FlexColumnWidth(),
-              1: FlexColumnWidth(),
-              // 2: FixedColumnWidth(154),
-            },
-            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-            children: <TableRow>[
-              TableRow(
-                decoration: BoxDecoration(
-                  color: Color.fromRGBO(1, 38, 65, 1),
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20)),
-                ),
-                children: <Widget>[
-                  Container(
-                    height: 100,
-                    child: Center(
-                      child: Text(
-                        "Service",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                    ),
-                  ),
-                  // TableCell(
-                  //   verticalAlignment: TableCellVerticalAlignment.top,
-                  //   child: Container(
-                  //     height: 32,
-                  //     width: 32,
-                  //     color: Colors.red,
-                  //   ),
-                  // ),
-                  Center(
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.white)),
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                                  content: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Flexible(child: AddEventPage(widget.uid)),
-                                    ],
-                                  ),
-                                ));
-                      },
-                      child: Text(
-                        "VISA",
-                        style: TextStyle(
-                            color: Color.fromRGBO(1, 38, 65, 1),
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              TableRow(
-                decoration: const BoxDecoration(
-                  color: Color.fromRGBO(1, 38, 65, 1),
-                ),
-                children: <Widget>[
-                  Container(
-                    height: 100,
-                    child: Center(
-                      child: Text(
-                        "Select a date",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                    ),
-                  ),
-                  Center(
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.white)),
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                                  content: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Flexible(child: AddEventPage(widget.uid)),
-                                    ],
-                                  ),
-                                ));
-                      },
-                      child: Text(
-                        "23.11.2022 13:00",
-                        style: TextStyle(
-                            color: Color.fromRGBO(1, 38, 65, 1),
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              TableRow(
-                decoration: const BoxDecoration(
-                  color: Color.fromRGBO(1, 38, 65, 1),
-                ),
-                children: <Widget>[
-                  Container(
-                    height: 100,
-                    child: Center(
-                      child: Text(
-                        "+2 days urgency",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                    ),
-                  ),
-                  Center(
-                    child: Text(
-                      "",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 35,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ],
-              ),
-              TableRow(
-                decoration: const BoxDecoration(
-                  color: Color.fromRGBO(1, 38, 65, 1),
-                ),
-                children: <Widget>[
-                  Container(
-                    height: 100,
-                    child: Center(
-                      child: Text(
-                        "Total",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                    ),
-                  ),
-                  Center(
-                    child: Text(
-                      "30 €",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 35,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 60,
-          ),
-          ElevatedButton(
-            style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Color(0xff5bc9bf))),
-            onPressed: () {},
-            child: Text(
-              "Submit",
-              style: TextStyle(
-                  color: Color.fromRGBO(1, 38, 65, 1),
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          )
-        ],
-      ),
-    ));
   }
 
   Widget _text() {

@@ -119,10 +119,104 @@ class _CreateEventState extends State<CreateEvent> {
 
   @override
   Widget build(BuildContext context) {
-    return _dateAndPrice();
+    return MediaQuery.of(context).size.width < 850.0 ? _mobView() : _webView();
   }
 
-  Widget _dateAndPrice() {
+  Widget _mobView() {
+    return Container(
+      height: 100,
+      decoration: BoxDecoration(
+        color: Color(0xffc2cee4),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.blueGrey,
+            offset: Offset(0.0, 1.0), //(x,y)
+            blurRadius: 10.0,
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        // crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Flexible(
+              flex: 3,
+              child: InkWell(
+                onTap: (() => {
+                      showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Flexible(child: AddEventPage(widget.uid)),
+                                  ],
+                                ),
+                              ))
+                    }),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "€30 ",
+                          style: TextStyle(
+                              // color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          " VISA Applicaton",
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "23.11.2022  13:50",
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              )),
+          Flexible(
+              flex: 1,
+              child: SizedBox(
+                height: 50,
+                width: 100,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(Color(0xff5bc9bf))),
+                  onPressed: () {
+                    _saveEvent();
+                  },
+                  child: Text(
+                    "Submit",
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 255, 255, 255),
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              )),
+        ],
+      ),
+    );
+  }
+
+  Widget _webView() {
     return SingleChildScrollView(
         child: Card(
       shadowColor: Color(0xff5bc9bf),

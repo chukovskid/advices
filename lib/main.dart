@@ -64,7 +64,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: "Named Routing",
         onGenerateRoute: router.generateRoute,
-        initialRoute: 'areas', 
+        initialRoute: 'lawyers_profile', 
       ),
     );
   }
