@@ -1,4 +1,4 @@
-import 'package:advices/screens/lawyerProfile.dart';
+import 'package:advices/screens/profile/lawyerProfile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -8,7 +8,7 @@ import 'authentication/authentication.dart';
 import 'floating_footer_btns.dart';
 
 class Lawyers extends StatefulWidget {
- final String lawArea;
+  final String lawArea;
   const Lawyers({Key? key, required this.lawArea}) : super(key: key);
 
   @override
@@ -28,8 +28,6 @@ class _LawyersState extends State<Lawyers>
     // controller.repeat(reverse: true);
     //     super.initState();
     // WidgetsBinding.instance!.removeObserver(this);
-
-
   }
 
   // @override
@@ -75,7 +73,7 @@ class _LawyersState extends State<Lawyers>
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
-            end: Alignment.bottomRight,   
+            end: Alignment.bottomRight,
             colors: [
               Color.fromRGBO(107, 119, 141, 1),
               Color.fromRGBO(38, 56, 89, 1),
@@ -95,12 +93,26 @@ class _LawyersState extends State<Lawyers>
         if (!snapshot.hasData) return Text("loading data ...");
         if (snapshot.hasData) {
           final users = snapshot.data!;
-          return ListView(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 10.0,
-                vertical: 40.0,
-              ),
-              children: users.map(_card).toList());
+          return Container(
+            margin:
+                const EdgeInsets.only(top: 35, left: 30, right: 50, bottom: 10),
+            child: GridView.count(
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              crossAxisCount: 6,
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              primary: false,
+              children: users.map(_card).toList(),
+            ),
+          );
+          // ListView(
+          //     padding: const EdgeInsets.symmetric(
+          //       horizontal: 10.0,
+          //       vertical: 40.0,
+          //     ),
+          //     children: users.map(_card).toList());
+
         } else {
           return Center(
             child: CircularProgressIndicator(
@@ -114,28 +126,48 @@ class _LawyersState extends State<Lawyers>
     );
   }
 
+  // Widget _gridTile() { // TODO not working but it would be usefull
+  //   return GridTile( 
+  //     header: Icon(
+  //       Icons.person,
+  //       size: 60,
+  //     ),
+  //     // footer: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
+  //     child: Text("hey"),
+  //     // leading: const Icon(Icons.person, size: 60,),
+  //     // title: Text(fUser.displayName.toString()),
+  //     // subtitle:
+  //     //     const Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
+  //   );
+  // }
+
   Widget _card(FlutterUser fUser) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
+    return InkWell(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LawyerProfile(fUser.uid)),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          ListTile(
-            leading: const Icon(Icons.person),
-            title: Text(fUser.displayName.toString()),
-            subtitle:
-                const Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => LawyerProfile(fUser.uid)),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: const Icon(
+                Icons.person,
+                size: 60,
+              ),
+              title: Text(fUser.displayName.toString()),
+              subtitle:
+                  const Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
             ),
-          ),
-          const SizedBox(
-            height: 20,
-          )
-        ],
+            const SizedBox(
+              height: 20,
+            )
+          ],
+        ),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:advices/config/agora.config.dart';
 import 'package:advices/models/call.dart';
-import 'package:advices/screens/lawyerProfile.dart';
+import 'package:advices/models/event.dart';
+import 'package:advices/screens/profile/lawyerProfile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -106,8 +107,8 @@ class _CallsState extends State<Calls>
   }
 
   Widget _cardsList() {
-    return StreamBuilder<Iterable<Call>>(
-      stream: DatabaseService.getOpenCallForUsers(user?.uid),
+    return StreamBuilder<Iterable<EventModel>>(
+      stream: DatabaseService.getPendingEventsForUsers(user?.uid),
       builder: ((context, snapshot) {
         if (!snapshot.hasData) return Text("loading data ...");
         if (snapshot.hasData) {
@@ -131,7 +132,7 @@ class _CallsState extends State<Calls>
     );
   }
 
-  Widget _card(Call call) {
+  Widget _card(EventModel call) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
@@ -141,9 +142,21 @@ class _CallsState extends State<Calls>
         children: <Widget>[
           ListTile(
             leading: const Icon(Icons.person),
-            title: Text(call.channelName.toString()),
+            title: Text(call.title.toString()),
             subtitle:
-                const Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
+                 Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize : MainAxisSize.min,
+                   children: [
+                     Column(
+                       children: [
+                         Text('Description: ${call.description}'),
+                         Text('DateTime: ${call.startDate.toString()}'),
+
+                       ],
+                     ),
+                   ],
+                 ),
             onTap: () => openCall(call.channelName),
           ),
           const SizedBox(

@@ -196,8 +196,10 @@ class _CallState extends State<Call> {
       await [Permission.microphone, Permission.camera].request();
     }
     // TODO secure user?
-    String channelName = await DatabaseService.saveOpenCallForUsers(widget.uid, user?.uid);
-
+    String channelName =
+        await DatabaseService.saveOpenCallForUsers(widget.uid, user?.uid);
+// TODO instead of saveOpenCallForUser, create a function setCallToOpen()
+// // meaning there is someone at the call and is WAITING
     await openCall(channelName);
   }
 

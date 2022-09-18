@@ -23,6 +23,7 @@ final kBoxDecorationStyle = BoxDecoration(
 
 
 const helpTextStyle =  TextStyle(color: Colors.black, fontSize: 15.0);
+const profileHeader =  TextStyle(color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold);
 
 const lightBlueColor = Color.fromRGBO(107, 119, 141, 1);
 const mediumBlueColor = Color.fromRGBO(38, 56, 89, 1);

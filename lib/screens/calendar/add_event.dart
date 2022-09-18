@@ -38,7 +38,7 @@ class _AddEventPageState extends State<AddEventPage> {
   Future<void> _getFreeTimePeriodsForDate() async {
     DateTime selectedDate = DateFormat("yyyy-MM-dd").parse("$_selectedDate");
     List<DateTime> events = await DatabaseService.getAllLEventsDateTIme(
-        "69kDEqpjX7aeulnh6QsCt1uH8l23", selectedDate); // TODO add lawyerId
+        widget.uid, selectedDate); 
     _unavailableTimePeriods = [];
     events.forEach((element) {
       DateTime substraction = element;

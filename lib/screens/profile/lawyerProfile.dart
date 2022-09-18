@@ -1,10 +1,12 @@
 import 'package:advices/screens/calendar/add_event.dart';
 import 'package:advices/screens/call/call.dart';
+import 'package:advices/screens/profile/createEvent.dart';
 import 'package:advices/services/database.dart';
 import 'package:flutter/material.dart';
-import '../models/user.dart';
-import '../utilities/constants.dart';
-import 'authentication/authentication.dart';
+import '../../models/user.dart';
+import '../../utilities/constants.dart';
+import '../authentication/authentication.dart';
+import '../call/calls.dart';
 
 class LawyerProfile extends StatefulWidget {
   final String uid;
@@ -75,8 +77,8 @@ class _LawyerProfileState extends State<LawyerProfile> {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Color.fromRGBO(107, 119, 141, 1),
-                Color.fromRGBO(38, 56, 89, 1),
+                Color.fromARGB(255, 214, 223, 243),
+                Color.fromARGB(255, 187, 199, 222),
               ],
               stops: [-1, 2],
             ),
@@ -84,7 +86,8 @@ class _LawyerProfileState extends State<LawyerProfile> {
           child: Row(
             children: [
               Flexible(flex: 2, child: _card()),
-              Flexible(child: _dateAndPrice())
+              // Flexible(child: _dateAndPrice())
+              Flexible(child: CreateEvent(widget.uid))
             ],
           )),
     );
@@ -110,28 +113,42 @@ class _LawyerProfileState extends State<LawyerProfile> {
     );
   }
 
-
   Widget _card() {
-    return SingleChildScrollView(
-      child: Card(
-        margin: const EdgeInsets.only(top: 35, left: 10, right: 10, bottom: 10),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            const SizedBox(height: 30),
-            ListTile(
-              leading: Icon(Icons.person),
-              title: Text("${lawyer?.displayName}"),
-              subtitle: Text("${lawyer?.education}"),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            _text()
-          ],
+    return Container(
+      height: 800,
+      child: SingleChildScrollView(
+        child: Card(
+          elevation: 0,
+          color: Colors.transparent,
+          margin:
+              const EdgeInsets.only(top: 35, left: 30, right: 10, bottom: 10),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const SizedBox(height: 30),
+              ListTile(
+                leading: Icon(
+                  Icons.person,
+                  size: 100.0,
+                ),
+                title: Text(
+                  "${lawyer?.displayName}",
+                  style: TextStyle(fontSize: 35),
+                ),
+                subtitle: Text("${lawyer?.education}"),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              _text()
+            ],
+          ),
         ),
       ),
     );
@@ -139,15 +156,17 @@ class _LawyerProfileState extends State<LawyerProfile> {
 
   Widget _dateAndPrice() {
     return SingleChildScrollView(
-      child: Card(
-          margin:
-              const EdgeInsets.only(top: 35, left: 10, right: 10, bottom: 10),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25.0),
-          ),
-          child: Table(
-            border: TableBorder.all(
-                color: Colors.red, borderRadius: BorderRadius.circular(20.0)),
+        child: Card(
+      shadowColor: Color(0xff5bc9bf),
+      elevation: 10.0,
+      color: Color.fromRGBO(1, 38, 65, 1),
+      margin: const EdgeInsets.only(top: 35, left: 30, right: 50, bottom: 10),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(25.0),
+      ),
+      child: Column(
+        children: [
+          Table(
             columnWidths: const <int, TableColumnWidth>{
               // 0: IntrinsicColumnWidth(),
               0: FlexColumnWidth(),
@@ -182,9 +201,28 @@ class _LawyerProfileState extends State<LawyerProfile> {
                   //   ),
                   // ),
                   Center(
-                    child: Text(
-                      "VISA",
-                      style: TextStyle(color: Colors.white),
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.white)),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                                  content: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Flexible(child: AddEventPage(widget.uid)),
+                                    ],
+                                  ),
+                                ));
+                      },
+                      child: Text(
+                        "VISA",
+                        style: TextStyle(
+                            color: Color.fromRGBO(1, 38, 65, 1),
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ],
@@ -198,23 +236,59 @@ class _LawyerProfileState extends State<LawyerProfile> {
                     height: 100,
                     child: Center(
                       child: Text(
-                        "Service",
+                        "Select a date",
                         style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                     ),
                   ),
-                  // TableCell(
-                  //   verticalAlignment: TableCellVerticalAlignment.top,
-                  //   child: Container(
-                  //     height: 32,
-                  //     width: 32,
-                  //     color: Colors.red,
-                  //   ),
-                  // ),
+                  Center(
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.white)),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                                  content: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Flexible(child: AddEventPage(widget.uid)),
+                                    ],
+                                  ),
+                                ));
+                      },
+                      child: Text(
+                        "23.11.2022 13:00",
+                        style: TextStyle(
+                            color: Color.fromRGBO(1, 38, 65, 1),
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              TableRow(
+                decoration: const BoxDecoration(
+                  color: Color.fromRGBO(1, 38, 65, 1),
+                ),
+                children: <Widget>[
+                  Container(
+                    height: 100,
+                    child: Center(
+                      child: Text(
+                        "+2 days urgency",
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                    ),
+                  ),
                   Center(
                     child: Text(
-                      "VISA",
-                      style: TextStyle(color: Colors.white),
+                      "",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 35,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
@@ -225,51 +299,47 @@ class _LawyerProfileState extends State<LawyerProfile> {
                 ),
                 children: <Widget>[
                   Container(
-                    height: 50,
+                    height: 100,
                     child: Center(
-                      child: Text("Service"),
+                      child: Text(
+                        "Total",
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
                     ),
                   ),
                   Center(
-                    child: Text("Service"),
-                  ),
-                ],
-              ),
-              TableRow(
-                decoration: const BoxDecoration(
-                  color: Color.fromRGBO(1, 38, 65, 1),
-                ),
-                children: <Widget>[
-                  Container(
-                    height: 50,
-                    child: Center(
-                      child: Text("Service"),
+                    child: Text(
+                      "30 €",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 35,
+                          fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  Center(
-                    child: Text("Service"),
-                  ),
-                ],
-              ),
-              TableRow(
-                decoration: const BoxDecoration(
-                  color: Color.fromRGBO(1, 38, 65, 1),
-                ),
-                children: <Widget>[
-                  Container(
-                    height: 50,
-                    child: Center(
-                      child: Text("Service"),
-                    ),
-                  ),
-                  Center(
-                    child: Text("Service"),
                   ),
                 ],
               ),
             ],
-          )),
-    );
+          ),
+          SizedBox(
+            height: 60,
+          ),
+          ElevatedButton(
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Color(0xff5bc9bf))),
+            onPressed: () {},
+            child: Text(
+              "Submit",
+              style: TextStyle(
+                  color: Color.fromRGBO(1, 38, 65, 1),
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          )
+        ],
+      ),
+    ));
   }
 
   Widget _text() {
@@ -278,10 +348,14 @@ class _LawyerProfileState extends State<LawyerProfile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Кратко био", style: helpTextStyle),
+          Text("Кратко био", style: profileHeader),
+          SizedBox(height: 15),
           Text("${lawyer?.description}", style: helpTextStyle),
-          Text("Уште нешто", style: helpTextStyle),
+          SizedBox(height: 15),
+          Text("Уште нешто", style: profileHeader),
+          SizedBox(height: 15),
           Text("${lawyer?.experience}", style: helpTextStyle),
+          SizedBox(height: 15),
           Text("", style: helpTextStyle),
         ],
       ),
@@ -307,25 +381,30 @@ class _LawyerProfileState extends State<LawyerProfile> {
       child: FloatingActionButton(
         heroTag: "settingsBtn",
         onPressed: () => {
-          showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                    content: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Flexible(child: AddEventPage(widget.uid)),
-                      ],
-                    ), 
-                  ))
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Calls()),
+      )
 
-          // showModalBottomSheet<void>(
-          //   backgroundColor: Colors.amber,
-          //   context: context,
-          //   builder: (BuildContext context) {
-          //     return Container(
-          //         // height: 200,
+          // showDialog(
+          //     context: context,
+          //     builder: (context) => AlertDialog(
+          //           content: Column(
+          //             mainAxisAlignment: MainAxisAlignment.center,
+          //             children: [
+          //               Flexible(child: AddEventPage(widget.uid)),
+          //             ],
+          //           ),
+          //         ))
 
-          //         color: Colors.amber,
+          // // showModalBottomSheet<void>(
+          // //   backgroundColor: Colors.amber,
+          // //   context: context,
+          // //   builder: (BuildContext context) {
+          // //     return Container(
+          // //         // height: 200,
+
+          // //         color: Colors.amber,
           //         child: AddEventPage());
           //   },
           // )

@@ -1,6 +1,6 @@
 import 'package:advices/models/law.dart';
 import 'package:advices/screens/call/call.dart';
-import 'package:advices/screens/lawyerProfile.dart';
+import 'package:advices/screens/profile/lawyerProfile.dart';
 import 'package:advices/screens/lawyers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

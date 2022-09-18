@@ -2,7 +2,7 @@ import 'package:advices/screens/laws.dart';
 import 'package:advices/screens/authentication/register.dart';
 import 'package:advices/screens/authentication/sign_in.dart';
 import 'package:advices/screens/home.dart';
-import 'package:advices/screens/lawyerProfile.dart';
+import 'package:advices/screens/profile/lawyerProfile.dart';
 import 'package:advices/screens/lawyers.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +24,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           builder: (context) =>
               Lawyers(lawArea: "ednakvostId")); // TODO this is not right
     case 'lawyers_profile':
-      return MaterialPageRoute(builder: (context) => LawyerProfile('69kDEqpjX7aeulnh6QsCt1uH8l23'));
+      return MaterialPageRoute(builder: (context) => LawyerProfile('cNbw66J36wMvUZdjES7H25HXAGo2'));
     case 'selectDate':
       return MaterialPageRoute(builder: (context) => CalendarPage());
     case 'sign_in':
