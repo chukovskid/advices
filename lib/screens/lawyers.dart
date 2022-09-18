@@ -171,4 +171,37 @@ class _LawyersState extends State<Lawyers>
       ),
     );
   }
+
+  Widget _listItem(FlutterUser fUser) {
+    return InkWell(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LawyerProfile(fUser.uid)),
+      ),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: const Icon(
+                Icons.person,
+                size: 60,
+              ),
+              title: Text(fUser.displayName.toString()),
+              subtitle:
+                  const Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
+            ),
+            const SizedBox(
+              height: 20,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+
 }

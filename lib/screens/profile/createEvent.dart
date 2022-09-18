@@ -1,10 +1,13 @@
+import 'package:advices/screens/authentication/sign_in.dart';
 import 'package:advices/screens/calendar/add_event.dart';
 import 'package:advices/screens/call/call.dart';
 import 'package:advices/services/database.dart';
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:time_picker_widget/time_picker_widget.dart';
 import '../../models/user.dart';
+import '../../services/auth.dart';
 import '../../utilities/constants.dart';
 import 'package:intl/intl.dart';
 
@@ -87,6 +90,22 @@ class _CreateEventState extends State<CreateEvent> {
   }
 
   Future<void> _saveEvent() async {
+    final AuthService _auth = AuthService();
+    User? user = await _auth.getCurrentUser();
+    bool userExist = user != null ? true : false;
+    if (!userExist) {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                content: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Flexible(child: SignIn()),
+                  ],
+                ),
+              ));
+    }
     DateTime selectedDateTime =
         DateFormat("yyyy-MM-dd hh:mm a").parse("$_selectedDate $selectedTime");
 
@@ -151,7 +170,7 @@ class _CreateEventState extends State<CreateEvent> {
                                   mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Flexible(child: AddEventPage(widget.uid)),
+                                    Flexible(child: _dialogFields()),
                                   ],
                                 ),
                               ))
@@ -181,7 +200,7 @@ class _CreateEventState extends State<CreateEvent> {
                     Row(
                       children: [
                         Text(
-                          "23.11.2022  13:50",
+                          "$_selectedDate $selectedTime",
                           style: TextStyle(
                             decoration: TextDecoration.underline,
                           ),
@@ -198,10 +217,12 @@ class _CreateEventState extends State<CreateEvent> {
                 width: 100,
                 child: ElevatedButton(
                   style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Color(0xff5bc9bf))),
+                      backgroundColor: (_title.text.isEmpty)
+                          ? MaterialStateProperty.all(
+                              Color.fromARGB(255, 176, 190, 189))
+                          : MaterialStateProperty.all(Color(0xff5bc9bf))),
                   onPressed: () {
-                    _saveEvent();
+                    (_title.text.isEmpty) ? _showToast(context) : _saveEvent();
                   },
                   child: Text(
                     "Submit",
@@ -382,17 +403,24 @@ class _CreateEventState extends State<CreateEvent> {
           SizedBox(
             height: 60,
           ),
-          ElevatedButton(
-            style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Color(0xff5bc9bf))),
-            onPressed: () {
-              _saveEvent();
-            },
-            child: Text(
-              "Submit",
-              style: TextStyle(
-                  color: Color.fromRGBO(1, 38, 65, 1),
-                  fontWeight: FontWeight.bold),
+          SizedBox(
+            height: 50,
+            width: 150,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor: (_title.text.isEmpty)
+                      ? MaterialStateProperty.all(
+                          Color.fromARGB(255, 176, 190, 189))
+                      : MaterialStateProperty.all(Color(0xff5bc9bf))),
+              onPressed: () {
+                (_title.text.isEmpty) ? _showToast(context) : _saveEvent();
+              },
+              child: Text(
+                "Submit",
+                style: TextStyle(
+                    color: Color.fromARGB(255, 255, 255, 255),
+                    fontWeight: FontWeight.bold),
+              ),
             ),
           ),
           SizedBox(
@@ -564,6 +592,30 @@ class _CreateEventState extends State<CreateEvent> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  void _showToast(BuildContext context) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: const Text('Please select title and date'),
+        action: SnackBarAction(
+            label: 'Fill form',
+            onPressed: () => {
+                  showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Flexible(child: _dialogFields()),
+                              ],
+                            ),
+                          ))
+                }),
       ),
     );
   }

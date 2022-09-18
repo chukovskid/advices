@@ -71,7 +71,7 @@ class _LawyerProfileState extends State<LawyerProfile> {
        bottomSheet: Container(
             child:  MediaQuery.of(context).size.width < 850.0 ? CreateEvent(widget.uid): SizedBox() ,
         ),
-      floatingActionButton: _openProfileBtn(),
+      // floatingActionButton: _openProfileBtn(),
       body: Container(
           height: double.maxFinite,
           width: double.infinity,
