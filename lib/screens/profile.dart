@@ -26,7 +26,8 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   final AuthService _auth = AuthService();
   FlutterUser? _fireUser;
-  var imageUrl = "https://devshift.biz/wp-content/uploads/2017/04/profile-icon-png-898.png"; //you can use a image
+  var imageUrl =
+      "https://devshift.biz/wp-content/uploads/2017/04/profile-icon-png-898.png"; //you can use a image
   final double circleRadius = 105.0;
   final double circleBorderWidth = 3.0;
   @override
@@ -41,7 +42,7 @@ class _ProfileState extends State<Profile> {
     if (user != null) {
       setState(() {
         _fireUser = user;
-        imageUrl = (user.photoURL.isEmpty ? imageUrl : user.photoURL );
+        imageUrl = (user.photoURL.isEmpty ? imageUrl : user.photoURL);
       });
     }
 
@@ -66,11 +67,15 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-
-  Future<bool> _signOut() async {
+  Future<void> _signOut() async {
     await _auth.signOut();
-    bool isSignIn = await _auth.googleIsSignIn();
-    return isSignIn;
+    // bool isSignIn = await _auth.googleIsSignIn();
+    await _auth.signOutWithGoogle(context: context);
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SignIn()),
+    );
+    // return isSignIn;
   }
 
   @override

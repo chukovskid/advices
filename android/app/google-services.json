@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "793184649946-hve0p3v62ti6iriifpvu93r60gmq73jk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chukovski.advices",
+            "certificate_hash": "fd8531aa9e477c4c3f275db42f8dbc56930979d2"
+          }
+        },
+        {
           "client_id": "793184649946-3evlk734paq8msu53a78min0bacp7vrs.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -50,6 +58,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "793184649946-sjluapocn75cjb6fgg9dqfirsuc2t7h1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.agora.agora_rtc_engine_example",
+            "certificate_hash": "fd8531aa9e477c4c3f275db42f8dbc56930979d2"
+          }
+        },
         {
           "client_id": "793184649946-3evlk734paq8msu53a78min0bacp7vrs.apps.googleusercontent.com",
           "client_type": 3

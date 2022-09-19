@@ -96,11 +96,14 @@ class _SignInState extends State<SignIn> {
 
   Future<void> _signInUser(FlutterUser flutUser) async {
     var user = await _auth.signInWithEmailAndPassword(flutUser);
-    if (user != null) _navigateToAuth();
+    if (user != null) {
+      Navigator.pop(context);
+    }
   }
 
   Future<void> _googleSignIn() async {
-    await _auth.googleSignIn();
+    await _auth.signInWithGoogle(context: context);
+    // await _auth.googleSignIn();
     await _navigateToAuth();
     print(email);
   }

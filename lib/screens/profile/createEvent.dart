@@ -63,7 +63,7 @@ class _CreateEventState extends State<CreateEvent> {
     print(_unavailableTimePeriods);
   }
 
-  Future<void> showTimePicherWidget() async {
+  Future<void> showTimePicherWidget(StateSetter setStateDialog) async {
     return await showCustomTimePicker(
         context: context,
         builder: (BuildContext context, Widget? child) {
@@ -81,11 +81,9 @@ class _CreateEventState extends State<CreateEvent> {
           setState(() => {
                 selectedTime = time!.format(context),
               }),
-          this.setState(() => {
+          setStateDialog(() => {
                 selectedTime = time!.format(context),
               }),
-          selectedTime = time!.format(context),
-          print("selectedTime $selectedTime"),
         });
   }
 
@@ -97,12 +95,17 @@ class _CreateEventState extends State<CreateEvent> {
       showDialog(
           context: context,
           builder: (context) => AlertDialog(
-                content: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Flexible(child: SignIn()),
-                  ],
+                elevation: 20,
+                contentPadding: EdgeInsets.all(2.0),
+                content: SizedBox(
+                  width: 400,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Flexible(child: SignIn()),
+                    ],
+                  ),
                 ),
               ));
     }
@@ -165,13 +168,25 @@ class _CreateEventState extends State<CreateEvent> {
                 onTap: (() => {
                       showDialog(
                           context: context,
-                          builder: (context) => AlertDialog(
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Flexible(child: _dialogFields()),
-                                  ],
+                          builder: (context) => StatefulBuilder(
+                                builder:
+                                    (context, StateSetter setStateDialog) =>
+                                        AlertDialog(
+                                  elevation: 20,
+                                  contentPadding: EdgeInsets.all(10),
+                                  content: SizedBox(
+                                    height: 400,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Flexible(
+                                            child:
+                                                _dialogFields(setStateDialog)),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ))
                     }),
@@ -202,9 +217,10 @@ class _CreateEventState extends State<CreateEvent> {
                         Text(
                           "$_selectedDate $selectedTime",
                           style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: selectedTime == 'time' ? Color(0xff5bc9bf) : Colors.black
-                          ),
+                              decoration: TextDecoration.underline,
+                              color: selectedTime == 'time'
+                                  ? Color(0xff5bc9bf)
+                                  : Colors.black),
                         ),
                       ],
                     ),
@@ -339,8 +355,11 @@ class _CreateEventState extends State<CreateEvent> {
                         showDialog(
                             context: context,
                             builder: (context) => StatefulBuilder(
-                                  builder: (context, setState) =>
-                                      AlertDialog(content: _dialogFields()),
+                                  builder: (context,
+                                          StateSetter setStateDialog) =>
+                                      AlertDialog(
+                                          content:
+                                              _dialogFields(setStateDialog)),
                                 ));
                       },
                       child: Text(
@@ -439,7 +458,7 @@ class _CreateEventState extends State<CreateEvent> {
     ));
   }
 
-  Widget _dialogFields() {
+  Widget _dialogFields(StateSetter setStateDialog) {
     return Center(
       child: Container(
         width: 500,
@@ -489,8 +508,14 @@ class _CreateEventState extends State<CreateEvent> {
                     const SizedBox(height: 10.0),
                     SizedBox(height: 10.0),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Flexible(
+                            child: SizedBox(
+                          width: 20,
+                        )),
+                        Flexible(
+                          flex: 2,
                           child: DateTimePicker(
                             type: DateTimePickerType.date,
                             dateMask: 'd MMM, yyyy  ',
@@ -515,7 +540,7 @@ class _CreateEventState extends State<CreateEvent> {
                                 _selectedDate = val;
                               }),
                               await _getFreeTimePeriodsForDate(),
-                              await showTimePicherWidget(),
+                              await showTimePicherWidget(setStateDialog),
                             },
                             validator: (val) {
                               print("validator $val");
@@ -523,41 +548,49 @@ class _CreateEventState extends State<CreateEvent> {
                             },
                             onSaved: (val) async => {
                               print("onSaved $val"),
-                              await showTimePicherWidget()
+                              // await showTimePicherWidget()
                             },
                           ),
                         ),
                         Flexible(
                             child: SizedBox(
-                          width: 50,
+                          width: 20,
                         )),
                         Flexible(
-                          child: TextFormField(
-                            enabled: false,
-                            decoration: InputDecoration(
-                                errorStyle: TextStyle(
-                                  color: Color.fromRGBO(225, 103, 104, 1),
-                                ),
-                                fillColor: Colors.orange,
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Color.fromRGBO(225, 103, 104, 1)),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color:
-                                          Color.fromARGB(255, 255, 255, 255)),
-                                ),
-                                labelText: "$selectedTime ",
-                                labelStyle: TextStyle(
-                                  color: Color.fromARGB(209, 0, 0, 0),
-                                )),
+                          flex: 1,
+                          child: InkWell(
+                            onTap: () => {
+                              showTimePicherWidget(setStateDialog)
+                            },
+                            child: TextFormField(
+                              key: Key(selectedTime), // <- Magic!
+                              initialValue: selectedTime,
+                              enabled: false,
+                              decoration: InputDecoration(
+                                  errorStyle: TextStyle(
+                                    color: Color.fromRGBO(225, 103, 104, 1),
+                                  ),
+                                  fillColor: Colors.orange,
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color:
+                                            Color.fromRGBO(225, 103, 104, 1)),
+                                  ),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255)),
+                                  ),
+                                  labelText: "time",
+                                  labelStyle: TextStyle(
+                                    color: Color.fromARGB(209, 0, 0, 0),
+                                  )),
+                            ),
                           ),
                         ),
-                        Flexible(child: Text("$selectedTime"))
                       ],
                     ),
-                    SizedBox(height: 10.0),
+                    SizedBox(height: 50.0),
                     processing
                         ? Center(child: CircularProgressIndicator())
                         : Padding(
@@ -567,7 +600,10 @@ class _CreateEventState extends State<CreateEvent> {
                               elevation: 5.0,
                               borderRadius: BorderRadius.circular(30.0),
                               color: Theme.of(context).primaryColor,
-                              child: MaterialButton(
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Color(0xff5bc9bf))),
                                 onPressed: () async {
                                   if (_formKey.currentState!.validate()) {
                                     setState(() {
@@ -577,8 +613,6 @@ class _CreateEventState extends State<CreateEvent> {
                                       "title": _title.text,
                                       "description": _description.text,
                                     };
-
-                                    // _saveEvent();
                                     Navigator.pop(context);
                                     setState(() {
                                       processing = false;
@@ -614,13 +648,22 @@ class _CreateEventState extends State<CreateEvent> {
             onPressed: () => {
                   showDialog(
                       context: context,
-                      builder: (context) => AlertDialog(
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Flexible(child: _dialogFields()),
-                              ],
+                      builder: (context) => StatefulBuilder(
+                            builder: (context, StateSetter setStateDialog) =>
+                                AlertDialog(
+                              elevation: 20,
+                              contentPadding: EdgeInsets.all(10),
+                              content: SizedBox(
+                                height: 400,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Flexible(
+                                        child: _dialogFields(setStateDialog)),
+                                  ],
+                                ),
+                              ),
                             ),
                           ))
                 }),
