@@ -1,5 +1,4 @@
 
-import 'package:advices/utilities/constants.dart';
 
 class EventModel{
   final String? id;

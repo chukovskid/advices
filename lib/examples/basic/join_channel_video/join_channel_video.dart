@@ -54,7 +54,9 @@ class _State extends State<JoinChannelVideo> {
   }
 
   Future<void> closeCall() async {
+    await _leaveChannel();
     await DatabaseService.closeCall(channelName);
+    await _engine.destroy();
   }
 
   Future<void> getUserUid() async {
@@ -304,9 +306,14 @@ class _State extends State<JoinChannelVideo> {
 
   Future<void> _onCallEnd(BuildContext context) async {
     print("Call ENDED ++++++++++++++++ ${channelName}");
-        await DatabaseService.closeCall(channelName);
+    closeCall();
 
-    Navigator.pop(context);
+    // TODO
+    // await Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => Calls()),
+    // );
+        Navigator.pop(context);      
   }
 
   void _onToggleMute() {

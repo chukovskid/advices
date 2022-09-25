@@ -8,7 +8,7 @@ const fcm = admin.messaging();
 
 
 export const notifyNewCalls = functions.firestore
-  .document('calls/{callerId}/open/{channelName}')
+  .document('users/{callerId}/pendingCalls/{channelName}')
   .onWrite(async (snapshot, context) => {
     let callerId = context.params.callerId;
     let channelName = context.params.channelName;

@@ -173,7 +173,6 @@ class DatabaseService {
       "dateCreated": DateTime.now().millisecondsSinceEpoch,
       "startDate": dateTime,
       "open": false
-
     });
 
     // save call for lawyer
@@ -188,11 +187,13 @@ class DatabaseService {
       "title": title,
       "description": description,
       "dateCreated": DateTime.now().millisecondsSinceEpoch,
+      "startDate": dateTime,
       "open": false
     });
   }
 
-  static Future<List<DateTime>> getAllLEventsDateTIme(lawyerId, DateTime date) async {
+  static Future<List<DateTime>> getAllLEventsDateTIme(
+      lawyerId, DateTime date) async {
     List<EventModel> data = [];
     List<DateTime> dataDateTime = [];
     DateTime endDate = date.add(Duration(days: 1));
@@ -230,8 +231,8 @@ class DatabaseService {
         .collection('pendingCalls');
 
     // var filteredCalls = calls.doc(uid).collection("open");
-final orderedCalls = calls.orderBy("open");
-    final snapshots = orderedCalls.snapshots();
+    final orderedCalls = calls.orderBy("open"); // TODO Use to order calls
+    final snapshots = calls.snapshots();
     var userCalls = snapshots.map((snapshot) =>
         snapshot.docs.map((doc) => EventModel.fromJson(doc.data())));
     return userCalls;
@@ -285,20 +286,17 @@ final orderedCalls = calls.orderBy("open");
         .doc(lawyerId)
         .collection("pendingCalls");
 
-    // save call for client 
+    // save call for client
     clientCalls.doc(channelName).update({
       "dateOpened": DateTime.now().millisecondsSinceEpoch,
       "open": true
       // TODO ADD collection of users that are inside this call
     });
 
-        // save call for lawyer 
-    lawyerCalls.doc(channelName).update({
-      "dateOpened": DateTime.now().millisecondsSinceEpoch,
-      "open": true
-    });
+    // save call for lawyer
+    lawyerCalls.doc(channelName).update(
+        {"dateOpened": DateTime.now().millisecondsSinceEpoch, "open": true});
 
-    
     return channelName;
   }
 
@@ -315,23 +313,16 @@ final orderedCalls = calls.orderBy("open");
         .doc(lawyerId)
         .collection("pendingCalls");
 
-    // save call for client 
-    clientCalls.doc(channelName).update({
-      "dateOpened": DateTime.now().millisecondsSinceEpoch,
-      "open": false
-    });
+    // save call for client
+    clientCalls.doc(channelName).update(
+        {"dateOpened": DateTime.now().millisecondsSinceEpoch, "open": false});
 
-        // save call for lawyer 
-    lawyerCalls.doc(channelName).update({
-      "dateOpened": DateTime.now().millisecondsSinceEpoch,
-      "open": false
-    });
+    // save call for lawyer
+    lawyerCalls.doc(channelName).update(
+        {"dateOpened": DateTime.now().millisecondsSinceEpoch, "open": false});
 
-    
     return channelName;
   }
-
-
 
   static Stream<Iterable<Call>> getOpenCallForUsers(uid) {
     CollectionReference calls = FirebaseFirestore.instance.collection("calls");
