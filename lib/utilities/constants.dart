@@ -29,6 +29,10 @@ const lightBlueColor = Color.fromRGBO(107, 119, 141, 1);
 const mediumBlueColor = Color.fromRGBO(38, 56, 89, 1);
 const darkBlueColor = const Color.fromRGBO(23, 34, 59, 1);
 const orangeColor = const Color.fromRGBO(225, 103, 104, 1);
+const darkGreenColor = const Color(0xff032229);
+const lightGreenColor = const Color(0xff5bc9bf);
+
+
 
 
 

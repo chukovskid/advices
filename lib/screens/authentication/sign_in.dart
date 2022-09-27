@@ -2,6 +2,7 @@
 
 import 'package:advices/screens/authentication/register.dart';
 import 'package:advices/screens/home.dart';
+import 'package:advices/utilities/constants.dart';
 import 'package:flutter/material.dart';
 import '../../models/user.dart';
 import '../../services/auth.dart';
@@ -113,8 +114,8 @@ class _SignInState extends State<SignIn> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        // backgroundColor: Color.fromRGBO(23, 34, 59, 1),
-        backgroundColor: Color.fromRGBO(23, 34, 59, 1),
+        // backgroundColor: darkGreenColor,
+        backgroundColor: darkGreenColor,
         elevation: 0.0,
         actions: <Widget>[
           FlatButton.icon(
@@ -165,7 +166,7 @@ class _SignInState extends State<SignIn> {
             _showEmailInputs ? _showEmailSignIn() : SizedBox(),
             !_showEmailInputs
                 ? RaisedButton(
-                    color: Color.fromRGBO(23, 34, 59, 1),
+                    color: darkGreenColor,
                     child: const Text(
                       ' Email log In ',
                       style: TextStyle(color: Colors.white),

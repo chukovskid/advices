@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:advices/screens/bottomAppBar/BottomBar.dart';
 import 'package:advices/screens/call/calls.dart';
 import 'package:advices/screens/laws.dart';
 import 'package:advices/screens/authentication/authentication.dart';
 import 'package:advices/screens/authentication/sign_in.dart';
 import 'package:advices/services/auth.dart';
+import 'package:advices/utilities/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -105,8 +107,8 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(23, 34, 59, 1),
-        elevation: 0.0,
+        backgroundColor: darkGreenColor,
+        elevation: 10.0,
         actions: <Widget>[
           FlatButton.icon(
             textColor: Colors.white,
@@ -116,18 +118,34 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.miniCenterFloat,
-      floatingActionButton: _next(),
+     bottomNavigationBar: BottomBar(
+          fabLocation: FloatingActionButtonLocation.endDocked,
+          shape:  CircularNotchedRectangle(),
+        ),
+                floatingActionButton: true
+            ? FloatingActionButton(
+                onPressed: () {},
+                tooltip: 'Create',
+                backgroundColor: lightGreenColor,
+                // child: const Text("lawyer",),
+                child: const Icon(Icons.add, color: Colors.black,),
+              )
+            : null,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      // floatingActionButtonLocation:
+      //     FloatingActionButtonLocation.miniCenterFloat,
+      // floatingActionButton: _next(),
       body: Container(
         // image
         height: double.infinity,
         width: double.infinity,
-        child: Image.network(
-            "https://images.unsplash.com/photo-1505664063603-28e48ca204eb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
-            height: 45,
-            width: 45,
-            fit: BoxFit.fitHeight),
+        child: Laws()
+        
+        // Image.network(
+        //     "https://images.unsplash.com/photo-1505664063603-28e48ca204eb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
+        //     height: 45,
+        //     width: 45,
+        //     fit: BoxFit.fitHeight),
       ),
     );
   }
@@ -166,7 +184,7 @@ class _HomeState extends State<Home> {
             child: FittedBox(
               child: FloatingActionButton.extended(
                 label: Text('      Open calls...    '),
-                heroTag: "settingsBtn",
+                heroTag: "openCalls",
                 onPressed: () => {
                   // DatabaseService.saveLawAreasForLawyerAsArray();
                   Navigator.push(
