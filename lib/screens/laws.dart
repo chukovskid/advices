@@ -1,14 +1,9 @@
-import 'package:advices/models/law.dart';
-import 'package:advices/screens/call/call.dart';
+import 'package:advices/models/service.dart';
 import 'package:advices/screens/lawAreas/gridBadge.dart';
-import 'package:advices/screens/profile/lawyerProfile.dart';
 import 'package:advices/screens/lawyers.dart';
 import 'package:advices/utilities/constants.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
-
-import '../models/user.dart';
 import '../services/database.dart';
 import 'authentication/authentication.dart';
 import 'floating_footer_btns.dart';
@@ -103,9 +98,9 @@ class _LawsState extends State<Laws>
               Flexible(
                 child: Row(
                   children: <Widget>[
-                    Flexible(child: _cardsList()),
-                    Flexible(child: _cardsList()),
-                    Flexible(child: _cardsList()),
+                    Flexible(child: _cardsList(2)),
+                    Flexible(child: _cardsList(3)),
+                    Flexible(child: _cardsList(4)),
                     // Flexible(
                     //   flex: 2,
                     //   child: Container(
@@ -169,7 +164,7 @@ class _LawsState extends State<Laws>
                         })
                       }),
               // Container( height:openExpats ? 250 : 10, child: openExpats ? _buildGrid() : SizedBox()),
-              Container(height: 200, child: _buildGrid()),
+              Container(height: 200, child: _cardsList(2)),
               // SizedBox(height: 10),
               ListTile(
                   leading: Icon(
@@ -191,7 +186,7 @@ class _LawsState extends State<Laws>
                         })
                       }),
               // Flexible(child: openContracts ? _cardsList() : SizedBox()),
-              Container(height: 200, child: _buildGrid()),
+              Container(height: 200, child: _cardsList(3)),
 
               // SizedBox(height: 10),
               ListTile(
@@ -214,15 +209,15 @@ class _LawsState extends State<Laws>
                         })
                       }),
               // Flexible(child: openCompanies ? _cardsList() : SizedBox()),
-              Container(height: 200, child: _cardsList()),
+              Container(height: 200, child: _cardsList(4)),
             ],
           ),
         ));
   }
 
-  Widget _cardsList() {
-    return StreamBuilder<Iterable<Law>>(
-      stream: DatabaseService.getAllLaws(),
+  Widget _cardsList(int area) {
+    return StreamBuilder<Iterable<Service>>(
+      stream: DatabaseService.getAllServicesByArea(area),
       builder: ((context, snapshot) {
         if (!snapshot.hasData) {
           return Center(
@@ -269,7 +264,7 @@ class _LawsState extends State<Laws>
     );
   }
 
-  Widget _card(Law law) {
+  Widget _card(Service service) {
     const icon = "account_balance_outlined";
     return Card(
       shape: RoundedRectangleBorder(
@@ -299,7 +294,7 @@ class _LawsState extends State<Laws>
               //   color: Color.fromARGB(255, 207, 223, 226),
               // ),
               title: Text(
-                law.name.toString(),
+                service.name.toString(),
                 style: TextStyle(
                     fontSize: 17, color: Color.fromRGBO(3, 34, 41, 1)),
               ),
@@ -307,7 +302,7 @@ class _LawsState extends State<Laws>
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => Lawyers(lawArea: law.id)),
+                    builder: (context) => Lawyers(service: service.id)),
               ),
             ),
           ),
@@ -368,7 +363,7 @@ class _LawsState extends State<Laws>
     );
   }
 
-  Widget _gridCard(Law law) {
+  Widget _gridCard(Service law) {
     return Container(
       padding: const EdgeInsets.all(8),
       color: Colors.teal[100],
@@ -376,7 +371,7 @@ class _LawsState extends State<Laws>
         radius: 10,
         borderWidth: 1,
         imageUrl:
-            'https://upload.wikimedia.org/wikipedia/commons/e/ea/Retrato_del_Maestro_Yoda.jpg',
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png',
       ),
 
       //  CircleAvatar(

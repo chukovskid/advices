@@ -8,8 +8,8 @@ import 'authentication/authentication.dart';
 import 'floating_footer_btns.dart';
 
 class Lawyers extends StatefulWidget {
-  final String lawArea;
-  const Lawyers({Key? key, required this.lawArea}) : super(key: key);
+  final String service;
+  const Lawyers({Key? key, required this.service}) : super(key: key);
 
   @override
   State<Lawyers> createState() => _LawyersState();
@@ -88,7 +88,7 @@ class _LawyersState extends State<Lawyers>
 
   Widget _cardsList() {
     return StreamBuilder<Iterable<FlutterUser>>(
-      stream: DatabaseService.getFilteredLawyers(widget.lawArea),
+      stream: DatabaseService.getFilteredLawyers(widget.service),
       builder: ((context, snapshot) {
         if (!snapshot.hasData) return Text("loading data ...");
         if (snapshot.hasData) {

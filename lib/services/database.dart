@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:advices/models/event.dart';
-import 'package:advices/models/law.dart';
+import 'package:advices/models/service.dart';
 import 'package:advices/models/user.dart';
 import 'package:advices/services/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -20,6 +20,13 @@ class DatabaseService {
   // // collection reference
   // final CollectionReference brewCollection =
   //     Firestore.instance.collection('brews');
+
+  // static readUsers() => FirebaseFirestore.instance
+  //     .collection("users")
+  //     .snapshots()
+  //     .map((snapshot) =>
+  //         snapshot.docs.map((doc) => FlutterUser.fromJson(doc.data())))
+  //     .toList();
 
   static Future<FlutterUser?> updateUserData(FlutterUser user) async {
     CollectionReference lawyers =
@@ -59,50 +66,6 @@ class DatabaseService {
     return user;
   }
 
-  static saveLawAreasForLawyerAsArray(
-      List<String> lawAreasIds, String uid) async {
-    DocumentReference lawyerRef =
-        FirebaseFirestore.instance.collection('lawyers').doc(uid);
-    await lawyerRef.update({"lawAreas": lawAreasIds});
-  }
-
-  static Future<void> saveLawAreasForLawyer(
-      String uid, List<Law?> newLawAreas) async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    CollectionReference lawAreas = FirebaseFirestore.instance
-        .collection('lawyers')
-        .doc(uid)
-        // .doc("69kDEqpjX7aeulnh6QsCt1uH8l23")
-        .collection("lawAreas");
-
-    if (newLawAreas.isNotEmpty) {
-      List<String> selectedLawsIds = [];
-      for (int i = 0; i < newLawAreas.length; i++) {
-        Law selectedLaw = Law.fromJson(jsonDecode(newLawAreas[i].toString()));
-        print(selectedLaw);
-        selectedLawsIds.add(selectedLaw.id);
-
-        // TODO delete the collection before adding the this
-        await lawAreas.doc(selectedLaw.id).set({
-          "id": selectedLaw.id,
-          "index": selectedLaw.index,
-          "name": selectedLaw.name,
-        });
-      }
-      print(selectedLawsIds);
-      await saveLawAreasForLawyerAsArray(selectedLawsIds, uid);
-    }
-  }
-
-  static Future<void> clearLawAreaCollection(
-      CollectionReference lawAreas) async {
-    final batch = FirebaseFirestore.instance.batch();
-    var snapshots = await lawAreas.get();
-    for (var doc in snapshots.docs) {
-      batch.delete(doc.reference);
-    }
-  }
-
   static Future<FlutterUser?> getUser(String userId) async {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     final snapshot = await users.doc(userId).get();
@@ -124,13 +87,6 @@ class DatabaseService {
     // return null;
   }
 
-  static readUsers() => FirebaseFirestore.instance
-      .collection("users")
-      .snapshots()
-      .map((snapshot) =>
-          snapshot.docs.map((doc) => FlutterUser.fromJson(doc.data())))
-      .toList();
-
   static Stream<Iterable<FlutterUser>> getAllUsers() {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     final snapshots = users.snapshots();
@@ -139,22 +95,65 @@ class DatabaseService {
     return flutterUsers;
   }
 
-  static Stream<Iterable<Law>> getAllLaws() {
-    CollectionReference laws = FirebaseFirestore.instance.collection('laws');
-    var filteredLaws = laws.where("id", isNotEqualTo: "notRealId").snapshots();
+////// SERVICES
+///
+  
+  static Stream<Iterable<Service>> getAllServices() {
+    CollectionReference services = FirebaseFirestore.instance.collection('services');
+    var filteredServices = services.where("area", isNotEqualTo: 2).snapshots();
 
-    // final snapshots = filteredLaws.orderBy('name').snapshots();
-    var flutterLaw = filteredLaws.map(
-        (snapshot) => snapshot.docs.map((doc) => Law.fromJson(doc.data())));
+    // final snapshots = filteredservices.orderBy('name').snapshots();
+    var flutterLaw = filteredServices.map(
+        (snapshot) => snapshot.docs.map((doc) => Service.fromJson(doc.data())));
     return flutterLaw;
+  }
+
+  static Stream<Iterable<Service>> getAllServicesByArea(int area) {
+    CollectionReference services = FirebaseFirestore.instance.collection('services');
+    var filteredServices = services.where("area", isEqualTo: area).snapshots();
+
+    // final snapshots = filteredservices.orderBy('name').snapshots();
+    var flutterLaw = filteredServices.map(
+        (snapshot) => snapshot.docs.map((doc) => Service.fromJson(doc.data())));
+    return flutterLaw;
+  }
+
+  static Future<void> saveServicesForLawyer(String uid, List<Service?> newServices) async {
+    CollectionReference services = FirebaseFirestore.instance
+        .collection('lawyers')
+        .doc(uid)
+        .collection("services");
+
+    if (newServices.isNotEmpty) {
+      List<String> selectedServicesIds = [];
+      for (int i = 0; i < newServices.length; i++) {
+        Service selectedService = Service.fromJson(jsonDecode(newServices[i].toString()));
+        print(selectedService);
+        selectedServicesIds.add(selectedService.id);
+
+        // TODO delete the collection before adding the this
+        await services.doc(selectedService.id).set({
+          "id": selectedService.id,
+          "area": selectedService.area,
+          "name": selectedService.name,
+        });
+      }
+      print(selectedServicesIds);
+      await saveServicesForLawyerAsArray(selectedServicesIds, uid);
+    }
+  }
+
+  static Future<void> saveServicesForLawyerAsArray(List<String> servicesIds, String uid) async {
+    DocumentReference lawyerRef =
+        FirebaseFirestore.instance.collection('lawyers').doc(uid);
+    await lawyerRef.update({"services": servicesIds});
   }
 
 //// EVENTS
   /// Events
   ///
 
-  static Future<void> saveEvent(
-      lawyerId, title, description, DateTime dateTime) async {
+  static Future<void> saveEvent(lawyerId, title, description, DateTime dateTime) async {
     // save call for cleint
     final AuthService _auth = AuthService();
     User? client = await _auth.getCurrentUser();
@@ -192,8 +191,7 @@ class DatabaseService {
     });
   }
 
-  static Future<List<DateTime>> getAllLEventsDateTIme(
-      lawyerId, DateTime date) async {
+  static Future<List<DateTime>> getAllLEventsDateTIme(lawyerId, DateTime date) async {
     List<EventModel> data = [];
     List<DateTime> dataDateTime = [];
     DateTime endDate = date.add(Duration(days: 1));
@@ -238,36 +236,21 @@ class DatabaseService {
     return userCalls;
   }
 
-//// LAWS
-  /// Laws
-  ///
-
-  static Stream<Iterable<Law>> getLawAreasForLawyer(String uid) {
-    CollectionReference laws = FirebaseFirestore.instance
-        .collection('lawyers')
-        .doc(uid)
-        .collection("lawAreas");
-    final snapshots = laws.orderBy('name').snapshots();
-    var flutterLaw = snapshots.map(
-        (snapshot) => snapshot.docs.map((doc) => Law.fromJson(doc.data())));
-    return flutterLaw;
-  }
-
-/////
+///// Lawyers
   /// Lawyers
   ///
 
   static Stream<Iterable<FlutterUser>> getFilteredLawyers(String lawId) {
     CollectionReference lawyers =
         FirebaseFirestore.instance.collection("lawyers");
-    var filteredLawyers = lawyers.where("lawAreas", arrayContains: lawId);
+    var filteredLawyers = lawyers.where("services", arrayContains: lawId);
     final snapshots = filteredLawyers.snapshots();
     var flutterUsers = snapshots.map((snapshot) =>
         snapshot.docs.map((doc) => FlutterUser.fromJson(doc.data())));
     return flutterUsers;
   }
 
-  /////
+  ///// Calls
   /// Calls
   ///
 
@@ -352,7 +335,7 @@ class DatabaseService {
     return null;
   }
 
-  ////
+  //// TOKEN
   /// Tokens
   ///
 

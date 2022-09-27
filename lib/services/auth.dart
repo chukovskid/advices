@@ -1,10 +1,10 @@
+import 'package:advices/models/service.dart';
 import 'package:advices/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '../models/law.dart';
 import 'database.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -90,8 +90,8 @@ class AuthService {
 
   // register with email and password
   Future registerWithEmailAndPassword(
-      FlutterUser newFUser, List<Law?> lawAreas) async {
-    print(lawAreas);
+      FlutterUser newFUser, List<Service?> services) async {
+    print(services);
     try {
       // const email = newFUser.email;
       UserCredential credential = await _auth.createUserWithEmailAndPassword(
@@ -104,10 +104,10 @@ class AuthService {
       if (user == null) return null;
 
       print(user.uid);
-      DatabaseService.saveLawAreasForLawyer(user.uid, lawAreas);
       newFUser.uid = user.uid;
-      FlutterUser? newFlutterUsere =
-          await DatabaseService.updateUserData(newFUser);
+      await DatabaseService.updateUserData(newFUser);
+      await DatabaseService.saveServicesForLawyer(user.uid, services);
+
       return newFUser;
     } catch (error) {
       print(error.toString());
@@ -261,8 +261,7 @@ class AuthService {
     return user;
   }
 
-
-   Future<void> signOutWithGoogle({required BuildContext context}) async {
+  Future<void> signOutWithGoogle({required BuildContext context}) async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
     try {
@@ -278,7 +277,6 @@ class AuthService {
       );
     }
   }
-
 
   static SnackBar customSnackBar({required String content}) {
     return SnackBar(

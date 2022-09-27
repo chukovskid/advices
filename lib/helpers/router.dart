@@ -21,7 +21,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case 'lawyers':
       return MaterialPageRoute(
           builder: (context) =>
-              Lawyers(lawArea: "ednakvostId")); // TODO this is not right
+              Lawyers(service: "ednakvostId")); // TODO this is not right
     case 'lawyers_profile':
       return MaterialPageRoute(builder: (context) => LawyerProfile('cNbw66J36wMvUZdjES7H25HXAGo2'));
     case 'selectDate':

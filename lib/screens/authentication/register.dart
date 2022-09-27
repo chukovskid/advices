@@ -2,15 +2,12 @@
 
 import 'dart:convert';
 
-import 'package:advices/screens/authentication/register.dart';
+import 'package:advices/models/service.dart';
 import 'package:advices/screens/home.dart';
 import 'package:advices/services/database.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
-import 'package:multi_select_flutter/util/multi_select_item.dart';
-import '../../models/law.dart';
+import '../../models/service.dart';
 import '../../models/user.dart';
 import '../../services/auth.dart';
 import '../../utilities/constants.dart';
@@ -45,7 +42,6 @@ class _RegisterState extends State<Register> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _surnameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _lawFieldController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _experienceController = TextEditingController();
   final TextEditingController _yearsOfExperienceController =
@@ -53,23 +49,17 @@ class _RegisterState extends State<Register> {
   final TextEditingController _educationController = TextEditingController();
 
   bool? isLawyer = null;
-  // text field state
   String registerAsText = '';
   bool _openLawyerInputs = false;
-  bool _showEmailInputs = false;
-
   String password = '';
   FlutterUser? user;
-  Law? selecteLaw;
-  List<Law?> selectedLaws = [];
-  List<int> selectedLawsIndexs = [];
+  List<Service?> selectedServices = [];
   var selectedLawAreaName;
-  final _multiSelectKey = GlobalKey<FormFieldState>();
-
   var carMake, carMakeModel;
   var setDefaultMake = true, setDefaultMakeModel = true;
+  bool showSelectService = false;
 
-  bool showSelectLawType = false;
+
 
   _nextFocus(FocusNode focusNode) {
     FocusScope.of(context).requestFocus(focusNode);
@@ -96,7 +86,7 @@ class _RegisterState extends State<Register> {
 
       try {
         FlutterUser? createdUser =
-            await _auth.registerWithEmailAndPassword(fUser, selectedLaws);
+            await _auth.registerWithEmailAndPassword(fUser, selectedServices);
         _navigateToAuth();
       } catch (e) {
         print(e);
@@ -209,7 +199,7 @@ class _RegisterState extends State<Register> {
               const SizedBox(height: 20.0),
               isLawyer != null
                   ? (_openLawyerInputs
-                      ? (showSelectLawType == false
+                      ? (showSelectService == false
                           ? _showLawyerRegisterFields()
                           : _dropdownLawSelect())
                       : _showRegisterFields())
@@ -613,7 +603,7 @@ class _RegisterState extends State<Register> {
             focusNode: _educationFocusNode,
             onFieldSubmitted: (String value) async {
               setState(() {
-                showSelectLawType = true;
+                showSelectService = true;
               });
             },
             controller: _educationController,
@@ -646,7 +636,7 @@ class _RegisterState extends State<Register> {
               ),
               onPressed: () async {
                 setState(() {
-                  showSelectLawType = true;
+                  showSelectService = true;
                 });
               })
         ]),
@@ -654,43 +644,12 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  Widget _selectLawArea() {
-    return FormField<String>(
-      // validator: (value) => _validateInput(value!),
-      builder: (FormFieldState<String> state) {
-        return _dropdownLawSelect();
-        //
-        // InputDecorator(
-        //     decoration: const InputDecoration(
-        //         errorStyle: TextStyle(
-        //           color: Color.fromRGBO(225, 103, 104, 1),
-        //         ),
-        //         fillColor: orangeColor,
-        //         enabledBorder: UnderlineInputBorder(
-        //           borderSide:
-        //               BorderSide(color: Color.fromRGBO(225, 103, 104, 1)),
-        //         ),
-        //         focusedBorder: UnderlineInputBorder(
-        //           borderSide:
-        //               BorderSide(color: Color.fromARGB(255, 255, 255, 255)),
-        //         ),
-        //         labelText: "Law field",
-        //         labelStyle: TextStyle(
-        //           color: Color.fromARGB(209, 255, 255, 255),
-        //         )),
-        //     // isEmpty: _currentSelectedValue == '',
-
-        //     child: _dropdownLawSelect());
-      },
-    );
-  }
-
   Widget _dropdownLawSelect() {
     return Column(
       children: [
         DropdownButtonHideUnderline(
-            child: StreamBuilder<Iterable<Law>>(
-                stream: DatabaseService.getAllLaws(),
+            child: StreamBuilder<Iterable<Service>>(
+                stream: DatabaseService.getAllServices(),
                 builder: (context, snapshot) {
                   // Safety check to ensure that snapshot contains data
                   // without this safety check, StreamBuilder dirty state warnings will be thrown
@@ -722,7 +681,7 @@ class _RegisterState extends State<Register> {
                           style: TextStyle(color: Colors.white),
                         ),
                         title: const Text("Права"),
-                        // initialValue: selectedLaws
+                        // initialValue: selectedServices
                         //     .map((e) => MultiSelectItem(e, e!.index.toString()))
                         //     .toList(),
                         validator: (values) {
@@ -736,27 +695,27 @@ class _RegisterState extends State<Register> {
                             .map((e) => MultiSelectItem(e, e.name))
                             .toList(),
                         onConfirm: (values) {
-                          selectedLaws.remove(values);
-                          selectedLaws.clear();
-                          print(selectedLaws);
+                          selectedServices.remove(values);
+                          selectedServices.clear();
+                          print(selectedServices);
                           for (int i = 0; i < values.length; i++) {
                             var val = values[i];
-                            Law selectedLaw =
-                                Law.fromJson(jsonDecode(values[i].toString()));
-                            selectedLaws.add(selectedLaw);
+                            Service selectedService =
+                                Service.fromJson(jsonDecode(values[i].toString()));
+                            selectedServices.add(selectedService);
                           }
-                          print(selectedLaws);
+                          print(selectedServices);
                         },
                         chipDisplay: MultiSelectChipDisplay(
-                          items: selectedLaws
+                          items: selectedServices
                               .map((e) => MultiSelectItem(e, e!.name))
                               .toList(),
                           onTap: (value) {
                             setState(() {
-                              selectedLaws.remove(value);
-                              selectedLaws.clear();
+                              selectedServices.remove(value);
+                              selectedServices.clear();
                             });
-                            return selectedLaws;
+                            return selectedServices;
                           },
                         ),
                       ),
@@ -776,7 +735,7 @@ class _RegisterState extends State<Register> {
               print("hey");
 
               setState(() {
-                // DatabaseService.saveLawAreasForLawyer("uid", selectedLaws);
+                // DatabaseService.saveLawAreasForLawyer("uid", selectedServices);
                 _submitForm();
               });
             })
