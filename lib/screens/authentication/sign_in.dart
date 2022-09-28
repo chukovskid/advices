@@ -6,6 +6,7 @@ import 'package:advices/utilities/constants.dart';
 import 'package:flutter/material.dart';
 import '../../models/user.dart';
 import '../../services/auth.dart';
+import '../shared_widgets/base_app_bar.dart';
 import 'authentication.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -113,19 +114,7 @@ class _SignInState extends State<SignIn> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        // backgroundColor: darkGreenColor,
-        backgroundColor: darkGreenColor,
-        elevation: 0.0,
-        actions: <Widget>[
-          FlatButton.icon(
-            textColor: Colors.white,
-            icon: Icon(Icons.home),
-            label: Text(''),
-            onPressed: _navigateToHome,
-          ),
-        ],
-      ),
+      appBar: BaseAppBar(appBar: AppBar(),redirectToHome: true,),     
       backgroundColor: Color.fromARGB(255, 226, 146, 100),
       body: Container(
         height: double.maxFinite,
@@ -134,10 +123,7 @@ class _SignInState extends State<SignIn> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Color.fromRGBO(107, 119, 141, 1),
-              Color.fromRGBO(38, 56, 89, 1),
-            ],
+            colors: backgroundColor,
             stops: [-1, 2],
           ),
         ),
@@ -166,7 +152,7 @@ class _SignInState extends State<SignIn> {
             _showEmailInputs ? _showEmailSignIn() : SizedBox(),
             !_showEmailInputs
                 ? RaisedButton(
-                    color: darkGreenColor,
+                    color: orangeColor,
                     child: const Text(
                       ' Email log In ',
                       style: TextStyle(color: Colors.white),

@@ -11,6 +11,7 @@ import '../../models/service.dart';
 import '../../models/user.dart';
 import '../../services/auth.dart';
 import '../../utilities/constants.dart';
+import '../shared_widgets/base_app_bar.dart';
 import 'authentication.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -131,19 +132,8 @@ class _RegisterState extends State<Register> {
   Widget build(BuildContext context) {
     return Scaffold(
       // resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        // backgroundColor: Color.fromRGBO(23, 34, 59, 1),
-        backgroundColor: const Color.fromRGBO(23, 34, 59, 1),
-        elevation: 0.0,
-        actions: <Widget>[
-          FlatButton.icon(
-            textColor: Colors.white,
-            icon: const Icon(Icons.home),
-            label: const Text(''),
-            onPressed: _navigateToHome,
-          ),
-        ],
-      ),
+      appBar: BaseAppBar(appBar: AppBar(),),
+
       // backgroundColor: const Color.fromARGB(255, 226, 146, 100),
       body: Container(
           height: double.maxFinite,
@@ -152,10 +142,7 @@ class _RegisterState extends State<Register> {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [
-                Color.fromRGBO(107, 119, 141, 1),
-                Color.fromRGBO(38, 56, 89, 1),
-              ],
+              colors: backgroundColor,
               stops: [-1, 2],
             ),
           ),

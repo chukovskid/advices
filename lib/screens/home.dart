@@ -1,13 +1,10 @@
-import 'dart:convert';
-
-import 'package:advices/screens/bottomAppBar/BottomBar.dart';
+import 'package:advices/screens/shared_widgets/BottomBar.dart';
 import 'package:advices/screens/call/calls.dart';
 import 'package:advices/screens/laws.dart';
 import 'package:advices/screens/authentication/authentication.dart';
-import 'package:advices/screens/authentication/sign_in.dart';
+import 'package:advices/screens/shared_widgets/base_app_bar.dart';
 import 'package:advices/services/auth.dart';
 import 'package:advices/utilities/constants.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -15,7 +12,6 @@ import 'package:flutter/material.dart';
 import '../examples/basic/join_channel_video/join_channel_video.dart';
 import '../services/database.dart';
 import 'call/callMethods.dart';
-import 'floating_footer_btns.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -78,14 +74,14 @@ class _HomeState extends State<Home> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  Scaffold(
+              builder: (context) => Scaffold(
                     body: JoinChannelVideo(
                       token: result['token'],
                       channelId: result['channelId'],
                     ),
                   )));
-    };
+    }
+    ;
   }
 
   Future<void> getFruit() async {
@@ -106,47 +102,42 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: darkGreenColor,
-        elevation: 10.0,
-        actions: <Widget>[
-          FlatButton.icon(
-            textColor: Colors.white,
-            icon: Icon(Icons.person_outline_sharp),
-            label: Text(''),
-            onPressed: _navigateToAuth,
-          ),
-        ],
+      appBar: BaseAppBar(
+        appBar: AppBar(),
       ),
-     bottomNavigationBar: BottomBar(
-          fabLocation: FloatingActionButtonLocation.endDocked,
-          shape:  CircularNotchedRectangle(),
+      bottomNavigationBar: BottomBar(
+        fabLocation: FloatingActionButtonLocation.endDocked,
+        shape: CircularNotchedRectangle(),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Calls()));
+        },
+        tooltip: 'Create',
+        backgroundColor: lightGreenColor,
+        // child: const Text("lawyer",),
+        child: const Icon(
+          Icons.call,
+          color: Colors.white,
         ),
-                floatingActionButton: true
-            ? FloatingActionButton(
-                onPressed: () {},
-                tooltip: 'Create',
-                backgroundColor: lightGreenColor,
-                // child: const Text("lawyer",),
-                child: const Icon(Icons.add, color: Colors.black,),
-              )
-            : null,
-        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       // floatingActionButtonLocation:
       //     FloatingActionButtonLocation.miniCenterFloat,
       // floatingActionButton: _next(),
       body: Container(
-        // image
-        height: double.infinity,
-        width: double.infinity,
-        child: Laws()
-        
-        // Image.network(
-        //     "https://images.unsplash.com/photo-1505664063603-28e48ca204eb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
-        //     height: 45,
-        //     width: 45,
-        //     fit: BoxFit.fitHeight),
-      ),
+          // image
+          height: double.infinity,
+          width: double.infinity,
+          child: Laws()
+
+          // Image.network(
+          //     "https://images.unsplash.com/photo-1505664063603-28e48ca204eb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
+          //     height: 45,
+          //     width: 45,
+          //     fit: BoxFit.fitHeight),
+          ),
     );
   }
 

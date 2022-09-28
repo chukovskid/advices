@@ -20,10 +20,9 @@ final kBoxDecorationStyle = BoxDecoration(
   border: Border.all(color: Colors.white),
 );
 
-
-
-const helpTextStyle =  TextStyle(color: Colors.black, fontSize: 15.0);
-const profileHeader =  TextStyle(color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold);
+const helpTextStyle = TextStyle(color: Colors.black, fontSize: 15.0);
+const profileHeader =
+    TextStyle(color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold);
 
 const lightBlueColor = Color.fromRGBO(107, 119, 141, 1);
 const mediumBlueColor = Color.fromRGBO(38, 56, 89, 1);
@@ -31,12 +30,7 @@ const darkBlueColor = const Color.fromRGBO(23, 34, 59, 1);
 const orangeColor = const Color.fromRGBO(225, 103, 104, 1);
 const darkGreenColor = const Color(0xff032229);
 const lightGreenColor = const Color(0xff5bc9bf);
-
-
-
-
-
-
+const backgroundColor = [darkGreenColor, darkGreenColor];
 
 /// Example event class.
 class Event {
@@ -79,12 +73,6 @@ List<DateTime> daysInRange(DateTime first, DateTime last) {
     (index) => DateTime.utc(first.year, first.month, first.day + index),
   );
 }
-
-
-
-
-
-
 
 final kToday = DateTime.now();
 final kFirstDay = DateTime(kToday.year, kToday.month - 3, kToday.day);

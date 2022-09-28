@@ -1,16 +1,14 @@
-import 'package:advices/config/agora.config.dart';
 import 'package:advices/models/event.dart';
 import 'package:advices/screens/call/call.dart';
-import 'package:advices/screens/profile/lawyerProfile.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:advices/utilities/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../examples/basic/join_channel_video/join_channel_video.dart';
-import '../../models/user.dart';
 import '../../services/auth.dart';
 import '../../services/database.dart';
 import '../authentication/authentication.dart';
+import '../shared_widgets/BottomBar.dart';
+import '../shared_widgets/base_app_bar.dart';
 import 'callMethods.dart';
 
 class Calls extends StatefulWidget {
@@ -80,17 +78,12 @@ class _CallsState extends State<Calls>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromRGBO(23, 34, 59, 1),
-        elevation: 0.0,
-        actions: <Widget>[
-          FlatButton.icon(
-            textColor: Colors.white,
-            icon: Icon(Icons.person_outline_sharp),
-            label: Text(''),
-            onPressed: _navigateToAuth,
-          ),
-        ],
+      appBar: BaseAppBar(
+        appBar: AppBar(),
+      ),
+      bottomNavigationBar: BottomBar(
+        fabLocation: FloatingActionButtonLocation.endDocked,
+        shape: CircularNotchedRectangle(),
       ),
       body: Container(
         height: double.maxFinite,
@@ -99,10 +92,7 @@ class _CallsState extends State<Calls>
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Color.fromRGBO(107, 119, 141, 1),
-              Color.fromRGBO(38, 56, 89, 1),
-            ],
+            colors: backgroundColor,
             stops: [-1, 2],
           ),
         ),

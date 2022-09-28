@@ -1,18 +1,13 @@
 // ignore_for_file: deprecated_member_use
 
-import 'dart:math';
-
 import 'package:advices/models/user.dart';
-import 'package:advices/screens/authentication/register.dart';
 import 'package:advices/screens/authentication/sign_in.dart';
 import 'package:advices/screens/home.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:advices/screens/shared_widgets/base_app_bar.dart';
+import 'package:advices/utilities/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:provider/provider.dart';
 
 import '../../services/auth.dart';
-import '../services/database.dart';
 import 'authentication/authentication.dart';
 
 class Profile extends StatefulWidget {
@@ -53,12 +48,6 @@ class _ProfileState extends State<Profile> {
     Navigator.pop(context);
   }
 
-  _navigateToHome() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Home()),
-    );
-  }
 
   _navigateToAuthenticate() {
     Navigator.push(
@@ -81,19 +70,8 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        // backgroundColor: Color.fromRGBO(23, 34, 59, 1),
-        backgroundColor: Color.fromRGBO(23, 34, 59, 1),
-        elevation: 0.0,
-        actions: <Widget>[
-          FlatButton.icon(
-            textColor: Colors.white,
-            icon: Icon(Icons.home),
-            label: Text(''),
-            onPressed: _navigateToHome,
-          ),
-        ],
-      ),
+      appBar: BaseAppBar(appBar: AppBar(), redirectToHome: true),
+
       backgroundColor: Color.fromARGB(255, 226, 146, 100),
       body: Container(
           height: double.maxFinite,
@@ -102,10 +80,7 @@ class _ProfileState extends State<Profile> {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [
-                Color.fromRGBO(107, 119, 141, 1),
-                Color.fromRGBO(38, 56, 89, 1),
-              ],
+              colors: backgroundColor,
               stops: [-1, 2],
             ),
           ),

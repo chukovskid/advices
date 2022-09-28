@@ -7,6 +7,7 @@ import '../../models/user.dart';
 import '../../utilities/constants.dart';
 import '../authentication/authentication.dart';
 import '../call/calls.dart';
+import '../shared_widgets/base_app_bar.dart';
 
 class LawyerProfile extends StatefulWidget {
   final String uid;
@@ -56,18 +57,8 @@ class _LawyerProfileState extends State<LawyerProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromRGBO(23, 34, 59, 1),
-        elevation: 0.0,
-        actions: <Widget>[
-          FlatButton.icon(
-            textColor: Colors.white,
-            icon: Icon(Icons.person_outline_sharp),
-            label: Text(''),
-            onPressed: _navigateToAuth,
-          ),
-        ],
-      ),
+      appBar: BaseAppBar(appBar: AppBar(),),
+
        bottomSheet: Container(
             child:  MediaQuery.of(context).size.width < 850.0 ? CreateEvent(widget.uid): SizedBox() ,
         ),

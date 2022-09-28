@@ -1,11 +1,11 @@
 import 'package:advices/screens/profile/lawyerProfile.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:advices/screens/shared_widgets/base_app_bar.dart';
+import 'package:advices/utilities/constants.dart';
 import 'package:flutter/material.dart';
-
 import '../models/user.dart';
 import '../services/database.dart';
 import 'authentication/authentication.dart';
-import 'floating_footer_btns.dart';
+import 'shared_widgets/BottomBar.dart';
 
 class Lawyers extends StatefulWidget {
   final String service;
@@ -20,52 +20,17 @@ class _LawyersState extends State<Lawyers>
   late AnimationController controller;
 
   @override
-  void initState() {
-    // controller = AnimationController(
-    //   vsync: this,
-    //   duration: const Duration(seconds: 2),
-    // );
-    // controller.repeat(reverse: true);
-    //     super.initState();
-    // WidgetsBinding.instance!.removeObserver(this);
-  }
-
-  // @override
-  // void dispose() {
-  //   // Remove the observer
-  //   WidgetsBinding.instance!.removeObserver(this);
-
-  //   super.dispose();
-  // }
-
-  // _navigateToLawyers() {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(builder: (context) => Lawyers()),
-  //   );
-  // }
-
-  _navigateToAuth() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Authenticate()),
-    );
-  }
+  void initState() {}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromRGBO(23, 34, 59, 1),
-        elevation: 0.0,
-        actions: <Widget>[
-          FlatButton.icon(
-            textColor: Colors.white,
-            icon: Icon(Icons.person_outline_sharp),
-            label: Text(''),
-            onPressed: _navigateToAuth,
-          ),
-        ],
+      appBar: BaseAppBar(
+        appBar: AppBar(),
+      ),
+      bottomNavigationBar: BottomBar(
+        fabLocation: FloatingActionButtonLocation.endDocked,
+        shape: CircularNotchedRectangle(),
       ),
       body: Container(
         height: double.maxFinite,
@@ -74,10 +39,7 @@ class _LawyersState extends State<Lawyers>
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Color.fromRGBO(107, 119, 141, 1),
-              Color.fromRGBO(38, 56, 89, 1),
-            ],
+            colors: backgroundColor,
             stops: [-1, 2],
           ),
         ),
@@ -100,13 +62,14 @@ class _LawyersState extends State<Lawyers>
                   ? ListView(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 10.0,
-                        vertical: 40.0,
+                        vertical: 50.0,
                       ),
                       children: users.map(_card).toList())
                   : GridView.count(
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 10,
-                      crossAxisCount: (MediaQuery.of(context).size.width < 950.0 ? 3 : 6),
+                      crossAxisCount:
+                          (MediaQuery.of(context).size.width < 950.0 ? 3 : 6),
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                       primary: false,
@@ -125,53 +88,7 @@ class _LawyersState extends State<Lawyers>
     );
   }
 
-  // Widget _gridTile() { // TODO not working but it would be usefull
-  //   return GridTile(
-  //     header: Icon(
-  //       Icons.person,
-  //       size: 60,
-  //     ),
-  //     // footer: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
-  //     child: Text("hey"),
-  //     // leading: const Icon(Icons.person, size: 60,),
-  //     // title: Text(fUser.displayName.toString()),
-  //     // subtitle:
-  //     //     const Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
-  //   );
-  // }
-
   Widget _card(FlutterUser fUser) {
-    return InkWell(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => LawyerProfile(fUser.uid)),
-      ),
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ListTile(
-              leading: const Icon(
-                Icons.person,
-                size: 60,
-              ),
-              title: Text(fUser.displayName.toString()),
-              subtitle:
-                  const Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
-            ),
-            const SizedBox(
-              height: 20,
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _listItem(FlutterUser fUser) {
     return InkWell(
       onTap: () => Navigator.push(
         context,

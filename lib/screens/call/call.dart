@@ -5,16 +5,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
-
 import '../../examples/basic/join_channel_video/join_channel_video.dart';
-import '../../examples/log_sink.dart';
 import '../../examples/advanced/index.dart';
 import '../../examples/basic/index.dart';
 import '../../config/agora.config.dart' as config;
-import '../../examples/log_sink.dart';
 import '../../services/auth.dart';
 import '../../utilities/constants.dart';
 import '../authentication/authentication.dart';
+import '../shared_widgets/base_app_bar.dart';
 
 /// This widget is the root of your application.
 class Call extends StatefulWidget {
@@ -104,10 +102,7 @@ class _CallState extends State<Call> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Color.fromRGBO(107, 119, 141, 1),
-              Color.fromRGBO(38, 56, 89, 1),
-            ],
+            colors: backgroundColor,
             stops: [-1, 2],
           ),
         ),
@@ -118,18 +113,8 @@ class _CallState extends State<Call> {
 
   Widget _selectChannelName() {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromRGBO(23, 34, 59, 1),
-        elevation: 0.0,
-        actions: <Widget>[
-          FlatButton.icon(
-            textColor: Colors.white,
-            icon: Icon(Icons.person_outline_sharp),
-            label: Text(''),
-            onPressed: _navigateToAuth,
-          ),
-        ],
-      ),
+      appBar: BaseAppBar(appBar: AppBar(),),
+
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
