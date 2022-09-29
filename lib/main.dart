@@ -30,6 +30,8 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    initDynamicLinks(context);
+
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -48,14 +50,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// void initDynamicLinks(BuildContext context) {
-//   FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
-//   dynamicLinks.onLink.listen((dynamicLinkData) {
-//     print('///// Dynamic Link' + dynamicLinkData.toString());
+void initDynamicLinks(BuildContext context) {
+  FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
+  dynamicLinks.onLink.listen((dynamicLinkData) {
+    print('///// Dynamic Link' + dynamicLinkData.toString());
 
-//     Navigator.pushNamed(context, dynamicLinkData.link.path);
-//   }).onError((error) {
-//     print('onLink error');
-//     print(error.message);
-//   });
-// }
+    Navigator.pushNamed(context, dynamicLinkData.link.path);
+  }).onError((error) {
+    print('onLink error');
+    print(error.message);
+  });
+}
