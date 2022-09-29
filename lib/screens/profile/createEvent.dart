@@ -309,14 +309,12 @@ class _CreateEventState extends State<CreateEvent> {
                       onPressed: () {
                         showDialog(
                             context: context,
-                            builder: (context) => AlertDialog(
-                                  content: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Flexible(child: AddEventPage(widget.uid)),
-                                    ],
-                                  ),
+                            builder: (context) => StatefulBuilder(
+                                  builder: (context,
+                                          StateSetter setStateDialog) =>
+                                      AlertDialog(
+                                          content:
+                                              _dialogFields(setStateDialog)),
                                 ));
                       },
                       child: Text(
@@ -559,9 +557,7 @@ class _CreateEventState extends State<CreateEvent> {
                         Flexible(
                           flex: 1,
                           child: InkWell(
-                            onTap: () => {
-                              showTimePicherWidget(setStateDialog)
-                            },
+                            onTap: () => {showTimePicherWidget(setStateDialog)},
                             child: TextFormField(
                               key: Key(selectedTime), // <- Magic!
                               initialValue: selectedTime,

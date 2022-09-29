@@ -23,6 +23,7 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       backgroundColor: darkGreenColor,
+      // automaticallyImplyLeading : appBar.automaticallyImplyLeading,
       elevation: 10.0,
       actions: <Widget>[
         FlatButton.icon(

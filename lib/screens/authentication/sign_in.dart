@@ -36,7 +36,7 @@ class _SignInState extends State<SignIn> {
     FocusScope.of(context).requestFocus(focusNode);
   }
 
-  _submitForm() {
+  _submitForm() async {
     // if (_formKey.currentState!.validate()) {
     var user = {
       'email': _emailController.text,
@@ -46,7 +46,7 @@ class _SignInState extends State<SignIn> {
         email: _emailController.text, password: _passwordController.text);
     print(user.toString());
 
-    _signInUser(fUser);
+    await _signInUser(fUser);
 
     // If the form passes validation, display a Snackbar.
     Scaffold.of(context)

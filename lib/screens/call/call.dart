@@ -1,4 +1,7 @@
 import 'package:advices/screens/call/callMethods.dart';
+import 'package:advices/screens/call/calls.dart';
+import 'package:advices/screens/home.dart';
+import 'package:advices/screens/profile/lawyerProfile.dart';
 import 'package:advices/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -65,6 +68,29 @@ class _CallState extends State<Call> {
     );
   }
 
+  _navigateToHome() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => Home()),
+    );
+  }
+
+  _navigateToCalls() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => Calls()),
+    );
+  }
+
+  _navigateToLawyerProfile() {
+    List<String> lawyerIdandclientId = widget.channellName.split("+");
+    String lawyerId = lawyerIdandclientId[0];
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LawyerProfile(lawyerId)),
+    );
+  }
+
   Future<void> openCall(channelName) async {
     if (user == null) {
       return null;
@@ -113,8 +139,37 @@ class _CallState extends State<Call> {
 
   Widget _selectChannelName() {
     return Scaffold(
-      appBar: BaseAppBar(appBar: AppBar(),),
-
+      appBar: AppBar(
+        backgroundColor: darkGreenColor,
+        automaticallyImplyLeading: false,
+        elevation: 10.0,
+        actions: <Widget>[
+          FlatButton.icon(
+            textColor: Colors.white,
+            icon: Icon(Icons.home),
+            label: Text(''),
+            onPressed: _navigateToHome,
+          ),
+          FlatButton.icon(
+            textColor: Colors.white,
+            icon: Icon(Icons.call),
+            label: Text(''),
+            onPressed: _navigateToCalls,
+          ),
+          FlatButton.icon(
+            textColor: Colors.white,
+            icon: Icon(Icons.balance),
+            label: Text(''),
+            onPressed: _navigateToLawyerProfile
+          ),
+          FlatButton.icon(
+            textColor: Colors.white,
+            icon: Icon(Icons.person),
+            label: Text(''),
+            onPressed: _navigateToAuth,
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -181,7 +236,7 @@ class _CallState extends State<Call> {
       await [Permission.microphone, Permission.camera].request();
     }
 
-        List<String> lawyerIdandclientId = widget.channellName.split("+");
+    List<String> lawyerIdandclientId = widget.channellName.split("+");
     String lawyerId = lawyerIdandclientId[0];
     String clientId = lawyerIdandclientId[1];
 

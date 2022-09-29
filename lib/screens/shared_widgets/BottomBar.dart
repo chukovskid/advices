@@ -132,7 +132,7 @@ class BottomBar extends StatelessWidget {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) => Laws()),
+                                              builder: (context) => Home()),
                                         );
                                       },
                                     ),

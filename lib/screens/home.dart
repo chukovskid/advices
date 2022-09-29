@@ -1,3 +1,4 @@
+import 'package:advices/screens/call/call.dart';
 import 'package:advices/screens/shared_widgets/BottomBar.dart';
 import 'package:advices/screens/call/calls.dart';
 import 'package:advices/screens/laws.dart';
@@ -37,13 +38,13 @@ class _HomeState extends State<Home> {
 
     _saveDeviceToken();
 
-    // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    //   String channelName = message.data["channelName"];
-    //   if (message.notification != null) {
-    //     print('Message also contained a notification: ${message.notification}');
-    //   }
-    //   openCall(channelName);
-    // });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      String channelName = message.data["channelName"];
+      if (message.notification != null) {
+        print('Message also contained a notification: ${message.notification}');
+      }
+      // openCall(channelName);
+    });
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       String channelName = message.data["channelName"];
       if (message.notification != null) {
@@ -69,19 +70,10 @@ class _HomeState extends State<Home> {
     if (user == null) {
       return null;
     }
-    Map<String, dynamic>? result = await CallMethods.makeCloudCall(channelName);
-    if (result!['token'] != null) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Scaffold(
-                    body: JoinChannelVideo(
-                      token: result['token'],
-                      channelId: result['channelId'],
-                    ),
-                  )));
-    }
-    ;
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Call(channelName)),
+    );
   }
 
   Future<void> getFruit() async {

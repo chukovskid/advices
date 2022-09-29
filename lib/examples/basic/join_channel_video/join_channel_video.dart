@@ -9,6 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../screens/call/callMethods.dart';
+import '../../../screens/call/calls.dart';
 import '../../../services/database.dart';
 
 /// MultiChannel Example
@@ -49,14 +50,19 @@ class _State extends State<JoinChannelVideo> {
   @override
   void dispose() {
     super.dispose();
-    _engine.destroy();
+    _destroyEngine();
     closeCall();
   }
 
-  Future<void> closeCall() async {
-    await _leaveChannel();
-    await DatabaseService.closeCall(channelName);
+  void _destroyEngine() async {
+    await _engine.leaveChannel();
     await _engine.destroy();
+  }
+
+  Future<void> closeCall() async {
+    await _engine.leaveChannel();
+    await _engine.destroy();
+    await DatabaseService.closeCall(channelName);
   }
 
   Future<void> getUserUid() async {
@@ -82,14 +88,6 @@ class _State extends State<JoinChannelVideo> {
     await _engine.setClientRole(ClientRole.Broadcaster);
 
     await _joinChannel();
-    // var result = await CallMethods.makeCloudCall();
-    // setState(() {
-    //   // token = result?["token"] ;
-    //   // channelName = result?["channelName"];
-    //     token = '00603f0c2c7973949b3afe5e475f15a350eIAAirL6BKbjLyEke7MvNyUTyg9Tl4J+GUboWW0pcYElEYc1EU08AAAAAIgDgYjwamtSoYgQAAQAqkadiAgAqkadiAwAqkadiBAAqkadi';
-    //   channelName = '12';
-
-    // });
   }
 
   void _addListeners() {
@@ -142,39 +140,8 @@ class _State extends State<JoinChannelVideo> {
     await _engine.leaveChannel();
   }
 
-  _switchCamera() {
-    _engine.switchCamera().then((value) {
-      setState(() {
-        switchCamera = !switchCamera;
-      });
-    }).catchError((err) {
-      logSink.log('switchCamera $err');
-    });
-  }
 
-  _switchRender() {
-    setState(() {
-      switchRender = !switchRender;
-      remoteUid = List.of(remoteUid.reversed);
-    });
-  }
 
-  _changeChannel() async {
-    print("Test123controler: ${_controller.text}");
-
-    Map<String, dynamic>? newCallCredentials =
-        await CallMethods.makeCloudCall(_controller.text);
-
-    if (newCallCredentials!['token'] != null) {
-      await _leaveChannel();
-
-      setState(() {
-        token = newCallCredentials['token'];
-        channelName = newCallCredentials['channelId'];
-      });
-      await _joinChannel();
-    }
-  }
 
   /// Toolbar layout
   Widget _toolbar() {
@@ -306,14 +273,15 @@ class _State extends State<JoinChannelVideo> {
 
   Future<void> _onCallEnd(BuildContext context) async {
     print("Call ENDED ++++++++++++++++ ${channelName}");
-    closeCall();
-
-    // TODO
-    // await Navigator.push(
+    //  Navigator.push(
     //   context,
     //   MaterialPageRoute(builder: (context) => Calls()),
     // );
-        Navigator.pop(context);      
+    await closeCall();
+
+    // TODO
+
+    // Navigator.pop(context);
   }
 
   void _onToggleMute() {
