@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-
 import '../helpers/sharedPreferencesHelper.dart';
 import 'authentication/authentication.dart';
 import 'floating_footer_btns.dart';
@@ -25,7 +24,8 @@ class HelpScreenState extends State<HelpScreen> {
       languageDanish = newState;
     });
   }
-    _navigateToAuth() {
+
+  _navigateToAuth() {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => Authenticate()),
@@ -39,8 +39,11 @@ class HelpScreenState extends State<HelpScreen> {
         backgroundColor: Color.fromRGBO(23, 34, 59, 1),
         elevation: 0.0,
         actions: <Widget>[
-          FlatButton.icon(
-            textColor: Colors.white,
+          TextButton.icon(
+            style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.white)),
+
+            // textColor: Colors.white,
             icon: Icon(Icons.person_outline_sharp),
             label: Text(''),
             onPressed: _navigateToAuth,
@@ -94,22 +97,26 @@ class HelpScreenState extends State<HelpScreen> {
     return Column(
       children: [
         Text(
-            languageDanish
-                ? "For at bruge FIDIMI Sync applikationen skal du logge ind med samme e-mailadresse og kodeord som du bruger på FIDIMI platformen."
-                : "To use the FIDIMI Sync application, you need to log in with the same e-mail address and password that you use on the FIDIMI platform.",
-            ),
-        Text("", ),
+          languageDanish
+              ? "For at bruge FIDIMI Sync applikationen skal du logge ind med samme e-mailadresse og kodeord som du bruger på FIDIMI platformen."
+              : "To use the FIDIMI Sync application, you need to log in with the same e-mail address and password that you use on the FIDIMI platform.",
+        ),
         Text(
-            languageDanish
-                ? "FIDIMI Sync bruges til at indhente skridtdata fra din enhed og overføre dem til din personlige profil på FIDIMI platformen. Der er to måder, hvorpå FIDIMI Sync kan indhente skridtdata; fra Google Fit eller enhedens egen skridttæller. Vi anbefaler, at du vælger, at dine skridtdata skal indhentes fra Google Fit, idet du så kan få skridtdata fra alle de enheder, som integrerer med Google Fit. Du behøver ikke installere Google Fit på den samme enhed, som du har installeret FIDIMI Sync - det er blot vigtigt, at du installerer Google Fit på den enhed, som registrerer dine skridtdata."
-                : "FIDIMI Sync is used to collect step data from your device and transfer it to your personal profile on the FIDIMI platform. The application can collect step data from Apple Health or the device sensor. We recommend that you choose Apple Health, as you can get step data from all the devices that integrate with Apple Health. All it requires is that your device is configured to forward data to Apple Health.",
-            ),
-        Text("", ),
+          "",
+        ),
         Text(
-            languageDanish
-                ? "På hovedsiden kan du se historikken for de senest indhentede skridtdata, herunder hvor mange skridt, du har gået i dag og de seneste syv dage. På siden finder du også et ikon nede i højre hjørne, hvor du kan ændre dine indstillinger samt logge ud af applikationen. "
-                : "On the main page, you can see the history of the most recently step data, including how many steps you have taken today and the last seven days. On the page you will also find an icon in the bottom right corner, where you can change your settings and log out of the application.",
-            ),
+          languageDanish
+              ? "FIDIMI Sync bruges til at indhente skridtdata fra din enhed og overføre dem til din personlige profil på FIDIMI platformen. Der er to måder, hvorpå FIDIMI Sync kan indhente skridtdata; fra Google Fit eller enhedens egen skridttæller. Vi anbefaler, at du vælger, at dine skridtdata skal indhentes fra Google Fit, idet du så kan få skridtdata fra alle de enheder, som integrerer med Google Fit. Du behøver ikke installere Google Fit på den samme enhed, som du har installeret FIDIMI Sync - det er blot vigtigt, at du installerer Google Fit på den enhed, som registrerer dine skridtdata."
+              : "FIDIMI Sync is used to collect step data from your device and transfer it to your personal profile on the FIDIMI platform. The application can collect step data from Apple Health or the device sensor. We recommend that you choose Apple Health, as you can get step data from all the devices that integrate with Apple Health. All it requires is that your device is configured to forward data to Apple Health.",
+        ),
+        Text(
+          "",
+        ),
+        Text(
+          languageDanish
+              ? "På hovedsiden kan du se historikken for de senest indhentede skridtdata, herunder hvor mange skridt, du har gået i dag og de seneste syv dage. På siden finder du også et ikon nede i højre hjørne, hvor du kan ændre dine indstillinger samt logge ud af applikationen. "
+              : "On the main page, you can see the history of the most recently step data, including how many steps you have taken today and the last seven days. On the page you will also find an icon in the bottom right corner, where you can change your settings and log out of the application.",
+        ),
       ],
     );
   }

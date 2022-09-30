@@ -13,28 +13,28 @@ dependencies:
     sdk: flutter
   shared_preferences: ^2.0.6
   http: ^0.13.3
-  firebase_core: ^1.15.0
+  firebase_core: ^1.24.0
+  firebase_messaging: ^11.4.2
+  firebase_auth: ^3.11.0
+  cloud_firestore: ^3.1.12
+  cloud_functions: ^3.3.9
+  firebase_dynamic_links: ^4.3.9
+  agora_rtc_engine: ^5.2.0
   table_calendar: ^3.0.5
   date_time_picker: "^2.1.0"
   time_picker_widget: ^1.0.0+10
-  firebase_messaging: ^11.4.2
-  firebase_auth: ^3.3.14
-  cloud_firestore: ^3.1.12
-  cloud_functions: ^3.2.16
   provider: ^6.0.2
+  permission_handler: ^8.3.0
+  path_provider: ^2.0.8
+  multi_select_flutter: ^4.1.2
+  cupertino_icons: ^1.0.2
+  font_awesome_flutter: ^10.1.0
+  pointer_interceptor: ^0.9.3+2
   flutter_secure_storage: ^5.0.2
   google_sign_in: ^5.3.0
   flutter_facebook_auth: '^3.5.0'
   twitter_login: ^4.0.1
-  multi_select_flutter: ^4.1.2
-  agora_rtc_engine: ^5.2.0
-  permission_handler: ^8.3.0
-  cupertino_icons: ^1.0.2
-  path_provider: ^2.0.8
-  font_awesome_flutter: ^10.1.0
-  pointer_interceptor: ^0.9.3+2
   # get: ^4.6.5
-  firebase_dynamic_links: ^4.0.0
 
 
 

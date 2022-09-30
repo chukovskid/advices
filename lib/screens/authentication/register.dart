@@ -60,8 +60,6 @@ class _RegisterState extends State<Register> {
   var setDefaultMake = true, setDefaultMakeModel = true;
   bool showSelectService = false;
 
-
-
   _nextFocus(FocusNode focusNode) {
     FocusScope.of(context).requestFocus(focusNode);
   }
@@ -94,7 +92,7 @@ class _RegisterState extends State<Register> {
       }
 
       // If the form passes validation, display a Snackbar.
-      Scaffold.of(context).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: const Text('Registration sent')));
 
       _formKey.currentState?.save();
@@ -132,7 +130,9 @@ class _RegisterState extends State<Register> {
   Widget build(BuildContext context) {
     return Scaffold(
       // resizeToAvoidBottomInset: false,
-      appBar: BaseAppBar(appBar: AppBar(),),
+      appBar: BaseAppBar(
+        appBar: AppBar(),
+      ),
 
       // backgroundColor: const Color.fromARGB(255, 226, 146, 100),
       body: Container(
@@ -215,12 +215,15 @@ class _RegisterState extends State<Register> {
                 Container(
                   height: 60,
                   width: 60,
-                  child: RaisedButton(
-                      textColor: const Color.fromARGB(255, 9, 123, 161),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(40.0),
-                      ),
-                      color: const Color.fromARGB(255, 255, 255, 255),
+                  child: ElevatedButton(
+                      style: ButtonStyle(
+                          foregroundColor:
+                              MaterialStateProperty.all<Color>(Colors.blue)),
+                      // textColor: const Color.fromARGB(255, 9, 123, 161),
+                      // shape: RoundedRectangleBorder(
+                      //   borderRadius: new BorderRadius.circular(40.0),
+                      // ),
+                      // color: const Color.fromARGB(255, 255, 255, 255),
                       child: const Center(
                           child: FaIcon(
                         FontAwesomeIcons.user,
@@ -248,12 +251,16 @@ class _RegisterState extends State<Register> {
                 Container(
                   height: 60,
                   width: 60,
-                  child: RaisedButton(
-                      textColor: const Color.fromARGB(255, 161, 113, 9),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(40.0),
-                      ),
-                      color: const Color.fromARGB(255, 255, 255, 255),
+                  child: ElevatedButton(
+                      style: ButtonStyle(
+                          foregroundColor:
+                              MaterialStateProperty.all<Color>(Colors.blue)),
+
+                      // textColor: const Color.fromARGB(255, 161, 113, 9),
+                      // shape: RoundedRectangleBorder(
+                      //   borderRadius: new BorderRadius.circular(40.0),
+                      // ),
+                      // color: const Color.fromARGB(255, 255, 255, 255),
                       child: const Center(
                           child: FaIcon(
                         FontAwesomeIcons.gavel,
@@ -432,8 +439,12 @@ class _RegisterState extends State<Register> {
               )),
         ),
         const SizedBox(height: 20.0),
-        RaisedButton(
-            color: const Color.fromRGBO(225, 103, 104, 1),
+        ElevatedButton(
+            style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all<Color>(
+                    Color.fromRGBO(225, 103, 104, 1))),
+
+            // color: const Color.fromRGBO(225, 103, 104, 1),
             child: Text(
               '${isLawyer == false ? "Submit form" : "Next"}',
               style: const TextStyle(color: Colors.white),
@@ -615,8 +626,12 @@ class _RegisterState extends State<Register> {
                 )),
           ),
           const SizedBox(height: 20.0),
-          RaisedButton(
-              color: orangeColor,
+          ElevatedButton(
+              style: ButtonStyle(
+                  foregroundColor:
+                      MaterialStateProperty.all<Color>(orangeColor)),
+
+              // color: orangeColor,
               child: Text(
                 '$registerAsText',
                 style: const TextStyle(color: Colors.white),
@@ -687,8 +702,8 @@ class _RegisterState extends State<Register> {
                           print(selectedServices);
                           for (int i = 0; i < values.length; i++) {
                             var val = values[i];
-                            Service selectedService =
-                                Service.fromJson(jsonDecode(values[i].toString()));
+                            Service selectedService = Service.fromJson(
+                                jsonDecode(values[i].toString()));
                             selectedServices.add(selectedService);
                           }
                           print(selectedServices);
@@ -712,8 +727,10 @@ class _RegisterState extends State<Register> {
         const SizedBox(
           height: 100,
         ),
-        RaisedButton(
-            color: orangeColor,
+        ElevatedButton(
+            style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all<Color>(orangeColor)),
+            // color: orangeColor,
             child: const Text(
               'Submit2',
               style: TextStyle(color: Colors.white),

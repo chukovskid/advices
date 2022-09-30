@@ -186,8 +186,11 @@ class _ProfileState extends State<Profile> {
               ]),
             ),
             const SizedBox(height: 40.0),
-            RaisedButton(
-                color: Color.fromRGBO(23, 34, 59, 1),
+            ElevatedButton(
+                      style: ButtonStyle(
+                          foregroundColor:
+                              MaterialStateProperty.all<Color>(Colors.black)),
+                // color: Color.fromRGBO(23, 34, 59, 1),
                 child: const Text(
                   'Sign out',
                   style: TextStyle(color: Colors.white),

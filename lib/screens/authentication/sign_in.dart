@@ -49,7 +49,7 @@ class _SignInState extends State<SignIn> {
     await _signInUser(fUser);
 
     // If the form passes validation, display a Snackbar.
-    Scaffold.of(context)
+    ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text('Registration sent')));
 
     _formKey.currentState?.save();
@@ -114,7 +114,10 @@ class _SignInState extends State<SignIn> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: BaseAppBar(appBar: AppBar(),redirectToHome: true,),     
+      appBar: BaseAppBar(
+        appBar: AppBar(),
+        redirectToHome: true,
+      ),
       backgroundColor: Color.fromARGB(255, 226, 146, 100),
       body: Container(
         height: double.maxFinite,
@@ -151,8 +154,12 @@ class _SignInState extends State<SignIn> {
             const SizedBox(height: 35.0),
             _showEmailInputs ? _showEmailSignIn() : SizedBox(),
             !_showEmailInputs
-                ? RaisedButton(
-                    color: orangeColor,
+                ? ElevatedButton(
+                    style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(orangeColor)),
+
+                    // color: orangeColor,
                     child: const Text(
                       ' Email log In ',
                       style: TextStyle(color: Colors.white),
@@ -180,12 +187,16 @@ class _SignInState extends State<SignIn> {
                 Container(
                   height: 60,
                   width: 60,
-                  child: RaisedButton(
-                      textColor: Color.fromARGB(255, 184, 15, 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(40.0),
-                      ),
-                      color: Color.fromARGB(255, 255, 255, 255),
+                  child: ElevatedButton(
+                      style: ButtonStyle(
+                          foregroundColor:
+                              MaterialStateProperty.all<Color>(Colors.blue)),
+
+                      // textColor: Color.fromARGB(255, 184, 15, 15),
+                      // shape: RoundedRectangleBorder(
+                      //   borderRadius: new BorderRadius.circular(40.0),
+                      // ),
+                      // color: Color.fromARGB(255, 255, 255, 255),
                       child: const Center(
                           child: FaIcon(FontAwesomeIcons.googlePlusG)),
                       onPressed: () async {
@@ -196,11 +207,15 @@ class _SignInState extends State<SignIn> {
                 Container(
                   height: 60,
                   width: 60,
-                  child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(40.0),
-                      ),
-                      color: Color.fromARGB(255, 255, 255, 255),
+                  child: ElevatedButton(
+                      style: ButtonStyle(
+                          foregroundColor:
+                              MaterialStateProperty.all<Color>(Colors.blue)),
+
+                      // shape: RoundedRectangleBorder(
+                      //   borderRadius: new BorderRadius.circular(40.0),
+                      // ),
+                      // color: Color.fromARGB(255, 255, 255, 255),
                       child: const Center(
                         child:
                             // FaIcon(FontAwesomeIcons.arrowLeft)
@@ -219,12 +234,15 @@ class _SignInState extends State<SignIn> {
                 Container(
                   height: 60,
                   width: 60,
-                  child: RaisedButton(
-                      textColor: Color.fromARGB(255, 54, 107, 187),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(40.0),
-                      ),
-                      color: Color.fromARGB(255, 255, 255, 255),
+                  child: ElevatedButton(
+                      style: ButtonStyle(
+                          foregroundColor:
+                              MaterialStateProperty.all<Color>(Colors.blue)),
+                      // textColor: Color.fromARGB(255, 54, 107, 187),
+                      // shape: RoundedRectangleBorder(
+                      //   borderRadius: new BorderRadius.circular(40.0),
+                      // ),
+                      // color: Color.fromARGB(255, 255, 255, 255),
                       child:
                           const Center(child: FaIcon(FontAwesomeIcons.twitter)),
                       onPressed: () async {
@@ -234,9 +252,12 @@ class _SignInState extends State<SignIn> {
               ],
             ),
             const SizedBox(height: 50.0),
-            RaisedButton(
-                color: Colors.transparent,
-                elevation: 0.0,
+            ElevatedButton(
+                style: ButtonStyle(
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(Colors.blue)),
+                // color: Colors.transparent,
+                // elevation: 0.0,
                 child: const Text(
                   'No account? Create one!',
                   style: TextStyle(color: Colors.white),
@@ -301,8 +322,11 @@ class _SignInState extends State<SignIn> {
             )),
       ),
       SizedBox(height: 30.0),
-      RaisedButton(
-          color: Color.fromRGBO(225, 103, 104, 1),
+      ElevatedButton(
+          style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(orangeColor)),
+
+          // color: Color.fromRGBO(225, 103, 104, 1),
           child: const Text(
             ' Log In ',
             style: TextStyle(color: Colors.white),

@@ -144,26 +144,26 @@ class _CallState extends State<Call> {
         automaticallyImplyLeading: false,
         elevation: 10.0,
         actions: <Widget>[
-          FlatButton.icon(
-            textColor: Colors.white,
+          TextButton.icon(
+            style: ButtonStyle(foregroundColor: MaterialStateProperty.all<Color>(Colors.blue)),
             icon: Icon(Icons.home),
             label: Text(''),
             onPressed: _navigateToHome,
           ),
-          FlatButton.icon(
-            textColor: Colors.white,
+          TextButton.icon(
+            style: ButtonStyle(foregroundColor: MaterialStateProperty.all<Color>(Colors.blue)),
             icon: Icon(Icons.call),
             label: Text(''),
             onPressed: _navigateToCalls,
           ),
-          FlatButton.icon(
-            textColor: Colors.white,
+          TextButton.icon(
+            style: ButtonStyle(foregroundColor: MaterialStateProperty.all<Color>(Colors.blue)),
             icon: Icon(Icons.balance),
             label: Text(''),
             onPressed: _navigateToLawyerProfile
           ),
-          FlatButton.icon(
-            textColor: Colors.white,
+          TextButton.icon(
+            style: ButtonStyle(foregroundColor: MaterialStateProperty.all<Color>(Colors.blue)),
             icon: Icon(Icons.person),
             label: Text(''),
             onPressed: _navigateToAuth,

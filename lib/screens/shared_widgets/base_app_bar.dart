@@ -26,8 +26,11 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
       // automaticallyImplyLeading : appBar.automaticallyImplyLeading,
       elevation: 10.0,
       actions: <Widget>[
-        FlatButton.icon(
-          textColor: Colors.white,
+        TextButton.icon(
+          style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue)),
+
+          // textColor: Colors.white,
           icon: Icon(redirectToHome ? Icons.home : Icons.person),
           label: Text(''),
           onPressed: _navigate,

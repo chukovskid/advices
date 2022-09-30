@@ -1,5 +1,6 @@
 import 'package:advices/services/auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+// import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -53,9 +54,9 @@ class MyApp extends StatelessWidget {
 void initDynamicLinks(BuildContext context) {
   FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
   dynamicLinks.onLink.listen((dynamicLinkData) {
-    print('///// Dynamic Link' + dynamicLinkData.toString());
+    print('///// Dynamic Link' + dynamicLinkData.link.toString());
 
-    Navigator.pushNamed(context, dynamicLinkData.link.path);
+    Navigator.pushNamed(context, "areas");
   }).onError((error) {
     print('onLink error');
     print(error.message);
