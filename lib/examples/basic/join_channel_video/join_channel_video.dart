@@ -32,8 +32,8 @@ class _State extends State<JoinChannelVideo> {
 
   bool isJoined = false, switchCamera = true, switchRender = true;
   List<int> remoteUid = [];
-  late TextEditingController _controller;
-  bool _isRenderSurfaceView = false;
+  // late TextEditingController _controller;
+  // bool _isRenderSurfaceView = false; 
   late String uid;
   late String token = widget.token;
   late String channelName = widget.channelId;
@@ -42,7 +42,7 @@ class _State extends State<JoinChannelVideo> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: "Everyone");
+    // _controller = TextEditingController(text: "Everyone");
     _initEngine();
     getUserUid();
   }
@@ -136,9 +136,9 @@ class _State extends State<JoinChannelVideo> {
         token, channelName, null, 0); // (token, channelName, )
   }
 
-  _leaveChannel() async {
-    await _engine.leaveChannel();
-  }
+  // _leaveChannel() async {
+  //   await _engine.leaveChannel();
+  // }
 
 
 
@@ -240,7 +240,11 @@ class _State extends State<JoinChannelVideo> {
       case 1:
         return Container(
             child: Column(
-          children: <Widget>[_videoView(views[0])],
+          // children: <Widget>[_videoView(views[0])],
+                    children: <Widget>[
+            _expandedVideoRow([views[0]]),
+            // _expandedVideoRow([views[1]])
+          ],
         ));
       case 2:
         return Container(
