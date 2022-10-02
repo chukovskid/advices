@@ -44,7 +44,7 @@ class _State extends State<JoinChannelVideo> {
     super.initState();
     _controller = TextEditingController(text: channelName);
     _initEngine();
-        getUserUid();
+    getUserUid();
   }
 
   @override
@@ -52,7 +52,6 @@ class _State extends State<JoinChannelVideo> {
     super.dispose();
     _engine.destroy();
     closeCall();
-
   }
 
   Future<void> closeCall() async {
@@ -61,7 +60,7 @@ class _State extends State<JoinChannelVideo> {
     await DatabaseService.closeCall(channelName);
   }
 
-   Future<void> getUserUid() async {
+  Future<void> getUserUid() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? storedUid = await preferences.getString("localUid");
     if (storedUid != null) {
@@ -76,6 +75,8 @@ class _State extends State<JoinChannelVideo> {
 
   Future<void> _initEngine() async {
     _engine = await RtcEngine.createWithContext(RtcEngineContext(config.appId));
+    await _engine.leaveChannel();
+
     _addListeners();
 
     await _engine.enableVideo();
@@ -125,7 +126,8 @@ class _State extends State<JoinChannelVideo> {
       await [Permission.microphone, Permission.camera].request();
     }
 
-    await _engine.joinChannel(token, channelName, null, 0); // (token, channelName, )
+    await _engine.joinChannel(
+        token, channelName, null, 0); // (token, channelName, )
   }
 
   _leaveChannel() async {

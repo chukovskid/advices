@@ -1,5 +1,6 @@
 import 'package:advices/screens/call/callMethods.dart';
 import 'package:advices/screens/call/calls.dart';
+import 'package:advices/screens/call/testCall.dart';
 import 'package:advices/screens/home.dart';
 import 'package:advices/screens/profile/lawyerProfile.dart';
 import 'package:advices/services/database.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
+import '../../examples/advanced/enable_virtualbackground/enable_virtualbackground.dart';
 import '../../examples/basic/join_channel_video/join_channel_video.dart';
 import '../../examples/advanced/index.dart';
 import '../../examples/basic/index.dart';
@@ -55,12 +57,6 @@ class _CallState extends State<Call> {
     }
   }
 
-  bool _isConfigInvalid() {
-    return config.appId == '<YOUR_APP_ID>' || // Why are we using this?
-        config.token == '<YOUR_TOKEN>' ||
-        config.channelId == '<YOUR_CHANNEL_ID>';
-  }
-
   _navigateToAuth() {
     Navigator.pushReplacement(
       context,
@@ -92,6 +88,11 @@ class _CallState extends State<Call> {
   }
 
   Future<void> openCall(channelName) async {
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => TestCall()),
+    // );
+    // return;
     if (user == null) {
       return null;
     }
@@ -100,14 +101,24 @@ class _CallState extends State<Call> {
     print("Jou will join with this channelName : $channelName");
     Map<String, dynamic>? result = await CallMethods.makeCloudCall(channelName);
     if (result!['token'] != null) {
+
+
+
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => JoinChannelVideo(
+              builder: (context) => TestCall(
                     token: result['token'],
                     channelId: result['channelId'],
                   )));
 
+      // MaterialPageRoute(
+      //     builder: (context) => Scaffold(
+      //           body: EnableVirtualBackground(
+      //             token: result['token'],
+      //             channelId: result['channelId'],
+      //           ),
+      //         )));
       // Scaffold(
       //   body: JoinChannelVideo(
       //     token: result['token'],
@@ -115,7 +126,6 @@ class _CallState extends State<Call> {
       //   ),
       // )));
     }
-    ;
   }
 
   @override
@@ -131,12 +141,12 @@ class _CallState extends State<Call> {
             stops: [-1, 2],
           ),
         ),
-        child: _selectChannelName() // _selectLawArea(), // _allUsersForm(),
+        child: _joinChannelButton() // _selectLawArea(), // _allUsersForm(),
         // child: _dropdownLawSelect(),
         );
   }
 
-  Widget _selectChannelName() {
+  Widget _joinChannelButton() {
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 15.0,
@@ -252,17 +262,21 @@ class _CallState extends State<Call> {
     List<String> lawyerIdandclientId = widget.channellName.split("+");
     String lawyerId = lawyerIdandclientId[0];
     String clientId = lawyerIdandclientId[1];
+    String receiverId = user!.uid == clientId ? lawyerId : clientId;
 
     // TODO secure user?
-    String channelName =
-        await DatabaseService.updateAsOpenCallForUsers(lawyerId, clientId);
+    // String channelName =
+    //     await DatabaseService.updateAsOpenCallForUsers(lawyerId, clientId);
+
+    await DatabaseService.callUser(widget.channellName, receiverId);
+
 // TODO instead of saveOpenCallForUser, create a function setCallToOpen()
 // // meaning there is someone at the call and is WAITING
-    await openCall(channelName);
+    await openCall( widget.channellName);
   }
 
-  Future<void> _handleCameraAndMic(Permission permission) async {
-    final status = await permission.request();
-    print(status);
-  }
+  // Future<void> _handleCameraAndMic(Permission permission) async {
+  //   final status = await permission.request();
+  //   print(status);
+  // }
 }

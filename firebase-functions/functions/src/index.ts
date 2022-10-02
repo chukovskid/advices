@@ -6,6 +6,51 @@ const db = admin.firestore();
 const fcm = admin.messaging();
 
 
+export const callUser = functions.https.onCall(async (data, context) => {
+
+    // let callerId = context.auth?.uid;
+    let receiverId = data.receiverId;
+    let channelName = data.channelName;
+    let displayName = "A user";
+    const querySnapshot = await db
+      .collection('users')
+      .doc(receiverId)
+      .collection('tokens')
+      .get();
+    const userRef = await db
+      .collection('users')
+      .doc(receiverId);
+    userRef.get().then((doc) => {
+      if (doc.exists) {
+        let data = doc.data()
+        console.log("Document Id:", data!.uid);
+
+        console.log("Document displayName:", data!.displayName);
+        displayName = data!.displayName;
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+      }
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+    const tokens = querySnapshot.docs.map((snap: any) => snap.id); // TODO check the  token!
+    console.log("tokens ==== ", tokens);
+    const payload: admin.messaging.MessagingPayload = {
+      notification: {
+        title: 'Tap to join call!',
+        body: `${displayName} has starter a call with you.`,
+        icon: 'your-icon-url',
+        click_action: 'FLUTTER_NOTIFICATION_CLICK',
+      },
+      data : {
+        channelName: channelName
+      }
+    };
+    return fcm.sendToDevice(tokens, payload);
+  });
+
+
 
 export const notifyNewCalls = functions.firestore
   .document('users/{callerId}/pendingCalls/{channelName}')

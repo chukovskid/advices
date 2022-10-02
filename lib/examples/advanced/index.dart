@@ -35,10 +35,10 @@ final advanced = [
   },
   {'name': 'StreamMessage', 'widget': const StreamMessage()},
   {'name': 'VoiceChanger', 'widget': const VoiceChanger()},
-  {
-    'name': 'EnableVirtualBackground',
-    'widget': const EnableVirtualBackground()
-  },
+  // {
+  //   'name': 'EnableVirtualBackground',
+  //   'widget': const EnableVirtualBackground()
+  // },
   {'name': 'MediaRecorder', 'widget': const MediaRecorder()},
 
 ];

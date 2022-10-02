@@ -14,8 +14,14 @@ import 'package:permission_handler/permission_handler.dart';
 
 /// EnableVirtualBackground Example
 class EnableVirtualBackground extends StatefulWidget {
-  /// @nodoc
-  const EnableVirtualBackground({Key? key}) : super(key: key);
+  final String token;
+  final String channelId;
+  final ClientRole role = ClientRole.Broadcaster;
+
+  /// Construct the [JoinChannelVideo]
+  const EnableVirtualBackground(
+      {Key? key, required this.token, required this.channelId})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _State();
@@ -32,7 +38,7 @@ class _State extends State<EnableVirtualBackground> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: config.channelId);
+    _controller = TextEditingController(text: widget.channelId);
     _initEngine();
   }
 
@@ -44,6 +50,8 @@ class _State extends State<EnableVirtualBackground> {
 
   Future<void> _initEngine() async {
     _engine = await RtcEngine.createWithContext(RtcEngineContext(config.appId));
+    await _engine.leaveChannel();
+
     _addListeners();
 
     await _engine.enableVideo();
@@ -120,7 +128,7 @@ class _State extends State<EnableVirtualBackground> {
       await [Permission.microphone, Permission.camera].request();
     }
 
-    await _engine.joinChannel(config.token, _controller.text, null, config.uid);
+    await _engine.joinChannel(widget.token, _controller.text, null, config.uid);
   }
 
   _leaveChannel() async {
@@ -188,8 +196,7 @@ class _State extends State<EnableVirtualBackground> {
     return Expanded(
       child: Stack(
         children: [
-          const rtc_local_view.SurfaceView(
-          ),
+          const rtc_local_view.SurfaceView(),
           Align(
             alignment: Alignment.topLeft,
             child: SingleChildScrollView(

@@ -6,6 +6,7 @@ import 'package:advices/models/service.dart';
 import 'package:advices/models/user.dart';
 import 'package:advices/services/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/rendering.dart';
@@ -96,10 +97,11 @@ class DatabaseService {
   }
 
 ////// SERVICES
-///
-  
+  ///
+
   static Stream<Iterable<Service>> getAllServices() {
-    CollectionReference services = FirebaseFirestore.instance.collection('services');
+    CollectionReference services =
+        FirebaseFirestore.instance.collection('services');
     var filteredServices = services.where("area", isNotEqualTo: 2).snapshots();
 
     // final snapshots = filteredservices.orderBy('name').snapshots();
@@ -109,7 +111,8 @@ class DatabaseService {
   }
 
   static Stream<Iterable<Service>> getAllServicesByArea(int area) {
-    CollectionReference services = FirebaseFirestore.instance.collection('services');
+    CollectionReference services =
+        FirebaseFirestore.instance.collection('services');
     var filteredServices = services.where("area", isEqualTo: area).snapshots();
 
     // final snapshots = filteredservices.orderBy('name').snapshots();
@@ -118,7 +121,8 @@ class DatabaseService {
     return flutterLaw;
   }
 
-  static Future<void> saveServicesForLawyer(String uid, List<Service?> newServices) async {
+  static Future<void> saveServicesForLawyer(
+      String uid, List<Service?> newServices) async {
     CollectionReference services = FirebaseFirestore.instance
         .collection('lawyers')
         .doc(uid)
@@ -127,7 +131,8 @@ class DatabaseService {
     if (newServices.isNotEmpty) {
       List<String> selectedServicesIds = [];
       for (int i = 0; i < newServices.length; i++) {
-        Service selectedService = Service.fromJson(jsonDecode(newServices[i].toString()));
+        Service selectedService =
+            Service.fromJson(jsonDecode(newServices[i].toString()));
         print(selectedService);
         selectedServicesIds.add(selectedService.id);
 
@@ -143,7 +148,8 @@ class DatabaseService {
     }
   }
 
-  static Future<void> saveServicesForLawyerAsArray(List<String> servicesIds, String uid) async {
+  static Future<void> saveServicesForLawyerAsArray(
+      List<String> servicesIds, String uid) async {
     DocumentReference lawyerRef =
         FirebaseFirestore.instance.collection('lawyers').doc(uid);
     await lawyerRef.update({"services": servicesIds});
@@ -153,7 +159,8 @@ class DatabaseService {
   /// Events
   ///
 
-  static Future<void> saveEvent(lawyerId, title, description, DateTime dateTime) async {
+  static Future<void> saveEvent(
+      lawyerId, title, description, DateTime dateTime) async {
     // save call for cleint
     final AuthService _auth = AuthService();
     User? client = await _auth.getCurrentUser();
@@ -191,7 +198,8 @@ class DatabaseService {
     });
   }
 
-  static Future<List<DateTime>> getAllLEventsDateTIme(lawyerId, DateTime date) async {
+  static Future<List<DateTime>> getAllLEventsDateTIme(
+      lawyerId, DateTime date) async {
     List<EventModel> data = [];
     List<DateTime> dataDateTime = [];
     DateTime endDate = date.add(Duration(days: 1));
@@ -253,6 +261,36 @@ class DatabaseService {
   ///// Calls
   /// Calls
   ///
+
+  static Future<Map<String, dynamic>?> callUser(
+      String channelName, String receiverId) async {
+    try {
+      HttpsCallable callable =
+          FirebaseFunctions.instance.httpsCallable('callUser');
+      // dynamic resp = await callable.call();
+
+      dynamic resp = await callable.call(<String, dynamic>{
+        "receiverId": receiverId,
+        "channelName": channelName,
+      });
+
+      Map<String, dynamic> res = {
+        "receiverId": receiverId,
+        "channelName": channelName,
+      };
+      return res;
+    } catch (e) {
+      // print(e);
+      return null;
+    }
+  }
+  // HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('callUser');
+  // dynamic resp = await callable.call(<String, dynamic>{
+  //   "receiverId": receiverId,
+  //   "channelName": channelName,
+  // });
+  // print("result: ${resp.data}");
+  // }
 
   static Future<String> updateAsOpenCallForUsers(lawyerId, clientId) async {
     // final AuthService _auth = AuthService();

@@ -38,13 +38,13 @@ class _HomeState extends State<Home> {
 
     _saveDeviceToken();
 
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      String channelName = message.data["channelName"];
-      if (message.notification != null) {
-        print('Message also contained a notification: ${message.notification}');
-      }
-      // openCall(channelName);
-    });
+    // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    //   String channelName = message.data["channelName"];
+    //   if (message.notification != null) {
+    //     print('Message also contained a notification: ${message.notification}');
+    //   }
+    //   // openCall(channelName);
+    // });
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       String channelName = message.data["channelName"];
       if (message.notification != null) {
