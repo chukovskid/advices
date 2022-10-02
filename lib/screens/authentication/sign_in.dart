@@ -152,24 +152,23 @@ class _SignInState extends State<SignIn> {
               ),
             ),
             const SizedBox(height: 35.0),
-            _showEmailInputs ? _showEmailSignIn() : SizedBox(),
-            !_showEmailInputs
-                ? ElevatedButton(
-                    style: ButtonStyle(
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(orangeColor)),
-
-                    // color: orangeColor,
-                    child: const Text(
-                      ' Email log In ',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () async {
-                      setState(() {
-                        _showEmailInputs = true;
-                      });
-                    })
-                : SizedBox(),
+            _showEmailSignIn(),
+            // _showEmailInputs ? _showEmailSignIn() : SizedBox(),
+            // !_showEmailInputs
+            //     ? ElevatedButton(
+            //         style: ButtonStyle(
+            //             backgroundColor:
+            //                 MaterialStateProperty.all<Color>(orangeColor)),
+            //         child: const Text(
+            //           ' Email log In ',
+            //           style: TextStyle(color: Colors.white),
+            //         ),
+            //         onPressed: () async {
+            //           setState(() {
+            //             _showEmailInputs = true;
+            //           });
+            //         })
+            //     : SizedBox(),
             const SizedBox(height: 50.0),
             const Text(
               "Or Sign up using social media",
@@ -188,10 +187,13 @@ class _SignInState extends State<SignIn> {
                   height: 60,
                   width: 60,
                   child: ElevatedButton(
-                      style: ButtonStyle(
-                          foregroundColor:
-                              MaterialStateProperty.all<Color>(Colors.blue)),
-
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        onPrimary: Color.fromARGB(255, 184, 15, 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(40.0),
+                        ),
+                      ),
                       // textColor: Color.fromARGB(255, 184, 15, 15),
                       // shape: RoundedRectangleBorder(
                       //   borderRadius: new BorderRadius.circular(40.0),
@@ -208,10 +210,13 @@ class _SignInState extends State<SignIn> {
                   height: 60,
                   width: 60,
                   child: ElevatedButton(
-                      style: ButtonStyle(
-                          foregroundColor:
-                              MaterialStateProperty.all<Color>(Colors.blue)),
-
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        onPrimary: Color.fromARGB(255, 184, 15, 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(40.0),
+                        ),
+                      ),
                       // shape: RoundedRectangleBorder(
                       //   borderRadius: new BorderRadius.circular(40.0),
                       // ),
@@ -235,9 +240,13 @@ class _SignInState extends State<SignIn> {
                   height: 60,
                   width: 60,
                   child: ElevatedButton(
-                      style: ButtonStyle(
-                          foregroundColor:
-                              MaterialStateProperty.all<Color>(Colors.blue)),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        onPrimary: Color.fromARGB(255, 54, 107, 187),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(40.0),
+                        ),
+                      ),
                       // textColor: Color.fromARGB(255, 54, 107, 187),
                       // shape: RoundedRectangleBorder(
                       //   borderRadius: new BorderRadius.circular(40.0),
@@ -253,11 +262,14 @@ class _SignInState extends State<SignIn> {
             ),
             const SizedBox(height: 50.0),
             ElevatedButton(
-                style: ButtonStyle(
-                    foregroundColor:
-                        MaterialStateProperty.all<Color>(Colors.blue)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(40.0),
+                  ),
+                  elevation: 0.0,
+                ),
                 // color: Colors.transparent,
-                // elevation: 0.0,
                 child: const Text(
                   'No account? Create one!',
                   style: TextStyle(color: Colors.white),
@@ -323,8 +335,9 @@ class _SignInState extends State<SignIn> {
       ),
       SizedBox(height: 30.0),
       ElevatedButton(
-          style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(orangeColor)),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: orangeColor,
+          ),
 
           // color: Color.fromRGBO(225, 103, 104, 1),
           child: const Text(

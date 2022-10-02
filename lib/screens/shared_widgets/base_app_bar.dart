@@ -1,3 +1,4 @@
+import 'package:advices/screens/authentication/authentication.dart';
 import 'package:advices/screens/profile.dart';
 import 'package:flutter/material.dart';
 import '../../utilities/constants.dart';
@@ -17,7 +18,7 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => redirectToHome ? Home() : Profile()),
+            builder: (context) => redirectToHome ? Home() : Authenticate()),
       );
     }
 
@@ -28,7 +29,7 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: <Widget>[
         TextButton.icon(
           style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue)),
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.white)),
 
           // textColor: Colors.white,
           icon: Icon(redirectToHome ? Icons.home : Icons.person),

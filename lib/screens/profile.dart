@@ -48,7 +48,6 @@ class _ProfileState extends State<Profile> {
     Navigator.pop(context);
   }
 
-
   _navigateToAuthenticate() {
     Navigator.push(
       context,
@@ -71,7 +70,6 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BaseAppBar(appBar: AppBar(), redirectToHome: true),
-
       backgroundColor: Color.fromARGB(255, 226, 146, 100),
       body: Container(
           height: double.maxFinite,
@@ -187,9 +185,9 @@ class _ProfileState extends State<Profile> {
             ),
             const SizedBox(height: 40.0),
             ElevatedButton(
-                      style: ButtonStyle(
-                          foregroundColor:
-                              MaterialStateProperty.all<Color>(Colors.black)),
+                style: ButtonStyle(
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(Colors.black)),
                 // color: Color.fromRGBO(23, 34, 59, 1),
                 child: const Text(
                   'Sign out',

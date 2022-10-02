@@ -110,7 +110,7 @@ class _CreateEventState extends State<CreateEvent> {
               ));
     }
     DateTime selectedDateTime =
-        DateFormat("yyyy-MM-dd hh:mm a").parse("$_selectedDate $selectedTime");
+        DateFormat("yyyy-MM-dd hh:mm").parse("$_selectedDate $selectedTime");
 
     print('//////////SAVING EVENT//////////');
 
@@ -138,7 +138,7 @@ class _CreateEventState extends State<CreateEvent> {
       });
     }
   }
-
+ 
   @override
   Widget build(BuildContext context) {
     return MediaQuery.of(context).size.width < 850.0 ? _mobView() : _webView();

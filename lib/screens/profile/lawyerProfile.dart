@@ -47,12 +47,6 @@ class _LawyerProfileState extends State<LawyerProfile> {
     }
   }
 
-  _navigateToAuth() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Authenticate()),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {

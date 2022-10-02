@@ -216,9 +216,13 @@ class _RegisterState extends State<Register> {
                   height: 60,
                   width: 60,
                   child: ElevatedButton(
-                      style: ButtonStyle(
-                          foregroundColor:
-                              MaterialStateProperty.all<Color>(Colors.blue)),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        onPrimary: Color.fromARGB(255, 9, 123, 161),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(40.0),
+                        ),
+                      ),
                       // textColor: const Color.fromARGB(255, 9, 123, 161),
                       // shape: RoundedRectangleBorder(
                       //   borderRadius: new BorderRadius.circular(40.0),
@@ -252,9 +256,13 @@ class _RegisterState extends State<Register> {
                   height: 60,
                   width: 60,
                   child: ElevatedButton(
-                      style: ButtonStyle(
-                          foregroundColor:
-                              MaterialStateProperty.all<Color>(Colors.blue)),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        onPrimary: Color.fromARGB(255, 161, 113, 9),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(40.0),
+                        ),
+                      ),
 
                       // textColor: const Color.fromARGB(255, 161, 113, 9),
                       // shape: RoundedRectangleBorder(
@@ -440,10 +448,9 @@ class _RegisterState extends State<Register> {
         ),
         const SizedBox(height: 20.0),
         ElevatedButton(
-            style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all<Color>(
-                    Color.fromRGBO(225, 103, 104, 1))),
-
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color.fromRGBO(225, 103, 104, 1),
+            ),
             // color: const Color.fromRGBO(225, 103, 104, 1),
             child: Text(
               '${isLawyer == false ? "Submit form" : "Next"}',
@@ -627,11 +634,9 @@ class _RegisterState extends State<Register> {
           ),
           const SizedBox(height: 20.0),
           ElevatedButton(
-              style: ButtonStyle(
-                  foregroundColor:
-                      MaterialStateProperty.all<Color>(orangeColor)),
-
-              // color: orangeColor,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: orangeColor,
+              ),
               child: Text(
                 '$registerAsText',
                 style: const TextStyle(color: Colors.white),
@@ -728,9 +733,9 @@ class _RegisterState extends State<Register> {
           height: 100,
         ),
         ElevatedButton(
-            style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all<Color>(orangeColor)),
-            // color: orangeColor,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: orangeColor,
+            ),
             child: const Text(
               'Submit2',
               style: TextStyle(color: Colors.white),

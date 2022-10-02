@@ -103,18 +103,17 @@ class _CallState extends State<Call> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  // JoinChannelVideo(
-                  //       token: result['token'],
-                  //       channelId: result['channelId'],
-                  //     )));
-
-                  Scaffold(
-                    body: JoinChannelVideo(
-                      token: result['token'],
-                      channelId: result['channelId'],
-                    ),
+              builder: (context) => JoinChannelVideo(
+                    token: result['token'],
+                    channelId: result['channelId'],
                   )));
+
+      // Scaffold(
+      //   body: JoinChannelVideo(
+      //     token: result['token'],
+      //     channelId: result['channelId'],
+      //   ),
+      // )));
     }
     ;
   }
@@ -140,33 +139,47 @@ class _CallState extends State<Call> {
   Widget _selectChannelName() {
     return Scaffold(
       appBar: AppBar(
+        titleSpacing: 15.0,
         backgroundColor: darkGreenColor,
         automaticallyImplyLeading: false,
         elevation: 10.0,
         actions: <Widget>[
-          TextButton.icon(
-            style: ButtonStyle(foregroundColor: MaterialStateProperty.all<Color>(Colors.blue)),
-            icon: Icon(Icons.home),
-            label: Text(''),
-            onPressed: _navigateToHome,
-          ),
-          TextButton.icon(
-            style: ButtonStyle(foregroundColor: MaterialStateProperty.all<Color>(Colors.blue)),
-            icon: Icon(Icons.call),
-            label: Text(''),
-            onPressed: _navigateToCalls,
-          ),
-          TextButton.icon(
-            style: ButtonStyle(foregroundColor: MaterialStateProperty.all<Color>(Colors.blue)),
-            icon: Icon(Icons.balance),
-            label: Text(''),
-            onPressed: _navigateToLawyerProfile
-          ),
-          TextButton.icon(
-            style: ButtonStyle(foregroundColor: MaterialStateProperty.all<Color>(Colors.blue)),
-            icon: Icon(Icons.person),
-            label: Text(''),
-            onPressed: _navigateToAuth,
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              TextButton.icon(
+                style: ButtonStyle(
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(Colors.white)),
+                icon: Icon(Icons.home),
+                label: Text(''),
+                onPressed: _navigateToHome,
+              ),
+              TextButton.icon(
+                style: ButtonStyle(
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(Colors.white)),
+                icon: Icon(Icons.call),
+                label: Text(''),
+                onPressed: _navigateToCalls,
+              ),
+              TextButton.icon(
+                  style: ButtonStyle(
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.white)),
+                  icon: Icon(Icons.balance),
+                  label: Text(''),
+                  onPressed: _navigateToLawyerProfile),
+              TextButton.icon(
+                style: ButtonStyle(
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(Colors.white)),
+                icon: Icon(Icons.person),
+                label: Text(''),
+                onPressed: _navigateToAuth,
+              ),
+            ],
           ),
         ],
       ),

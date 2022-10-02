@@ -32,8 +32,8 @@ class _State extends State<JoinChannelVideo> {
 
   bool isJoined = false, switchCamera = true, switchRender = true;
   List<int> remoteUid = [];
-  // late TextEditingController _controller;
-  // bool _isRenderSurfaceView = false; 
+  late TextEditingController _controller;
+  bool _isRenderSurfaceView = false;
   late String uid;
   late String token = widget.token;
   late String channelName = widget.channelId;
@@ -42,21 +42,17 @@ class _State extends State<JoinChannelVideo> {
   @override
   void initState() {
     super.initState();
-    // _controller = TextEditingController(text: "Everyone");
+    _controller = TextEditingController(text: channelName);
     _initEngine();
-    getUserUid();
+        getUserUid();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _destroyEngine();
+    _engine.destroy();
     closeCall();
-  }
 
-  void _destroyEngine() async {
-    await _engine.leaveChannel();
-    await _engine.destroy();
   }
 
   Future<void> closeCall() async {
@@ -65,7 +61,7 @@ class _State extends State<JoinChannelVideo> {
     await DatabaseService.closeCall(channelName);
   }
 
-  Future<void> getUserUid() async {
+   Future<void> getUserUid() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? storedUid = await preferences.getString("localUid");
     if (storedUid != null) {
@@ -86,8 +82,6 @@ class _State extends State<JoinChannelVideo> {
     await _engine.startPreview();
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await _engine.setClientRole(ClientRole.Broadcaster);
-
-    await _joinChannel();
   }
 
   void _addListeners() {
@@ -130,298 +124,136 @@ class _State extends State<JoinChannelVideo> {
     if (defaultTargetPlatform == TargetPlatform.android) {
       await [Permission.microphone, Permission.camera].request();
     }
-    print("You are joining with this token: ${widget.token}");
-    // await _engine.joinChannel(config.token, _controller.text, null, config.uid); // (token, channelName, )
-    await _engine.joinChannel(
-        token, channelName, null, 0); // (token, channelName, )
+
+    await _engine.joinChannel(token, channelName, null, 0); // (token, channelName, )
   }
 
-  // _leaveChannel() async {
-  //   await _engine.leaveChannel();
-  // }
+  _leaveChannel() async {
+    await _engine.leaveChannel();
+  }
 
+  _switchCamera() {
+    _engine.switchCamera().then((value) {
+      setState(() {
+        switchCamera = !switchCamera;
+      });
+    }).catchError((err) {
+      logSink.log('switchCamera $err');
+    });
+  }
 
+  _switchRender() {
+    setState(() {
+      switchRender = !switchRender;
+      remoteUid = List.of(remoteUid.reversed);
+    });
+  }
 
-
-  /// Toolbar layout
-  Widget _toolbar() {
-    return Container(
-      alignment: Alignment.bottomCenter,
-      padding: const EdgeInsets.symmetric(vertical: 48),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          RawMaterialButton(
-            onPressed: _onToggleMute,
-            child: Icon(
-              muted ? Icons.mic_off : Icons.mic,
-              color: muted ? Colors.white : Colors.blueAccent,
-              size: 20.0,
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: _controller,
+              decoration: const InputDecoration(hintText: 'Channel ID'),
             ),
-            shape: CircleBorder(),
-            elevation: 2.0,
-            fillColor: muted ? Colors.blueAccent : Colors.white,
-            padding: const EdgeInsets.all(12.0),
+            if (!kIsWeb &&
+                (defaultTargetPlatform == TargetPlatform.android ||
+                    defaultTargetPlatform == TargetPlatform.iOS))
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Text(
+                      'Rendered by SurfaceView \n(default TextureView): '),
+                  Switch(
+                    value: _isRenderSurfaceView,
+                    onChanged: isJoined
+                        ? null
+                        : (changed) {
+                            setState(() {
+                              _isRenderSurfaceView = changed;
+                            });
+                          },
+                  )
+                ],
+              ),
+            Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: ElevatedButton(
+                    onPressed: isJoined ? _leaveChannel : _joinChannel,
+                    child: Text('${isJoined ? 'Leave' : 'Join'} channel'),
+                  ),
+                )
+              ],
+            ),
+            _renderVideo(),
+          ],
+        ),
+        if (defaultTargetPlatform == TargetPlatform.android ||
+            defaultTargetPlatform == TargetPlatform.iOS)
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ElevatedButton(
+                  onPressed: _switchCamera,
+                  child: Text('Camera ${switchCamera ? 'front' : 'rear'}'),
+                ),
+              ],
+            ),
+          )
+      ],
+    );
+  }
+
+  _renderVideo() {
+    return Expanded(
+      child: Stack(
+        children: [
+          Container(
+            child: (kIsWeb || _isRenderSurfaceView)
+                ? const rtc_local_view.SurfaceView(
+                    zOrderMediaOverlay: true,
+                    zOrderOnTop: true,
+                  )
+                : const rtc_local_view.TextureView(),
           ),
-          RawMaterialButton(
-            onPressed: () => _onCallEnd(context),
-            child: Icon(
-              Icons.call_end,
-              color: Colors.white,
-              size: 35.0,
+          Align(
+            alignment: Alignment.topLeft,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: List.of(remoteUid.map(
+                  (e) => GestureDetector(
+                    onTap: _switchRender,
+                    child: SizedBox(
+                      width: 120,
+                      height: 120,
+                      child: (kIsWeb || _isRenderSurfaceView)
+                          ? rtc_remote_view.SurfaceView(
+                              uid: e,
+                              channelId: _controller.text,
+                            )
+                          : rtc_remote_view.TextureView(
+                              uid: e,
+                              channelId: _controller.text,
+                            ),
+                    ),
+                  ),
+                )),
+              ),
             ),
-            shape: CircleBorder(),
-            elevation: 2.0,
-            fillColor: Colors.redAccent,
-            padding: const EdgeInsets.all(15.0),
-          ),
-          RawMaterialButton(
-            onPressed: _onSwitchCamera,
-            child: Icon(
-              Icons.switch_camera,
-              color: Colors.blueAccent,
-              size: 20.0,
-            ),
-            shape: CircleBorder(),
-            elevation: 2.0,
-            fillColor: Colors.white,
-            padding: const EdgeInsets.all(12.0),
           )
         ],
       ),
     );
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      // backgroundColor: Colors.black,
-      body: Center(
-        child: Stack(
-          children: <Widget>[
-            _viewRows(),
-            _toolbar(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// Helper function to get list of native views
-  List<Widget> _getRenderViews() {
-    final List<StatefulWidget> list = [];
-    list.add(rtc_local_view.SurfaceView());
-    remoteUid.forEach((int uid) => list.add(rtc_remote_view.SurfaceView(
-          uid: uid,
-          channelId: channelName,
-        )));
-    return list;
-  }
-
-  /// Video view wrapper
-  Widget _videoView(view) {
-    return Expanded(child: Container(child: view));
-  }
-
-  /// Video view row wrapper
-  Widget _expandedVideoRow(List<Widget> views) {
-    final wrappedViews = views.map<Widget>(_videoView).toList();
-    return Expanded(
-      child: Row(
-        children: wrappedViews,
-      ),
-    );
-  }
-
-  /// Video layout wrapper
-  Widget _viewRows() {
-    final views = _getRenderViews();
-    switch (views.length) {
-      case 1:
-        return Container(
-            child: Column(
-          // children: <Widget>[_videoView(views[0])],
-                    children: <Widget>[
-            _expandedVideoRow([views[0]]),
-            // _expandedVideoRow([views[1]])
-          ],
-        ));
-      case 2:
-        return Container(
-            child: Column(
-          children: <Widget>[
-            _expandedVideoRow([views[0]]),
-            _expandedVideoRow([views[1]])
-          ],
-        ));
-      case 3:
-        return Container(
-            child: Column(
-          children: <Widget>[
-            _expandedVideoRow(views.sublist(0, 2)),
-            _expandedVideoRow(views.sublist(2, 3))
-          ],
-        ));
-      case 4:
-        return Container(
-            child: Column(
-          children: <Widget>[
-            _expandedVideoRow(views.sublist(0, 2)),
-            _expandedVideoRow(views.sublist(2, 4))
-          ],
-        ));
-      default:
-    }
-    return Container();
-  }
-
-  Future<void> _onCallEnd(BuildContext context) async {
-    print("Call ENDED ++++++++++++++++ ${channelName}");
-    //  Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => Calls()),
-    // );
-    await closeCall();
-
-    // TODO
-
-    // Navigator.pop(context);
-  }
-
-  void _onToggleMute() {
-    setState(() {
-      muted = !muted;
-    });
-    _engine.muteLocalAudioStream(muted);
-  }
-
-  void _onSwitchCamera() {
-    _engine.switchCamera();
-  }
 }
-
-
-
-
-
-
-
-
-
-
-/////////////////////// OLD UI >>>>>
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Stack(
-  //     children: [
-  //       Column(
-  //         mainAxisAlignment: MainAxisAlignment.start,
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           TextFormField(
-  //             onFieldSubmitted: (String value) async {
-  //               _changeChannel();
-  //             },
-  //             controller: _controller,
-  //             decoration: const InputDecoration(hintText: 'Channel ID'),
-  //           ),
-  //           if (!kIsWeb &&
-  //               (defaultTargetPlatform == TargetPlatform.android ||
-  //                   defaultTargetPlatform == TargetPlatform.iOS))
-  //             Row(
-  //               mainAxisSize: MainAxisSize.min,
-  //               mainAxisAlignment: MainAxisAlignment.start,
-  //               children: [
-  //                 const Text(
-  //                     'Rendered by SurfaceView \n(default TextureView): '),
-  //                 Switch(
-  //                   value: _isRenderSurfaceView,
-  //                   onChanged: isJoined
-  //                       ? null
-  //                       : (changed) {
-  //                           setState(() {
-  //                             _isRenderSurfaceView = changed;
-  //                           });
-  //                         },
-  //                 )
-  //               ],
-  //             ),
-  //           Row(
-  //             children: [
-  //               Expanded(
-  //                 flex: 1,
-  //                 child: ElevatedButton(
-  //                   onPressed: isJoined ? _leaveChannel : _joinChannel,
-  //                   child: Text('${isJoined ? 'Leave' : 'Join'} channel'),
-  //                 ),
-  //               )
-  //             ],
-  //           ),
-  //           _renderVideo(),
-  //         ],
-  //       ),
-  //       if (defaultTargetPlatform == TargetPlatform.android ||
-  //           defaultTargetPlatform == TargetPlatform.iOS)
-  //         Align(
-  //           alignment: Alignment.bottomRight,
-  //           child: Column(
-  //             mainAxisSize: MainAxisSize.min,
-  //             children: [
-  //               ElevatedButton(
-  //                 onPressed: _switchCamera,
-  //                 child: Text('Camera ${switchCamera ? 'front' : 'rear'}'),
-  //               ),
-  //             ],
-  //           ),
-  //         )
-  //     ],
-  //   );
-  // }
-
-  // _renderVideo() {
-  //   return Expanded(
-  //     child: Stack(
-  //       children: [
-  //         Container(
-  //           child: (kIsWeb || _isRenderSurfaceView)
-  //               ? const rtc_local_view.SurfaceView(
-  //                   zOrderMediaOverlay: true,
-  //                   zOrderOnTop: true,
-  //                 )
-  //               : const rtc_local_view.TextureView(),
-  //         ),
-  //         Align(
-  //           alignment: Alignment.topLeft,
-  //           child: SingleChildScrollView(
-  //             scrollDirection: Axis.horizontal,
-  //             child: Row(
-  //               children: List.of(remoteUid.map(
-  //                 (e) => GestureDetector(
-  //                   onTap: _switchRender,
-  //                   child: SizedBox(
-  //                     width: 120,
-  //                     height: 120,
-  //                     child: (kIsWeb || _isRenderSurfaceView)
-  //                         ? rtc_remote_view.SurfaceView(
-  //                             uid: e,
-  //                             channelId: _controller.text,
-  //                           )
-  //                         : rtc_remote_view.TextureView(
-  //                             uid: e,
-  //                             channelId: _controller.text,
-  //                           ),
-  //                   ),
-  //                 ),
-  //               )),
-  //             ),
-  //           ),
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
-
-
-
-
-
