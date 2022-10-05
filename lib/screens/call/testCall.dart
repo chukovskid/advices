@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:advices/screens/call/calls.dart';
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
@@ -26,6 +27,7 @@ class TestCall extends StatefulWidget {
 }
 
 class _TestCallState extends State<TestCall> {
+  bool isJoined = false, switchCamera = true, switchRender = true, muted = false;
   int? _remoteUid;
   bool _localUserJoined = false;
   late RtcEngine _engine;
@@ -93,8 +95,13 @@ class _TestCallState extends State<TestCall> {
       body: Stack(
         children: [
           Center(
-            child: _remoteVideo(),
-          ),
+        child: Stack(
+          children: <Widget>[
+            _remoteVideo(),
+            _toolbar(),
+          ],
+        ),
+      ),
           Align(
             alignment: Alignment.topLeft,
             child: Container(
@@ -125,5 +132,80 @@ class _TestCallState extends State<TestCall> {
         textAlign: TextAlign.center,
       );
     }
+  }
+
+
+  /// Toolbar layout
+  Widget _toolbar() {
+    return Container(
+      alignment: Alignment.bottomCenter,
+      padding: const EdgeInsets.symmetric(vertical: 48),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          RawMaterialButton(
+            onPressed: _onToggleMute,
+            child: Icon(
+              muted ? Icons.mic_off : Icons.mic,
+              color: muted ? Colors.white : Colors.blueAccent,
+              size: 20.0,
+            ),
+            shape: CircleBorder(),
+            elevation: 2.0,
+            fillColor: muted ? Colors.blueAccent : Colors.white,
+            padding: const EdgeInsets.all(12.0),
+          ),
+          RawMaterialButton(
+            onPressed: () => _onCallEnd(context),
+            child: Icon(
+              Icons.call_end,
+              color: Colors.white,
+              size: 35.0,
+            ),
+            shape: CircleBorder(),
+            elevation: 2.0,
+            fillColor: Colors.redAccent,
+            padding: const EdgeInsets.all(15.0),
+          ),
+          RawMaterialButton(
+            onPressed: _onSwitchCamera,
+            child: Icon(
+              Icons.switch_camera,
+              color: Colors.blueAccent,
+              size: 20.0,
+            ),
+            shape: CircleBorder(),
+            elevation: 2.0,
+            fillColor: Colors.white,
+            padding: const EdgeInsets.all(12.0),
+          )
+        ],
+      ),
+    );
+  }
+
+
+  Future<void> _onCallEnd(BuildContext context) async {
+    // print("Call ENDED ++++++++++++++++ ${channelName}");
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Calls()),
+    );
+    await closeCall();
+
+    // TODO
+
+    // Navigator.pop(context);
+  }
+
+  void _onToggleMute() {
+    setState(() {
+      muted = !muted;
+    });
+    _engine.muteLocalAudioStream(muted);
+  }
+
+  void _onSwitchCamera() {
+    _engine.switchCamera();
   }
 }

@@ -19,6 +19,10 @@ class _LawsState extends State<Laws>
   bool openContracts = false;
   bool openCompanies = false;
 
+  Color urgentColor = Color.fromARGB(243, 242, 58, 34);
+  Color expatsColor = darkGreenColor;
+  Color contractsColor = darkGreenColor;
+  Color companyColor = darkGreenColor;
   @override
   void initState() {
     controller = AnimationController(
@@ -61,19 +65,203 @@ class _LawsState extends State<Laws>
               stops: [-1, 2],
             ),
           ),
-          child: Column(
-            children: [
+          child: Row(
+            // mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Expanded(child: _scrolable(2, "Urgent", urgentColor)),
+              Flexible(child: _scrolableExpats(2, "Expats", expatsColor)),
               Flexible(
-                child: Row(
-                  children: <Widget>[
-                    Flexible(child: _cardsList(2)),
-                    Flexible(child: _cardsList(3)),
-                    Flexible(child: _cardsList(4)),
+                  child: _scrolableContracts(3, "Contracts", contractsColor)),
+              Flexible(child: _scrolableCompany(4, "Company", companyColor)),
+            ],
+          )),
+    );
+  }
+
+  Widget _scrolable(int area, String name, Color color) {
+    return MouseRegion(
+      onEnter: (PointerEvent details) {
+        setState(() {
+          urgentColor = Color.fromARGB(243, 242, 103, 34)  ;
+        });
+      },
+      onExit: (PointerEvent details) {
+        setState(() {
+          urgentColor = Color.fromARGB(243, 242, 58, 34);
+        });
+      },
+      child: Container(
+        color: color,
+        child: new SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Container(
+                height: 600,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      name,
+                      style: TextStyle(color: Colors.white, fontSize: 25),
+                    ),
+                    Text(
+                      "______________________",
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                    ),
+                    Text(
+                      "For more, scroll down",
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                    ),
                   ],
                 ),
               ),
+              _cardsList(area),
             ],
-          )),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _scrolableExpats(int area, String name, Color color) {
+    return MouseRegion(
+      onEnter: (PointerEvent details) {
+        setState(() {
+          expatsColor =greyGreenColor;
+          //  Color.fromARGB(243, 145, 128, 77);
+          // expatsColor = Color.fromARGB(255, 124, 142, 97);
+        });
+      },
+      onExit: (PointerEvent details) {
+        setState(() {
+          expatsColor = darkGreenColor;
+        });
+      },
+      child: Container(
+        color: color,
+        child: new SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Container(
+                height: 600,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      name,
+                      style: TextStyle(color: Colors.white, fontSize: 25),
+                    ),
+                    Text(
+                      "______________________",
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                    ),
+                    Text(
+                      "For more, scroll down",
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                    ),
+                  ],
+                ),
+              ),
+              _cardsList(area),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _scrolableContracts(int area, String name, Color color) {
+    return MouseRegion(
+      onEnter: (PointerEvent details) {
+        setState(() {
+          contractsColor = greyGreenColor;
+          // contractsColor = Color.fromARGB(255, 124, 159, 169);
+        });
+      },
+      onExit: (PointerEvent details) {
+        setState(() {
+          contractsColor = darkGreenColor;
+        });
+      },
+      child: Container(
+        color: color,
+        child: new SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Container(
+                height: 600,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      name,
+                      style: TextStyle(color: Colors.white, fontSize: 25),
+                    ),
+                    Text(
+                      "______________________",
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                    ),
+                    Text(
+                      "For more, scroll down",
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                    ),
+                  ],
+                ),
+              ),
+              _cardsList(area),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _scrolableCompany(int area, String name, Color color) {
+    return MouseRegion(
+      onEnter: (PointerEvent details) {
+        setState(() {
+          companyColor = greyGreenColor;
+        });
+      },
+      onExit: (PointerEvent details) {
+        setState(() {
+          companyColor = darkGreenColor;
+        });
+      },
+      child: Container(
+        color: color,
+        child: new SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Container(
+                height: 600,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      name,
+                      style: TextStyle(color: Colors.white, fontSize: 25),
+                    ),
+                    Text(
+                      "______________________",
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                    ),
+                    Text(
+                      "For more, scroll down",
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                    ),
+                  ],
+                ),
+              ),
+              _cardsList(area),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -92,77 +280,153 @@ class _LawsState extends State<Laws>
             stops: [-1, 2],
           ),
         ),
-        child: SingleChildScrollView(
+        child: Container(
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
               SizedBox(height: 10),
-              ListTile(
-                  leading: Icon(
-                    openExpats
-                        ? Icons.keyboard_arrow_down
-                        : Icons.keyboard_arrow_right,
-                    color: Color.fromARGB(255, 207, 223, 226),
-                  ),
-                  title: Text(
-                    "Expats",
-                    style: TextStyle(
-                        fontSize: 25,
-                        color: Color.fromARGB(255, 207, 223, 226)),
-                  ),
-                  subtitle: const Text(''),
-                  onTap: () => {
-                        setState(() {
-                          openExpats = !openExpats;
-                        })
-                      }),
-              // Container( height:openExpats ? 250 : 10, child: openExpats ? _buildGrid() : SizedBox()),
-              Container(height: 200, child: _cardsList(2)),
-              // SizedBox(height: 10),
-              ListTile(
-                  leading: Icon(
-                    openContracts
-                        ? Icons.keyboard_arrow_down
-                        : Icons.keyboard_arrow_right,
-                    color: Color.fromARGB(255, 207, 223, 226),
-                  ),
-                  title: Text(
-                    "Contracts",
-                    style: TextStyle(
-                        fontSize: 25,
-                        color: Color.fromARGB(255, 207, 223, 226)),
-                  ),
-                  subtitle: const Text(''),
-                  onTap: () => {
-                        setState(() {
-                          openContracts = !openContracts;
-                        })
-                      }),
-              // Flexible(child: openContracts ? _cardsList() : SizedBox()),
-              Container(height: 200, child: _cardsList(3)),
+              Expanded(
+                child: Container(
+                  // height: 200,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Expats",
+                          style: TextStyle(
+                              fontSize: 25,
+                              color: Color.fromARGB(255, 207, 223, 226)),
+                        )
+                      ]),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  // height: 200,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Contracts",
+                          style: TextStyle(
+                              fontSize: 25,
+                              color: Color.fromARGB(255, 207, 223, 226)),
+                        )
+                      ]),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  // height: 200,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Company",
+                          style: TextStyle(
+                              fontSize: 25,
+                              color: Color.fromARGB(255, 207, 223, 226)),
+                        )
+                      ]),
+                ),
+              ),
+              Expanded(
+                child: MouseRegion(
+                  onHover: (PointerEvent details) {
+                    details.tilt;
 
-              // SizedBox(height: 10),
-              ListTile(
-                  leading: Icon(
-                    openCompanies
-                        ? Icons.keyboard_arrow_down
-                        : Icons.keyboard_arrow_right,
-                    color: Color.fromARGB(255, 207, 223, 226),
+                    setState(() {});
+                  },
+                  //      on: (PointerEvent details) {
+                  //   details.tilt;
+
+                  //   setState(() {});
+                  // },
+
+                  child: Container(
+                    height: double.maxFinite,
+                    width: double.infinity,
+                    color: urgentColor, // height: 200,
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Urgent",
+                            style: TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                                color: darkBlueColor),
+                          )
+                        ]),
                   ),
-                  title: Text(
-                    "Companies",
-                    style: TextStyle(
-                        fontSize: 25,
-                        color: Color.fromARGB(255, 207, 223, 226)),
-                  ),
-                  subtitle: const Text(''),
-                  onTap: () => {
-                        setState(() {
-                          openCompanies = !openCompanies;
-                        })
-                      }),
-              // Flexible(child: openCompanies ? _cardsList() : SizedBox()),
-              Container(height: 200, child: _cardsList(4)),
+                ),
+              ),
+              // ListTile(
+              //     leading: Icon(
+              //       openExpats
+              //           ? Icons.keyboard_arrow_down
+              //           : Icons.keyboard_arrow_right,
+              //       color: Color.fromARGB(255, 207, 223, 226),
+              //     ),
+              //     title: Text(
+              //       "Expats",
+              //       style: TextStyle(
+              //           fontSize: 25,
+              //           color: Color.fromARGB(255, 207, 223, 226)),
+              //     ),
+              //     subtitle: const Text(''),
+              //     onTap: () => {
+              //           setState(() {
+              //             openExpats = !openExpats;
+              //           })
+              //         }),
+              // // Container( height:openExpats ? 250 : 10, child: openExpats ? _buildGrid() : SizedBox()),
+              // // Container(height: 200, child: _cardsList(2)),
+              // // SizedBox(height: 10),
+              // ListTile(
+              //     leading: Icon(
+              //       openContracts
+              //           ? Icons.keyboard_arrow_down
+              //           : Icons.keyboard_arrow_right,
+              //       color: Color.fromARGB(255, 207, 223, 226),
+              //     ),
+              //     title: Text(
+              //       "Contracts",
+              //       style: TextStyle(
+              //           fontSize: 25,
+              //           color: Color.fromARGB(255, 207, 223, 226)),
+              //     ),
+              //     subtitle: const Text(''),
+              //     onTap: () => {
+              //           setState(() {
+              //             openContracts = !openContracts;
+              //           })
+              //         }),
+              // // Flexible(child: openContracts ? _cardsList() : SizedBox()),
+              // Container(height: 200, child: _cardsList(3)),
+
+              // // SizedBox(height: 10),
+              // ListTile(
+              //     leading: Icon(
+              //       openCompanies
+              //           ? Icons.keyboard_arrow_down
+              //           : Icons.keyboard_arrow_right,
+              //       color: Color.fromARGB(255, 207, 223, 226),
+              //     ),
+              //     title: Text(
+              //       "Companies",
+              //       style: TextStyle(
+              //           fontSize: 25,
+              //           color: Color.fromARGB(255, 207, 223, 226)),
+              //     ),
+              //     subtitle: const Text(''),
+              //     onTap: () => {
+              //           setState(() {
+              //             openCompanies = !openCompanies;
+              //           })
+              //         }),
+              // // Flexible(child: openCompanies ? _cardsList() : SizedBox()),
+              // Container(height: 200, child: _cardsList(4)),
             ],
           ),
         ));
@@ -193,15 +457,16 @@ class _LawsState extends State<Laws>
                   crossAxisCount: 1,
                   children: laws.map(_gridCard).toList())
               : Column(
+                mainAxisSize : MainAxisSize.max,
                   children: [
-                    Flexible(
-                      child: ListView(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10.0,
-                            vertical: 10.0,
-                          ),
-                          children: laws.map(_card).toList()),
-                    ),
+                    ListView(
+                      
+                        shrinkWrap: true,
+                        // padding: const EdgeInsets.symmetric(
+                        //   horizontal: 10.0,
+                        //   vertical: 10.0,
+                        // ),
+                        children: laws.map(_card).toList()),
                   ],
                 );
         } else {
@@ -219,8 +484,10 @@ class _LawsState extends State<Laws>
 
   Widget _card(Service service) {
     return Card(
+      elevation: 25.0,
+      
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5.0),
+        borderRadius: BorderRadius.circular(0.2),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -263,9 +530,7 @@ class _LawsState extends State<Laws>
               ),
             ),
           ),
-          const SizedBox(
-              // height: 10,
-              )
+
         ],
       ),
     );

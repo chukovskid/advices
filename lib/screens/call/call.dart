@@ -101,16 +101,31 @@ class _CallState extends State<Call> {
     print("Jou will join with this channelName : $channelName");
     Map<String, dynamic>? result = await CallMethods.makeCloudCall(channelName);
     if (result!['token'] != null) {
+      if (kIsWeb) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => JoinChannelVideo(
+                      token: result['token'], 
+                      channelId: result['channelId'],
+                    )));
+      } else {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => TestCall(
+                      token: result['token'],
+                      channelId: result['channelId'],
+                    )));
+      }
 
-
-
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => TestCall(
-                    token: result['token'],
-                    channelId: result['channelId'],
-                  )));
+      // Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //         builder: (context) => TestCall(
+      //               token: result['token'],
+      //               channelId: result['channelId'],
+      //             )));
 
       // MaterialPageRoute(
       //     builder: (context) => Scaffold(
@@ -272,7 +287,7 @@ class _CallState extends State<Call> {
 
 // TODO instead of saveOpenCallForUser, create a function setCallToOpen()
 // // meaning there is someone at the call and is WAITING
-    await openCall( widget.channellName);
+    await openCall(widget.channellName);
   }
 
   // Future<void> _handleCameraAndMic(Permission permission) async {

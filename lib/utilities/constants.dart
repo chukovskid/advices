@@ -30,6 +30,9 @@ const orangeColor = const Color.fromRGBO(225, 103, 104, 1);
 const darkGreenColor = const Color(0xff032229);
 const lightGreenColor = const Color(0xff5bc9bf);
 const backgroundColor = [darkGreenColor, darkGreenColor];
+const urgentColor = Color.fromARGB(255, 218, 144, 109);
+const greyGreenColor = Color.fromARGB(255, 188, 190, 182);
+
 
 /// Example event class.
 class Event {

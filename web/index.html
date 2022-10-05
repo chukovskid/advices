@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -24,11 +25,12 @@
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="icon" type="image/png" href="favicon.png" />
 
   <title>advices</title>
   <link rel="manifest" href="manifest.json">
 </head>
+
 <body>
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
@@ -40,7 +42,32 @@
       });
     }
   </script>
+
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-analytics.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyAMiXYCdnUTqZItvme_QYds_TTNCLXGmac",
+      authDomain: "advices-dev.firebaseapp.com",
+      projectId: "advices-dev",
+      storageBucket: "advices-dev.appspot.com",
+      messagingSenderId: "793184649946",
+      appId: "1:793184649946:web:9551788cf7f51068cd9be3",
+      measurementId: "G-QPSYB5REK5"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  </script>
   <script src="main.dart.js" type="application/javascript"></script>
-  
+
 </body>
+
 </html>

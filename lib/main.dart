@@ -28,6 +28,7 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -56,135 +57,209 @@ void initDynamicLinks(BuildContext context) {
   dynamicLinks.onLink.listen((dynamicLinkData) {
     print('///// Dynamic Link' + dynamicLinkData.link.toString());
 
-    Navigator.pushNamed(context, "areas");
+    // Navigator.pushNamed(context, "areas");
   }).onError((error) {
     print('onLink error');
     print(error.message);
   });
 }
 
+// Copyright 2021 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 // import 'dart:async';
 
-// import 'package:advices/config/agora.config.dart';
-// import 'package:advices/services/database.dart';
-// import 'package:agora_rtc_engine/rtc_engine.dart';
-// import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
-// import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
+// import 'package:advices/services/firebase_dynamic_links.dart';
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 // import 'package:flutter/material.dart';
-// import 'package:permission_handler/permission_handler.dart';
+// import 'package:flutter/services.dart';
+// import 'package:url_launcher/url_launcher.dart';
 
-// const appId = "03f0c2c7973949b3afe5e475f15a350e";
-// const token =
-//     "00603f0c2c7973949b3afe5e475f15a350eIABYvY5vO7jO4iPVDMdA2CIA1Xs58ZD+2QtgE6awK1VtmWK47TwAAAAAIgDS67t85Ok6YwQAAQB0pjljAgB0pjljAwB0pjljBAB0pjlj";
-// const channel = "Lk37HV68oaPxOA8AHpNqcSoFgEA3+BegoHlxHbccfYh0wpMCjtWgrUFE2";
+// Future<void> main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   // iOS requires you run in release mode to test dynamic links ("flutter run --release").
+//   await Firebase.initializeApp();
 
-// void main() => runApp(MaterialApp(home: MyApp()));
-
-// class MyApp extends StatefulWidget {
-//   @override
-//   _MyAppState createState() => _MyAppState();
+//   runApp(
+//     MaterialApp(
+//       title: 'Dynamic Links Example',
+//       routes: <String, WidgetBuilder>{
+//         '/': (BuildContext context) => _MainScreen(),
+//         '/helloworld': (BuildContext context) => _DynamicLinkScreen(),
+//       },
+//     ),
+//   );
 // }
 
-// class _MyAppState extends State<MyApp> {
-//   int? _remoteUid;
-//   bool _localUserJoined = false;
-//   late RtcEngine _engine;
+// class _MainScreen extends StatefulWidget {
+//   @override
+//   State<StatefulWidget> createState() => _MainScreenState();
+// }
+
+// class _MainScreenState extends State<_MainScreen> {
+//   String? _linkMessage;
+//   bool _isCreatingLink = false;
+
+//   FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
+//   final String _testString =
+//       'To test: long press link and then copy and click from a non-browser '
+//       "app. Make sure this isn't being tested on iOS simulator and iOS xcode "
+//       'is properly setup. Look at firebase_dynamic_links/README.md for more '
+//       'details.';
+
+//   final String DynamicLink = 'https://test-app/helloworld';
+//   final String Link = 'https://reactnativefirebase.page.link/bFkn';
 
 //   @override
 //   void initState() {
-//     initAgora();
 //     super.initState();
+//     initDynamicLinks();
 //   }
 
-//   @override
-//   void dispose() {
-//     _engine.destroy();
-//     closeCall();
-//     super.dispose();
+//   Future<void> initDynamicLinks() async {
+//     dynamicLinks.onLink.listen((dynamicLinkData) {
+//       Navigator.pushNamed(context, dynamicLinkData.link.path);
+//     }).onError((error) {
+//       print('onLink error');
+//       print(error.message);
+//     });
 //   }
 
-//   Future<void> closeCall() async {
-//     await _engine.leaveChannel();
-//     await _engine.destroy();
-//     await DatabaseService.closeCall(channelId);
-//   }
+//   Future<void> _createDynamicLink(bool short) async {
+//     setState(() {
+//       _isCreatingLink = true;
+//     });
 
-//   Future<void> initAgora() async {
-//     // retrieve permissions
-//     await [Permission.microphone, Permission.camera].request();
-
-//     //create the engine
-//     _engine = await RtcEngine.create(appId);
-//     await _engine.leaveChannel();
-
-//     await _engine.enableVideo();
-//     _engine.setEventHandler(
-//       RtcEngineEventHandler(
-//         joinChannelSuccess: (String channel, int uid, int elapsed) {
-//           print("local user $uid joined");
-//           setState(() {
-//             _localUserJoined = true;
-//           });
-//         },
-//         userJoined: (int uid, int elapsed) {
-//           print("remote user $uid joined");
-//           setState(() {
-//             _remoteUid = uid;
-//           });
-//         },
-//         userOffline: (int uid, UserOfflineReason reason) {
-//           print("remote user $uid left channel");
-//           setState(() {
-//             _remoteUid = null;
-//           });
-//         },
+//     final DynamicLinkParameters parameters = DynamicLinkParameters(
+//       uriPrefix: 'https://reactnativefirebase.page.link',
+//       longDynamicLink: Uri.parse(
+//         'https://reactnativefirebase.page.link/?efr=0&ibi=io.invertase.testing&apn=io.flutter.plugins.firebase.dynamiclinksexample&imv=0&amv=0&link=https%3A%2F%2Ftest-app%2Fhelloworld&ofl=https://ofl-example.com',
+//       ),
+//       link: Uri.parse(DynamicLink),
+//       androidParameters: const AndroidParameters(
+//         packageName: 'io.flutter.plugins.firebase.dynamiclinksexample',
+//         minimumVersion: 0,
+//       ),
+//       iosParameters: const IOSParameters(
+//         bundleId: 'io.invertase.testing',
+//         minimumVersion: '0',
 //       ),
 //     );
 
-//     await _engine.joinChannel(token, channel, null, 0);
+//     Uri url;
+//     if (short) {
+//       final ShortDynamicLink shortLink =
+//           await dynamicLinks.buildShortLink(parameters);
+//       url = shortLink.shortUrl;
+//     } else {
+//       url = await dynamicLinks.buildLink(parameters);
+//     }
+
+//     setState(() {
+//       _linkMessage = url.toString();
+//       _isCreatingLink = false;
+//     });
 //   }
 
-//   // Create UI with local view and remote view
 //   @override
 //   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Agora Video Call'),
-//       ),
-//       body: Stack(
-//         children: [
-//           Center(
-//             child: _remoteVideo(),
-//           ),
-//           Align(
-//             alignment: Alignment.topLeft,
-//             child: Container(
-//               width: 100,
-//               height: 150,
-//               child: Center(
-//                 child: _localUserJoined
-//                     ? RtcLocalView.SurfaceView()
-//                     : CircularProgressIndicator(),
+//     return Material(
+//       child: Scaffold(
+//         appBar: AppBar(
+//           title: const Text('Dynamic Links Example'),
+//         ),
+//         body: Builder(
+//           builder: (BuildContext context) {
+//             return Center(
+//               child: Column(
+//                 mainAxisAlignment: MainAxisAlignment.center,
+//                 children: <Widget>[
+//                   ButtonBar(
+//                     alignment: MainAxisAlignment.center,
+//                     children: <Widget>[
+//                       ElevatedButton(
+//                         onPressed: () async {
+//                           final String? data = await FirebaseDynamicLinkService
+//                               .createDynamicLink(true);
+//                           // final Uri? deepLink = data?.link;
+//                           print("// Data $data");
+//                           // if (data != null) {
+//                           //   // ignore: unawaited_futures
+//                           //   Navigator.pushNamed(context, deepLink.path);
+//                           // }
+//                         },
+//                         child: const Text('getInitialLink'),
+//                       ),
+//                       ElevatedButton(
+//                         onPressed: () async {
+//                           final PendingDynamicLinkData? data =
+//                               await dynamicLinks
+//                                   .getDynamicLink(Uri.parse(Link));
+//                           final Uri? deepLink = data?.link;
+
+//                           if (deepLink != null) {
+//                             // ignore: unawaited_futures
+//                             Navigator.pushNamed(context, deepLink.path);
+//                           }
+//                         },
+//                         child: const Text('getDynamicLink'),
+//                       ),
+//                       ElevatedButton(
+//                         onPressed: !_isCreatingLink
+//                             ? () => _createDynamicLink(false)
+//                             : null,
+//                         child: const Text('Get Long Link'),
+//                       ),
+//                       ElevatedButton(
+//                         onPressed: !_isCreatingLink
+//                             ? () => _createDynamicLink(true)
+//                             : null,
+//                         child: const Text('Get Short Link'),
+//                       ),
+//                     ],
+//                   ),
+//                   InkWell(
+//                     onTap: () async {
+//                       if (_linkMessage != null) {
+//                         await launchUrl(Uri.parse(_linkMessage!));
+//                       }
+//                     },
+//                     onLongPress: () {
+//                       Clipboard.setData(ClipboardData(text: _linkMessage));
+//                       ScaffoldMessenger.of(context).showSnackBar(
+//                         const SnackBar(content: Text('Copied Link!')),
+//                       );
+//                     },
+//                     child: Text(
+//                       _linkMessage ?? '',
+//                       style: const TextStyle(color: Colors.blue),
+//                     ),
+//                   ),
+//                   Text(_linkMessage == null ? '' : _testString)
+//                 ],
 //               ),
-//             ),
-//           ),
-//         ],
+//             );
+//           },
+//         ),
 //       ),
 //     );
 //   }
+// }
 
-//   // Display remote user's video
-//   Widget _remoteVideo() {
-//     if (_remoteUid != null) {
-//       return RtcRemoteView.SurfaceView(
-//         uid: _remoteUid!,
-//         channelId: channel,
-//       );
-//     } else {
-//       return Text(
-//         'Please wait for remote user to join',
-//         textAlign: TextAlign.center,
-//       );
-//     }
+// class _DynamicLinkScreen extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Material(
+//       child: Scaffold(
+//         appBar: AppBar(
+//           title: const Text('Hello World DeepLink'),
+//         ),
+//         body: const Center(
+//           child: Text('Hello, World!'),
+//         ),
+//       ),
+//     );
 //   }
 // }

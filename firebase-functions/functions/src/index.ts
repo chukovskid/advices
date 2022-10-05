@@ -6,6 +6,20 @@ const db = admin.firestore();
 const fcm = admin.messaging();
 
 
+// function makeDynamicLongLink(postId, socialDescription, socialImageUrl) {
+//   return urlBuilder(`${functions.config().applinks.link}`, {
+//       queryParams: {
+//           link: "https://www.arvana.io/code/" + postId,
+//           apn: "io.arvana.blog",
+//           dfl: "https://www.arvana.io",
+//           st: "Arvana Blog - All you need to know about arvana",
+//           sd: socialDescription,
+//           si: socialImageUrl
+//       }
+//   });
+// }
+
+
 export const callUser = functions.https.onCall(async (data, context) => {
 
     // let callerId = context.auth?.uid;
