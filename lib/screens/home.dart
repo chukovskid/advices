@@ -94,9 +94,9 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BaseAppBar(
-        appBar: AppBar(),
-      ),
+            //       appBar: BaseAppBar(
+      //   appBar: AppBar(),
+      // ),
       bottomNavigationBar: BottomBar(
         fabLocation: FloatingActionButtonLocation.endDocked,
         shape: CircularNotchedRectangle(),

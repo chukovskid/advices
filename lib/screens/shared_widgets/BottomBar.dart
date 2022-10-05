@@ -191,8 +191,10 @@ class BottomBar extends StatelessWidget {
       child: IconTheme(
         data: IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             IconButton(
+              iconSize: 32.0,
               tooltip: 'Open navigation menu',
               icon: const Icon(Icons.menu),
               onPressed: () {
@@ -201,14 +203,14 @@ class BottomBar extends StatelessWidget {
             ),
             if (centerLocations.contains(fabLocation)) const Spacer(),
             IconButton(
-              tooltip: 'Search',
-              icon: const Icon(Icons.search),
-              onPressed: () {},
-            ),
-            IconButton(
-              tooltip: 'Favorite',
-              icon: const Icon(Icons.favorite),
-              onPressed: () {},
+              tooltip: 'Profile',
+              icon: const Icon(Icons.person),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Authenticate()),
+                );
+              },
             ),
           ],
         ),

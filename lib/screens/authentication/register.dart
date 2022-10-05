@@ -130,9 +130,9 @@ class _RegisterState extends State<Register> {
   Widget build(BuildContext context) {
     return Scaffold(
       // resizeToAvoidBottomInset: false,
-      appBar: BaseAppBar(
-        appBar: AppBar(),
-      ),
+            //       appBar: BaseAppBar(
+      //   appBar: AppBar(),
+      // ),
 
       // backgroundColor: const Color.fromARGB(255, 226, 146, 100),
       body: Container(

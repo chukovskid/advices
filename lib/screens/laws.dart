@@ -1,4 +1,5 @@
 import 'package:advices/models/service.dart';
+import 'package:advices/screens/lawAreas/selected_services.dart';
 import 'package:advices/screens/lawyers.dart';
 import 'package:advices/utilities/constants.dart';
 import 'package:flutter/material.dart';
@@ -58,10 +59,7 @@ class _LawsState extends State<Laws>
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [
-                Color.fromARGB(255, 255, 255, 255),
-                Color.fromARGB(255, 255, 255, 255),
-              ],
+              colors: backgroundColor,
               stops: [-1, 2],
             ),
           ),
@@ -82,7 +80,7 @@ class _LawsState extends State<Laws>
     return MouseRegion(
       onEnter: (PointerEvent details) {
         setState(() {
-          urgentColor = Color.fromARGB(243, 242, 103, 34)  ;
+          urgentColor = Color.fromARGB(243, 242, 103, 34);
         });
       },
       onExit: (PointerEvent details) {
@@ -97,7 +95,7 @@ class _LawsState extends State<Laws>
             mainAxisSize: MainAxisSize.max,
             children: [
               Container(
-                height: 600,
+                height: MediaQuery.of(context).size.height / 1.7,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -110,7 +108,8 @@ class _LawsState extends State<Laws>
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
                     Text(
-                      "For more, scroll down",
+                      "This section is for calling a lawyer immediately \n instead of arranging a date",
+                      textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
                   ],
@@ -128,7 +127,7 @@ class _LawsState extends State<Laws>
     return MouseRegion(
       onEnter: (PointerEvent details) {
         setState(() {
-          expatsColor =greyGreenColor;
+          expatsColor = greyGreenColor;
           //  Color.fromARGB(243, 145, 128, 77);
           // expatsColor = Color.fromARGB(255, 124, 142, 97);
         });
@@ -145,7 +144,7 @@ class _LawsState extends State<Laws>
             mainAxisSize: MainAxisSize.max,
             children: [
               Container(
-                height: 600,
+                height: MediaQuery.of(context).size.height / 1.7,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -158,7 +157,8 @@ class _LawsState extends State<Laws>
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
                     Text(
-                      "For more, scroll down",
+                      "Schedule a date with your lawyer \n and get the full service",
+                      textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
                   ],
@@ -192,7 +192,7 @@ class _LawsState extends State<Laws>
             mainAxisSize: MainAxisSize.max,
             children: [
               Container(
-                height: 600,
+                height: MediaQuery.of(context).size.height / 1.7,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -205,7 +205,9 @@ class _LawsState extends State<Laws>
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
                     Text(
-                      "For more, scroll down",
+                      "Get the contract ready \n next week",
+                      textAlign: TextAlign.center,
+                      // "Explain your needs in the description part and the lawyer will be more prepared",
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
                   ],
@@ -238,7 +240,7 @@ class _LawsState extends State<Laws>
             mainAxisSize: MainAxisSize.max,
             children: [
               Container(
-                height: 600,
+                height: MediaQuery.of(context).size.height / 1.7,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -251,7 +253,8 @@ class _LawsState extends State<Laws>
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
                     Text(
-                      "For more, scroll down",
+                      "Explain your problem and let the lawyer advice \n you and fix it together",
+                      textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
                   ],
@@ -286,63 +289,74 @@ class _LawsState extends State<Laws>
             children: [
               SizedBox(height: 10),
               Expanded(
-                child: Container(
-                  // height: 200,
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Expats",
-                          style: TextStyle(
-                              fontSize: 25,
-                              color: Color.fromARGB(255, 207, 223, 226)),
-                        )
-                      ]),
+                child: InkWell(
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SelectedServices(areaId: 2))),
+                  child: Container(
+                    // height: 200,
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Expats",
+                            style: TextStyle(
+                                fontSize: 25,
+                                color: Color.fromARGB(255, 207, 223, 226)),
+                          )
+                        ]),
+                  ),
                 ),
               ),
               Expanded(
-                child: Container(
-                  // height: 200,
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Contracts",
-                          style: TextStyle(
-                              fontSize: 25,
-                              color: Color.fromARGB(255, 207, 223, 226)),
-                        )
-                      ]),
+                child: InkWell(
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SelectedServices(areaId: 3))),
+                  child: Container(
+                    // height: 200,
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Contracts",
+                            style: TextStyle(
+                                fontSize: 25,
+                                color: Color.fromARGB(255, 207, 223, 226)),
+                          )
+                        ]),
+                  ),
                 ),
               ),
               Expanded(
-                child: Container(
-                  // height: 200,
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Company",
-                          style: TextStyle(
-                              fontSize: 25,
-                              color: Color.fromARGB(255, 207, 223, 226)),
-                        )
-                      ]),
+                child: InkWell(
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SelectedServices(areaId: 4))),
+                  child: Container(
+                    // height: 200,
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Company",
+                            style: TextStyle(
+                                fontSize: 25,
+                                color: Color.fromARGB(255, 207, 223, 226)),
+                          )
+                        ]),
+                  ),
                 ),
               ),
               Expanded(
-                child: MouseRegion(
-                  onHover: (PointerEvent details) {
-                    details.tilt;
-
-                    setState(() {});
-                  },
-                  //      on: (PointerEvent details) {
-                  //   details.tilt;
-
-                  //   setState(() {});
-                  // },
-
+                child: InkWell(
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SelectedServices(areaId: 2))),
                   child: Container(
                     height: double.maxFinite,
                     width: double.infinity,
@@ -457,10 +471,9 @@ class _LawsState extends State<Laws>
                   crossAxisCount: 1,
                   children: laws.map(_gridCard).toList())
               : Column(
-                mainAxisSize : MainAxisSize.max,
+                  mainAxisSize: MainAxisSize.max,
                   children: [
                     ListView(
-                      
                         shrinkWrap: true,
                         // padding: const EdgeInsets.symmetric(
                         //   horizontal: 10.0,
@@ -485,7 +498,6 @@ class _LawsState extends State<Laws>
   Widget _card(Service service) {
     return Card(
       elevation: 25.0,
-      
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(0.2),
       ),
@@ -530,7 +542,6 @@ class _LawsState extends State<Laws>
               ),
             ),
           ),
-
         ],
       ),
     );

@@ -78,9 +78,9 @@ class _CallsState extends State<Calls>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BaseAppBar(
-        appBar: AppBar(),
-      ),
+      //       appBar: BaseAppBar(
+      //   appBar: AppBar(),
+      // ),
       bottomNavigationBar: BottomBar(
         fabLocation: FloatingActionButtonLocation.endDocked,
         shape: CircularNotchedRectangle(),
@@ -129,8 +129,9 @@ class _CallsState extends State<Calls>
 
   Widget _card(EventModel call) {
     return Card(
+      elevation: 25,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
+        borderRadius: BorderRadius.circular(0.2),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

@@ -1,21 +1,22 @@
+import 'package:advices/models/service.dart';
+import 'package:advices/screens/lawyers.dart';
 import 'package:advices/screens/profile/lawyerProfile.dart';
 import 'package:advices/screens/shared_widgets/base_app_bar.dart';
 import 'package:advices/utilities/constants.dart';
 import 'package:flutter/material.dart';
-import '../models/user.dart';
-import '../services/database.dart';
-import 'authentication/authentication.dart';
-import 'shared_widgets/BottomBar.dart';
+import '../../models/user.dart';
+import '../../services/database.dart';
+import '../shared_widgets/BottomBar.dart';
 
-class Lawyers extends StatefulWidget {
-  final String service;
-  const Lawyers({Key? key, required this.service}) : super(key: key);
+class SelectedServices extends StatefulWidget {
+  final int areaId;
+  const SelectedServices({Key? key, required this.areaId}) : super(key: key);
 
   @override
-  State<Lawyers> createState() => _LawyersState();
+  State<SelectedServices> createState() => _SelectedServicesState();
 }
 
-class _LawyersState extends State<Lawyers>
+class _SelectedServicesState extends State<SelectedServices>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late AnimationController controller;
 
@@ -25,9 +26,7 @@ class _LawyersState extends State<Lawyers>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-            //       appBar: BaseAppBar(
-      //   appBar: AppBar(),
-      // ),
+       
       bottomNavigationBar: BottomBar(
         fabLocation: FloatingActionButtonLocation.endDocked,
         shape: CircularNotchedRectangle(),
@@ -49,31 +48,31 @@ class _LawyersState extends State<Lawyers>
   }
 
   Widget _cardsList() {
-    return StreamBuilder<Iterable<FlutterUser>>(
-      stream: DatabaseService.getFilteredLawyers(widget.service),
+    return StreamBuilder<Iterable<Service>>(
+      stream: DatabaseService.getAllServicesByArea(widget.areaId),
       builder: ((context, snapshot) {
         if (!snapshot.hasData) return Text("loading data ...");
         if (snapshot.hasData) {
-          final users = snapshot.data!;
+          final services = snapshot.data!;
           return Container(
               margin: const EdgeInsets.only(
-                  top: 35, left: 30, right: 50, bottom: 10),
-              child: MediaQuery.of(context).size.width < 850.0
+                  top: 10, left: 10, right: 10, bottom: 10),
+              child: MediaQuery.of(context).size.width < 750.0
                   ? ListView(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0,
+                        horizontal: 5.0,
                         vertical: 50.0,
                       ),
-                      children: users.map(_card).toList())
+                      children: services.map(_card).toList())
                   : GridView.count(
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 10,
                       crossAxisCount:
-                          (MediaQuery.of(context).size.width < 950.0 ? 3 : 6),
+                          (MediaQuery.of(context).size.width < 1150.0 ? 3 : 5),
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                       primary: false,
-                      children: users.map(_card).toList(),
+                      children: services.map(_card).toList(),
                     ));
         } else {
           return Center(
@@ -88,27 +87,37 @@ class _LawyersState extends State<Lawyers>
     );
   }
 
-  Widget _card(FlutterUser fUser) {
+  Widget _card(Service service) {
     return InkWell(
       onTap: () => Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => LawyerProfile(fUser.uid)),
+        MaterialPageRoute(
+            builder: (context) => Lawyers(service: service.id)),
       ),
       child: Card(
+        elevation: 30,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
+          borderRadius: BorderRadius.circular(0.2),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
-              leading: const Icon(
-                Icons.person,
-                size: 60,
+              leading: CircleAvatar(
+                radius: 40,
+                backgroundColor: Colors.white,
+                child: CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  radius: 40,
+                  backgroundImage: NetworkImage(
+                    service.imageUrl.length > 20
+                        ? service.imageUrl
+                        : 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png',
+                  ),
+                ),
               ),
-              title: Text(fUser.displayName.toString()),
-              subtitle:
-                  const Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
+              title: Text(service.name.toString()),
+              subtitle: Text("Description about this service and what types of issues it contains "),
             ),
             const SizedBox(
               height: 20,
