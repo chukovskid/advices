@@ -1,3 +1,4 @@
+import 'package:advices/screens/authentication/register.dart';
 import 'package:advices/services/auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 // import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
@@ -28,16 +29,14 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    initDynamicLinks(context);
 
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+    // SystemChrome.setPreferredOrientations([
+    //   DeviceOrientation.portraitUp,
+    //   DeviceOrientation.portraitDown,
+    // ]);
     // precacheImage(AssetImage("lib/assets/images/background.jpg"), context);
     return StreamProvider.value(
       value: AuthService().user,
@@ -52,17 +51,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-void initDynamicLinks(BuildContext context) {
-  FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
-  dynamicLinks.onLink.listen((dynamicLinkData) {
-    print('///// Dynamic Link' + dynamicLinkData.link.toString());
-
-    // Navigator.pushNamed(context, "areas");
-  }).onError((error) {
-    print('onLink error');
-    print(error.message);
-  });
-}
 
 // Copyright 2021 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be

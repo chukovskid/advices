@@ -8,10 +8,14 @@ import 'package:advices/services/auth.dart';
 import 'package:advices/utilities/constants.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../examples/basic/join_channel_video/join_channel_video.dart';
 import '../services/database.dart';
+import 'authentication/register.dart';
 import 'call/callMethods.dart';
 
 class Home extends StatefulWidget {
@@ -27,7 +31,6 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-
     // if (Platform.isIOS) {
     //   iosSubscription = _fcm.onIosSettingsRegistered.listen((data) {
     //     // save the token  OR subscribe to a topic here
@@ -35,16 +38,14 @@ class _HomeState extends State<Home> {
 
     //   _fcm.requestNotificationPermissions(IosNotificationSettings());
     // }
-
     _saveDeviceToken();
-
-    // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    //   String channelName = message.data["channelName"];
-    //   if (message.notification != null) {
-    //     print('Message also contained a notification: ${message.notification}');
-    //   }
-    //   // openCall(channelName);
-    // });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      String channelName = message.data["channelName"];
+      if (message.notification != null) {
+        print('Message also contained a notification: ${message.notification}');
+      }
+      openCall(channelName);
+    });
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       String channelName = message.data["channelName"];
       if (message.notification != null) {
@@ -52,6 +53,7 @@ class _HomeState extends State<Home> {
       }
       openCall(channelName);
     });
+    initDynamicLinks(context);
   }
 
   final AuthService _auth = AuthService();
@@ -76,25 +78,48 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Future<void> getFruit() async {
-    HttpsCallable callable =
-        FirebaseFunctions.instance.httpsCallable('testFunction');
-    final results = await callable();
-    var fruit =
-        results.data; // ["Apple", "Banana", "Cherry", "Date", "Fig", "Grapes"]
+  void initDynamicLinks(BuildContext context) async {
+    FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
+    dynamicLinks.onLink.listen((dynamicLinkData) async {
+      print('///// Dynamic Link' + dynamicLinkData.link.toString());
+      print('///// fragment' + dynamicLinkData.link.fragment);
+      if (dynamicLinkData.link.fragment == "/register") {
+        await Future.delayed(Duration(seconds: 1));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Register()),
+        );
+      }
+      if (dynamicLinkData.link.fragment == "/calls") {
+        await Future.delayed(Duration(seconds: 1));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Calls()),
+        );
+      }
+    }).onError((error) {
+      print('onLink error');
+      print(error.message);
+    });
   }
 
-  _navigateToAuth() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Authenticate()),
-    );
+  openCalls() async {
+    if (kIsWeb && MediaQuery.of(context).size.width > 850.0) {
+      Uri url = Uri.parse("https://advices.page.link/calls");
+      if (await canLaunchUrl(url)) {
+        await launchUrl(url);
+      } else {
+        throw "Could not launch $url";
+      }
+    } else {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Calls()));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-            //       appBar: BaseAppBar(
+      //       appBar: BaseAppBar(
       //   appBar: AppBar(),
       // ),
       bottomNavigationBar: BottomBar(
@@ -102,10 +127,7 @@ class _HomeState extends State<Home> {
         shape: CircularNotchedRectangle(),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Calls()));
-        },
+        onPressed: openCalls,
         tooltip: 'Create',
         backgroundColor: lightGreenColor,
         // child: const Text("lawyer",),

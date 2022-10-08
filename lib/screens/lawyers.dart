@@ -25,7 +25,7 @@ class _LawyersState extends State<Lawyers>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-            //       appBar: BaseAppBar(
+      //       appBar: BaseAppBar(
       //   appBar: AppBar(),
       // ),
       bottomNavigationBar: BottomBar(
@@ -89,6 +89,10 @@ class _LawyersState extends State<Lawyers>
   }
 
   Widget _card(FlutterUser fUser) {
+      //   var img = imageBytes != null ? Image.memory(
+      //   imageBytes,
+      //   fit: BoxFit.cover,
+      // ) : Text(errorMsg != null ? errorMsg : "Loading...");
     return InkWell(
       onTap: () => Navigator.push(
         context,
@@ -96,16 +100,28 @@ class _LawyersState extends State<Lawyers>
       ),
       child: Card(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
+          borderRadius: BorderRadius.circular(0.2),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
-              leading: const Icon(
-                Icons.person,
-                size: 60,
+              leading: CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 60,
+                child: ClipOval(
+                  child: Image.network(
+                    fUser.photoURL.length > 20
+                        ? fUser.photoURL
+                        : 'gs://advices-dev.appspot.com/users/images/Lk37HV68oaPxOA8AHpNqcSoFgEA3/Lk37HV68oaPxOA8AHpNqcSoFgEA3.jpg',
+                  ),
+                ),
               ),
+
+              // const Icon(
+              //   Icons.person,
+              //   size: 60,
+              // ),
               title: Text(fUser.displayName.toString()),
               subtitle:
                   const Text('Music by Julie Gable. Lyrics by Sidney Stein.'),

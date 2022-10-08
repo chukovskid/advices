@@ -119,7 +119,7 @@ class _ProfileState extends State<Profile> {
       elevation: 0.3,
       margin: const EdgeInsets.only(top: 0, left: 10, right: 10, bottom: 10),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
+        borderRadius: BorderRadius.circular(0.2),
       ),
       child: Container(
         width: double.infinity / 0.2,

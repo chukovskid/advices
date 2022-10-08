@@ -1,5 +1,4 @@
 import 'package:advices/screens/authentication/authentication.dart';
-import 'package:advices/screens/profile.dart';
 import 'package:flutter/material.dart';
 import '../../utilities/constants.dart';
 import '../home.dart';
