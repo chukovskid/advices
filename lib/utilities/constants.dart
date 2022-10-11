@@ -2,6 +2,15 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 
+
+const apiKey =
+    'pk_test_51LqfHUH6waKuk26ulU4pHpQU6fssmDlG1UYk4jrFNO0iu2gBYgz2vOyQ74Dwla8YDOJ3k8A51xK9jmyZqyFlYUa900SVxa5x2B';
+const secretKey =
+    'sk_test_51LqfHUH6waKuk26udtxoXVUw9HY3bTBUD8Gi0iPc5khMeU9ReMxvniRcD3kaKtT37O9iTZ6NHKQAlGqYk3PiDhND00SskyV7z6';
+const nikesPriceId = 'price_1LrkUPH6waKuk26ucUMu99hm';
+
+
+
 final kHintTextStyle = TextStyle(
   color: Colors.white54,
   fontFamily: 'OpenSans',

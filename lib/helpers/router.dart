@@ -7,6 +7,7 @@ import 'package:advices/screens/lawyers.dart';
 import 'package:flutter/material.dart';
 
 import '../examples/basic/join_channel_video/join_channel_video.dart';
+import '../payment/stripe_payment.dart';
 import '../screens/authentication/authentication.dart';
 import '../screens/calendar/add_event.dart';
 import '../screens/calendar/calendar.dart';
@@ -23,7 +24,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           builder: (context) =>
               Lawyers(service: "buyAndSaleId")); // TODO this is not right
     case 'lawyers_profile':
-      return MaterialPageRoute(builder: (context) => LawyerProfile('cNbw66J36wMvUZdjES7H25HXAGo2'));
+      return MaterialPageRoute(
+          builder: (context) => LawyerProfile('cNbw66J36wMvUZdjES7H25HXAGo2'));
     case 'selectDate':
       return MaterialPageRoute(builder: (context) => CalendarPage());
     case 'sign_in':
@@ -32,6 +34,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => Register());
     case 'auth':
       return MaterialPageRoute(builder: (context) => Authenticate());
+    case 'payment':
+      return MaterialPageRoute(builder: (context) => StripePayment());
     default:
       return MaterialPageRoute(builder: (context) => Home());
   }

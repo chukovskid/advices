@@ -23,7 +23,7 @@ class StripePayment extends StatelessWidget {
                     // });
                     // final jsonResponse = response.data;
                     // print(jsonResponse["customer"]);
-      // redirectToCheckout(context);
+      redirectToCheckout(context);
     //   Navigator.push(
     //   context,
     //   MaterialPageRoute(builder: (context) => CheckoutPage(sessionId: jsonResponse["paymentIntent"],)),
