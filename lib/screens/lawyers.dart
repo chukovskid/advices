@@ -25,9 +25,9 @@ class _LawyersState extends State<Lawyers>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //       appBar: BaseAppBar(
-      //   appBar: AppBar(),
-      // ),
+      appBar: BaseAppBar(
+        appBar: AppBar(),
+      ),
       bottomNavigationBar: BottomBar(
         fabLocation: FloatingActionButtonLocation.endDocked,
         shape: CircularNotchedRectangle(),
@@ -89,10 +89,10 @@ class _LawyersState extends State<Lawyers>
   }
 
   Widget _card(FlutterUser fUser) {
-      //   var img = imageBytes != null ? Image.memory(
-      //   imageBytes,
-      //   fit: BoxFit.cover,
-      // ) : Text(errorMsg != null ? errorMsg : "Loading...");
+    //   var img = imageBytes != null ? Image.memory(
+    //   imageBytes,
+    //   fit: BoxFit.cover,
+    // ) : Text(errorMsg != null ? errorMsg : "Loading...");
     return InkWell(
       onTap: () => Navigator.push(
         context,

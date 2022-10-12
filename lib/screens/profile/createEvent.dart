@@ -109,7 +109,7 @@ class _CreateEventState extends State<CreateEvent> {
                   ),
                 ),
               ));
-      // return;
+      return;
     }
     DateTime selectedDateTime =
         DateFormat("yyyy-MM-dd hh:mm").parse("$_selectedDate $selectedTime");
