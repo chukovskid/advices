@@ -89,8 +89,7 @@ class _HomeState extends State<Home> {
           context,
           MaterialPageRoute(builder: (context) => Register()),
         );
-      }
-      if (dynamicLinkData.link.fragment == "/calls") {
+      }else if (dynamicLinkData.link.fragment == "/calls") {
         await Future.delayed(Duration(seconds: 1));
         Navigator.push(
           context,

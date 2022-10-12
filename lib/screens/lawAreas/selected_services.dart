@@ -97,7 +97,7 @@ class _SelectedServicesState extends State<SelectedServices>
       child: Card(
         elevation: 30,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(0.2),
+          borderRadius: BorderRadius.circular(4),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,

@@ -100,7 +100,7 @@ class _LawyersState extends State<Lawyers>
       ),
       child: Card(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(0.2),
+          borderRadius: BorderRadius.circular(4),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -113,7 +113,7 @@ class _LawyersState extends State<Lawyers>
                   child: Image.network(
                     fUser.photoURL.length > 20
                         ? fUser.photoURL
-                        : 'gs://advices-dev.appspot.com/users/images/Lk37HV68oaPxOA8AHpNqcSoFgEA3/Lk37HV68oaPxOA8AHpNqcSoFgEA3.jpg',
+                        : 'https://st.depositphotos.com/2069323/2156/i/600/depositphotos_21568785-stock-photo-man-pointing.jpg',
                   ),
                 ),
               ),

@@ -66,7 +66,7 @@ class _LawsState extends State<Laws>
           child: Row(
             // mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              Expanded(child: _scrolable(2, "Urgent", urgentColor)),
+              Expanded(child: _scrolable(1, "Urgent", urgentColor)),
               Flexible(child: _scrolableExpats(2, "Expats", expatsColor)),
               Flexible(
                   child: _scrolableContracts(3, "Contracts", contractsColor)),
@@ -95,7 +95,7 @@ class _LawsState extends State<Laws>
             mainAxisSize: MainAxisSize.max,
             children: [
               Container(
-                height: MediaQuery.of(context).size.height / 1.7,
+                height: MediaQuery.of(context).size.height / 1.8,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -114,6 +114,11 @@ class _LawsState extends State<Laws>
                     ),
                   ],
                 ),
+              ),
+              Icon(
+                Icons.keyboard_double_arrow_down_outlined,
+                size: 30,
+                color: Color.fromARGB(255, 255, 255, 255),
               ),
               _cardsList(area),
             ],
@@ -144,7 +149,7 @@ class _LawsState extends State<Laws>
             mainAxisSize: MainAxisSize.max,
             children: [
               Container(
-                height: MediaQuery.of(context).size.height / 1.7,
+                height: MediaQuery.of(context).size.height / 1.8,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -163,6 +168,11 @@ class _LawsState extends State<Laws>
                     ),
                   ],
                 ),
+              ),
+              Icon(
+                Icons.keyboard_double_arrow_down_outlined,
+                size: 30,
+                color: Color.fromARGB(255, 255, 255, 255),
               ),
               _cardsList(area),
             ],
@@ -192,7 +202,7 @@ class _LawsState extends State<Laws>
             mainAxisSize: MainAxisSize.max,
             children: [
               Container(
-                height: MediaQuery.of(context).size.height / 1.7,
+                height: MediaQuery.of(context).size.height / 1.8,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -212,6 +222,11 @@ class _LawsState extends State<Laws>
                     ),
                   ],
                 ),
+              ),
+              Icon(
+                Icons.keyboard_double_arrow_down_outlined,
+                size: 30,
+                color: Color.fromARGB(255, 255, 255, 255),
               ),
               _cardsList(area),
             ],
@@ -240,7 +255,7 @@ class _LawsState extends State<Laws>
             mainAxisSize: MainAxisSize.max,
             children: [
               Container(
-                height: MediaQuery.of(context).size.height / 1.7,
+                height: MediaQuery.of(context).size.height / 1.8,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -259,6 +274,11 @@ class _LawsState extends State<Laws>
                     ),
                   ],
                 ),
+              ),
+              Icon(
+                Icons.keyboard_double_arrow_down_outlined,
+                size: 30,
+                color: Color.fromARGB(255, 255, 255, 255),
               ),
               _cardsList(area),
             ],
@@ -499,7 +519,7 @@ class _LawsState extends State<Laws>
     return Card(
       elevation: 25.0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(0.2),
+        borderRadius: BorderRadius.circular(2),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

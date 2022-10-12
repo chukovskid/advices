@@ -106,7 +106,9 @@ class _SignInState extends State<SignIn> {
   Future<void> _googleSignIn() async {
     await _auth.signInWithGoogle(context: context);
     // await _auth.googleSignIn();
-    await _navigateToAuth();
+    Navigator.pop(context);
+
+    // await _navigateToAuth();
     print(email);
   }
 

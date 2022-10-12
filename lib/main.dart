@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: "Advices",
         onGenerateRoute: router.generateRoute,
-        initialRoute: 'payment',
+        initialRoute: 'lawyers',
       ),
     );
   }

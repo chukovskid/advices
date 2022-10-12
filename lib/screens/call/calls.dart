@@ -131,7 +131,7 @@ class _CallsState extends State<Calls>
     return Card(
       elevation: 25,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(0.2),
+        borderRadius: BorderRadius.circular(4),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

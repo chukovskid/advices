@@ -200,38 +200,51 @@ class AuthService {
   Future<User?> signInWithGoogle({required BuildContext context}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
+    UserCredential userCredential;
+    GoogleSignInAccount? googleUser;
 
     if (kIsWeb) {
       GoogleAuthProvider authProvider = GoogleAuthProvider();
 
       try {
-        final UserCredential userCredential =
-            await auth.signInWithPopup(authProvider);
-
+        userCredential = await auth.signInWithPopup(authProvider);
         user = userCredential.user;
+        print(userCredential);
+
+        FlutterUser newUser = FlutterUser(
+          displayName: userCredential.user?.displayName ?? "No Name",
+          email: userCredential.user?.email ?? "No email",
+          photoURL: userCredential.user?.photoURL ?? "No photoUrl",
+          uid: userCredential.user?.uid ?? "googleUser.id",
+        );
+        FlutterUser? fUser = await DatabaseService.updateUserData(newUser);
       } catch (e) {
         print(e);
       }
     } else {
       final GoogleSignIn googleSignIn = GoogleSignIn();
+      googleUser = await googleSignIn.signIn();
 
-      final GoogleSignInAccount? googleSignInAccount =
-          await googleSignIn.signIn();
-
-      if (googleSignInAccount != null) {
+      if (googleUser != null) {
         final GoogleSignInAuthentication googleSignInAuthentication =
-            await googleSignInAccount.authentication;
-
+            await googleUser.authentication;
         final AuthCredential credential = GoogleAuthProvider.credential(
           accessToken: googleSignInAuthentication.accessToken,
           idToken: googleSignInAuthentication.idToken,
         );
-
         try {
-          final UserCredential userCredential =
-              await auth.signInWithCredential(credential);
-
+          userCredential = await auth.signInWithCredential(credential);
           user = userCredential.user;
+
+          print(userCredential);
+
+          FlutterUser newUser = FlutterUser(
+            displayName: googleUser.displayName ?? "No Name",
+            email: googleUser.email,
+            photoURL: googleUser.photoUrl ?? "No photoUrl",
+            uid: userCredential.user?.uid ?? googleUser.id,
+          );
+          FlutterUser? fUser = await DatabaseService.updateUserData(newUser);
         } on FirebaseAuthException catch (e) {
           if (e.code == 'account-exists-with-different-credential') {
             ScaffoldMessenger.of(context).showSnackBar(

@@ -13,8 +13,8 @@ void redirectToCheckout(BuildContext _) async {
       LineItem(price: nikesPriceId, quantity: 1),
     ],
     mode: 'payment',
-    successUrl: 'http://localhost:8080/#/success',
-    cancelUrl: 'http://localhost:8080/#/cancel',
+    successUrl: 'https://advices.page.link/calls',
+    cancelUrl: 'https://advices.page.link/',
   ));
 }
 

@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:time_picker_widget/time_picker_widget.dart';
 import '../../models/user.dart';
+import '../../payment/checkout/checkout.dart';
 import '../../services/auth.dart';
 import '../../utilities/constants.dart';
 import 'package:intl/intl.dart';
@@ -108,6 +109,7 @@ class _CreateEventState extends State<CreateEvent> {
                   ),
                 ),
               ));
+      // return;
     }
     DateTime selectedDateTime =
         DateFormat("yyyy-MM-dd hh:mm").parse("$_selectedDate $selectedTime");
@@ -123,10 +125,12 @@ class _CreateEventState extends State<CreateEvent> {
     await DatabaseService.saveEvent(
         widget.uid, _title.text, _description.text, selectedDateTime);
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Calls()),
-    );
+    redirectToCheckout(context);
+
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => Calls()),
+    // );
   }
 
   Future<void> _getLawyer() async {
@@ -138,10 +142,13 @@ class _CreateEventState extends State<CreateEvent> {
       });
     }
   }
- 
+
   @override
   Widget build(BuildContext context) {
-    return MediaQuery.of(context).size.width < 850.0 ? _mobView() : _webView();
+    return MediaQuery.of(context).size.width < 850.0
+        // || MediaQuery.of(context).size.height < 2500.0 )
+        ? _mobView()
+        : _webView();
   }
 
   Widget _mobView() {
