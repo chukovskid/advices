@@ -89,7 +89,7 @@ class _HomeState extends State<Home> {
           context,
           MaterialPageRoute(builder: (context) => Register()),
         );
-      }else if (dynamicLinkData.link.fragment == "/calls") {
+      } else if (dynamicLinkData.link.fragment == "/calls") {
         await Future.delayed(Duration(seconds: 1));
         Navigator.push(
           context,
@@ -103,16 +103,18 @@ class _HomeState extends State<Home> {
   }
 
   openCalls() async {
-    if (kIsWeb && MediaQuery.of(context).size.width > 850.0) {
-      Uri url = Uri.parse("https://advices.page.link/calls");
-      if (await canLaunchUrl(url)) {
-        await launchUrl(url);
-      } else {
-        throw "Could not launch $url";
-      }
-    } else {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Calls()));
-    }
+  Navigator.pushNamed(context, 'payment');
+
+    // if (kIsWeb && MediaQuery.of(context).size.width > 850.0) {
+    //   Uri url = Uri.parse("https://advices.page.link/calls");
+    //   if (await canLaunchUrl(url)) {
+    //     await launchUrl(url);
+    //   } else {
+    //     throw "Could not launch $url";
+    //   }
+    // } else {
+    //   Navigator.push(context, MaterialPageRoute(builder: (context) => Calls()));
+    // }
   }
 
   @override
@@ -126,7 +128,9 @@ class _HomeState extends State<Home> {
         shape: CircularNotchedRectangle(),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: openCalls,
+        onPressed: () {
+          Navigator.pushNamed(context, '/payment');
+        },
         tooltip: 'Create',
         backgroundColor: lightGreenColor,
         // child: const Text("lawyer",),

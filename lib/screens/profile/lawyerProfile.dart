@@ -102,7 +102,8 @@ class _LawyerProfileState extends State<LawyerProfile> {
   }
 
   Widget _card() {
-    return Container(
+    return 
+    Container(
       height: 800,
       child: SingleChildScrollView(
         child: Card(
@@ -140,6 +141,8 @@ class _LawyerProfileState extends State<LawyerProfile> {
         ),
       ),
     );
+ 
+ 
   }
 
   Widget _text() {
@@ -148,11 +151,11 @@ class _LawyerProfileState extends State<LawyerProfile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Кратко био", style: profileHeader),
+          Text("Short bio", style: profileHeader),
           SizedBox(height: 15),
           Text("${lawyer?.description}", style: helpTextStyle),
           SizedBox(height: 15),
-          Text("Уште нешто", style: profileHeader),
+          Text("Experience", style: profileHeader),
           SizedBox(height: 15),
           Text("${lawyer?.experience}", style: helpTextStyle),
           SizedBox(height: 15),

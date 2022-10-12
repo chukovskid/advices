@@ -14,6 +14,7 @@ class FlutterUser {
      String education;
     String lawField;
     String photoURL;
+    double minPriceEuro;
     
 
   FlutterUser({
@@ -32,6 +33,7 @@ class FlutterUser {
     this.experience= "",
     this.description= "",
     this.photoURL= "",
+    this.minPriceEuro= 1,
   });
 
   Map<String, dynamic> toMap() {
@@ -51,6 +53,7 @@ class FlutterUser {
       'education': education,
       'lawField': lawField,
       'photoURL': photoURL,
+      'minPriceEuro': minPriceEuro,
     };
   }
 
@@ -88,5 +91,6 @@ class FlutterUser {
         education: json['education'] as String ? ?? "",
         lawField: json['lawField'] as String ? ?? "",
         photoURL: json['photoURL'] as String ? ?? "",
+        minPriceEuro: json['minPriceEuro'] as double? ?? 1,
       );
 }

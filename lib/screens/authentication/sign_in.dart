@@ -138,146 +138,150 @@ class _SignInState extends State<SignIn> {
   }
 
   Widget _form() {
-    return Form(
-      child: Container(
-        height: 60,
-        margin: EdgeInsets.all(35),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              "Sign In",
-              style: TextStyle(
-                fontWeight: FontWeight.normal,
-                color: Colors.white,
-                fontSize: 30,
-              ),
-            ),
-            const SizedBox(height: 35.0),
-            _showEmailSignIn(),
-            // _showEmailInputs ? _showEmailSignIn() : SizedBox(),
-            // !_showEmailInputs
-            //     ? ElevatedButton(
-            //         style: ButtonStyle(
-            //             backgroundColor:
-            //                 MaterialStateProperty.all<Color>(orangeColor)),
-            //         child: const Text(
-            //           ' Email log In ',
-            //           style: TextStyle(color: Colors.white),
-            //         ),
-            //         onPressed: () async {
-            //           setState(() {
-            //             _showEmailInputs = true;
-            //           });
-            //         })
-            //     : SizedBox(),
-            const SizedBox(height: 50.0),
-            const Text(
-              "Or Sign up using social media",
-              style: TextStyle(
-                fontWeight: FontWeight.normal,
-                color: Colors.white,
-                fontSize: 14,
-              ),
-            ),
-            const SizedBox(height: 10.0),
-            Row(
-              mainAxisAlignment:
-                  MainAxisAlignment.center, //Center Row contents horizontally,
-              children: [
-                Container(
-                  height: 60,
-                  width: 60,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        onPrimary: Color.fromARGB(255, 184, 15, 15),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(40.0),
-                        ),
-                      ),
-                      // textColor: Color.fromARGB(255, 184, 15, 15),
-                      // shape: RoundedRectangleBorder(
-                      //   borderRadius: new BorderRadius.circular(40.0),
-                      // ),
-                      // color: Color.fromARGB(255, 255, 255, 255),
-                      child: const Center(
-                          child: FaIcon(FontAwesomeIcons.googlePlusG)),
-                      onPressed: () async {
-                        _googleSignIn();
-                      }),
-                ),
-                const SizedBox(width: 15.0),
-                Container(
-                  height: 60,
-                  width: 60,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        onPrimary: Color.fromARGB(255, 184, 15, 15),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(40.0),
-                        ),
-                      ),
-                      // shape: RoundedRectangleBorder(
-                      //   borderRadius: new BorderRadius.circular(40.0),
-                      // ),
-                      // color: Color.fromARGB(255, 255, 255, 255),
-                      child: const Center(
-                        child:
-                            // FaIcon(FontAwesomeIcons.arrowLeft)
+    return Container(
+      child: Form(
+        child: Container(
+          height: 60,
+          width: 100,
 
-                            Icon(
-                          Icons.facebook,
-                          size: 30.0,
-                          color: Color.fromARGB(255, 22, 28, 87),
-                        ),
-                      ),
-                      onPressed: () async {
-                        _googleSignIn();
-                      }),
+          margin: EdgeInsets.all(35),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text(
+                "Sign In",
+                style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  color: Colors.white,
+                  fontSize: 30,
                 ),
-                const SizedBox(width: 15.0),
-                Container(
-                  height: 60,
-                  width: 60,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        onPrimary: Color.fromARGB(255, 54, 107, 187),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(40.0),
-                        ),
-                      ),
-                      // textColor: Color.fromARGB(255, 54, 107, 187),
-                      // shape: RoundedRectangleBorder(
-                      //   borderRadius: new BorderRadius.circular(40.0),
-                      // ),
-                      // color: Color.fromARGB(255, 255, 255, 255),
-                      child:
-                          const Center(child: FaIcon(FontAwesomeIcons.twitter)),
-                      onPressed: () async {
-                        _googleSignIn();
-                      }),
+              ),
+              const SizedBox(height: 35.0),
+              _showEmailSignIn(),
+              // _showEmailInputs ? _showEmailSignIn() : SizedBox(),
+              // !_showEmailInputs
+              //     ? ElevatedButton(
+              //         style: ButtonStyle(
+              //             backgroundColor:
+              //                 MaterialStateProperty.all<Color>(orangeColor)),
+              //         child: const Text(
+              //           ' Email log In ',
+              //           style: TextStyle(color: Colors.white),
+              //         ),
+              //         onPressed: () async {
+              //           setState(() {
+              //             _showEmailInputs = true;
+              //           });
+              //         })
+              //     : SizedBox(),
+              const SizedBox(height: 50.0),
+              const Text(
+                "Or Sign up using social media",
+                style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  color: Colors.white,
+                  fontSize: 14,
                 ),
-              ],
-            ),
-            const SizedBox(height: 50.0),
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(40.0),
+              ),
+              const SizedBox(height: 10.0),
+              Row(
+                mainAxisAlignment:
+                    MainAxisAlignment.center, //Center Row contents horizontally,
+                children: [
+                  Container(
+                    height: 60,
+                    width: 60,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          onPrimary: Color.fromARGB(255, 184, 15, 15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(40.0),
+                          ),
+                        ),
+                        // textColor: Color.fromARGB(255, 184, 15, 15),
+                        // shape: RoundedRectangleBorder(
+                        //   borderRadius: new BorderRadius.circular(40.0),
+                        // ),
+                        // color: Color.fromARGB(255, 255, 255, 255),
+                        child: const Center(
+                            child: FaIcon(FontAwesomeIcons.googlePlusG)),
+                        onPressed: () async {
+                          _googleSignIn();
+                        }),
                   ),
-                  elevation: 0.0,
-                ),
-                // color: Colors.transparent,
-                child: const Text(
-                  'No account? Create one!',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: _navigateToRegister),
-          ],
+                  const SizedBox(width: 15.0),
+                  Container(
+                    height: 60,
+                    width: 60,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          onPrimary: Color.fromARGB(255, 184, 15, 15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(40.0),
+                          ),
+                        ),
+                        // shape: RoundedRectangleBorder(
+                        //   borderRadius: new BorderRadius.circular(40.0),
+                        // ),
+                        // color: Color.fromARGB(255, 255, 255, 255),
+                        child: const Center(
+                          child:
+                              // FaIcon(FontAwesomeIcons.arrowLeft)
+
+                              Icon(
+                            Icons.facebook,
+                            size: 30.0,
+                            color: Color.fromARGB(255, 22, 28, 87),
+                          ),
+                        ),
+                        onPressed: () async {
+                          _googleSignIn();
+                        }),
+                  ),
+                  const SizedBox(width: 15.0),
+                  Container(
+                    height: 60,
+                    width: 60,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          onPrimary: Color.fromARGB(255, 54, 107, 187),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(40.0),
+                          ),
+                        ),
+                        // textColor: Color.fromARGB(255, 54, 107, 187),
+                        // shape: RoundedRectangleBorder(
+                        //   borderRadius: new BorderRadius.circular(40.0),
+                        // ),
+                        // color: Color.fromARGB(255, 255, 255, 255),
+                        child:
+                            const Center(child: FaIcon(FontAwesomeIcons.twitter)),
+                        onPressed: () async {
+                          _googleSignIn();
+                        }),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 50.0),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(40.0),
+                    ),
+                    elevation: 0.0,
+                  ),
+                  // color: Colors.transparent,
+                  child: const Text(
+                    'No account? Create one!',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: _navigateToRegister),
+            ],
+          ),
         ),
       ),
     );
