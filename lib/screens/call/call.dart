@@ -101,7 +101,8 @@ class _CallState extends State<Call> {
     print("Jou will join with this channelName : $channelName");
     Map<String, dynamic>? result = await CallMethods.makeCloudCall(channelName);
     if (result!['token'] != null) {
-      if (kIsWeb) {
+      // if (kIsWeb) {
+        // THIS IS WORKING ON WEB AND ANDROID!
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -109,15 +110,15 @@ class _CallState extends State<Call> {
                       token: result['token'], 
                       channelId: result['channelId'],
                     )));
-      } else {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => TestCall(
-                      token: result['token'],
-                      channelId: result['channelId'],
-                    )));
-      }
+      // } else {
+      //   Navigator.push(
+      //       context,
+      //       MaterialPageRoute(
+      //           builder: (context) => JoinChannelVideo(
+      //                 token: result['token'],
+      //                 channelId: result['channelId'],
+      //               )));
+      // }
 
       // Navigator.push(
       //     context,

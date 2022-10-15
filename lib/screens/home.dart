@@ -1,24 +1,16 @@
-import 'dart:html';
 
 import 'package:advices/screens/call/call.dart';
 import 'package:advices/screens/shared_widgets/BottomBar.dart';
 import 'package:advices/screens/call/calls.dart';
 import 'package:advices/screens/laws.dart';
-import 'package:advices/screens/authentication/authentication.dart';
-import 'package:advices/screens/shared_widgets/base_app_bar.dart';
 import 'package:advices/services/auth.dart';
 import 'package:advices/utilities/constants.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
-import '../examples/basic/join_channel_video/join_channel_video.dart';
 import '../services/database.dart';
 import 'authentication/register.dart';
-import 'call/callMethods.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
