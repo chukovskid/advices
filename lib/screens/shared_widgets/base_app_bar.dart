@@ -22,6 +22,10 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
     }
 
     return AppBar(
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back_ios),
+        onPressed: () => Navigator.of(context).pop(),
+      ),
       backgroundColor: darkGreenColor,
       // automaticallyImplyLeading : appBar.automaticallyImplyLeading,
       elevation: 10.0,

@@ -28,6 +28,7 @@ class _CallsState extends State<Calls>
   @override
   void initState() {
     _checkAuthentication();
+    super.initState();
   }
 
   Future<void> _checkAuthentication() async {
@@ -78,9 +79,9 @@ class _CallsState extends State<Calls>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //       appBar: BaseAppBar(
-      //   appBar: AppBar(),
-      // ),
+      appBar: BaseAppBar(
+        appBar: AppBar(),
+      ),
       bottomNavigationBar: BottomBar(
         fabLocation: FloatingActionButtonLocation.endDocked,
         shape: CircularNotchedRectangle(),

@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:advices/screens/call/call.dart';
 import 'package:advices/screens/shared_widgets/BottomBar.dart';
 import 'package:advices/screens/call/calls.dart';
@@ -79,6 +81,23 @@ class _HomeState extends State<Home> {
   }
 
   void initDynamicLinks(BuildContext context) async {
+    var currentUri = Uri.base;
+
+    // if (window.location.href.contains("/calls")) {
+    //   // await Future.delayed(Duration(seconds: 1));
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(builder: (context) => Calls()),
+    //   );
+    //   return;
+    // } else if (window.location.href.contains("/register")) {
+    //   // await Future.delayed(Duration(seconds: 1));
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(builder: (context) => Register()),
+    //   );
+    // }
+
     FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
     dynamicLinks.onLink.listen((dynamicLinkData) async {
       print('///// Dynamic Link' + dynamicLinkData.link.toString());
@@ -103,17 +122,17 @@ class _HomeState extends State<Home> {
   }
 
   openCalls() async {
-  Navigator.pushNamed(context, 'payment');
+    // Navigator.pushNamed(context, 'payment');
 
     // if (kIsWeb && MediaQuery.of(context).size.width > 850.0) {
-    //   Uri url = Uri.parse("https://advices.page.link/calls");
+    //   Uri url = Uri.parse("http://localhost:59445/#/calls");
     //   if (await canLaunchUrl(url)) {
-    //     await launchUrl(url);
+    //     await launchUrl(url, webOnlyWindowName: '_self');
     //   } else {
     //     throw "Could not launch $url";
     //   }
     // } else {
-    //   Navigator.push(context, MaterialPageRoute(builder: (context) => Calls()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Calls()));
     // }
   }
 
@@ -128,9 +147,7 @@ class _HomeState extends State<Home> {
         shape: CircularNotchedRectangle(),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, '/payment');
-        },
+        onPressed: openCalls,
         tooltip: 'Create',
         backgroundColor: lightGreenColor,
         // child: const Text("lawyer",),
@@ -193,13 +210,7 @@ class _HomeState extends State<Home> {
               child: FloatingActionButton.extended(
                 label: Text('      Open calls...    '),
                 heroTag: "openCalls",
-                onPressed: () => {
-                  // DatabaseService.saveLawAreasForLawyerAsArray();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Calls()),
-                  )
-                },
+                onPressed: openCalls,
                 backgroundColor: Color.fromRGBO(107, 119, 141, 1),
                 elevation: 0,
               ),
