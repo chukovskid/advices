@@ -7,6 +7,10 @@ import 'package:advices/utilities/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../chat/screens/mobile_layout_screen.dart';
+import '../chat/screens/web_layout_screen.dart';
+import '../chat/utils/responsive_layout.dart';
+
 class BottomBar extends StatelessWidget {
   const BottomBar({
     this.fabLocation = FloatingActionButtonLocation.endDocked,
@@ -199,6 +203,21 @@ class BottomBar extends StatelessWidget {
               icon: const Icon(Icons.menu),
               onPressed: () {
                 showMenu();
+              },
+            ),
+            IconButton(
+              iconSize: 32.0,
+              tooltip: 'Open chat',
+              icon: const Icon(Icons.chat),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ResponsiveLayout(
+                            mobileScreenLayout: MobileLayoutScreen(),
+                            webScreenLayout: WebLayoutScreen(),
+                          )),
+                );
               },
             ),
             if (centerLocations.contains(fabLocation)) const Spacer(),

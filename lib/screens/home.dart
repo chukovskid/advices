@@ -1,4 +1,3 @@
-
 import 'package:advices/screens/call/call.dart';
 import 'package:advices/screens/shared_widgets/BottomBar.dart';
 import 'package:advices/screens/call/calls.dart';
@@ -21,7 +20,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   User? user;
-
+  bool userExist = false;
   @override
   void initState() {
     super.initState();
@@ -56,7 +55,9 @@ class _HomeState extends State<Home> {
   /// Get the token, save it to the database for current user
   _saveDeviceToken() async {
     user = await _auth.getCurrentUser();
-    bool userExist = user != null ? true : false;
+    setState(() {
+      userExist = user != null ? true : false;
+    });
     if (userExist) {
       await DatabaseService.saveDeviceToken(user!.uid);
     }
@@ -124,7 +125,7 @@ class _HomeState extends State<Home> {
     //     throw "Could not launch $url";
     //   }
     // } else {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Calls()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Calls()));
     // }
   }
 
@@ -138,16 +139,18 @@ class _HomeState extends State<Home> {
         fabLocation: FloatingActionButtonLocation.endDocked,
         shape: CircularNotchedRectangle(),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: openCalls,
-        tooltip: 'Create',
-        backgroundColor: lightGreenColor,
-        // child: const Text("lawyer",),
-        child: const Icon(
-          Icons.call,
-          color: Colors.white,
-        ),
-      ),
+      floatingActionButton: userExist
+          ? FloatingActionButton(
+              onPressed: openCalls,
+              tooltip: 'Create',
+              backgroundColor: lightGreenColor,
+              // child: const Text("lawyer",),
+              child: const Icon(
+                Icons.call,
+                color: Colors.white,
+              ),
+            )
+          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       // floatingActionButtonLocation:
       //     FloatingActionButtonLocation.miniCenterFloat,

@@ -24,7 +24,7 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       leading: IconButton(
         icon: Icon(Icons.arrow_back_ios),
-        onPressed: () => Navigator.of(context).pop(),
+        onPressed: () => Navigator.pop(context, true),
       ),
       backgroundColor: darkGreenColor,
       // automaticallyImplyLeading : appBar.automaticallyImplyLeading,
@@ -33,7 +33,6 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
         TextButton.icon(
           style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(Colors.white)),
-
           // textColor: Colors.white,
           icon: Icon(redirectToHome ? Icons.home : Icons.person),
           label: Text(''),

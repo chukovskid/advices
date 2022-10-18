@@ -98,7 +98,7 @@ class _LawyersState extends State<Lawyers>
     return InkWell(
       onTap: () => Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => LawyerProfile(fUser.uid)),
+        MaterialPageRoute(builder: (context) => LawyerProfile(fUser.uid, widget.service)),
       ),
       child: Card(
         elevation: 30,

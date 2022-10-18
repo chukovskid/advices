@@ -5,13 +5,12 @@ import 'package:advices/screens/home.dart';
 import 'package:advices/screens/profile/lawyerProfile.dart';
 import 'package:advices/screens/lawyers.dart';
 import 'package:flutter/material.dart';
-
-import '../examples/basic/join_channel_video/join_channel_video.dart';
 import '../payment/stripe_payment.dart';
 import '../screens/authentication/authentication.dart';
-import '../screens/calendar/add_event.dart';
 import '../screens/calendar/calendar.dart';
-import '../screens/call/call.dart';
+import '../screens/chat/screens/mobile_layout_screen.dart';
+import '../screens/chat/screens/web_layout_screen.dart';
+import '../screens/chat/utils/responsive_layout.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -25,7 +24,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
               Lawyers(service: "buyAndSaleId")); // TODO this is not right
     case 'lawyers_profile':
       return MaterialPageRoute(
-          builder: (context) => LawyerProfile('cNbw66J36wMvUZdjES7H25HXAGo2'));
+          builder: (context) =>
+              LawyerProfile('Lk37HV68oaPxOA8AHpNqcSoFgEA3', ""));
     case 'selectDate':
       return MaterialPageRoute(builder: (context) => CalendarPage());
     case 'sign_in':
@@ -36,6 +36,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => Authenticate());
     case 'payment':
       return MaterialPageRoute(builder: (context) => StripePayment());
+    case 'chat':
+      return MaterialPageRoute(builder: (context) => ResponsiveLayout(
+        mobileScreenLayout: MobileLayoutScreen(),
+        webScreenLayout: WebLayoutScreen(),
+      ),);
     default:
       return MaterialPageRoute(builder: (context) => Home());
   }

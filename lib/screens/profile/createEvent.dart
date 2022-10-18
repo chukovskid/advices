@@ -6,6 +6,7 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:time_picker_widget/time_picker_widget.dart';
+import '../../models/service.dart';
 import '../../models/user.dart';
 import '../../payment/checkout/checkout.dart';
 import '../../services/auth.dart';
@@ -16,32 +17,39 @@ import '../call/calls.dart';
 
 class CreateEvent extends StatefulWidget {
   final String uid;
+  final String serviceId;
+  final String minPriceEuro;
 
-  const CreateEvent(this.uid, {Key? key}) : super(key: key);
+  const CreateEvent(this.uid, this.serviceId, this.minPriceEuro, {Key? key})
+      : super(key: key);
 
   @override
   _CreateEventState createState() => _CreateEventState();
 }
 
 class _CreateEventState extends State<CreateEvent> {
-  FlutterUser? lawyer;
+  late Service service;
   var imageUrl =
       "https://devshift.biz/wp-content/uploads/2017/04/profile-icon-png-898.png"; //you can use a image
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-  final TextEditingController _title = TextEditingController();
+  TextEditingController _title = TextEditingController(text: "Everyone");
   final TextEditingController _description = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
   late bool processing;
-  late String _selectedDate = "select date";
-  String selectedTime = "time";
+  // late String _selectedDate = "select date";
+  String selectedTime = "select time";
+  // DateFormat.Hm().format(DateTime.now());
+  // DateFormat("hh:mm").parse(DateTime.now().toString()).toString();
+  String _selectedDate = DateFormat.yMd().format(DateTime.now());
+
+  String serviceName = "Click here to select service";
   List<TimeOfDay> _unavailableTimePeriods = [];
 
   @override
   void initState() {
     super.initState();
-
-    _getLawyer();
+    _getService();
     processing = false;
   }
 
@@ -113,15 +121,6 @@ class _CreateEventState extends State<CreateEvent> {
     }
     DateTime selectedDateTime =
         DateFormat("yyyy-MM-dd hh:mm").parse("$_selectedDate $selectedTime");
-
-    print('//////////SAVING EVENT//////////');
-
-    print(_title.text);
-    print(_description.text);
-    print(selectedDateTime);
-
-    print('//////////');
-
     await DatabaseService.saveEvent(
         widget.uid, _title.text, _description.text, selectedDateTime);
 
@@ -133,14 +132,20 @@ class _CreateEventState extends State<CreateEvent> {
     // );
   }
 
-  Future<void> _getLawyer() async {
-    lawyer = await DatabaseService.getLawyer(widget.uid);
-    if (lawyer != null) {
-      setState(() {
-        lawyer = lawyer;
-        imageUrl = (lawyer!.photoURL.isEmpty ? imageUrl : lawyer!.photoURL);
-      });
-    }
+  Future<void> _getService() async {
+    service = await DatabaseService.getService(widget.serviceId);
+    setState(() {
+      serviceName = "${service.areaName}: ${service.name}";
+      service = service;
+      // _title.text = serviceName;
+      _title = TextEditingController(text: serviceName);
+    });
+  }
+
+  bool _isFormEmpty() {
+    return (_title.text.isEmpty ||
+        _description.text.isEmpty ||
+        selectedTime == "select time");
   }
 
   @override
@@ -211,9 +216,7 @@ class _CreateEventState extends State<CreateEvent> {
                               fontSize: 20,
                               fontWeight: FontWeight.bold),
                         ),
-                        Text(
-                          " VISA Applicaton",
-                        ),
+                        Text(serviceName),
                       ],
                     ),
                     SizedBox(
@@ -241,12 +244,12 @@ class _CreateEventState extends State<CreateEvent> {
                 width: 100,
                 child: ElevatedButton(
                   style: ButtonStyle(
-                      backgroundColor: (_title.text.isEmpty)
+                      backgroundColor: _isFormEmpty()
                           ? MaterialStateProperty.all(
                               Color.fromARGB(255, 176, 190, 189))
                           : MaterialStateProperty.all(Color(0xff5bc9bf))),
                   onPressed: () {
-                    (_title.text.isEmpty) ? _showToast(context) : _saveEvent();
+                    _isFormEmpty() ? _showToast(context) : _saveEvent();
                   },
                   child: Text(
                     "Submit",
@@ -325,7 +328,7 @@ class _CreateEventState extends State<CreateEvent> {
                                 ));
                       },
                       child: Text(
-                        "VISA",
+                        serviceName,
                         style: TextStyle(
                             color: selectedTime == 'time'
                                 ? Colors.white
@@ -421,7 +424,7 @@ class _CreateEventState extends State<CreateEvent> {
                   ),
                   Center(
                     child: Text(
-                      "30 €",
+                      "${widget.minPriceEuro} €",
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 35,
@@ -440,12 +443,12 @@ class _CreateEventState extends State<CreateEvent> {
             width: 150,
             child: ElevatedButton(
               style: ButtonStyle(
-                  backgroundColor: (_title.text.isEmpty)
+                  backgroundColor: _isFormEmpty()
                       ? MaterialStateProperty.all(
                           Color.fromARGB(255, 176, 190, 189))
                       : MaterialStateProperty.all(Color(0xff5bc9bf))),
               onPressed: () {
-                (_title.text.isEmpty) ? _showToast(context) : _saveEvent();
+                _isFormEmpty() ? _showToast(context) : _saveEvent();
               },
               child: Text(
                 "Submit",
@@ -481,6 +484,7 @@ class _CreateEventState extends State<CreateEvent> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16.0, vertical: 8.0),
                       child: TextFormField(
+                        // initialValue: _title.text,
                         controller: _title,
                         validator: (value) =>
                             (value!.isEmpty) ? "Please Enter title" : null,

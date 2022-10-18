@@ -11,8 +11,9 @@ import '../shared_widgets/base_app_bar.dart';
 
 class LawyerProfile extends StatefulWidget {
   final String uid;
+  final String serviceId;
 
-  const LawyerProfile(this.uid, {Key? key}) : super(key: key);
+  const LawyerProfile(this.uid, this.serviceId, {Key? key}) : super(key: key);
 
   @override
   State<LawyerProfile> createState() => _LawyerProfileState();
@@ -20,22 +21,33 @@ class LawyerProfile extends StatefulWidget {
 
 class _LawyerProfileState extends State<LawyerProfile> {
   FlutterUser? lawyer;
+  String minPriceEuro = "30";
+
   var imageUrl =
       "https://devshift.biz/wp-content/uploads/2017/04/profile-icon-png-898.png"; //you can use a image
 
   @override
   void initState() {
     _getLawyer();
+    super.initState();
   }
 
   Future<void> _getLawyer() async {
     lawyer = await DatabaseService.getLawyer(widget.uid);
     if (lawyer != null) {
       setState(() {
+        minPriceEuro = lawyer!.minPriceEuro.toString().isEmpty
+            ? minPriceEuro
+            : lawyer!.minPriceEuro.toString();
         lawyer = lawyer;
-        imageUrl = (lawyer!.photoURL.isEmpty ? imageUrl : lawyer!.photoURL);
+        imageUrl = lawyer!.photoURL.isEmpty ? imageUrl : lawyer!.photoURL;
       });
     }
+  }
+
+  Widget? returnCreateEventWidget() {
+    _getLawyer();
+    return CreateEvent(widget.uid, widget.serviceId, minPriceEuro);
   }
 
   _redirectToCall() async {
@@ -47,15 +59,18 @@ class _LawyerProfileState extends State<LawyerProfile> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BaseAppBar(appBar: AppBar(),),
+      appBar: BaseAppBar(
+        appBar: AppBar(),
+      ),
 
-       bottomSheet: Container(
-            child:  MediaQuery.of(context).size.width < 850.0 ? CreateEvent(widget.uid): SizedBox() ,
-        ),
+      bottomSheet: Container(
+        child: MediaQuery.of(context).size.width < 850.0
+            ? CreateEvent(widget.uid, widget.serviceId, minPriceEuro)
+            : SizedBox(),
+      ),
       // floatingActionButton: _openProfileBtn(),
       body: Container(
           height: double.maxFinite,
@@ -75,7 +90,12 @@ class _LawyerProfileState extends State<LawyerProfile> {
             children: [
               Flexible(flex: 3, child: _card()),
               // Flexible(child: _dateAndPrice())
-              MediaQuery.of(context).size.width < 850.0 ? SizedBox(): Flexible(flex: 2, child: CreateEvent(widget.uid)),
+              MediaQuery.of(context).size.width < 850.0
+                  ? SizedBox()
+                  : Flexible(
+                      flex: 2,
+                      child: CreateEvent(
+                          widget.uid, widget.serviceId, minPriceEuro)),
             ],
           )),
     );
@@ -102,10 +122,10 @@ class _LawyerProfileState extends State<LawyerProfile> {
   }
 
   Widget _card() {
-    return 
-    Container(
-      height: 800,
-      child: SingleChildScrollView(
+    return Container(
+      height: 900,
+      child: 
+      SingleChildScrollView(
         child: Card(
           elevation: 0,
           color: Colors.transparent,
@@ -114,35 +134,52 @@ class _LawyerProfileState extends State<LawyerProfile> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
-          child: Column(
+          child: 
+          
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               const SizedBox(height: 30),
-              ListTile(
-                leading: Icon(
-                  Icons.person,
-                  size: 100.0,
-                ),
-                title: Text(
-                  "${lawyer?.displayName}",
-                  style: TextStyle(fontSize: 35),
-                ),
-                subtitle: Text("${lawyer?.education}"),
+              Row(
+                children: [
+                  ClipOval(
+                    child: Image.network(
+                        (lawyer?.photoURL != null && lawyer!.photoURL.isNotEmpty)
+                            ? lawyer!.photoURL
+                            : 'https://st.depositphotos.com/2069323/2156/i/600/depositphotos_21568785-stock-photo-man-pointing.jpg',
+                        // scale: 1,
+                        cacheWidth: 1,
+                        width: 100,
+                        height: 100),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${lawyer?.displayName}",
+                        style: TextStyle(fontSize: 35),
+                      ),
+                      Text("${lawyer?.email}"),
+                    ],
+                  ),
+                ],
               ),
               const SizedBox(
-                height: 30,
+                height: 45,
               ),
-              SizedBox(
-                height: 15,
-              ),
+             
               _text()
             ],
           ),
+       
+       
+       
         ),
       ),
+    
+    
+    
     );
- 
- 
   }
 
   Widget _text() {
@@ -161,7 +198,6 @@ class _LawyerProfileState extends State<LawyerProfile> {
           SizedBox(height: 15),
           Text("", style: helpTextStyle),
           SizedBox(height: 40),
-
         ],
       ),
     );
@@ -186,10 +222,10 @@ class _LawyerProfileState extends State<LawyerProfile> {
       child: FloatingActionButton(
         heroTag: "settingsBtn",
         onPressed: () => {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Calls()),
-      )
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Calls()),
+          )
 
           // showDialog(
           //     context: context,

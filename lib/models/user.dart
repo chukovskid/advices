@@ -91,6 +91,6 @@ class FlutterUser {
         education: json['education'] as String ? ?? "",
         lawField: json['lawField'] as String ? ?? "",
         photoURL: json['photoURL'] as String ? ?? "",
-        minPriceEuro: json['minPriceEuro'] as double? ?? 1,
+        minPriceEuro: json['minPriceEuro'] as double? ?? 1.0,
       );
 }

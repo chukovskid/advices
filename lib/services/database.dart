@@ -98,6 +98,13 @@ class DatabaseService {
 
 ////// SERVICES
   ///
+  static Future<Service> getService(String seviceId) async {
+    CollectionReference services =
+        FirebaseFirestore.instance.collection('services');
+    final snapshot = await services.doc(seviceId).get();
+    var service = Service.fromJson(snapshot.data()!);
+    return service;
+  }
 
   static Stream<Iterable<Service>> getAllServices() {
     CollectionReference services =

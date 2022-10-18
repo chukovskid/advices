@@ -83,7 +83,7 @@ class _CallState extends State<Call> {
     String lawyerId = lawyerIdandclientId[0];
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => LawyerProfile(lawyerId)),
+      MaterialPageRoute(builder: (context) => LawyerProfile(lawyerId, "")),
     );
   }
 
