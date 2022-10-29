@@ -1,7 +1,9 @@
 // ignore_for_file: deprecated_member_use
+import 'package:advices/App/services/googleAuth.dart';
 import 'package:advices/screens/authentication/register.dart';
 import 'package:advices/assets/utilities/constants.dart';
 import 'package:flutter/material.dart';
+import '../../App/contexts/authContext.dart';
 import '../../App/models/user.dart';
 import '../../App/services/auth.dart';
 import '../home/home.dart';
@@ -18,7 +20,7 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  final AuthService _auth = AuthService();
+  final AuthContext _auth = AuthContext();
   final _formKey = GlobalKey<FormState>();
 
   // final FocusNode _nameFocusNode = FocusNode();
@@ -103,7 +105,7 @@ class _SignInState extends State<SignIn> {
   }
 
   Future<void> _googleSignIn() async {
-    await _auth.signInWithGoogle(context: context);
+    await GoogleAuthService.signInWithGoogle(context: context);
     // await _auth.googleSignIn();
     Navigator.pop(context);
 
@@ -198,11 +200,6 @@ class _SignInState extends State<SignIn> {
                             borderRadius: new BorderRadius.circular(40.0),
                           ),
                         ),
-                        // textColor: Color.fromARGB(255, 184, 15, 15),
-                        // shape: RoundedRectangleBorder(
-                        //   borderRadius: new BorderRadius.circular(40.0),
-                        // ),
-                        // color: Color.fromARGB(255, 255, 255, 255),
                         child: const Center(
                             child: FaIcon(FontAwesomeIcons.googlePlusG)),
                         onPressed: () async {

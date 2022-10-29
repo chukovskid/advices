@@ -9,6 +9,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
+import '../../App/contexts/authContext.dart';
+import '../../App/contexts/callEventsContext.dart';
 import '../video/examples/advanced/enable_virtualbackground/enable_virtualbackground.dart';
 import '../video/examples/basic/join_channel_video/join_channel_video.dart';
 import '../video/examples/advanced/index.dart';
@@ -31,7 +33,7 @@ class Call extends StatefulWidget {
 }
 
 class _CallState extends State<Call> {
-  final AuthService _auth = AuthService();
+  final AuthContext _auth = AuthContext();
   User? user;
   final myController = TextEditingController();
   bool _validateError = false;
@@ -245,7 +247,7 @@ class _CallState extends State<Call> {
     // String channelName =
     //     await DatabaseService.updateAsOpenCallForUsers(lawyerId, clientId);
 
-    await DatabaseService.callUser(widget.channellName, receiverId);
+    await CallEventsContext.callUser(widget.channellName, receiverId);
 
 // TODO instead of saveOpenCallForUser, create a function setCallToOpen()
 // // meaning there is someone at the call and is WAITING

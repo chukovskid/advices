@@ -5,6 +5,7 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'App/contexts/authContext.dart';
 import 'App/helpers/router.dart' as router;
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
     // ]);
     // precacheImage(AssetImage("lib/assets/images/background.jpg"), context);
     return StreamProvider.value(
-      value: AuthService().user,
+      value: AuthContext().user,
       initialData: null,
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -5,6 +5,8 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:time_picker_widget/time_picker_widget.dart';
 import 'package:intl/intl.dart';
 
+import '../../App/contexts/callEventsContext.dart';
+
 class AddEventPage extends StatefulWidget {
   final String uid;
 
@@ -37,7 +39,7 @@ class _AddEventPageState extends State<AddEventPage> {
 
   Future<void> _getFreeTimePeriodsForDate() async {
     DateTime selectedDate = DateFormat("yyyy-MM-dd").parse("$_selectedDate");
-    List<DateTime> events = await DatabaseService.getAllLEventsDateTIme(
+    List<DateTime> events = await CallEventsContext.getAllLEventsDateTIme(
         widget.uid, selectedDate); 
     _unavailableTimePeriods = [];
     events.forEach((element) {
@@ -100,7 +102,7 @@ class _AddEventPageState extends State<AddEventPage> {
     // print(DateFormat.yMMMd().format("$_selectedDate 01:00 PM"));
     print(selectedDateTime);
 
-    DatabaseService.saveEvent(
+    CallEventsContext.saveEvent(
         widget.uid, _title.text, _description.text, selectedDateTime);
 
     print('//////////');

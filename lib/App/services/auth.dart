@@ -1,303 +1,311 @@
-import 'package:advices/App/models/service.dart';
-import 'package:advices/App/models/user.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+// // import 'package:advices/App/contexts/usersContext.dart';
+// // import 'package:advices/App/models/service.dart';
+// // import 'package:advices/App/models/user.dart';
+// // import 'package:firebase_auth/firebase_auth.dart';
+// // import 'package:flutter/material.dart';
+// // import 'package:google_sign_in/google_sign_in.dart';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'database.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+// // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+// // import '../contexts/lawyersContext.dart';
+// // import 'database.dart';
+// // import 'package:flutter/foundation.dart' show kIsWeb;
 
-class AuthService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final storage = new FlutterSecureStorage();
-  final userStream = FirebaseAuth.instance.authStateChanges();
-  // final user = FirebaseAuth.instance.currentUser;
-//////  https://firebase.flutter.dev/docs/auth/usage/     Razgledaj ova!!
-  ///FirebaseAuth.instance
-  // .userChanges() // <----
-  // .listen((User? user) {
-  //   if (user == null) {
-  //     print('User is currently signed out!');
-  //   } else {
-  //     print('User is signed in!');
-  //   }
-  // });
+// // import 'googleAuth.dart';
 
-  // auth change user stream
-  Stream<FlutterUser> get user {
-    return _auth
-        .authStateChanges()
-        .map((firebaseUser) => _userFromFirebaseUser(firebaseUser!));
-  }
+// // class AuthService {
+// //   final FirebaseAuth _auth = FirebaseAuth.instance;
+// //   final storage = new FlutterSecureStorage();
+// //   final userStream = FirebaseAuth.instance.authStateChanges();
+// //   // final user = FirebaseAuth.instance.currentUser;
+// // //////  https://firebase.flutter.dev/docs/auth/usage/     Razgledaj ova!!
+// //   ///FirebaseAuth.instance
+// //   // .userChanges() // <----
+// //   // .listen((User? user) {
+// //   //   if (user == null) {
+// //   //     print('User is currently signed out!');
+// //   //   } else {
+// //   //     print('User is signed in!');
+// //   //   }
+// //   // });
 
-  // sign out
-  Future signOut() async {
-    try {
-      googleSignOut();
-      _auth.currentUser;
-      return await _auth.signOut();
-    } catch (error) {
-      print(error.toString());
-      return null;
-    }
-  }
+// //   // auth change user stream
+// //   Stream<FlutterUser> get user {
+// //     return _auth
+// //         .authStateChanges()
+// //         .map((firebaseUser) => _userFromFirebaseUser(firebaseUser!));
+// //   }
 
-  Future<User?> getCurrentUser() async {
-    User? user = _auth.currentUser;
-    return user;
-  }
+// //   // sign out
+// //   Future signOut() async {
+// //     try {
+// //       GoogleAuthService.googleSignOut();
+// //       _auth.currentUser;
+// //       return await _auth.signOut();
+// //     } catch (error) {
+// //       print(error.toString());
+// //       return null;
+// //     }
+// //   }
 
-  Future<FlutterUser?> getMyProfileInfo() async {
-    User? user = _auth.currentUser;
-    if (user == null) return null;
-    print(user);
+// //   Future<User?> getCurrentUser() async {
+// //     User? user = _auth.currentUser;
+// //     return user;
+// //   }
 
-    FlutterUser? fUser = await DatabaseService.getUser(user.uid);
-    // print(user);
-    return fUser;
-  }
+// //   Future<FlutterUser?> getMyProfileInfo() async {
+// //     User? user = _auth.currentUser;
+// //     if (user == null) return null;
+// //     print(user);
 
-  // create user obj based on firebase user
-  FlutterUser _userFromFirebaseUser(User user) {
-    return FlutterUser(uid: user.uid, email: '');
-  }
+// //     FlutterUser? fUser = await UsersContext.getUser(user.uid);
+// //     // print(user);
+// //     return fUser;
+// //   }
 
-  // sign in Anon
-  Future signInAnon() async {
-    try {
-      var result = await _auth.signInAnonymously();
-      var user = result.user;
-      return user;
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
-  }
+// //   // create user obj based on firebase user
+// //   FlutterUser _userFromFirebaseUser(User user) {
+// //     return FlutterUser(uid: user.uid, email: '');
+// //   }
 
-  // sign in with email and password
-  Future<User?> signInWithEmailAndPassword(FlutterUser flutUser) async {
-    try {
-      UserCredential result = await _auth.signInWithEmailAndPassword(
-          email: flutUser.email, password: flutUser.password);
-      User? user = result.user;
-      return user;
-    } catch (error) {
-      print(error.toString());
-      return null;
-    }
-  }
+// //   // sign in Anon
+// //   Future signInAnon() async {
+// //     try {
+// //       var result = await _auth.signInAnonymously();
+// //       var user = result.user;
+// //       return user;
+// //     } catch (e) {
+// //       print(e.toString());
+// //       return null;
+// //     }
+// //   }
 
-  // register with email and password
-  Future registerWithEmailAndPassword(
-      FlutterUser newFUser, List<Service?> services) async {
-    print(services);
-    try {
-      // const email = newFUser.email;
-      UserCredential credential = await _auth.createUserWithEmailAndPassword(
-          email: newFUser.email, password: newFUser.password);
-      print(credential.user?.uid);
-      User? user = credential.user;
-      if (user != null) {
-        await user.reload();
-      }
-      if (user == null) return null;
+// //   // sign in with email and password
+// //   Future<User?> signInWithEmailAndPassword(FlutterUser flutUser) async {
+// //     try {
+// //       UserCredential result = await _auth.signInWithEmailAndPassword(
+// //           email: flutUser.email, password: flutUser.password);
+// //       User? user = result.user;
+// //       return user;
+// //     } catch (error) {
+// //       print(error.toString());
+// //       return null;
+// //     }
+// //   }
 
-      print(user.uid);
-      newFUser.uid = user.uid;
-      await DatabaseService.updateUserData(newFUser);
-      await DatabaseService.saveServicesForLawyer(user.uid, services);
+// //   // register with email and password
+// //   Future registerWithEmailAndPassword(
+// //       FlutterUser newFUser, List<Service?> services) async {
+// //     print(services);
+// //     try {
+// //       // const email = newFUser.email;
+// //       UserCredential credential = await _auth.createUserWithEmailAndPassword(
+// //           email: newFUser.email, password: newFUser.password);
+// //       print(credential.user?.uid);
+// //       User? user = credential.user;
+// //       if (user != null) {
+// //         await user.reload();
+// //       }
+// //       if (user == null) return null;
 
-      return newFUser;
-    } catch (error) {
-      print(error.toString());
-      return null;
-    }
-  }
+// //       print(user.uid);
+// //       newFUser.uid = user.uid;
+// //       await UsersContext.updateUserData(newFUser);
+// //       await LawyersContext.saveServicesForLawyer(user.uid, services);
 
-  /// Firebase store data
-  ///
-  ///
-  Future<void> storeTokenData(UserCredential userCredential) async {
-    await storage.write(
-        key: "token", value: userCredential.credential!.token.toString());
-    await storage.write(
-        key: "userCredential", value: userCredential.toString());
-  }
+// //       return newFUser;
+// //     } catch (error) {
+// //       print(error.toString());
+// //       return null;
+// //     }
+// //   }
 
-  Future<String?> getToken() async {
-    return await storage.read(key: "token");
-  }
+// //   /// Firebase store data
+// //   ///
+// //   ///
+// //   Future<void> storeTokenData(UserCredential userCredential) async {
+// //     await storage.write(
+// //         key: "token", value: userCredential.credential!.token.toString());
+// //     await storage.write(
+// //         key: "userCredential", value: userCredential.toString());
+// //   }
 
-  Future<void> removeToken() async {
-    return await storage.delete(key: "token");
-  }
+// //   Future<String?> getToken() async {
+// //     return await storage.read(key: "token");
+// //   }
 
-  /// Google Sign in
-  ///
-  ///
+// //   Future<void> removeToken() async {
+// //     return await storage.delete(key: "token");
+// //   }
 
-  GoogleSignIn _googleSignIn = GoogleSignIn(
-      // scopes: <String>[
-      //   'email',
-      //   'https://www.googleapis.com/auth/fitness.activity.read',
-      // ],
-      );
+// // //   /// Google Sign in
+// // //   ///
+// // //   ///
 
-  Future<dynamic> silentSignIn() async {
-    await _googleSignIn.signInSilently().then((result) async {
-      await result!.authentication.then((googleKey) async {
-        print(googleKey.accessToken.toString().substring(0, 8) + "...");
-      });
-    }).catchError((err) {
-      googleSignIn();
-      return false;
-    });
-  }
+// // //   GoogleSignIn _googleSignIn = GoogleSignIn(
+// // //       // scopes: <String>[
+// // //       //   'email',
+// // //       //   'https://www.googleapis.com/auth/fitness.activity.read',
+// // //       // ],
+// // //       );
 
-  Future<void> googleSignIn() async {
-    try {
-// Trigger the authentication flow
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      print(googleUser);
-      if (googleUser == null) return;
+// // //   Future<dynamic> silentSignIn() async {
+// // //     await _googleSignIn.signInSilently().then((result) async {
+// // //       await result!.authentication.then((googleKey) async {
+// // //         print(googleKey.accessToken.toString().substring(0, 8) + "...");
+// // //       });
+// // //     }).catchError((err) {
+// // //       googleSignIn();
+// // //       return false;
+// // //     });
+// // //   }
 
-      final googleAuth = await googleUser.authentication;
-      // Create a new credential
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
+// // //   Future<void> googleSignIn() async {
+// // //     try {
+// // // // Trigger the authentication flow
+// // //       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+// // //       print(googleUser);
+// // //       if (googleUser == null) return;
 
-      // Once signed in, return the UserCredential
-      UserCredential userCredentials =
-          await FirebaseAuth.instance.signInWithCredential(credential);
+// // //       final googleAuth = await googleUser.authentication;
+// // //       // Create a new credential
+// // //       final credential = GoogleAuthProvider.credential(
+// // //         accessToken: googleAuth.accessToken,
+// // //         idToken: googleAuth.idToken,
+// // //       );
 
-      print(userCredentials);
+// // //       // Once signed in, return the UserCredential
+// // //       UserCredential userCredentials =
+// // //           await FirebaseAuth.instance.signInWithCredential(credential);
 
-      FlutterUser newUser = FlutterUser(
-        displayName: googleUser.displayName ?? "No Name",
-        email: googleUser.email,
-        photoURL: googleUser.photoUrl ?? "No photoUrl",
-        uid: userCredentials.user?.uid ?? googleUser.id,
-      );
-      FlutterUser? fUser = await DatabaseService.updateUserData(newUser);
-    } on FirebaseAuthException catch (e) {
-      // handle error
-      print(e);
-    }
-  }
+// // //       print(userCredentials);
 
-  Future<void> googleSignOut() async {
-    bool isSignedInGoogle = await googleIsSignIn();
-    if (isSignedInGoogle) {
-      await _googleSignIn.disconnect();
-    }
-  }
+// // //       FlutterUser newUser = FlutterUser(
+// // //         displayName: googleUser.displayName ?? "No Name",
+// // //         email: googleUser.email,
+// // //         photoURL: googleUser.photoUrl ?? "No photoUrl",
+// // //         uid: userCredentials.user?.uid ?? googleUser.id,
+// // //       );
+// // //       FlutterUser? fUser = await UsersContext.updateUserData(newUser);
+// // //     } on FirebaseAuthException catch (e) {
+// // //       // handle error
+// // //       print(e);
+// // //     }
+// // //   }
 
-  Future<bool> googleIsSignIn() => _googleSignIn.isSignedIn();
+// // //   Future<void> googleSignOut() async {
+// // //     bool isSignedInGoogle = await googleIsSignIn();
+// // //     if (isSignedInGoogle) {
+// // //       await _googleSignIn.disconnect();
+// // //     }
+// // //   }
 
-  Future<User?> signInWithGoogle({required BuildContext context}) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user;
-    UserCredential userCredential;
-    GoogleSignInAccount? googleUser;
+// // //   Future<bool> googleIsSignIn() => _googleSignIn.isSignedIn();
 
-    if (kIsWeb) {
-      GoogleAuthProvider authProvider = GoogleAuthProvider();
+// // //   Future<User?> signInWithGoogle({required BuildContext context}) async {
+// // //     FirebaseAuth auth = FirebaseAuth.instance;
+// // //     User? user;
+// // //     UserCredential userCredential;
+// // //     GoogleSignInAccount? googleUser;
 
-      try {
-        userCredential = await auth.signInWithPopup(authProvider);
-        user = userCredential.user;
-        print(userCredential);
+// // //     if (kIsWeb) {
+// // //       GoogleAuthProvider authProvider = GoogleAuthProvider();
 
-        FlutterUser newUser = FlutterUser(
-          displayName: userCredential.user?.displayName ?? "No Name",
-          email: userCredential.user?.email ?? "No email",
-          photoURL: userCredential.user?.photoURL ?? "No photoUrl",
-          uid: userCredential.user?.uid ?? "googleUser.id",
-        );
-        FlutterUser? fUser = await DatabaseService.updateUserData(newUser);
-      } catch (e) {
-        print(e);
-      }
-    } else {
-      final GoogleSignIn googleSignIn = GoogleSignIn();
-      googleUser = await googleSignIn.signIn();
+// // //       try {
+// // //         userCredential = await auth.signInWithPopup(authProvider);
+// // //         user = userCredential.user;
+// // //         print(userCredential);
 
-      if (googleUser != null) {
-        final GoogleSignInAuthentication googleSignInAuthentication =
-            await googleUser.authentication;
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          accessToken: googleSignInAuthentication.accessToken,
-          idToken: googleSignInAuthentication.idToken,
-        );
-        try {
-          userCredential = await auth.signInWithCredential(credential);
-          user = userCredential.user;
+// // //         FlutterUser newUser = FlutterUser(
+// // //           displayName: userCredential.user?.displayName ?? "No Name",
+// // //           email: userCredential.user?.email ?? "No email",
+// // //           photoURL: userCredential.user?.photoURL ?? "No photoUrl",
+// // //           uid: userCredential.user?.uid ?? "googleUser.id",
+// // //         );
+// // //         FlutterUser? fUser = await UsersContext.updateUserData(newUser);
+// // //       } catch (e) {
+// // //         print(e);
+// // //       }
+// // //     } else {
+// // //       final GoogleSignIn googleSignIn = GoogleSignIn();
+// // //       googleUser = await googleSignIn.signIn();
 
-          print(userCredential);
+// // //       if (googleUser != null) {
+// // //         final GoogleSignInAuthentication googleSignInAuthentication =
+// // //             await googleUser.authentication;
+// // //         final AuthCredential credential = GoogleAuthProvider.credential(
+// // //           accessToken: googleSignInAuthentication.accessToken,
+// // //           idToken: googleSignInAuthentication.idToken,
+// // //         );
+// // //         try {
+// // //           userCredential = await auth.signInWithCredential(credential);
+// // //           user = userCredential.user;
 
-          FlutterUser newUser = FlutterUser(
-            displayName: googleUser.displayName ?? "No Name",
-            email: googleUser.email,
-            photoURL: googleUser.photoUrl ?? "No photoUrl",
-            uid: userCredential.user?.uid ?? googleUser.id,
-          );
-          FlutterUser? fUser = await DatabaseService.updateUserData(newUser);
-        } on FirebaseAuthException catch (e) {
-          if (e.code == 'account-exists-with-different-credential') {
-            ScaffoldMessenger.of(context).showSnackBar(
-              customSnackBar(
-                content:
-                    'The account already exists with a different credential.',
-              ),
-            );
-          } else if (e.code == 'invalid-credential') {
-            ScaffoldMessenger.of(context).showSnackBar(
-              customSnackBar(
-                content:
-                    'Error occurred while accessing credentials. Try again.',
-              ),
-            );
-          }
-        } catch (e) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            customSnackBar(
-              content: 'Error occurred using Google Sign-In. Try again.',
-            ),
-          );
-        }
-      }
-    }
+// // //           print(userCredential);
 
-    return user;
-  }
+// // //           FlutterUser newUser = FlutterUser(
+// // //             displayName: googleUser.displayName ?? "No Name",
+// // //             email: googleUser.email,
+// // //             photoURL: googleUser.photoUrl ?? "No photoUrl",
+// // //             uid: userCredential.user?.uid ?? googleUser.id,
+// // //           );
+// // //           FlutterUser? fUser = await UsersContext.updateUserData(newUser);
+// // //         } on FirebaseAuthException catch (e) {
+// // //           if (e.code == 'account-exists-with-different-credential') {
+// // //             ScaffoldMessenger.of(context).showSnackBar(
+// // //               customSnackBar(
+// // //                 content:
+// // //                     'The account already exists with a different credential.',
+// // //               ),
+// // //             );
+// // //           } else if (e.code == 'invalid-credential') {
+// // //             ScaffoldMessenger.of(context).showSnackBar(
+// // //               customSnackBar(
+// // //                 content:
+// // //                     'Error occurred while accessing credentials. Try again.',
+// // //               ),
+// // //             );
+// // //           }
+// // //         } catch (e) {
+// // //           ScaffoldMessenger.of(context).showSnackBar(
+// // //             customSnackBar(
+// // //               content: 'Error occurred using Google Sign-In. Try again.',
+// // //             ),
+// // //           );
+// // //         }
+// // //       }
+// // //     }
 
-  Future<void> signOutWithGoogle({required BuildContext context}) async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
+// // //     return user;
+// // //   }
 
-    try {
-      if (!kIsWeb) {
-        await googleSignIn.signOut();
-      }
-      await FirebaseAuth.instance.signOut();
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        customSnackBar(
-          content: 'Error signing out. Try again.',
-        ),
-      );
-    }
-  }
+// // //   Future<void> signOutWithGoogle({required BuildContext context}) async {
+// // //     final GoogleSignIn googleSignIn = GoogleSignIn();
 
-  static SnackBar customSnackBar({required String content}) {
-    return SnackBar(
-      backgroundColor: Colors.black,
-      content: Text(
-        content,
-        style: TextStyle(color: Colors.redAccent, letterSpacing: 0.5),
-      ),
-    );
-  }
-}
+// // //     try {
+// // //       if (!kIsWeb) {
+// // //         await googleSignIn.signOut();
+// // //       }
+// // //       await FirebaseAuth.instance.signOut();
+// // //     } catch (e) {
+// // //       ScaffoldMessenger.of(context).showSnackBar(
+// // //         customSnackBar(
+// // //           content: 'Error signing out. Try again.',
+// // //         ),
+// // //       );
+// // //     }
+// // //   }
+
+// // //   static SnackBar customSnackBar({required String content}) {
+// // //     return SnackBar(
+// // //       backgroundColor: Colors.black,
+// // //       content: Text(
+// // //         content,
+// // //         style: TextStyle(color: Colors.redAccent, letterSpacing: 0.5),
+// // //       ),
+// // //     );
+// // //   }
+
+
+
+
+// // }

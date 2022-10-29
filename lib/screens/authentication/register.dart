@@ -1,9 +1,11 @@
 // ignore_for_file: deprecated_member_use
 import 'dart:convert';
+import 'package:advices/App/contexts/servicesContext.dart';
 import 'package:advices/App/models/service.dart';
 import 'package:advices/App/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import '../../App/contexts/authContext.dart';
 import '../../App/models/user.dart';
 import '../../App/services/auth.dart';
 import '../../assets/utilities/constants.dart';
@@ -20,7 +22,7 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  final AuthService _auth = AuthService();
+  final AuthContext _auth = AuthContext();
   final _formKey = GlobalKey<FormState>();
 
   final FocusNode _emailFocusNode = FocusNode();
@@ -652,7 +654,7 @@ class _RegisterState extends State<Register> {
       children: [
         DropdownButtonHideUnderline(
             child: StreamBuilder<Iterable<Service>>(
-                stream: DatabaseService.getAllServices(),
+                stream: ServicesContext.getAllServices(),
                 builder: (context, snapshot) {
                   // Safety check to ensure that snapshot contains data
                   // without this safety check, StreamBuilder dirty state warnings will be thrown

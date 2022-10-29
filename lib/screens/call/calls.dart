@@ -4,6 +4,8 @@ import 'package:advices/assets/utilities/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../App/contexts/authContext.dart';
+import '../../App/contexts/callEventsContext.dart';
 import '../../App/services/auth.dart';
 import '../../App/services/database.dart';
 import '../authentication/authentication.dart';
@@ -23,7 +25,7 @@ class Calls extends StatefulWidget {
 class _CallsState extends State<Calls>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late AnimationController controller;
-  final AuthService _auth = AuthService();
+  final AuthContext _auth = AuthContext();
   User? user;
   @override
   void initState() {
@@ -104,7 +106,7 @@ class _CallsState extends State<Calls>
 
   Widget _cardsList() {
     return StreamBuilder<Iterable<EventModel>>(
-      stream: DatabaseService.getAllLEvents(user?.uid),
+      stream: CallEventsContext.getAllLEvents(user?.uid),
       builder: ((context, snapshot) {
         if (!snapshot.hasData) return Text("loading data ...");
         if (snapshot.hasData) {

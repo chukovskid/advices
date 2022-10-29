@@ -1,10 +1,12 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:advices/App/models/user.dart';
+import 'package:advices/App/services/googleAuth.dart';
 import 'package:advices/screens/authentication/sign_in.dart';
 import 'package:advices/screens/shared_widgets/base_app_bar.dart';
 import 'package:advices/assets/utilities/constants.dart';
 import 'package:flutter/material.dart';
+import '../../App/contexts/authContext.dart';
 import '../../App/services/auth.dart';
 import '../authentication/authentication.dart';
 
@@ -17,7 +19,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  final AuthService _auth = AuthService();
+  final AuthContext _auth = AuthContext();
   FlutterUser? _fireUser;
   var imageUrl =
       "https://devshift.biz/wp-content/uploads/2017/04/profile-icon-png-898.png"; //you can use a image
@@ -56,7 +58,7 @@ class _ProfileState extends State<Profile> {
   Future<void> _signOut() async {
     await _auth.signOut();
     // bool isSignIn = await _auth.googleIsSignIn();
-    await _auth.signOutWithGoogle(context: context);
+    await GoogleAuthService.signOutWithGoogle(context: context);
     await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => SignIn()),

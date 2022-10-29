@@ -1,3 +1,4 @@
+import 'package:advices/App/contexts/lawyersContext.dart';
 import 'package:advices/screens/calendar/add_event.dart';
 import 'package:advices/screens/call/call.dart';
 import 'package:advices/screens/profile/createEvent.dart';
@@ -33,7 +34,7 @@ class _LawyerProfileState extends State<LawyerProfile> {
   }
 
   Future<void> _getLawyer() async {
-    lawyer = await DatabaseService.getLawyer(widget.uid);
+    lawyer = await LawyersContext.getLawyer(widget.uid);
     if (lawyer != null) {
       setState(() {
         minPriceEuro = lawyer!.minPriceEuro.toString().isEmpty

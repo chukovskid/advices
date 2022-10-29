@@ -1,3 +1,5 @@
+import 'package:advices/App/contexts/callEventsContext.dart';
+import 'package:advices/App/contexts/servicesContext.dart';
 import 'package:advices/screens/authentication/sign_in.dart';
 import 'package:advices/screens/calendar/add_event.dart';
 import 'package:advices/screens/call/call.dart';
@@ -6,6 +8,7 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:time_picker_widget/time_picker_widget.dart';
+import '../../App/contexts/authContext.dart';
 import '../../App/models/service.dart';
 import '../../App/models/user.dart';
 import '../payment/checkout/checkout.dart';
@@ -56,7 +59,7 @@ class _CreateEventState extends State<CreateEvent> {
   Future<void> _getFreeTimePeriodsForDate() async {
     DateTime selectedDate = DateFormat("yyyy-MM-dd").parse("$_selectedDate");
     List<DateTime> events =
-        await DatabaseService.getAllLEventsDateTIme(widget.uid, selectedDate);
+        await CallEventsContext.getAllLEventsDateTIme(widget.uid, selectedDate);
     _unavailableTimePeriods = [];
     events.forEach((element) {
       DateTime substraction = element;
@@ -97,7 +100,7 @@ class _CreateEventState extends State<CreateEvent> {
   }
 
   Future<void> _saveEvent() async {
-    final AuthService _auth = AuthService();
+    final AuthContext _auth = AuthContext();
     User? user = await _auth.getCurrentUser();
     bool userExist = user != null ? true : false;
     if (!userExist) {
@@ -121,19 +124,19 @@ class _CreateEventState extends State<CreateEvent> {
     }
     DateTime selectedDateTime =
         DateFormat("yyyy-MM-dd hh:mm").parse("$_selectedDate $selectedTime");
-    await DatabaseService.saveEvent(
+    await CallEventsContext.saveEvent(
         widget.uid, _title.text, _description.text, selectedDateTime);
 
-    redirectToCheckout(context);
+    // redirectToCheckout(context);
 
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => Calls()),
-    // );
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Calls()),
+    );
   }
 
   Future<void> _getService() async {
-    service = await DatabaseService.getService(widget.serviceId);
+    service = await ServicesContext.getService(widget.serviceId);
     setState(() {
       serviceName = "${service.areaName}: ${service.name}";
       service = service;

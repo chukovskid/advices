@@ -1,3 +1,4 @@
+import 'package:advices/App/contexts/servicesContext.dart';
 import 'package:advices/App/models/service.dart';
 import 'package:advices/assets/utilities/constants.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,7 @@ class _SelectedServicesState extends State<SelectedServices>
 
   Widget _cardsList() {
     return StreamBuilder<Iterable<Service>>(
-      stream: DatabaseService.getAllServicesByArea(widget.areaId),
+      stream: ServicesContext.getAllServicesByArea(widget.areaId),
       builder: ((context, snapshot) {
         if (!snapshot.hasData) return Text("loading data ...");
         if (snapshot.hasData) {

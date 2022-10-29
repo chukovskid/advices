@@ -5,6 +5,7 @@ import 'package:advices/screens/shared_widgets/base_app_bar.dart';
 import 'package:advices/assets/utilities/constants.dart';
 import 'package:flutter/material.dart';
 
+import '../../App/contexts/lawyersContext.dart';
 import '../../App/models/user.dart';
 import '../../App/services/database.dart';
 import '../shared_widgets/BottomBar.dart';
@@ -53,7 +54,7 @@ class _LawyersState extends State<Lawyers>
 
   Widget _cardsList() {
     return StreamBuilder<Iterable<FlutterUser>>(
-      stream: DatabaseService.getFilteredLawyers(widget.service),
+      stream: LawyersContext.getFilteredLawyers(widget.service),
       builder: ((context, snapshot) {
         if (!snapshot.hasData) return Text("loading data ...");
         if (snapshot.hasData) {

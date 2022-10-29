@@ -1,3 +1,4 @@
+import 'package:advices/App/contexts/callEventsContext.dart';
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as rtc_local_view;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as rtc_remote_view;
@@ -61,7 +62,7 @@ class _State extends State<JoinChannelVideo> {
   Future<void> closeCall() async {
     await _engine.leaveChannel();
     await _engine.destroy();
-    await DatabaseService.closeCall(channelName);
+    await CallEventsContext.closeCall(channelName);
   }
 
   Future<void> getUserUid() async {

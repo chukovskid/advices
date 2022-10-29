@@ -3,6 +3,7 @@ import 'package:advices/screens/lawAreas/selected_services.dart';
 import 'package:advices/assets/utilities/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
+import '../../App/contexts/servicesContext.dart';
 import '../../App/services/database.dart';
 import 'lawyers.dart';
 
@@ -432,7 +433,7 @@ class _LawsState extends State<Laws>
 
   Widget _cardsList(int area) {
     return StreamBuilder<Iterable<Service>>(
-      stream: DatabaseService.getAllServicesByArea(area),
+      stream: ServicesContext.getAllServicesByArea(area),
       builder: ((context, snapshot) {
         if (!snapshot.hasData) {
           return Center(

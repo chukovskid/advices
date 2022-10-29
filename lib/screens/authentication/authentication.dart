@@ -2,6 +2,7 @@ import 'package:advices/screens/authentication/sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../App/contexts/authContext.dart';
 import '../../App/services/auth.dart';
 import '../home/profile.dart';
 
@@ -11,7 +12,7 @@ class Authenticate extends StatefulWidget {
 }
 
 class _AuthenticateState extends State<Authenticate> {
-  final AuthService _auth = AuthService();
+  final AuthContext _auth = AuthContext();
   bool showSignIn = true;
   bool isLoggedIn = true;
   @override

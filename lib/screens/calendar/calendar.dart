@@ -14,6 +14,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../../App/contexts/callEventsContext.dart';
+
 // import '../../../../core/presentation/res/colors.dart';
 // import '../../../../core/presentation/res/sizes.dart';
 
@@ -67,7 +69,7 @@ class _CalendarPageState extends State<CalendarPage> {
       ),
       body: SingleChildScrollView(
         child: StreamBuilder(
-          stream: DatabaseService.getAllEventsStream(),
+          stream: CallEventsContext.getAllEventsStream(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.hasData) {
               final List<EventModel> events = snapshot.data;

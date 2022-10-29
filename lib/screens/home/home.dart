@@ -7,6 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import '../../App/contexts/authContext.dart';
+import '../../App/contexts/usersContext.dart';
 import '../../App/services/database.dart';
 import '../authentication/register.dart';
 import 'laws.dart';
@@ -49,7 +51,7 @@ class _HomeState extends State<Home> {
     initDynamicLinks(context);
   }
 
-  final AuthService _auth = AuthService();
+  final AuthContext _auth = AuthContext();
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
   /// Get the token, save it to the database for current user
@@ -59,7 +61,7 @@ class _HomeState extends State<Home> {
       userExist = user != null ? true : false;
     });
     if (userExist) {
-      await DatabaseService.saveDeviceToken(user!.uid);
+      await UsersContext.saveDeviceToken(user!.uid);
     }
   }
 
