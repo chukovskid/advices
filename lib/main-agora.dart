@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'examples/advanced/index.dart';
-import 'examples/basic/index.dart';
-import 'config/agora.config.dart' as config;
-import 'examples/log_sink.dart';
+import 'screens/video/examples/advanced/index.dart';
+import 'screens/video/examples/basic/index.dart';
+import 'screens/video/config/agora.config.dart' as config;
+import 'screens/video/examples/log_sink.dart';
 
 void main() => runApp(const MyApp());
 

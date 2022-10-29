@@ -1,15 +1,11 @@
 import 'package:advices/screens/authentication/authentication.dart';
 import 'package:advices/screens/call/calls.dart';
-import 'package:advices/screens/home.dart';
-import 'package:advices/screens/laws.dart';
-import 'package:advices/screens/lawyers.dart';
-import 'package:advices/utilities/constants.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:advices/assets/utilities/constants.dart';
 import 'package:flutter/material.dart';
-
 import '../chat/screens/mobile_layout_screen.dart';
 import '../chat/screens/web_layout_screen.dart';
 import '../chat/utils/responsive_layout.dart';
+import '../home/home.dart';
 
 class BottomBar extends StatelessWidget {
   const BottomBar({

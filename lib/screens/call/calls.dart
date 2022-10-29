@@ -1,11 +1,11 @@
-import 'package:advices/models/event.dart';
+import 'package:advices/App/models/event.dart';
 import 'package:advices/screens/call/call.dart';
-import 'package:advices/utilities/constants.dart';
+import 'package:advices/assets/utilities/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../services/auth.dart';
-import '../../services/database.dart';
+import '../../App/services/auth.dart';
+import '../../App/services/database.dart';
 import '../authentication/authentication.dart';
 import '../shared_widgets/BottomBar.dart';
 import '../shared_widgets/base_app_bar.dart';

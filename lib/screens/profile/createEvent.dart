@@ -1,16 +1,16 @@
 import 'package:advices/screens/authentication/sign_in.dart';
 import 'package:advices/screens/calendar/add_event.dart';
 import 'package:advices/screens/call/call.dart';
-import 'package:advices/services/database.dart';
+import 'package:advices/App/services/database.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:time_picker_widget/time_picker_widget.dart';
-import '../../models/service.dart';
-import '../../models/user.dart';
-import '../../payment/checkout/checkout.dart';
-import '../../services/auth.dart';
-import '../../utilities/constants.dart';
+import '../../App/models/service.dart';
+import '../../App/models/user.dart';
+import '../payment/checkout/checkout.dart';
+import '../../App/services/auth.dart';
+import '../../assets/utilities/constants.dart';
 import 'package:intl/intl.dart';
 
 import '../call/calls.dart';

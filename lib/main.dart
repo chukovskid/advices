@@ -1,11 +1,11 @@
 import 'package:advices/screens/authentication/register.dart';
-import 'package:advices/services/auth.dart';
+import 'package:advices/App/services/auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 // import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'helpers/router.dart' as router;
+import 'App/helpers/router.dart' as router;
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 

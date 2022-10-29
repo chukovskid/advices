@@ -1,11 +1,10 @@
 // ignore_for_file: deprecated_member_use
-
 import 'package:advices/screens/authentication/register.dart';
-import 'package:advices/screens/home.dart';
-import 'package:advices/utilities/constants.dart';
+import 'package:advices/assets/utilities/constants.dart';
 import 'package:flutter/material.dart';
-import '../../models/user.dart';
-import '../../services/auth.dart';
+import '../../App/models/user.dart';
+import '../../App/services/auth.dart';
+import '../home/home.dart';
 import '../shared_widgets/base_app_bar.dart';
 import 'authentication.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

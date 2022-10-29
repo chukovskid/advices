@@ -1,7 +1,7 @@
 import 'package:advices/screens/authentication/authentication.dart';
 import 'package:flutter/material.dart';
-import '../../utilities/constants.dart';
-import '../home.dart';
+import '../../assets/utilities/constants.dart';
+import '../home/home.dart';
 
 class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
   final AppBar appBar;

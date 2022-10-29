@@ -1,8 +1,8 @@
 import 'dart:collection';
 
-import 'package:advices/models/event.dart';
+import 'package:advices/App/models/event.dart';
 import 'package:advices/screens/calendar/add_event.dart';
-import 'package:advices/services/database.dart';
+import 'package:advices/App/services/database.dart';
 // import 'package:firebase_helpers/firebase_helpers.dart';
 // import 'package:firebasestarter/core/presentation/providers/providers.dart';
 // import 'package:firebasestarter/features/events/data/models/app_event.dart';

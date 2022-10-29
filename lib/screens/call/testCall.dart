@@ -6,7 +6,7 @@ import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:advices/config/agora.config.dart' as config;
+import 'package:advices/screens/video/config/agora.config.dart' as config;
 
 const appId = "03f0c2c7973949b3afe5e475f15a350e";
 const token =

@@ -1,21 +1,21 @@
 import 'package:advices/screens/call/callMethods.dart';
 import 'package:advices/screens/call/calls.dart';
 import 'package:advices/screens/call/testCall.dart';
-import 'package:advices/screens/home.dart';
+import 'package:advices/screens/home/home.dart';
 import 'package:advices/screens/profile/lawyerProfile.dart';
-import 'package:advices/services/database.dart';
+import 'package:advices/App/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
-import '../../examples/advanced/enable_virtualbackground/enable_virtualbackground.dart';
-import '../../examples/basic/join_channel_video/join_channel_video.dart';
-import '../../examples/advanced/index.dart';
-import '../../examples/basic/index.dart';
-import '../../config/agora.config.dart' as config;
-import '../../services/auth.dart';
-import '../../utilities/constants.dart';
+import '../video/examples/advanced/enable_virtualbackground/enable_virtualbackground.dart';
+import '../video/examples/basic/join_channel_video/join_channel_video.dart';
+import '../video/examples/advanced/index.dart';
+import '../video/examples/basic/index.dart';
+import '../video/config/agora.config.dart' as config;
+import '../../App/services/auth.dart';
+import '../../assets/utilities/constants.dart';
 import '../authentication/authentication.dart';
 import '../shared_widgets/base_app_bar.dart';
 
@@ -88,59 +88,20 @@ class _CallState extends State<Call> {
   }
 
   Future<void> openCall(channelName) async {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => TestCall()),
-    // );
-    // return;
     if (user == null) {
       return null;
     }
-
-    // String channelName = widget.uid + "+" + user!.uid;
     print("Jou will join with this channelName : $channelName");
     Map<String, dynamic>? result = await CallMethods.makeCloudCall(channelName);
     if (result!['token'] != null) {
-      // if (kIsWeb) {
-        // THIS IS WORKING ON WEB AND ANDROID!
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => JoinChannelVideo(
-                      token: result['token'], 
-                      channelId: result['channelId'],
-                    )));
-      // } else {
-      //   Navigator.push(
-      //       context,
-      //       MaterialPageRoute(
-      //           builder: (context) => JoinChannelVideo(
-      //                 token: result['token'],
-      //                 channelId: result['channelId'],
-      //               )));
-      // }
-
-      // Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //         builder: (context) => TestCall(
-      //               token: result['token'],
-      //               channelId: result['channelId'],
-      //             )));
-
-      // MaterialPageRoute(
-      //     builder: (context) => Scaffold(
-      //           body: EnableVirtualBackground(
-      //             token: result['token'],
-      //             channelId: result['channelId'],
-      //           ),
-      //         )));
-      // Scaffold(
-      //   body: JoinChannelVideo(
-      //     token: result['token'],
-      //     channelId: result['channelId'],
-      //   ),
-      // )));
+      // THIS IS WORKING ON WEB AND ANDROID!
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => JoinChannelVideo(
+                    token: result['token'],
+                    channelId: result['channelId'],
+                  )));
     }
   }
 

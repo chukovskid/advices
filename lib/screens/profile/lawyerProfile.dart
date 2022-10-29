@@ -1,10 +1,10 @@
 import 'package:advices/screens/calendar/add_event.dart';
 import 'package:advices/screens/call/call.dart';
 import 'package:advices/screens/profile/createEvent.dart';
-import 'package:advices/services/database.dart';
+import 'package:advices/App/services/database.dart';
 import 'package:flutter/material.dart';
-import '../../models/user.dart';
-import '../../utilities/constants.dart';
+import '../../App/models/user.dart';
+import '../../assets/utilities/constants.dart';
 import '../authentication/authentication.dart';
 import '../call/calls.dart';
 import '../shared_widgets/base_app_bar.dart';

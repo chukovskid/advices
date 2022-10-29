@@ -1,11 +1,8 @@
-import 'package:advices/models/service.dart';
-import 'package:advices/screens/lawyers.dart';
-import 'package:advices/screens/profile/lawyerProfile.dart';
-import 'package:advices/screens/shared_widgets/base_app_bar.dart';
-import 'package:advices/utilities/constants.dart';
+import 'package:advices/App/models/service.dart';
+import 'package:advices/assets/utilities/constants.dart';
 import 'package:flutter/material.dart';
-import '../../models/user.dart';
-import '../../services/database.dart';
+import '../../App/services/database.dart';
+import '../home/lawyers.dart';
 import '../shared_widgets/BottomBar.dart';
 
 class SelectedServices extends StatefulWidget {

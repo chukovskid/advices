@@ -1,11 +1,9 @@
-import 'package:advices/models/user.dart';
-import 'package:advices/screens/authentication/register.dart';
 import 'package:advices/screens/authentication/sign_in.dart';
-import 'package:advices/screens/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../services/auth.dart';
+import '../../App/services/auth.dart';
+import '../home/profile.dart';
 
 class Authenticate extends StatefulWidget {
   @override

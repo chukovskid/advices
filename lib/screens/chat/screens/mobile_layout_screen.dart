@@ -3,7 +3,7 @@ import 'package:advices/screens/chat/colors.dart';
 import 'package:advices/screens/chat/info.dart';
 import 'package:flutter/material.dart';
 
-import '../../../utilities/constants.dart';
+import '../../../assets/utilities/constants.dart';
 import '../widgets/contacts_list.dart';
 
 

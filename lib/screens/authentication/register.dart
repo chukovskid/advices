@@ -1,17 +1,13 @@
 // ignore_for_file: deprecated_member_use
-
 import 'dart:convert';
-
-import 'package:advices/models/service.dart';
-import 'package:advices/screens/home.dart';
-import 'package:advices/services/database.dart';
+import 'package:advices/App/models/service.dart';
+import 'package:advices/App/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
-import '../../models/service.dart';
-import '../../models/user.dart';
-import '../../services/auth.dart';
-import '../../utilities/constants.dart';
-import '../shared_widgets/base_app_bar.dart';
+import '../../App/models/user.dart';
+import '../../App/services/auth.dart';
+import '../../assets/utilities/constants.dart';
+import '../home/home.dart';
 import 'authentication.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
