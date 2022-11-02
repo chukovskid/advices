@@ -1,7 +1,6 @@
 import 'package:advices/screens/call/call.dart';
 import 'package:advices/screens/shared_widgets/BottomBar.dart';
 import 'package:advices/screens/call/calls.dart';
-import 'package:advices/App/services/auth.dart';
 import 'package:advices/assets/utilities/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
@@ -9,7 +8,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import '../../App/contexts/authContext.dart';
 import '../../App/contexts/usersContext.dart';
-import '../../App/services/database.dart';
 import '../authentication/register.dart';
 import 'laws.dart';
 

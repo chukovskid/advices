@@ -1,22 +1,15 @@
+import 'package:advices/App/contexts/authContext.dart';
 import 'package:advices/App/contexts/callEventsContext.dart';
 import 'package:advices/App/contexts/servicesContext.dart';
+import 'package:advices/App/models/service.dart';
 import 'package:advices/screens/authentication/sign_in.dart';
-import 'package:advices/screens/calendar/add_event.dart';
-import 'package:advices/screens/call/call.dart';
-import 'package:advices/App/services/database.dart';
+import 'package:advices/screens/call/calls.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:time_picker_widget/time_picker_widget.dart';
-import '../../App/contexts/authContext.dart';
-import '../../App/models/service.dart';
-import '../../App/models/user.dart';
-import '../payment/checkout/checkout.dart';
-import '../../App/services/auth.dart';
-import '../../assets/utilities/constants.dart';
 import 'package:intl/intl.dart';
 
-import '../call/calls.dart';
 
 class CreateEvent extends StatefulWidget {
   final String uid;
@@ -44,7 +37,7 @@ class _CreateEventState extends State<CreateEvent> {
   String selectedTime = "select time";
   // DateFormat.Hm().format(DateTime.now());
   // DateFormat("hh:mm").parse(DateTime.now().toString()).toString();
-  String _selectedDate = DateFormat.yMd().format(DateTime.now());
+  String _selectedDate = DateFormat("yyyy-MM-dd").parse(DateTime.now().toString()).toString();
 
   String serviceName = "Click here to select service";
   List<TimeOfDay> _unavailableTimePeriods = [];

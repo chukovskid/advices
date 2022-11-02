@@ -9,14 +9,19 @@ import 'App/contexts/authContext.dart';
 import 'App/helpers/router.dart' as router;
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
+    await dotenv.load();
+
+  await dotenv.load(fileName: ".env");
+
   WidgetsFlutterBinding.ensureInitialized();
   if (kIsWeb) {
     await Firebase.initializeApp(
       // // Replace with actual values
       options: FirebaseOptions(
-        apiKey: "AIzaSyAMiXYCdnUTqZItvme_QYds_TTNCLXGmac",
+        apiKey: dotenv.env['GOOGLE_API_KEY'].toString(),
         authDomain: "advices-dev.firebaseapp.com",
         appId: "1:793184649946:web:9551788cf7f51068cd9be3",
         messagingSenderId: "793184649946",
@@ -33,7 +38,6 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     // SystemChrome.setPreferredOrientations([
     //   DeviceOrientation.portraitUp,
     //   DeviceOrientation.portraitDown,

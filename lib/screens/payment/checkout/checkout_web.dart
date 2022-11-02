@@ -2,12 +2,13 @@
 library stripe;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:js/js.dart';
 
 import '../../../assets/utilities/constants.dart';
 
 void redirectToCheckout(BuildContext _) async {
-  final stripe = Stripe(apiKey);
+  final stripe = Stripe(dotenv.env['STRIPE_PK'].toString());
   stripe.redirectToCheckout(CheckoutOptions(
     lineItems: [
       LineItem(price: nikesPriceId, quantity: 1),
