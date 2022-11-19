@@ -119,16 +119,7 @@ class CallEventsContext {
     List<String> lawyerIdandclientId = channellName.split("+");
     String lawyerId = lawyerIdandclientId[0];
     String clientId = lawyerIdandclientId[1];
-
-    print(lawyerId);
-    print(clientId);
-    // CollectionReference calls = FirebaseFirestore.instance.collection("calls");
-
-    // await calls.doc(lawyerId).collection("open").doc(clientId).delete();
-    // await calls.doc(clientId).collection("open").doc(lawyerId).delete();
-
     await updateAsClosedCallForUsers(lawyerId, clientId);
-
     return null;
   }
 

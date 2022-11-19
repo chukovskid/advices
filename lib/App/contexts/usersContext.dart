@@ -38,8 +38,6 @@ class UsersContext {
       'isLawyer': user.isLawyer,
       'photoURL': user.photoURL,
     });
-
-    print(user);
     return user;
   }
 

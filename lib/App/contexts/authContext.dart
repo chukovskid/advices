@@ -38,10 +38,7 @@ class AuthContext {
   Future<FlutterUser?> getMyProfileInfo() async {
     User? user = _auth.currentUser;
     if (user == null) return null;
-    print(user);
-
     FlutterUser? fUser = await UsersContext.getUser(user.uid);
-    // print(user);
     return fUser;
   }
 
@@ -78,12 +75,10 @@ class AuthContext {
   // register with email and password
   Future registerWithEmailAndPassword(
       FlutterUser newFUser, List<Service?> services) async {
-    print(services);
     try {
       // const email = newFUser.email;
       UserCredential credential = await _auth.createUserWithEmailAndPassword(
           email: newFUser.email, password: newFUser.password);
-      print(credential.user?.uid);
       User? user = credential.user;
       if (user != null) {
         await user.reload();

@@ -643,7 +643,6 @@ class _CreateEventState extends State<CreateEvent> {
                                         "title": _title.text,
                                         "description": _description.text,
                                       };
-                                      // Navigator.pop(context);
                                       setState(() {
                                         processing = false;
                                         openEventForm = false;

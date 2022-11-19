@@ -51,7 +51,7 @@ class _SignInState extends State<SignIn> {
 
     // If the form passes validation, display a Snackbar.
     ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text('Registration sent')));
+        .showSnackBar(SnackBar(content: Text('Успешно регистриран')));
 
     _formKey.currentState?.save();
     _formKey.currentState?.reset();

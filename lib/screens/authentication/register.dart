@@ -89,9 +89,9 @@ class _RegisterState extends State<Register> {
         print(e);
       }
 
-      // If the form passes validation, display a Snackbar.
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: const Text('Registration sent')));
+      // // If the form passes validation, display a Snackbar.
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //     const SnackBar(content: const Text('Registration sent')));
 
       _formKey.currentState?.save();
       _formKey.currentState?.reset();
