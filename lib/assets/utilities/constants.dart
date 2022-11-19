@@ -23,7 +23,6 @@ final kBoxDecorationStyle = BoxDecoration(
   border: Border.all(color: Colors.white),
 );
 
-
 const profileHeader =
     TextStyle(color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold);
 const helpTextStyle = TextStyle(color: Colors.black, fontSize: 15.0);
@@ -41,6 +40,13 @@ const lightGreenColor = const Color(0xff5bc9bf);
 const backgroundColor = [darkGreenColor, darkGreenColor];
 const urgentColor = Color.fromARGB(255, 218, 144, 109);
 const greyGreenColor = Color.fromARGB(255, 188, 190, 182);
+const whiteColor = Color.fromARGB(255, 241, 245, 255);
+
+// Text Style
+const textStylePayingOptions = TextStyle(
+    color: Color.fromARGB(255, 255, 255, 255),
+    fontWeight: FontWeight.bold,
+    fontSize: 10);
 
 /// Example event class.
 class Event {

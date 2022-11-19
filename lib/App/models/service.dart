@@ -1,6 +1,7 @@
 class Service {
   String id;
   String name;
+  String nameMk;
   String areaName;
   String imageUrl;
   int area;
@@ -10,6 +11,7 @@ class Service {
   Service({
     this.id = "",
     this.name = "",
+    this.nameMk = "",
     this.area = 0,
     this.areaName = "",
     this.imageUrl = "",
@@ -19,6 +21,7 @@ class Service {
     return {
       'id': id,
       'name': name,
+      'nameMk': nameMk,
       'area': area,
       'areaName': areaName,
       'imageUrl': imageUrl,
@@ -29,6 +32,7 @@ class Service {
         area: int.tryParse(json['area'].toString()) as int ? ?? 0,
         id: json['id'] as String? ?? "",
         name: json['name'] as String? ?? "",
+        nameMk: json['nameMk'] as String? ?? "",
         areaName: json['areaName'] as String? ?? "",
         imageUrl: json['imageUrl'] as String? ?? "",
       );
@@ -37,6 +41,7 @@ class Service {
     Map<String, dynamic> m = new Map();
     m['id'] = id as String;
     m['name'] = name as String;
+    m['nameMk'] = nameMk as String;
     m['area'] = area as int;
     m['areaName'] = areaName as String;
     m['imageUrl'] = imageUrl as String;
@@ -47,6 +52,7 @@ class Service {
     Map<String, dynamic> toJson() => {
     'id': id,
     'name': name,
+    'nameMk': nameMk,
     'area': area,
     'areaName': areaName,
     'imageUrl': imageUrl,
@@ -55,6 +61,6 @@ class Service {
     @override
   String toString() {
     // id == null ? "x" : id;
-    return '{ "name": "$name", "area": $area, "id": "$id", "areaName": "$areaName",  "imageUrl": "$imageUrl"}';
+    return '{ "name": "$name", "nameMk": "$nameMk", "area": $area, "id": "$id", "areaName": "$areaName",  "imageUrl": "$imageUrl"}';
   }
 }

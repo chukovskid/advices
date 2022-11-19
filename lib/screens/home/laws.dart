@@ -16,6 +16,7 @@ class Laws extends StatefulWidget {
 
 class _LawsState extends State<Laws>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+  bool mkLanguage = true;
   late AnimationController controller;
   bool openExpats = false;
   bool openContracts = false;
@@ -72,11 +73,18 @@ class _LawsState extends State<Laws>
           child: Row(
             // mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              Expanded(child: _scrolable(1, "Urgent", urgentColor)),
-              Flexible(child: _scrolableExpats(2, "Expats", expatsColor)),
+              Expanded(
+                  child: _scrolable(
+                      1, (mkLanguage ? "Итно" : "Urgent"), urgentColor)),
               Flexible(
-                  child: _scrolableContracts(3, "Contracts", contractsColor)),
-              Flexible(child: _scrolableCompany(4, "Company", companyColor)),
+                  child: _scrolableExpats(
+                      2, mkLanguage ? "Иселеници" : "Expats", expatsColor)),
+              Flexible(
+                  child: _scrolableContracts(3,
+                      mkLanguage ? "Договори" : "Contracts", contractsColor)),
+              Flexible(
+                  child: _scrolableCompany(4,
+                      mkLanguage ? "Фирми" : "Business firms", companyColor)),
             ],
           )),
     );
@@ -120,7 +128,9 @@ class _LawsState extends State<Laws>
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
                     Text(
-                      "This section is for calling a lawyer immediately \n instead of arranging a date",
+                      mkLanguage
+                          ? "Оваа секција е за во итни случаи. Во наредните 5-15мин. ќе добиете емаил со адвокати кои се достапни во моментот за консултација."
+                          : "This section is for calling a lawyer immediately \n instead of arranging a date",
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
@@ -179,7 +189,9 @@ class _LawsState extends State<Laws>
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
                     Text(
-                      "Schedule a date with your lawyer \n and get the full service",
+                      mkLanguage
+                          ? "Сервиси фокусирани за експати на кои им е потребна авокатска консултација или договор"
+                          : "Schedule a date with your lawyer \n and get the full service",
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
@@ -239,7 +251,9 @@ class _LawsState extends State<Laws>
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
                     Text(
-                      "Get the contract ready \n next week",
+                      mkLanguage
+                          ? "Заврши се онлајн"
+                          : "Get the contract ready \n next week",
                       textAlign: TextAlign.center,
                       // "Explain your needs in the description part and the lawyer will be more prepared",
                       style: TextStyle(color: Colors.white, fontSize: 15),
@@ -299,15 +313,17 @@ class _LawsState extends State<Laws>
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
                     Text(
+                      mkLanguage ?
+                      "Сервиси за отварање, затварање и промени на фирма": 
                       "Explain your problem and let the lawyer advice \n you and fix it together",
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
-                  ],
+                  ], 
                 ),
               ),
               Icon(
-                Icons.keyboard_double_arrow_down_outlined,
+                Icons.keyboard_double_arrow_down_outlined,  
                 size: 30,
                 color: Color.fromARGB(255, 255, 255, 255),
               ),
@@ -479,8 +495,8 @@ class _LawsState extends State<Laws>
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-          color: Colors.white, border: Border.all(color: Colors.grey, width: 0.2)),
-
+          color: Colors.white,
+          border: Border.all(color: Colors.grey, width: 0.2)),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -489,8 +505,7 @@ class _LawsState extends State<Laws>
           ),
           PointerInterceptor(
             child: ListTile(
-              leading:
-                  CircleAvatar(
+              leading: CircleAvatar(
                 backgroundColor: Colors.white,
                 radius: 40,
                 child: ClipOval(
@@ -504,11 +519,14 @@ class _LawsState extends State<Laws>
                 ),
               ),
               title: Text(
-                service.name.toString(),
+                mkLanguage
+                    ? service.nameMk.toString()
+                    : service.name.toString(),
                 style: TextStyle(
                     fontSize: 16, color: Color.fromRGBO(3, 34, 41, 1)),
               ),
-              subtitle: const Text('Lorem Ipsum is simply dummy text of the printing and typesetting industry.'),
+              subtitle: const Text(
+                  'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'),
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -551,7 +569,9 @@ class _LawsState extends State<Laws>
               ),
               Flexible(
                   child: Text(
-                service.name,
+                mkLanguage
+                    ? service.nameMk.toString()
+                    : service.name.toString(),
                 style: TextStyle(color: Colors.white, fontSize: 14),
               ))
             ],
