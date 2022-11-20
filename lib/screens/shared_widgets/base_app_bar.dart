@@ -21,10 +21,19 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
       );
     }
 
+    _navigateBack() {
+      redirectToHome
+          ? Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Home()),
+            )
+          : Navigator.pop(context, true);
+    }
+
     return AppBar(
       leading: IconButton(
         icon: Icon(Icons.arrow_back_ios),
-        onPressed: () => Navigator.pop(context, true),
+        onPressed:  _navigateBack,
       ),
       backgroundColor: darkGreenColor,
       // automaticallyImplyLeading : appBar.automaticallyImplyLeading,

@@ -1,27 +1,25 @@
 import 'package:advices/App/contexts/usersContext.dart';
-import 'package:advices/App/models/service.dart';
 import 'package:advices/App/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '../contexts/lawyersContext.dart';
-import 'database.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 class GoogleAuthService {
   final storage = new FlutterSecureStorage();
   final userStream = FirebaseAuth.instance.authStateChanges();
 
-  static GoogleSignIn _googleSignIn = GoogleSignIn(
-      // scopes: <String>[
-      //   'email',
-      //   'https://www.googleapis.com/auth/fitness.activity.read',
-      // ],
-      // Use Scopes to get diferent informations for the user from google
+  static GoogleSignIn _googleSignIn =
+      GoogleSignIn(clientId: dotenv.env['GOOGLE_API_KEY'].toString()
+          // scopes: <String>[
+          //   'email',
+          //   'https://www.googleapis.com/auth/fitness.activity.read',
+          // ],
+          // Use Scopes to get diferent informations for the user from google
 
-      );
+          );
 
   static Future<void> googleSignOut() async {
     bool isSignedInGoogle = await googleIsSignIn();
@@ -80,6 +78,7 @@ class GoogleAuthService {
             uid: userCredential.user?.uid ?? googleUser.id,
           );
           FlutterUser? fUser = await UsersContext.updateUserData(newUser);
+          return user;
         } on FirebaseAuthException catch (e) {
           if (e.code == 'account-exists-with-different-credential') {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -96,12 +95,14 @@ class GoogleAuthService {
               ),
             );
           }
+          return null;
         } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(
             customSnackBar(
               content: 'Error occurred using Google Sign-In. Try again.',
             ),
           );
+          return null;
         }
       }
     }

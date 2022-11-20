@@ -159,7 +159,7 @@ class _CreateEventState extends State<CreateEvent> {
 
   Widget _mobView() {
     return
-        // openEventForm ? Flexible(child: _dialogFields(setState)):
+        openEventForm ? Flexible(child: _dialogFields(setState)):
         Container(
       height: 100,
       decoration: BoxDecoration(
@@ -278,7 +278,7 @@ class _CreateEventState extends State<CreateEvent> {
         borderRadius: BorderRadius.circular(25.0),
       ),
       child: openEventForm
-          ? Flexible(child: _dialogFields(setState))
+          ?  _dialogFields(setState)
           : Column(
               children: [
                 Table(

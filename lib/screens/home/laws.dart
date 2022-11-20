@@ -371,7 +371,22 @@ class _LawsState extends State<Laws>
                             style: TextStyle(
                                 fontSize: 25,
                                 color: Color.fromARGB(255, 207, 223, 226)),
-                          )
+                          ),
+                           Text(
+                                "____________" ,
+                                style: TextStyle(
+                                    fontSize: 25,
+                                    color: Color.fromARGB(255, 207, 223, 226)),
+                              ),
+                              Text(
+                                mkLanguage
+                                    ? "Сервиси фокусирани за иселеници на кои им е потребна авокатска консултација или договор"
+                                    : "Company",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: Color.fromARGB(255, 207, 223, 226)),
+                              ),
                         ]),
                   ),
                 ),
@@ -392,7 +407,22 @@ class _LawsState extends State<Laws>
                             style: TextStyle(
                                 fontSize: 25,
                                 color: Color.fromARGB(255, 207, 223, 226)),
-                          )
+                          ),
+                          Text(
+                            mkLanguage ? "____________" : "Company",
+                            style: TextStyle(
+                                fontSize: 25,
+                                color: Color.fromARGB(255, 207, 223, 226)),
+                          ),
+                          Text(
+                            mkLanguage
+                                ? "Заврши се онлајн"
+                                : "Company",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Color.fromARGB(255, 207, 223, 226)),
+                          ),
                         ]),
                   ),
                 ),
@@ -408,11 +438,30 @@ class _LawsState extends State<Laws>
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            mkLanguage ? "Кратко био" : "Company",
-                            style: TextStyle(
-                                fontSize: 25,
-                                color: Color.fromARGB(255, 207, 223, 226)),
+                          Column(
+                            children: [
+                              Text(
+                                mkLanguage ? "Фирми" : "Company",
+                                style: TextStyle(
+                                    fontSize: 25,
+                                    color: Color.fromARGB(255, 207, 223, 226)),
+                              ),
+                              Text(
+                                mkLanguage ? "____________" : "Company",
+                                style: TextStyle(
+                                    fontSize: 25,
+                                    color: Color.fromARGB(255, 207, 223, 226)),
+                              ),
+                              Text(
+                                mkLanguage
+                                    ? "Сервиси за отварање, затварање и промени на фирма"
+                                    : "Company",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: Color.fromARGB(255, 207, 223, 226)),
+                              ),
+                            ],
                           )
                         ]),
                   ),
@@ -423,7 +472,7 @@ class _LawsState extends State<Laws>
                   onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => SelectedServices(areaId: 2))),
+                          builder: (context) => SelectedServices(areaId: 1))),
                   child: Container(
                     height: double.maxFinite,
                     width: double.infinity,
@@ -432,12 +481,27 @@ class _LawsState extends State<Laws>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            mkLanguage ? "Итно" :"Urgent",
+                            mkLanguage ? "Итно" : "Urgent",
                             style: TextStyle(
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white),
-                          )
+                          ),
+                           Text(
+                                mkLanguage ? "____________" : "Company",
+                                style: TextStyle(
+                                    fontSize: 25,
+                                    color: Color.fromARGB(255, 207, 223, 226)),
+                              ),
+                              Text(
+                                mkLanguage
+                                    ? "Оваа секција е за во итни случаи. Во наредните 5-15мин. ќе добиете емаил со адвокати кои се достапни во моментот за консултација"
+                                    : "Company",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: Color.fromARGB(255, 207, 223, 226)),
+                              ),
                         ]),
                   ),
                 ),

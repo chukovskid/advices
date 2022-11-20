@@ -3,14 +3,12 @@ import 'package:advices/screens/call/call.dart';
 import 'package:advices/assets/utilities/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import '../../App/contexts/authContext.dart';
 import '../../App/contexts/callEventsContext.dart';
-import '../../App/services/auth.dart';
-import '../../App/services/database.dart';
 import '../authentication/authentication.dart';
 import '../shared_widgets/BottomBar.dart';
 import '../shared_widgets/base_app_bar.dart';
+import 'package:intl/intl.dart';
 import 'callMethods.dart';
 
 class Calls extends StatefulWidget {
@@ -57,17 +55,6 @@ class _CallsState extends State<Calls>
         context,
         MaterialPageRoute(builder: (context) => Call(channelName)),
       );
-
-      // Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //         builder: (context) => Scaffold(
-      //               body: JoinChannelVideo(
-      //                 token: result['token'],
-      //                 channelId: result['channelId'],
-      //               ),
-      //             )));
-
     }
   }
 
@@ -83,6 +70,7 @@ class _CallsState extends State<Calls>
     return Scaffold(
       appBar: BaseAppBar(
         appBar: AppBar(),
+        redirectToHome: true,
       ),
       bottomNavigationBar: BottomBar(
         fabLocation: FloatingActionButtonLocation.endDocked,
@@ -137,28 +125,49 @@ class _CallsState extends State<Calls>
         borderRadius: BorderRadius.circular(4),
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        // mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           ListTile(
-            leading: const Icon(Icons.person),
+            // leading: const Icon(Icons.person),
             title: Text(call.title.toString()),
             subtitle: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              // mainAxisSize: MainAxisSize.min,
               children: [
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Description: ${call.description}'),
-                    Text('DateTime: ${call.startDate.toString()}'),
+                    SizedBox(
+                      height: 4,
+                    ),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.description,
+                          size: 16,
+                        ),
+                        Text(' ${call.description}'),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Icon(Icons.access_time, size: 16),
+                        Text(
+                            ' ${DateFormat("yyyy-MM-dd hh:mm").format(call.startDate)}'),
+                        
+                        
+                        SizedBox(width: 24,),
+                        call.open == true
+                            ? Text(
+                                'Некој ве чека веќе',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.green),
+                              )
+                            : Text('Сеуште нема никој')
+                      ],
+                    ),
                   ],
                 ),
-                call.open == true
-                    ? Text(
-                        'tap here to Open',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.green),
-                      )
-                    : Text('Empty:')
               ],
             ),
             onTap: () => openCall(call.channelName),

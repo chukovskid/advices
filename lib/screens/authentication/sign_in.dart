@@ -1,6 +1,7 @@
 import 'package:advices/App/services/googleAuth.dart';
 import 'package:advices/screens/authentication/register.dart';
 import 'package:advices/assets/utilities/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../App/contexts/authContext.dart';
 import '../../App/models/user.dart';
@@ -96,9 +97,9 @@ class _SignInState extends State<SignIn> {
   }
 
   Future<void> _googleSignIn() async {
-    await GoogleAuthService.signInWithGoogle(context: context);
+   User? user = await GoogleAuthService.signInWithGoogle(context: context);
     // await _auth.googleSignIn();
-    Navigator.pop(context);
+    if(user != null) Navigator.pop(context);
 
     // await _navigateToAuth();
     print(email);
@@ -248,6 +249,7 @@ class _SignInState extends State<SignIn> {
                   child:  Text(
                     mkLanguage ? "Почни со регистрација!" :'No account? Create one!',
                     style: TextStyle(color: Colors.white),
+                    textAlign: TextAlign.center,
                   ),
                   onPressed: _navigateToRegister),
             ],

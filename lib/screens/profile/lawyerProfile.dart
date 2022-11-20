@@ -47,10 +47,7 @@ class _LawyerProfileState extends State<LawyerProfile> {
     }
   }
 
-  Widget? returnCreateEventWidget() {
-    _getLawyer();
-    return CreateEvent(widget.uid, widget.serviceId, minPriceEuro);
-  }
+
 
   _redirectToCall() async {
     if (lawyer != null) {
