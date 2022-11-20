@@ -17,6 +17,7 @@ class SelectedServices extends StatefulWidget {
 class _SelectedServicesState extends State<SelectedServices>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late AnimationController controller;
+  bool mkLanguage = true;
 
   @override
   void initState() {}
@@ -24,7 +25,6 @@ class _SelectedServicesState extends State<SelectedServices>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       
       bottomNavigationBar: BottomBar(
         fabLocation: FloatingActionButtonLocation.endDocked,
         shape: CircularNotchedRectangle(),
@@ -89,8 +89,7 @@ class _SelectedServicesState extends State<SelectedServices>
     return InkWell(
       onTap: () => Navigator.push(
         context,
-        MaterialPageRoute(
-            builder: (context) => Lawyers(service: service.id)),
+        MaterialPageRoute(builder: (context) => Lawyers(service: service.id)),
       ),
       child: Card(
         elevation: 30,
@@ -114,8 +113,10 @@ class _SelectedServicesState extends State<SelectedServices>
                   ),
                 ),
               ),
-              title: Text(service.name.toString()),
-              subtitle: Text("Description about this service and what types of issues it contains "),
+              title:
+                  Text(mkLanguage ? service.nameMk : service.name.toString()),
+              subtitle: Text(
+                  "Description about this service and what types of issues it contains "),
             ),
             const SizedBox(
               height: 20,

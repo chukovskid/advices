@@ -313,17 +313,17 @@ class _LawsState extends State<Laws>
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
                     Text(
-                      mkLanguage ?
-                      "Сервиси за отварање, затварање и промени на фирма": 
-                      "Explain your problem and let the lawyer advice \n you and fix it together",
+                      mkLanguage
+                          ? "Сервиси за отварање, затварање и промени на фирма"
+                          : "Explain your problem and let the lawyer advice \n you and fix it together",
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
-                  ], 
+                  ],
                 ),
               ),
               Icon(
-                Icons.keyboard_double_arrow_down_outlined,  
+                Icons.keyboard_double_arrow_down_outlined,
                 size: 30,
                 color: Color.fromARGB(255, 255, 255, 255),
               ),
@@ -362,12 +362,12 @@ class _LawsState extends State<Laws>
                       MaterialPageRoute(
                           builder: (context) => SelectedServices(areaId: 2))),
                   child: Container(
-                    // height: 200,
+                    width: double.infinity,
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Expats",
+                            mkLanguage ? "Иселеници" : "Expats",
                             style: TextStyle(
                                 fontSize: 25,
                                 color: Color.fromARGB(255, 207, 223, 226)),
@@ -383,12 +383,12 @@ class _LawsState extends State<Laws>
                       MaterialPageRoute(
                           builder: (context) => SelectedServices(areaId: 3))),
                   child: Container(
-                    // height: 200,
+                    width: double.infinity,
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Contracts",
+                            mkLanguage ? "Договори" : "Contracts",
                             style: TextStyle(
                                 fontSize: 25,
                                 color: Color.fromARGB(255, 207, 223, 226)),
@@ -404,12 +404,12 @@ class _LawsState extends State<Laws>
                       MaterialPageRoute(
                           builder: (context) => SelectedServices(areaId: 4))),
                   child: Container(
-                    // height: 200,
+                    width: double.infinity,
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Company",
+                            mkLanguage ? "Кратко био" : "Company",
                             style: TextStyle(
                                 fontSize: 25,
                                 color: Color.fromARGB(255, 207, 223, 226)),
@@ -432,7 +432,7 @@ class _LawsState extends State<Laws>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Urgent",
+                            mkLanguage ? "Итно" :"Urgent",
                             style: TextStyle(
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,

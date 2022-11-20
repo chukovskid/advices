@@ -22,6 +22,8 @@ class Lawyers extends StatefulWidget {
 class _LawyersState extends State<Lawyers>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late AnimationController controller;
+  bool mkLanguage = true;
+
 
   @override
   void initState() {}
@@ -176,11 +178,11 @@ class _LawyersState extends State<Lawyers>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Short bio", style: lawyersCardHeader),
+          Text(mkLanguage ? "Кратко био" :"Short bio", style: lawyersCardHeader),
           SizedBox(height: 12),
           Text("${fUser.description}", style: lawyersCardTextStyle),
           SizedBox(height: 15),
-          Text("Experience", style: lawyersCardHeader),
+          Text(mkLanguage ? "Искуство" :"Experience", style: lawyersCardHeader),
           SizedBox(height: 15),
           Text("${fUser.experience}", style: lawyersCardTextStyle),
           // SizedBox(height: 15),

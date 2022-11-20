@@ -21,6 +21,7 @@ class LawyerProfile extends StatefulWidget {
 }
 
 class _LawyerProfileState extends State<LawyerProfile> {
+  bool mkLanguage = true;
   FlutterUser? lawyer;
   String minPriceEuro = "30";
 
@@ -189,11 +190,11 @@ class _LawyerProfileState extends State<LawyerProfile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Short bio", style: profileHeader),
+          Text(mkLanguage ? "Кратко био" :"Short bio", style: profileHeader),
           SizedBox(height: 15),
           Text("${lawyer?.description}", style: helpTextStyle),
           SizedBox(height: 15),
-          Text("Experience", style: profileHeader),
+          Text(mkLanguage ? "Искуство" :"Experience", style: profileHeader),
           SizedBox(height: 15),
           Text("${lawyer?.experience}", style: helpTextStyle),
           SizedBox(height: 15),

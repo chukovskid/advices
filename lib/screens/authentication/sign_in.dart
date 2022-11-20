@@ -1,11 +1,9 @@
-// ignore_for_file: deprecated_member_use
 import 'package:advices/App/services/googleAuth.dart';
 import 'package:advices/screens/authentication/register.dart';
 import 'package:advices/assets/utilities/constants.dart';
 import 'package:flutter/material.dart';
 import '../../App/contexts/authContext.dart';
 import '../../App/models/user.dart';
-import '../../App/services/auth.dart';
 import '../home/home.dart';
 import '../shared_widgets/base_app_bar.dart';
 import 'authentication.dart';
@@ -20,16 +18,13 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+  bool mkLanguage = true;
+
   final AuthContext _auth = AuthContext();
   final _formKey = GlobalKey<FormState>();
 
-  // final FocusNode _nameFocusNode = FocusNode();
-  // final FocusNode _phoneFocusNode = FocusNode();
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
-
-  // final TextEditingController _nameController = TextEditingController();
-  // final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -38,7 +33,6 @@ class _SignInState extends State<SignIn> {
   }
 
   _submitForm() async {
-    // if (_formKey.currentState!.validate()) {
     var user = {
       'email': _emailController.text,
       'password': _passwordController.text,
@@ -49,14 +43,12 @@ class _SignInState extends State<SignIn> {
 
     await _signInUser(fUser);
 
-    // If the form passes validation, display a Snackbar.
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text('Успешно регистриран')));
 
     _formKey.currentState?.save();
     _formKey.currentState?.reset();
     _nextFocus(_emailFocusNode);
-    // }
   }
 
   String? _validateInput(String value) {
@@ -66,7 +58,6 @@ class _SignInState extends State<SignIn> {
     return null;
   }
 
-  // text field state
   String email = '';
   String password = '';
   bool _showEmailInputs = false;
@@ -144,13 +135,12 @@ class _SignInState extends State<SignIn> {
         child: Container(
           height: 60,
           width: 100,
-
           margin: EdgeInsets.all(35),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              const Text(
-                "Sign In",
+              Text(
+                mkLanguage ? "Најави се" : "Sign In",
                 style: TextStyle(
                   fontWeight: FontWeight.normal,
                   color: Colors.white,
@@ -159,25 +149,9 @@ class _SignInState extends State<SignIn> {
               ),
               const SizedBox(height: 35.0),
               _showEmailSignIn(),
-              // _showEmailInputs ? _showEmailSignIn() : SizedBox(),
-              // !_showEmailInputs
-              //     ? ElevatedButton(
-              //         style: ButtonStyle(
-              //             backgroundColor:
-              //                 MaterialStateProperty.all<Color>(orangeColor)),
-              //         child: const Text(
-              //           ' Email log In ',
-              //           style: TextStyle(color: Colors.white),
-              //         ),
-              //         onPressed: () async {
-              //           setState(() {
-              //             _showEmailInputs = true;
-              //           });
-              //         })
-              //     : SizedBox(),
               const SizedBox(height: 50.0),
-              const Text(
-                "Or Sign up using social media",
+              Text(
+                mkLanguage ? "Или пријавете се со помош на социјалните медиуми" : "Or Sign up using social media",
                 style: TextStyle(
                   fontWeight: FontWeight.normal,
                   color: Colors.white,
@@ -186,8 +160,8 @@ class _SignInState extends State<SignIn> {
               ),
               const SizedBox(height: 10.0),
               Row(
-                mainAxisAlignment:
-                    MainAxisAlignment.center, //Center Row contents horizontally,
+                mainAxisAlignment: MainAxisAlignment
+                    .center, //Center Row contents horizontally,
                 children: [
                   Container(
                     height: 60,
@@ -253,8 +227,8 @@ class _SignInState extends State<SignIn> {
                         //   borderRadius: new BorderRadius.circular(40.0),
                         // ),
                         // color: Color.fromARGB(255, 255, 255, 255),
-                        child:
-                            const Center(child: FaIcon(FontAwesomeIcons.twitter)),
+                        child: const Center(
+                            child: FaIcon(FontAwesomeIcons.twitter)),
                         onPressed: () async {
                           _googleSignIn();
                         }),
@@ -271,8 +245,8 @@ class _SignInState extends State<SignIn> {
                     elevation: 0.0,
                   ),
                   // color: Colors.transparent,
-                  child: const Text(
-                    'No account? Create one!',
+                  child:  Text(
+                    mkLanguage ? "Почни со регистрација!" :'No account? Create one!',
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: _navigateToRegister),
