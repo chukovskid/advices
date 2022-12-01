@@ -356,114 +356,162 @@ class _LawsState extends State<Laws>
             children: [
               SizedBox(height: 10),
               Expanded(
-                child: InkWell(
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SelectedServices(areaId: 2))),
-                  child: Container(
-                    width: double.infinity,
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            mkLanguage ? "Иселеници" : "Expats",
-                            style: TextStyle(
-                                fontSize: 25,
-                                color: Color.fromARGB(255, 207, 223, 226)),
-                          ),
-                           Text(
-                                "____________" ,
-                                style: TextStyle(
-                                    fontSize: 25,
-                                    color: Color.fromARGB(255, 207, 223, 226)),
-                              ),
-                              Text(
-                                mkLanguage
-                                    ? "Сервиси фокусирани за иселеници на кои им е потребна авокатска консултација или договор"
-                                    : "Company",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    color: Color.fromARGB(255, 207, 223, 226)),
-                              ),
-                        ]),
+                child: MouseRegion(
+                  onEnter: (PointerEvent details) {
+                    setState(() {
+                      expatsColor = greyGreenColor;
+                      heightFactorCompany = 2.0;
+                    });
+                  },
+                  onExit: (PointerEvent details) {
+                    setState(() {
+                      expatsColor = darkGreenColor;
+                      heightFactorCompany = 1.8;
+                    });
+                  },
+                  child: InkWell(
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SelectedServices(areaId: 2))),
+                    child: Container(
+                      width: double.infinity,
+                      color: expatsColor,
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              mkLanguage ? "Иселеници" : "Expats",
+                              style: TextStyle(
+                                  fontSize: 25,
+                                  color: Color.fromARGB(255, 207, 223, 226)),
+                            ),
+                            Text(
+                              "____________",
+                              style: TextStyle(
+                                  fontSize: 25,
+                                  color: Color.fromARGB(255, 207, 223, 226)),
+                            ),
+                            Text(
+                              mkLanguage
+                                  ? "Сервиси фокусирани за иселеници на кои им е потребна авокатска консултација или договор"
+                                  : "Company",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Color.fromARGB(255, 207, 223, 226)),
+                            ),
+                          ]),
+                    ),
                   ),
                 ),
               ),
               Expanded(
-                child: InkWell(
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SelectedServices(areaId: 3))),
-                  child: Container(
-                    width: double.infinity,
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            mkLanguage ? "Договори" : "Contracts",
-                            style: TextStyle(
-                                fontSize: 25,
-                                color: Color.fromARGB(255, 207, 223, 226)),
-                          ),
-                          Text(
-                            mkLanguage ? "____________" : "Company",
-                            style: TextStyle(
-                                fontSize: 25,
-                                color: Color.fromARGB(255, 207, 223, 226)),
-                          ),
-                          Text(
-                            mkLanguage
-                                ? "Заврши се онлајн"
-                                : "Company",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: Color.fromARGB(255, 207, 223, 226)),
-                          ),
-                        ]),
+                child: MouseRegion(
+                  onEnter: (PointerEvent details) {
+                    setState(() {
+                      contractsColor = greyGreenColor;
+                      heightFactorCompany = 2.0;
+                    });
+                  },
+                  onExit: (PointerEvent details) {
+                    setState(() {
+                      contractsColor = darkGreenColor;
+                      heightFactorCompany = 1.8;
+                    });
+                  },
+                  child: InkWell(
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SelectedServices(areaId: 3))),
+                    child: Container(
+                      width: double.infinity,
+                      color: contractsColor,
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              mkLanguage ? "Договори" : "Contracts",
+                              style: TextStyle(
+                                  fontSize: 25,
+                                  color: Color.fromARGB(255, 207, 223, 226)),
+                            ),
+                            Text(
+                              mkLanguage ? "____________" : "Company",
+                              style: TextStyle(
+                                  fontSize: 25,
+                                  color: Color.fromARGB(255, 207, 223, 226)),
+                            ),
+                            Text(
+                              mkLanguage ? "Заврши се онлајн" : "Company",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Color.fromARGB(255, 207, 223, 226)),
+                            ),
+                          ]),
+                    ),
                   ),
                 ),
               ),
               Expanded(
-                child: InkWell(
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SelectedServices(areaId: 4))),
-                  child: Container(
-                    width: double.infinity,
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Column(
-                            children: [
-                              Text(
-                                mkLanguage ? "Фирми" : "Company",
-                                style: TextStyle(
-                                    fontSize: 25,
-                                    color: Color.fromARGB(255, 207, 223, 226)),
-                              ),
-                              Text(
-                                mkLanguage ? "____________" : "Company",
-                                style: TextStyle(
-                                    fontSize: 25,
-                                    color: Color.fromARGB(255, 207, 223, 226)),
-                              ),
-                              Text(
-                                mkLanguage
-                                    ? "Сервиси за отварање, затварање и промени на фирма"
-                                    : "Company",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    color: Color.fromARGB(255, 207, 223, 226)),
-                              ),
-                            ],
-                          )
-                        ]),
+                child: MouseRegion(
+                  onEnter: (PointerEvent details) {
+                    setState(() {
+                      companyColor = greyGreenColor;
+                      heightFactorCompany = 2.0;
+                    });
+                  },
+                  onExit: (PointerEvent details) {
+                    setState(() {
+                      companyColor = darkGreenColor;
+                      heightFactorCompany = 1.8;
+                    });
+                  },
+                  child: InkWell(
+                    
+                    onHover: (value) => {},
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SelectedServices(areaId: 4))),
+                    child: Container(
+                      width: double.infinity,
+                      color: companyColor,
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Column(
+                              children: [
+                                Text(
+                                  mkLanguage ? "Фирми" : "Company",
+                                  style: TextStyle(
+                                      fontSize: 25,
+                                      color:
+                                          Color.fromARGB(255, 207, 223, 226)),
+                                ),
+                                Text(
+                                  mkLanguage ? "____________" : "Company",
+                                  style: TextStyle(
+                                      fontSize: 25,
+                                      color:
+                                          Color.fromARGB(255, 207, 223, 226)),
+                                ),
+                                Text(
+                                  mkLanguage
+                                      ? "Сервиси за отварање, затварање и промени на фирма"
+                                      : "Company",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      color:
+                                          Color.fromARGB(255, 207, 223, 226)),
+                                ),
+                              ],
+                            )
+                          ]),
+                    ),
                   ),
                 ),
               ),
@@ -487,21 +535,21 @@ class _LawsState extends State<Laws>
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white),
                           ),
-                           Text(
-                                mkLanguage ? "____________" : "Company",
-                                style: TextStyle(
-                                    fontSize: 25,
-                                    color: Color.fromARGB(255, 207, 223, 226)),
-                              ),
-                              Text(
-                                mkLanguage
-                                    ? "Оваа секција е за во итни случаи. Во наредните 5-15мин. ќе добиете емаил со адвокати кои се достапни во моментот за консултација"
-                                    : "Company",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    color: Color.fromARGB(255, 207, 223, 226)),
-                              ),
+                          Text(
+                            mkLanguage ? "____________" : "Company",
+                            style: TextStyle(
+                                fontSize: 25,
+                                color: Color.fromARGB(255, 207, 223, 226)),
+                          ),
+                          Text(
+                            mkLanguage
+                                ? "Оваа секција е за во итни случаи. Во наредните 5-15мин. ќе добиете емаил со адвокати кои се достапни во моментот за консултација"
+                                : "Company",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Color.fromARGB(255, 207, 223, 226)),
+                          ),
                         ]),
                   ),
                 ),
