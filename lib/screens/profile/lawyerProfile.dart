@@ -1,3 +1,4 @@
+import 'package:advices/App/contexts/chatContext.dart';
 import 'package:advices/App/contexts/lawyersContext.dart';
 import 'package:advices/screens/calendar/add_event.dart';
 import 'package:advices/screens/call/call.dart';
@@ -47,8 +48,6 @@ class _LawyerProfileState extends State<LawyerProfile> {
     }
   }
 
-
-
   _redirectToCall() async {
     if (lawyer != null) {
       Navigator.push(
@@ -56,6 +55,11 @@ class _LawyerProfileState extends State<LawyerProfile> {
         MaterialPageRoute(builder: (context) => Call(widget.uid)),
       );
     }
+  }
+
+  Future<void> _startChatConversation() async {
+    print("_startChatConversation");
+    await ChatContext.createNewChat([lawyer!.uid]);
   }
 
   @override
@@ -100,31 +104,30 @@ class _LawyerProfileState extends State<LawyerProfile> {
     );
   }
 
-  Widget _openProfileBtn() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Expanded(
-          flex: 10,
-          child: Stack(
-            children: [_next()],
-          ),
-        ),
-        Expanded(
-          flex: 1,
-          child: Stack(
-            children: [_calendar()],
-          ),
-        )
-      ],
-    );
-  }
+  // Widget _openProfileBtn() {
+  //   return Column(
+  //     mainAxisAlignment: MainAxisAlignment.end,
+  //     children: [
+  //       Expanded(
+  //         flex: 10,
+  //         child: Stack(
+  //           children: [_next()],
+  //         ),
+  //       ),
+  //       Expanded(
+  //         flex: 1,
+  //         child: Stack(
+  //           children: [_calendar()],
+  //         ),
+  //       )
+  //     ],
+  //   );
+  // }
 
   Widget _card() {
     return Container(
       height: 900,
-      child: 
-      SingleChildScrollView(
+      child: SingleChildScrollView(
         child: Card(
           elevation: 0,
           color: Colors.transparent,
@@ -133,9 +136,7 @@ class _LawyerProfileState extends State<LawyerProfile> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
-          child: 
-          
-          Column(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               const SizedBox(height: 30),
@@ -143,7 +144,8 @@ class _LawyerProfileState extends State<LawyerProfile> {
                 children: [
                   ClipOval(
                     child: Image.network(
-                        (lawyer?.photoURL != null && lawyer!.photoURL.isNotEmpty)
+                        (lawyer?.photoURL != null &&
+                                lawyer!.photoURL.isNotEmpty)
                             ? lawyer!.photoURL
                             : 'https://st.depositphotos.com/2069323/2156/i/600/depositphotos_21568785-stock-photo-man-pointing.jpg',
                         // scale: 1,
@@ -163,21 +165,16 @@ class _LawyerProfileState extends State<LawyerProfile> {
                   ),
                 ],
               ),
+              ElevatedButton(
+                  onPressed: _startChatConversation, child: Text("Chat")),
               const SizedBox(
                 height: 45,
               ),
-             
               _text()
             ],
           ),
-       
-       
-       
         ),
       ),
-    
-    
-    
     );
   }
 
@@ -187,11 +184,11 @@ class _LawyerProfileState extends State<LawyerProfile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(mkLanguage ? "Кратко био" :"Short bio", style: profileHeader),
+          Text(mkLanguage ? "Кратко био" : "Short bio", style: profileHeader),
           SizedBox(height: 15),
           Text("${lawyer?.description}", style: helpTextStyle),
           SizedBox(height: 15),
-          Text(mkLanguage ? "Искуство" :"Experience", style: profileHeader),
+          Text(mkLanguage ? "Искуство" : "Experience", style: profileHeader),
           SizedBox(height: 15),
           Text("${lawyer?.experience}", style: helpTextStyle),
           SizedBox(height: 15),
@@ -225,29 +222,6 @@ class _LawyerProfileState extends State<LawyerProfile> {
             context,
             MaterialPageRoute(builder: (context) => Calls()),
           )
-
-          // showDialog(
-          //     context: context,
-          //     builder: (context) => AlertDialog(
-          //           content: Column(
-          //             mainAxisAlignment: MainAxisAlignment.center,
-          //             children: [
-          //               Flexible(child: AddEventPage(widget.uid)),
-          //             ],
-          //           ),
-          //         ))
-
-          // // showModalBottomSheet<void>(
-          // //   backgroundColor: Colors.amber,
-          // //   context: context,
-          // //   builder: (BuildContext context) {
-          // //     return Container(
-          // //         // height: 200,
-
-          // //         color: Colors.amber,
-          //         child: AddEventPage());
-          //   },
-          // )
         },
         backgroundColor: Color.fromARGB(255, 226, 105, 105),
         elevation: 0,

@@ -1,26 +1,59 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-// import 'package:whatsapp_ui/colors.dart';
-// import 'package:whatsapp_ui/info.dart';
-// import 'package:whatsapp_ui/widgets/chat_list.dart';
-// import 'package:whatsapp_ui/widgets/web_chat_appbar.dart';
-// import 'package:whatsapp_ui/widgets/contacts_list.dart';
-// import 'package:whatsapp_ui/widgets/my_message_card.dart';
-// import 'package:whatsapp_ui/widgets/sender_message_card.dart';
-// import 'package:whatsapp_ui/widgets/web_profile_bar.dart';
-// import 'package:whatsapp_ui/widgets/web_search_bar.dart';
 import 'package:advices/screens/chat/colors.dart';
-import 'package:advices/screens/chat/info.dart';
-import 'package:flutter/material.dart';
-
+import '../../../App/contexts/authContext.dart';
+import '../../../App/contexts/chatContext.dart';
+import '../../../App/models/message.dart';
+import '../../authentication/authentication.dart';
 import '../widgets/chat_list.dart';
 import '../widgets/contacts_list.dart';
 import '../widgets/web_chat_appbar.dart';
 import '../widgets/web_profile_bar.dart';
 import '../widgets/web_search_bar.dart';
 
+class WebLayoutScreen extends StatefulWidget {
+  WebLayoutScreen({Key? key}) : super(key: key);
 
-class WebLayoutScreen extends StatelessWidget {
-  const WebLayoutScreen({Key? key}) : super(key: key);
+  @override
+  State<WebLayoutScreen> createState() => _WebLayoutScreenState();
+}
+
+class _WebLayoutScreenState extends State<WebLayoutScreen> {
+  final FocusNode _messageFocusNode = FocusNode();
+  final TextEditingController _messageController = TextEditingController();
+  final AuthContext _auth = AuthContext();
+  List<Message> messages =  [];
+  User? user;
+
+  @override
+  void initState() {
+    _checkAuthentication();
+    super.initState();
+  }
+
+  Future<void> _checkAuthentication() async {
+    user = await _auth.getCurrentUser();
+    setState(() {
+      user = user;
+    });
+    bool userExist = user != null ? true : false;
+    if (!userExist) {
+      _navigateToAuth();
+    }
+  }
+
+  _navigateToAuth() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Authenticate()),
+    );
+  }
+
+  _submitMessage(String message) async {
+    _messageController.clear();
+    await ChatContext.sendMessage(user!.uid, message,"1");
+    print("Submitet $message");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +64,10 @@ class WebLayoutScreen extends StatelessWidget {
           Expanded(
             child: SingleChildScrollView(
               child: Column(
-                children: const [
+                children:  [
                   WebProfileBar(),
                   WebSearchBar(),
-                  ContactsList(),
+                  ContactsList(user!),
                 ],
               ),
             ),
@@ -52,12 +85,12 @@ class WebLayoutScreen extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-          child: Column(
+            child: Column(
               children: [
                 const ChatAppBar(),
                 const SizedBox(height: 20),
-                const Expanded(
-                  child: ChatList(),
+                 Expanded(
+                  child: ChatList(user!),
                 ),
                 Container(
                   height: MediaQuery.of(context).size.height * 0.07,
@@ -90,25 +123,39 @@ class WebLayoutScreen extends StatelessWidget {
                             left: 10,
                             right: 15,
                           ),
-                          child: TextField(
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: searchBarColor,
-                              hintText: 'Type a message',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                                borderSide: const BorderSide(
-                                  width: 0,
-                                  style: BorderStyle.none,
+                          child: TextFormField(
+                            keyboardType: TextInputType.emailAddress,
+                            textInputAction: TextInputAction.next,
+                            focusNode: _messageFocusNode,
+                            onFieldSubmitted: (String value) {
+                              //Do anything with value
+                              // _nextFocus(_passwordFocusNode);
+
+                              _submitMessage(value);
+                            },
+                            controller: _messageController,
+                            // validator: (value) => _validateInput(value.toString()),
+                            style: const TextStyle(color: Colors.white),
+                            decoration: const InputDecoration(
+                                fillColor: Colors.transparent,
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.transparent),
                                 ),
-                              ),
-                              contentPadding: const EdgeInsets.only(left: 20),
-                            ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.transparent),
+                                ),
+                                labelStyle: TextStyle(
+                                  color: Colors.transparent,
+                                )),
                           ),
                         ),
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          print("mic button");
+                        },
                         icon: const Icon(
                           Icons.mic,
                           color: Colors.grey,

@@ -470,7 +470,6 @@ class _LawsState extends State<Laws>
                     });
                   },
                   child: InkWell(
-                    
                     onHover: (value) => {},
                     onTap: () => Navigator.push(
                         context,

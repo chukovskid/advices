@@ -1,14 +1,49 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:advices/screens/chat/colors.dart';
 import 'package:advices/screens/chat/info.dart';
 import 'package:flutter/material.dart';
 
+import '../../../App/contexts/authContext.dart';
 import '../../../assets/utilities/constants.dart';
+import '../../authentication/authentication.dart';
 import '../widgets/contacts_list.dart';
 
-
-class MobileLayoutScreen extends StatelessWidget {
+class MobileLayoutScreen extends StatefulWidget {
   const MobileLayoutScreen({Key? key}) : super(key: key);
+
+  @override
+  State<MobileLayoutScreen> createState() => _MobileLayoutScreenState();
+}
+
+class _MobileLayoutScreenState extends State<MobileLayoutScreen> {
+  final AuthContext _auth = AuthContext();
+
+  User? user;
+
+  @override
+  void initState() {
+    _checkAuthentication();
+    super.initState();
+  }
+
+  Future<void> _checkAuthentication() async {
+    user = await _auth.getCurrentUser();
+    setState(() {
+      user = user;
+    });
+    bool userExist = user != null ? true : false;
+    if (!userExist) {
+      _navigateToAuth();
+    }
+  }
+
+  _navigateToAuth() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Authenticate()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +93,7 @@ class MobileLayoutScreen extends StatelessWidget {
             ],
           ),
         ),
-        body: const ContactsList(),
+        body: ContactsList(user!),
         floatingActionButton: FloatingActionButton(
           onPressed: () {},
           backgroundColor: tabColor,
