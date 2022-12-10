@@ -211,7 +211,7 @@ class BottomBar extends StatelessWidget {
                   MaterialPageRoute(
                       builder: (context) => ResponsiveLayout(
                             mobileScreenLayout: MobileLayoutScreen(),
-                            webScreenLayout: WebLayoutScreen(),
+                            webScreenLayout: WebLayoutScreen(null),
                           )),
                 );
               },

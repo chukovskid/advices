@@ -1,25 +1,57 @@
+import 'package:advices/App/contexts/usersContext.dart';
+import 'package:advices/App/models/userChat.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../../App/contexts/chatContext.dart';
+import '../../../App/models/chat.dart';
 import '../../../App/models/message.dart';
 import '../colors.dart';
+import '../screens/mobile_chat_screen.dart';
 
 class ContactsList extends StatefulWidget {
   final User user;
+  final Function(String) callback;
 
-  const ContactsList(this.user, {Key? key}) : super(key: key);
+  const ContactsList(this.user, this.callback, {Key? key}) : super(key: key);
 
   @override
   State<ContactsList> createState() => _ContactsListState();
 }
 
 class _ContactsListState extends State<ContactsList> {
+  List<String> userChats = ["1670705512899"];
+  @override
+  void initState() {
+    _getUserChats();
+    super.initState();
+  }
+
+  Future<void> _getUserChats() async {
+    setState(() async {
+      userChats = await ChatContext.getUserChats(widget.user.uid);
+    });
+  }
+
+  _selectChat(chatId) {
+    MediaQuery.of(context).size.width < 850.0
+        ? _navigateToMobileChat(chatId)
+        : widget.callback(chatId);
+  }
+
+  _navigateToMobileChat(String chatId) {
+    print("_navigateToMobileChat $chatId");
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MobileChatScreen(chatId)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 10.0),
-      child: StreamBuilder<Iterable<Message>>(
-          stream: ChatContext.getMessagesStreamForChat("1"),
+      child: StreamBuilder<Iterable<Chat>>(
+          stream: ChatContext.getChats(userChats),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final chats = snapshot.data!;
@@ -32,24 +64,20 @@ class _ContactsListState extends State<ContactsList> {
     );
   }
 
-  Widget _listItem(Message message) {
+  Widget _listItem(Chat chat) {
     return
         // Text("HEEEEEKKKKKK");
         Column(
       children: [
         InkWell(
           onTap: () {
-            // Navigator.of(context).push(
-            //   MaterialPageRoute(
-            //     builder: (context) => const MobileChatScreen(),
-            //   ),
-            // );
+            _selectChat(chat.id);
           },
           child: Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
             child: ListTile(
               title: Text(
-                "info[index]['name'].toString()",
+                chat.displayNames!.first.toString(),
                 style: const TextStyle(
                   fontSize: 18,
                 ),
@@ -57,7 +85,7 @@ class _ContactsListState extends State<ContactsList> {
               subtitle: Padding(
                 padding: const EdgeInsets.only(top: 6.0),
                 child: Text(
-                  "info[index]['message'].toString()",
+                  chat.lastMessage.toString(),
                   style: const TextStyle(fontSize: 15),
                 ),
               ),
@@ -68,7 +96,7 @@ class _ContactsListState extends State<ContactsList> {
                 radius: 30,
               ),
               trailing: Text(
-                "info[index]['time'].toString()",
+                chat.lastMessageTime.toString(),
                 style: const TextStyle(
                   color: Colors.grey,
                   fontSize: 13,

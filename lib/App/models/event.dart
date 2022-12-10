@@ -1,6 +1,4 @@
-
-
-class EventModel{
+class EventModel {
   final String? id;
   final String title;
   final String channelName;
@@ -8,7 +6,13 @@ class EventModel{
   final DateTime startDate;
   final bool open;
 
-  EventModel( {this.id,required this.title,required this.channelName, required this.description, required this.startDate,required this.open});
+  EventModel(
+      {this.id,
+      required this.title,
+      required this.channelName,
+      required this.description,
+      required this.startDate,
+      required this.open});
 
   factory EventModel.fromMap(Map data) {
     return EventModel(
@@ -20,7 +24,7 @@ class EventModel{
     );
   }
 
-  factory EventModel.fromDS(String id, Map<String,dynamic> data) {
+  factory EventModel.fromDS(String id, Map<String, dynamic> data) {
     return EventModel(
       id: id,
       title: data['title'],
@@ -28,11 +32,10 @@ class EventModel{
       description: data['description'],
       startDate: data['startDate'].toDate(),
       open: data['open'],
-
     );
   }
 
-    static EventModel fromJson(json) => EventModel(
+  static EventModel fromJson(json) => EventModel(
         id: json['id'] as String? ?? "",
         title: json['title'] as String? ?? "",
         channelName: json['channelName'] as String? ?? "",
@@ -41,15 +44,14 @@ class EventModel{
         open: json['open'] as bool? ?? false,
       );
 
-
-  Map<String,dynamic> toMap() {
+  Map<String, dynamic> toMap() {
     return {
-      "title":title,
-      "channelName":channelName,
+      "title": title,
+      "channelName": channelName,
       "description": description,
-      "startDate":startDate,
-      "id":id,
-      "open":open,
+      "startDate": startDate,
+      "id": id,
+      "open": open,
     };
   }
 }

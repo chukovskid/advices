@@ -2,6 +2,7 @@ import 'package:advices/App/contexts/chatContext.dart';
 import 'package:advices/App/contexts/lawyersContext.dart';
 import 'package:advices/screens/calendar/add_event.dart';
 import 'package:advices/screens/call/call.dart';
+import 'package:advices/screens/chat/screens/mobile_chat_screen.dart';
 import 'package:advices/screens/profile/createEvent.dart';
 import 'package:advices/App/services/database.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,9 @@ import '../../App/models/user.dart';
 import '../../assets/utilities/constants.dart';
 import '../authentication/authentication.dart';
 import '../call/calls.dart';
+import '../chat/screens/mobile_layout_screen.dart';
+import '../chat/screens/web_layout_screen.dart';
+import '../chat/utils/responsive_layout.dart';
 import '../shared_widgets/base_app_bar.dart';
 
 class LawyerProfile extends StatefulWidget {
@@ -59,7 +63,15 @@ class _LawyerProfileState extends State<LawyerProfile> {
 
   Future<void> _startChatConversation() async {
     print("_startChatConversation");
-    await ChatContext.createNewChat([lawyer!.uid]);
+    String chatId = await ChatContext.createNewChat([lawyer!.uid]);
+    Navigator.push(
+      context,  
+      MaterialPageRoute(
+          builder: (context) => ResponsiveLayout(
+                mobileScreenLayout: MobileChatScreen(chatId),
+                webScreenLayout: WebLayoutScreen(chatId),
+              )),
+    );
   }
 
   @override
@@ -166,7 +178,16 @@ class _LawyerProfileState extends State<LawyerProfile> {
                 ],
               ),
               ElevatedButton(
-                  onPressed: _startChatConversation, child: Text("Chat")),
+                  onPressed: _startChatConversation, child: Row( 
+                    mainAxisSize : MainAxisSize.min,
+                    children: [
+                      Icon(Icons.mail, size: 15,),
+                      Text(" Пораки"),
+                    ],
+                  ), style:  ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 15), backgroundColor: lightGreenColor) ,),
+                  //how to get ElevatedButton backgroundColor?
+                  
+
               const SizedBox(
                 height: 45,
               ),

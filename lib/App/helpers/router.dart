@@ -39,7 +39,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case 'chat':
       return MaterialPageRoute(builder: (context) => ResponsiveLayout(
         mobileScreenLayout: MobileLayoutScreen(),
-        webScreenLayout: WebLayoutScreen(),
+        webScreenLayout: WebLayoutScreen(""),
       ),);
     default:
       return MaterialPageRoute(builder: (context) => Home());

@@ -7,8 +7,10 @@ import 'my_message_card.dart';
 
 class ChatList extends StatefulWidget {
   final User user;
+  final String chatId;
 
-  const ChatList(this.user, {Key? key}) : super(key: key);
+
+  const ChatList(this.user, this.chatId, {Key? key}) : super(key: key);
 
   @override
   State<ChatList> createState() => _ChatListState();
@@ -18,7 +20,7 @@ class _ChatListState extends State<ChatList> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<Iterable<Message>>(
-        stream: ChatContext.getMessagesStreamForChat("1"),
+        stream: ChatContext.getMessagesStreamForChat(widget.chatId),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final chatMessages = snapshot.data!;

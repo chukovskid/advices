@@ -1,3 +1,4 @@
+import 'package:advices/screens/chat/screens/mobile_chat_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:advices/screens/chat/colors.dart';
@@ -20,6 +21,7 @@ class _MobileLayoutScreenState extends State<MobileLayoutScreen> {
   final AuthContext _auth = AuthContext();
 
   User? user;
+  String chatId = "";
 
   @override
   void initState() {
@@ -43,6 +45,12 @@ class _MobileLayoutScreenState extends State<MobileLayoutScreen> {
       context,
       MaterialPageRoute(builder: (context) => Authenticate()),
     );
+  }
+
+  callbackSelectChat(selectedChatId) {
+    setState(() {
+      chatId = selectedChatId;
+    });
   }
 
   @override
@@ -93,7 +101,7 @@ class _MobileLayoutScreenState extends State<MobileLayoutScreen> {
             ],
           ),
         ),
-        body: ContactsList(user!),
+        body: ContactsList(user!, callbackSelectChat),
         floatingActionButton: FloatingActionButton(
           onPressed: () {},
           backgroundColor: tabColor,

@@ -41,11 +41,11 @@ class UsersContext {
     return user;
   }
 
-  static Future<FlutterUser?> getUser(String userId) async {
+  static Future<FlutterUser> getUser(String userId) async {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     final snapshot = await users.doc(userId).get();
     // if (snapshot.exists) {
-    var flutterUser = await FlutterUser.fromJson(snapshot.data()!);
+    var flutterUser =  FlutterUser.fromJson(snapshot.data()!);
     return flutterUser;
     // }
     // return null;

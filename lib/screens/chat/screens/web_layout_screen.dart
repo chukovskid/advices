@@ -1,3 +1,4 @@
+import 'package:advices/assets/utilities/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:advices/screens/chat/colors.dart';
@@ -12,7 +13,8 @@ import '../widgets/web_profile_bar.dart';
 import '../widgets/web_search_bar.dart';
 
 class WebLayoutScreen extends StatefulWidget {
-  WebLayoutScreen({Key? key}) : super(key: key);
+  final String? chatId;
+  WebLayoutScreen(this.chatId, {Key? key}) : super(key: key);
 
   @override
   State<WebLayoutScreen> createState() => _WebLayoutScreenState();
@@ -22,12 +24,17 @@ class _WebLayoutScreenState extends State<WebLayoutScreen> {
   final FocusNode _messageFocusNode = FocusNode();
   final TextEditingController _messageController = TextEditingController();
   final AuthContext _auth = AuthContext();
-  List<Message> messages =  [];
+  List<Message> messages = [];
   User? user;
+  String chatId = "";
 
   @override
   void initState() {
     _checkAuthentication();
+
+    setState(() {
+      chatId = widget.chatId != null ? widget.chatId.toString() : "";
+    });
     super.initState();
   }
 
@@ -51,8 +58,14 @@ class _WebLayoutScreenState extends State<WebLayoutScreen> {
 
   _submitMessage(String message) async {
     _messageController.clear();
-    await ChatContext.sendMessage(user!.uid, message,"1");
+    await ChatContext.sendMessage(user!.uid, message, chatId);
     print("Submitet $message");
+  }
+
+  callbackSelectChat(selectedChatId) {
+    setState(() {
+      chatId = selectedChatId;
+    });
   }
 
   @override
@@ -64,10 +77,10 @@ class _WebLayoutScreenState extends State<WebLayoutScreen> {
           Expanded(
             child: SingleChildScrollView(
               child: Column(
-                children:  [
+                children: [
                   WebProfileBar(),
                   WebSearchBar(),
-                  ContactsList(user!),
+                  ContactsList(user!, callbackSelectChat),
                 ],
               ),
             ),
@@ -89,9 +102,12 @@ class _WebLayoutScreenState extends State<WebLayoutScreen> {
               children: [
                 const ChatAppBar(),
                 const SizedBox(height: 20),
-                 Expanded(
-                  child: ChatList(user!),
-                ),
+                //////////////// TODO add text if there is no chat selected
+                chatId == ""
+                    ? Expanded(child: Text("Please select a chat", style: TextStyle(color: whiteColor),))
+                    : Expanded(
+                        child: ChatList(user!, chatId),
+                      ),
                 Container(
                   height: MediaQuery.of(context).size.height * 0.07,
                   padding: const EdgeInsets.all(10),

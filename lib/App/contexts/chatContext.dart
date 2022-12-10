@@ -4,20 +4,20 @@ import 'package:advices/App/contexts/usersContext.dart';
 import 'package:advices/App/models/chat.dart';
 import 'package:advices/App/models/service.dart';
 import 'package:advices/App/models/user.dart';
-import 'package:advices/screens/video/config/agora.config.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/message.dart';
+import '../models/userChat.dart';
 
 class ChatContext {
   static Future<void> sendMessage(
       String userId, String message, String? chatId) async {
-    FlutterUser? fUser = await UsersContext.getUser(userId);
-
+    FlutterUser? fUser = await UsersContext.getUser(
+        userId); //TODO change to auth instead of users context
     CollectionReference refMessages =
         FirebaseFirestore.instance.collection('conversation/messages/$chatId');
-
+    print("SendMessage $chatId");
     DateTime now = DateTime.now();
     final Message newMesage = Message(
       chatId: chatId!,
@@ -33,54 +33,64 @@ class ChatContext {
         .set(newMesage.toMap());
   }
 
-  static Future<bool> createNewChat(List<String> userIds) async {
+  static Future<String> createNewChat(List<String> userIds) async {
     try {
+      bool chatExists = false;
+      AuthContext _auth = AuthContext();
+      User? user = await _auth.getCurrentUser();
+      // if (userIds.contains(user!.uid)) {
+      //   return "GroupChat";
+      // }
+      userIds.add(user!.uid);
+      print(userIds);
       String chatId = new DateTime.now().millisecondsSinceEpoch.toString();
       CollectionReference refChat =
           FirebaseFirestore.instance.collection('conversation/groups/chats');
-
-      bool chatExists = false;
-      final chats = refChat
-          .where("members", arrayContainsAny: ['useerID1', "userID2"]).get();
-      // const getCategoryProducts = getDocs(chats);
+      final chats = refChat.where("members", isEqualTo: userIds).get();
       await chats.then(
         (res) => {
-          print("Successfully completed"),
-          if (res.size > 0) {print("is Exist1"), print(res), chatExists = true}
+          if (res.size > 0) {chatExists = true, chatId = res.docs.last.id}
         },
         onError: (e) => print("Error completing: $e"),
       );
-
       if (chatExists == true) {
-        print("is Exist 2");
-        // print(chatExists.snapshots());
-        return chatExists;
+        return chatId;
+      }
+
+      // CollectionReference refChatMembers = FirebaseFirestore.instance
+      //     .collection('conversation/groups/chats/$chatId/members');
+      List<String> membersDisplayNames = [];
+      List<String> membersPhotoURLs = [];
+      for (var userId in userIds) {
+        FlutterUser user = await UsersContext.getUser(userId);
+        membersDisplayNames.add(user.displayName);
+        membersPhotoURLs.add(user.photoURL);
+        // refChatMembers.doc(userId).set({
+        //   "displayName": user.displayName,
+        //   "photoURL": user.photoURL,
+        //   "email": user.email
+        // });
+        CollectionReference refUserChats = FirebaseFirestore.instance
+            .collection('conversation/userChats/${userId}');
+        refUserChats.doc(chatId).set({
+          "id": chatId,
+          // "createdAt": chatId,
+          "contacts": userIds,
+        });
       }
 
       final Chat newChat = Chat(
           id: chatId,
-          members: ['useerID1', "userID2"],
-          lastMessage: "All mesages read");
+          lastMessage: "All mesages read",
+          lastMessageTime: DateTime.now(), 
+          members: userIds,
+          photoURLs: membersPhotoURLs,
+          displayNames: membersDisplayNames);
       refChat.doc(chatId).set(newChat.toMap());
 
-      AuthContext _auth = AuthContext();
-      User? user = await _auth.getCurrentUser();
-      print(user!.uid);
-      CollectionReference refUserChats = FirebaseFirestore.instance
-          .collection('conversation/groups/userChats/${user.uid}/$chatId');
-
-      // final Chat newUserChat = Chat(
-      //     id: chatId,
-      //     members: ['useerID1', "userID2"],
-      //     lastMessage: "All mesages read");
-      refUserChats.doc(chatId).set({
-        "id": user!.uid,
-        "chats": [user!.uid, "123TestUser"]
-      });
-
-      return true;
+      return chatId;
     } catch (e) {
-      return false;
+      return e.toString();
     }
   }
 
@@ -91,79 +101,36 @@ class ChatContext {
     // var filteredServices = services.where("chatId", isEqualTo: chatId).snapshots();
     var filteredServices = services.snapshots();
     print("filteredServices $filteredServices");
-
     // final snapshots = filteredservices.orderBy('name').snapshots();
     var message = filteredServices.map(
         (snapshot) => snapshot.docs.map((doc) => Message.fromJson(doc.data())));
     return message;
   }
 
-  static Stream<Iterable<Message>> getChats(String userId) {
+  static Future<List<String>> getUserChats(String userId) async {
+    CollectionReference userChats =
+        FirebaseFirestore.instance.collection('conversation/userChats/$userId');
+    QuerySnapshot querySnapshot = await userChats.get();
+    // List<UserChat> allData =
+    //     querySnapshot.docs.map((doc) => UserChat.fromJson(doc.data())).toList();
+
+    List<String> chatIds = querySnapshot.docs.map((doc) => doc.id).toList();
+
+    return chatIds;
+  }
+
+  static Stream<Iterable<Chat>> getChats(List<String> chatIds) {
     // AuthContext _auth = AuthContext();
     // User? user = await _auth.getCurrentUser();
-    CollectionReference services =
-        FirebaseFirestore.instance.collection('conversation/groups/userChats/$userId');
-    // var filteredServices = services.where("chatId", isEqualTo: chatId).snapshots();
-    var filteredServices = services.snapshots();
+    CollectionReference userChats =
+        FirebaseFirestore.instance.collection('conversation/groups/chats');
+    var snapshotUserChats = userChats.snapshots();
+    var filteredUserChats = snapshotUserChats.map(
+        (snapshot) => snapshot.docs.map((doc) => Chat.fromJson(doc.data())));
 
-    // final snapshots = filteredservices.orderBy('name').snapshots();
-    var message = filteredServices.map(
-        (snapshot) => snapshot.docs.map((doc) => Message.fromJson(doc.data())));
-    return message;
-  }
+// for (var chat in filteredUserChats) {
 
-  static Future<FlutterUser?> getLawyer(String lawyerId) async {
-    CollectionReference users =
-        FirebaseFirestore.instance.collection('lawyers');
-    final snapshot = await users.doc(lawyerId).get();
-    // if (snapshot.exists) {
-    var flutterUser = await FlutterUser.fromJson(snapshot.data()!);
-    return flutterUser;
-    // }
-    // return null;
-  }
-
-  static Future<void> saveServicesForLawyer(
-      String uid, List<Service?> newServices) async {
-    CollectionReference services = FirebaseFirestore.instance
-        .collection('lawyers')
-        .doc(uid)
-        .collection("services");
-
-    if (newServices.isNotEmpty) {
-      List<String> selectedServicesIds = [];
-      for (int i = 0; i < newServices.length; i++) {
-        Service selectedService =
-            Service.fromJson(jsonDecode(newServices[i].toString()));
-        print(selectedService);
-        selectedServicesIds.add(selectedService.id);
-
-        // TODO delete the collection before adding the this
-        await services.doc(selectedService.id).set({
-          "id": selectedService.id,
-          "area": selectedService.area,
-          "name": selectedService.name,
-        });
-      }
-      print(selectedServicesIds);
-      await saveServicesForLawyerAsArray(selectedServicesIds, uid);
-    }
-  }
-
-  static Future<void> saveServicesForLawyerAsArray(
-      List<String> servicesIds, String uid) async {
-    DocumentReference lawyerRef =
-        FirebaseFirestore.instance.collection('lawyers').doc(uid);
-    await lawyerRef.update({"services": servicesIds});
-  }
-
-  static Stream<Iterable<FlutterUser>> getFilteredLawyers(String lawId) {
-    CollectionReference lawyers =
-        FirebaseFirestore.instance.collection("lawyers");
-    var filteredLawyers = lawyers.where("services", arrayContains: lawId);
-    final snapshots = filteredLawyers.snapshots();
-    var flutterUsers = snapshots.map((snapshot) =>
-        snapshot.docs.map((doc) => FlutterUser.fromJson(doc.data())));
-    return flutterUsers;
+// }
+    return filteredUserChats;
   }
 }

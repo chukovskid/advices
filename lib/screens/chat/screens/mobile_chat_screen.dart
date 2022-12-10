@@ -10,7 +10,9 @@ import '../../authentication/authentication.dart';
 import '../widgets/chat_list.dart';
 
 class MobileChatScreen extends StatefulWidget {
-  const MobileChatScreen({Key? key}) : super(key: key);
+  final String chatId;
+
+  const MobileChatScreen(this.chatId, {Key? key}) : super(key: key);
 
   @override
   State<MobileChatScreen> createState() => _MobileChatScreenState();
@@ -53,7 +55,9 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
 
   _submitMessage(String message) async {
     _messageController.clear();
-    await ChatContext.sendMessage(user!.uid, message, "1");
+    print("_submitMessage ${widget.chatId}");
+
+    await ChatContext.sendMessage(user!.uid, message, widget.chatId);
     print("Submitet $message");
   }
 
@@ -84,39 +88,51 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
       body: Column(
         children: [
           Expanded(
-            child: ChatList(user!),
+            child: ChatList(user!, widget.chatId),
           ),
-          TextField(
+          TextFormField(
+            keyboardType: TextInputType.text,
+            // textInputAction: TextInputAction.next,
+            focusNode: _messageFocusNode,
+            onFieldSubmitted: (String value) {
+              //Do anything with value
+              // _nextFocus(_passwordFocusNode);
+
+              _submitMessage(value);
+            },
+            controller: _messageController,
+            // validator: (value) => _validateInput(value.toString()),
+            style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
               filled: true,
               fillColor: mobileChatBoxColor,
-              prefixIcon: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0),
-                child: Icon(
-                  Icons.emoji_emotions,
-                  color: Colors.grey,
-                ),
-              ),
-              suffixIcon: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: const [
-                    Icon(
-                      Icons.camera_alt,
-                      color: Colors.grey,
-                    ),
-                    Icon(
-                      Icons.attach_file,
-                      color: Colors.grey,
-                    ),
-                    Icon(
-                      Icons.money,
-                      color: Colors.grey,
-                    ),
-                  ],
-                ),
-              ),
+              // prefixIcon: const Padding(
+              //   padding: EdgeInsets.symmetric(horizontal: 20.0),
+              //   child: Icon(
+              //     Icons.emoji_emotions,
+              //     color: Colors.grey,
+              //   ),
+              // ),
+              // suffixIcon: Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.end,
+              //     children: const [
+              //       Icon(
+              //         Icons.camera_alt,
+              //         color: Colors.grey,
+              //       ),
+              //       Icon(
+              //         Icons.attach_file,
+              //         color: Colors.grey,
+              //       ),
+              //       Icon(
+              //         Icons.money,
+              //         color: Colors.grey,
+              //       ),
+              //     ],
+              //   ),
+              // ),
               hintText: 'Type a message!',
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20.0),
