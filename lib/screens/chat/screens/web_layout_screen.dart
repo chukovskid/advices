@@ -27,6 +27,8 @@ class _WebLayoutScreenState extends State<WebLayoutScreen> {
   List<Message> messages = [];
   User? user;
   String chatId = "";
+  bool mkLanguage = true;
+
 
   @override
   void initState() {
@@ -68,6 +70,10 @@ class _WebLayoutScreenState extends State<WebLayoutScreen> {
     });
   }
 
+   _nextFocus(FocusNode focusNode) {
+    FocusScope.of(context).requestFocus(focusNode);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,7 +85,7 @@ class _WebLayoutScreenState extends State<WebLayoutScreen> {
               child: Column(
                 children: [
                   WebProfileBar(),
-                  WebSearchBar(),
+                  // WebSearchBar(),
                   ContactsList(user!, callbackSelectChat),
                 ],
               ),
@@ -102,9 +108,8 @@ class _WebLayoutScreenState extends State<WebLayoutScreen> {
               children: [
                 const ChatAppBar(),
                 const SizedBox(height: 20),
-                //////////////// TODO add text if there is no chat selected
                 chatId == ""
-                    ? Expanded(child: Text("Please select a chat", style: TextStyle(color: whiteColor),))
+                    ? Expanded(child: Text(mkLanguage ? "Одберете разговор" :"Please select a chat", style: TextStyle(color: whiteColor),))
                     : Expanded(
                         child: ChatList(user!, chatId),
                       ),
@@ -141,12 +146,10 @@ class _WebLayoutScreenState extends State<WebLayoutScreen> {
                           ),
                           child: TextFormField(
                             keyboardType: TextInputType.emailAddress,
-                            textInputAction: TextInputAction.next,
+                            textInputAction: TextInputAction.send,
                             focusNode: _messageFocusNode,
                             onFieldSubmitted: (String value) {
-                              //Do anything with value
-                              // _nextFocus(_passwordFocusNode);
-
+                              _nextFocus(_messageFocusNode);
                               _submitMessage(value);
                             },
                             controller: _messageController,

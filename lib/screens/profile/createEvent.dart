@@ -26,7 +26,10 @@ class CreateEvent extends StatefulWidget {
 class _CreateEventState extends State<CreateEvent> {
   late Service service;
   bool mkLanguage = true;
-  bool openEventForm = true;
+  bool openEventForm =
+      MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width >
+          850.0;
+
   var imageUrl =
       "https://devshift.biz/wp-content/uploads/2017/04/profile-icon-png-898.png"; //you can use a image
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
@@ -36,7 +39,7 @@ class _CreateEventState extends State<CreateEvent> {
   final _key = GlobalKey<ScaffoldState>();
   late bool processing;
   // late String _selectedDate = "select date";
-  String selectedTime = "select time";
+  String selectedTime = "кликни тука";
   // DateFormat.Hm().format(DateTime.now());
   // DateFormat("hh:mm").parse(DateTime.now().toString()).toString();
   String _selectedDate =
@@ -124,6 +127,7 @@ class _CreateEventState extends State<CreateEvent> {
     await CallEventsContext.saveEvent(
         widget.uid, _title.text, _description.text, selectedDateTime);
 
+    // Uncoment this for enabeling Stripe payment
     // redirectToCheckout(context);
 
     Navigator.push(
@@ -146,7 +150,7 @@ class _CreateEventState extends State<CreateEvent> {
   bool _isFormEmpty() {
     return (_title.text.isEmpty ||
         _description.text.isEmpty ||
-        selectedTime == "select time");
+        selectedTime == "кликни тука");
   }
 
   @override
@@ -158,113 +162,120 @@ class _CreateEventState extends State<CreateEvent> {
   }
 
   Widget _mobView() {
-    return
-        openEventForm ? Flexible(child: _dialogFields(setState)):
-        Container(
-      height: 100,
-      decoration: BoxDecoration(
-        color: Color(0xffc2cee4),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.blueGrey,
-            offset: Offset(0.0, 1.0), //(x,y)
-            blurRadius: 10.0,
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        // crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Flexible(
-              flex: 3,
-              child: InkWell(
-                onTap: (() => {
-                      showDialog(
-                          context: context,
-                          builder: (context) => StatefulBuilder(
-                                builder:
-                                    (context, StateSetter setStateDialog) =>
-                                        AlertDialog(
-                                  elevation: 20,
-                                  contentPadding: EdgeInsets.all(10),
-                                  content: SizedBox(
-                                    height: 400,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Flexible(
-                                            child:
-                                                _dialogFields(setStateDialog)),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ))
-                    }),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "€30 ",
-                          style: TextStyle(
-                              // color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(serviceName),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "$_selectedDate $selectedTime",
-                          style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              color: selectedTime == 'time'
-                                  ? Color(0xff5bc9bf)
-                                  : Colors.black),
-                        ),
-                      ],
-                    ),
-                  ],
+    return openEventForm
+        ? Flexible(child: _dialogFields(setState))
+        : Container(
+            height: 100,
+            decoration: BoxDecoration(
+              color: Color(0xffc2cee4),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.blueGrey,
+                  offset: Offset(0.0, 1.0), //(x,y)
+                  blurRadius: 10.0,
                 ),
-              )),
-          Flexible(
-              flex: 1,
-              child: SizedBox(
-                height: 50,
-                width: 100,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: _isFormEmpty()
-                          ? MaterialStateProperty.all(
-                              Color.fromARGB(255, 176, 190, 189))
-                          : MaterialStateProperty.all(Color(0xff5bc9bf))),
-                  onPressed: () {
-                    _isFormEmpty() ? _showToast(context) : _saveEvent();
-                  },
-                  child: Text(
-                    "Submit",
-                    style: TextStyle(
-                        color: Color.fromARGB(255, 255, 255, 255),
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              )),
-        ],
-      ),
-    );
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              // crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Flexible(
+                    flex: 3,
+                    child: InkWell(
+                      onTap: (() => {
+                            showDialog(
+                                context: context,
+                                builder: (context) => StatefulBuilder(
+                                      builder: (context,
+                                              StateSetter setStateDialog) =>
+                                          AlertDialog(
+                                        elevation: 20,
+                                        contentPadding: EdgeInsets.all(10),
+                                        content: SizedBox(
+                                          height: 400,
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Flexible(
+                                                  child: _dialogFields(
+                                                      setStateDialog)),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ))
+                          }),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                "€30 ",
+                                style: TextStyle(
+                                    // color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(serviceName),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                "$_selectedDate $selectedTime",
+                                style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    color: selectedTime == 'time'
+                                        ? Color(0xff5bc9bf)
+                                        : Colors.black),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    )),
+                Flexible(
+                    flex: 1,
+                    child: SizedBox(
+                      height: 50,
+                      width: 150,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(Color(0xff5bc9bf))),
+                        onPressed: () {
+                          print(openEventForm);
+                          _isFormEmpty()
+                              ? setState(() {
+                                  openEventForm = true;
+                                })
+                              : _saveEvent();
+                        },
+                        child: Row(
+                          children: [
+                            Text(
+                              _isFormEmpty() ? "Продолжи" : "Поднеси",
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Icon(Icons.chevron_right_sharp)
+                          ],
+                        ),
+                      ),
+                    )),
+              ],
+            ),
+          );
   }
 
   Widget _webView() {
@@ -278,7 +289,7 @@ class _CreateEventState extends State<CreateEvent> {
         borderRadius: BorderRadius.circular(25.0),
       ),
       child: openEventForm
-          ?  _dialogFields(setState)
+          ? _dialogFields(setState)
           : Column(
               children: [
                 Table(
@@ -583,8 +594,8 @@ class _CreateEventState extends State<CreateEvent> {
                                     validator: (value) {
                                       if (value == null ||
                                           value.isEmpty ||
-                                          value == "select time") {
-                                        return 'Please Select time';
+                                          value == "кликни тука") {
+                                        return 'Внесете време';
                                       }
                                       return null;
                                     },
@@ -620,44 +631,33 @@ class _CreateEventState extends State<CreateEvent> {
                       const SizedBox(height: 10.0),
                       // payingOptions(),
                       SizedBox(height: 50.0),
-                      processing
-                          ? Center(child: CircularProgressIndicator())
-                          : Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: Material(
-                                elevation: 5.0,
-                                borderRadius: BorderRadius.circular(30.0),
-                                color: Theme.of(context).primaryColor,
-                                child: ElevatedButton(
-                                  style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              Color(0xff5bc9bf))),
-                                  onPressed: () async {
-                                    if (_formKey.currentState!.validate()) {
-                                      setState(() {
-                                        processing = true;
-                                      });
-                                      final data = {
-                                        "title": _title.text,
-                                        "description": _description.text,
-                                      };
-                                      setState(() {
-                                        processing = false;
-                                        openEventForm = false;
-                                      });
-                                    }
-                                  },
-                                  child: Text(
-                                    mkLanguage ? "Продолжи" : "Save",
-                                    style: style.copyWith(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ),
+                      // processing ? Center(child: CircularProgressIndicator()):
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Material(
+                          elevation: 5.0,
+                          borderRadius: BorderRadius.circular(30.0),
+                          color: Theme.of(context).primaryColor,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    Color(0xff5bc9bf))),
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                setState(() {
+                                  openEventForm = false;
+                                });
+                              }
+                            },
+                            child: Text(
+                              mkLanguage ? "Продолжи" : "Save",
+                              style: style.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
                             ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),

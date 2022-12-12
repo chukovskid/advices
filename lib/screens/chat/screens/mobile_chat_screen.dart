@@ -61,6 +61,10 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
     print("Submitet $message");
   }
 
+  _nextFocus(FocusNode focusNode) {
+    FocusScope.of(context).requestFocus(focusNode);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,7 +100,7 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
             focusNode: _messageFocusNode,
             onFieldSubmitted: (String value) {
               //Do anything with value
-              // _nextFocus(_passwordFocusNode);
+              _nextFocus(_messageFocusNode);
 
               _submitMessage(value);
             },

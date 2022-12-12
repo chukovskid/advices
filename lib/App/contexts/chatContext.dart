@@ -71,7 +71,7 @@ class ChatContext {
           "id": chatId,
           // "createdAt": chatId,
           "contacts": userIds,
-          "lastMessage": "All mesages read",
+          "lastMessage": "Почнете муабет",
           "lastMessageTime": DateTime.now(),
           "members": userIds,
           "photoURLs": membersPhotoURLs,

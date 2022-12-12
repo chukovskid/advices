@@ -115,27 +115,7 @@ class _LawyerProfileState extends State<LawyerProfile> {
           )),
     );
   }
-
-  // Widget _openProfileBtn() {
-  //   return Column(
-  //     mainAxisAlignment: MainAxisAlignment.end,
-  //     children: [
-  //       Expanded(
-  //         flex: 10,
-  //         child: Stack(
-  //           children: [_next()],
-  //         ),
-  //       ),
-  //       Expanded(
-  //         flex: 1,
-  //         child: Stack(
-  //           children: [_calendar()],
-  //         ),
-  //       )
-  //     ],
-  //   );
-  // }
-
+ 
   Widget _card() {
     return Container(
       height: 900,
@@ -220,34 +200,6 @@ class _LawyerProfileState extends State<LawyerProfile> {
     );
   }
 
-  Widget _next() {
-    return Align(
-      alignment: Alignment.bottomRight,
-      child: FloatingActionButton(
-        heroTag: "settingsBtn",
-        onPressed: () => {_redirectToCall()},
-        backgroundColor: Color.fromARGB(255, 226, 105, 105),
-        elevation: 0,
-        child: const Icon(Icons.keyboard_arrow_right_sharp),
-      ),
-    );
-  }
 
-  Widget _calendar() {
-    return Align(
-      alignment: Alignment.bottomRight,
-      child: FloatingActionButton(
-        heroTag: "settingsBtn",
-        onPressed: () => {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Calls()),
-          )
-        },
-        backgroundColor: Color.fromARGB(255, 226, 105, 105),
-        elevation: 0,
-        child: const Icon(Icons.calendar_month),
-      ),
-    );
-  }
+
 }
