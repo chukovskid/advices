@@ -38,9 +38,9 @@ class ChatContext {
       bool chatExists = false;
       AuthContext _auth = AuthContext();
       User? user = await _auth.getCurrentUser();
-      // if (userIds.contains(user!.uid)) {
-      //   return "GroupChat";
-      // }
+      if (userIds.contains(user!.uid)) {
+        return "GroupChat";
+      }
       userIds.add(user!.uid);
       print(userIds);
       String chatId = new DateTime.now().millisecondsSinceEpoch.toString();
@@ -53,9 +53,9 @@ class ChatContext {
         },
         onError: (e) => print("Error completing: $e"),
       );
-      if (chatExists == true) {
-        return chatId;
-      }
+      // if (chatExists == true) {
+      //   return chatId;
+      // }
 
       // CollectionReference refChatMembers = FirebaseFirestore.instance
       //     .collection('conversation/groups/chats/$chatId/members');
@@ -65,24 +65,24 @@ class ChatContext {
         FlutterUser user = await UsersContext.getUser(userId);
         membersDisplayNames.add(user.displayName);
         membersPhotoURLs.add(user.photoURL);
-        // refChatMembers.doc(userId).set({
-        //   "displayName": user.displayName,
-        //   "photoURL": user.photoURL,
-        //   "email": user.email
-        // });
         CollectionReference refUserChats = FirebaseFirestore.instance
             .collection('conversation/userChats/${userId}');
         refUserChats.doc(chatId).set({
           "id": chatId,
           // "createdAt": chatId,
           "contacts": userIds,
+          "lastMessage": "All mesages read",
+          "lastMessageTime": DateTime.now(),
+          "members": userIds,
+          "photoURLs": membersPhotoURLs,
+          "displayNames": membersDisplayNames
         });
       }
 
       final Chat newChat = Chat(
           id: chatId,
           lastMessage: "All mesages read",
-          lastMessageTime: DateTime.now(), 
+          lastMessageTime: DateTime.now(),
           members: userIds,
           photoURLs: membersPhotoURLs,
           displayNames: membersDisplayNames);
@@ -111,19 +111,24 @@ class ChatContext {
     CollectionReference userChats =
         FirebaseFirestore.instance.collection('conversation/userChats/$userId');
     QuerySnapshot querySnapshot = await userChats.get();
-    // List<UserChat> allData =
-    //     querySnapshot.docs.map((doc) => UserChat.fromJson(doc.data())).toList();
+    List<UserChat> allData =
+        querySnapshot.docs.map((doc) => UserChat.fromJson(doc.data())).toList();
 
     List<String> chatIds = querySnapshot.docs.map((doc) => doc.id).toList();
 
     return chatIds;
   }
 
-  static Stream<Iterable<Chat>> getChats(List<String> chatIds) {
+  static Stream<Iterable<Chat>> getChats(
+    // List<String> chatIds
+    String userId
+    ) {
     // AuthContext _auth = AuthContext();
     // User? user = await _auth.getCurrentUser();
     CollectionReference userChats =
-        FirebaseFirestore.instance.collection('conversation/groups/chats');
+        // FirebaseFirestore.instance.collection('conversation/groups/chats');
+        FirebaseFirestore.instance.collection('conversation/userChats/$userId');
+
     var snapshotUserChats = userChats.snapshots();
     var filteredUserChats = snapshotUserChats.map(
         (snapshot) => snapshot.docs.map((doc) => Chat.fromJson(doc.data())));

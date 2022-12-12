@@ -19,19 +19,6 @@ class ContactsList extends StatefulWidget {
 }
 
 class _ContactsListState extends State<ContactsList> {
-  List<String> userChats = ["1670705512899"];
-  @override
-  void initState() {
-    _getUserChats();
-    super.initState();
-  }
-
-  Future<void> _getUserChats() async {
-    setState(() async {
-      userChats = await ChatContext.getUserChats(widget.user.uid);
-    });
-  }
-
   _selectChat(chatId) {
     MediaQuery.of(context).size.width < 850.0
         ? _navigateToMobileChat(chatId)
@@ -51,7 +38,7 @@ class _ContactsListState extends State<ContactsList> {
     return Padding(
       padding: const EdgeInsets.only(top: 10.0),
       child: StreamBuilder<Iterable<Chat>>(
-          stream: ChatContext.getChats(userChats),
+          stream: ChatContext.getChats(widget.user.uid),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final chats = snapshot.data!;
@@ -77,7 +64,7 @@ class _ContactsListState extends State<ContactsList> {
             padding: const EdgeInsets.only(bottom: 8.0),
             child: ListTile(
               title: Text(
-                chat.displayNames!.first.toString(),
+                chat.displayNames!.firstWhere((e) => e != widget.user.displayName).toString(),
                 style: const TextStyle(
                   fontSize: 18,
                 ),
