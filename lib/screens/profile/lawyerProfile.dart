@@ -29,6 +29,7 @@ class _LawyerProfileState extends State<LawyerProfile> {
   bool mkLanguage = true;
   FlutterUser? lawyer;
   String minPriceEuro = "30";
+  bool loading = true;
 
   var imageUrl =
       "https://devshift.biz/wp-content/uploads/2017/04/profile-icon-png-898.png"; //you can use a image
@@ -48,16 +49,8 @@ class _LawyerProfileState extends State<LawyerProfile> {
             : lawyer!.minPriceEuro.toString();
         lawyer = lawyer;
         imageUrl = lawyer!.photoURL.isEmpty ? imageUrl : lawyer!.photoURL;
+        loading = false;
       });
-    }
-  }
-
-  _redirectToCall() async {
-    if (lawyer != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Call(widget.uid)),
-      );
     }
   }
 
@@ -117,7 +110,9 @@ class _LawyerProfileState extends State<LawyerProfile> {
   }
  
   Widget _card() {
-    return Container(
+    return 
+    loading ? Center(child: CircularProgressIndicator(color: darkGreenColor,)):
+    Container(
       height: 900,
       child: SingleChildScrollView(
         child: Card(
@@ -199,7 +194,5 @@ class _LawyerProfileState extends State<LawyerProfile> {
       ),
     );
   }
-
-
 
 }

@@ -131,129 +131,127 @@ class _SignInState extends State<SignIn> {
   }
 
   Widget _form() {
-    return Container(
-      child: Form(
-        child: Container(
-          height: 60,
-          width: 100,
-          margin: EdgeInsets.all(35),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                mkLanguage ? "Најави се" : "Sign In",
-                style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  color: Colors.white,
-                  fontSize: 30,
-                ),
+    return Form(
+      child: Container(
+        height: 60,
+        width: 100,
+        margin: EdgeInsets.all(35),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              mkLanguage ? "Најави се" : "Sign In",
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                color: Colors.white,
+                fontSize: 30,
               ),
-              const SizedBox(height: 35.0),
-              _showEmailSignIn(),
-              const SizedBox(height: 50.0),
-              Text(
-                mkLanguage ? "Или пријавете се со помош на социјалните медиуми" : "Or Sign up using social media",
-                style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  color: Colors.white,
-                  fontSize: 14,
-                ),
+            ),
+            const SizedBox(height: 35.0),
+            SizedBox(child: _showEmailSignIn(), width: 660,),
+            const SizedBox(height: 50.0),
+            Text(
+              mkLanguage ? "Или пријавете се со помош на социјалните медиуми" : "Or Sign up using social media",
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                color: Colors.white,
+                fontSize: 14,
               ),
-              const SizedBox(height: 10.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment
-                    .center, //Center Row contents horizontally,
-                children: [
-                  Container(
-                    height: 60,
-                    width: 60,
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          onPrimary: Color.fromARGB(255, 184, 15, 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(40.0),
-                          ),
+            ),
+            const SizedBox(height: 10.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment
+                  .center, //Center Row contents horizontally,
+              children: [
+                Container(
+                  height: 60,
+                  width: 60,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        onPrimary: Color.fromARGB(255, 184, 15, 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(40.0),
                         ),
-                        child: const Center(
-                            child: FaIcon(FontAwesomeIcons.googlePlusG)),
-                        onPressed: () async {
-                          _googleSignIn();
-                        }),
-                  ),
-                  const SizedBox(width: 15.0),
-                  Container(
-                    height: 60,
-                    width: 60,
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          onPrimary: Color.fromARGB(255, 184, 15, 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(40.0),
-                          ),
+                      ),
+                      child: const Center(
+                          child: FaIcon(FontAwesomeIcons.googlePlusG)),
+                      onPressed: () async {
+                        _googleSignIn();
+                      }),
+                ),
+                const SizedBox(width: 15.0),
+                Container(
+                  height: 60,
+                  width: 60,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        onPrimary: Color.fromARGB(255, 184, 15, 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(40.0),
                         ),
-                        // shape: RoundedRectangleBorder(
-                        //   borderRadius: new BorderRadius.circular(40.0),
-                        // ),
-                        // color: Color.fromARGB(255, 255, 255, 255),
-                        child: const Center(
-                          child:
-                              // FaIcon(FontAwesomeIcons.arrowLeft)
+                      ),
+                      // shape: RoundedRectangleBorder(
+                      //   borderRadius: new BorderRadius.circular(40.0),
+                      // ),
+                      // color: Color.fromARGB(255, 255, 255, 255),
+                      child: const Center(
+                        child:
+                            // FaIcon(FontAwesomeIcons.arrowLeft)
 
-                              Icon(
-                            Icons.facebook,
-                            size: 30.0,
-                            color: Color.fromARGB(255, 22, 28, 87),
-                          ),
+                            Icon(
+                          Icons.facebook,
+                          size: 30.0,
+                          color: Color.fromARGB(255, 22, 28, 87),
                         ),
-                        onPressed: () async {
-                          _googleSignIn();
-                        }),
-                  ),
-                  const SizedBox(width: 15.0),
-                  Container(
-                    height: 60,
-                    width: 60,
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          onPrimary: Color.fromARGB(255, 54, 107, 187),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(40.0),
-                          ),
+                      ),
+                      onPressed: () async {
+                        _googleSignIn();
+                      }),
+                ),
+                const SizedBox(width: 15.0),
+                Container(
+                  height: 60,
+                  width: 60,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        onPrimary: Color.fromARGB(255, 54, 107, 187),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(40.0),
                         ),
-                        // textColor: Color.fromARGB(255, 54, 107, 187),
-                        // shape: RoundedRectangleBorder(
-                        //   borderRadius: new BorderRadius.circular(40.0),
-                        // ),
-                        // color: Color.fromARGB(255, 255, 255, 255),
-                        child: const Center(
-                            child: FaIcon(FontAwesomeIcons.twitter)),
-                        onPressed: () async {
-                          _googleSignIn();
-                        }),
+                      ),
+                      // textColor: Color.fromARGB(255, 54, 107, 187),
+                      // shape: RoundedRectangleBorder(
+                      //   borderRadius: new BorderRadius.circular(40.0),
+                      // ),
+                      // color: Color.fromARGB(255, 255, 255, 255),
+                      child: const Center(
+                          child: FaIcon(FontAwesomeIcons.twitter)),
+                      onPressed: () async {
+                        _googleSignIn();
+                      }),
+                ),
+              ],
+            ),
+            const SizedBox(height: 50.0),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(40.0),
                   ),
-                ],
-              ),
-              const SizedBox(height: 50.0),
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(40.0),
-                    ),
-                    elevation: 0.0,
-                  ),
-                  // color: Colors.transparent,
-                  child:  Text(
-                    mkLanguage ? "Почни со регистрација!" :'No account? Create one!',
-                    style: TextStyle(color: Colors.white),
-                    textAlign: TextAlign.center,
-                  ),
-                  onPressed: _navigateToRegister),
-            ],
-          ),
+                  elevation: 0.0,
+                ),
+                // color: Colors.transparent,
+                child:  Text(
+                  mkLanguage ? "Почни со регистрација!" :'No account? Create one!',
+                  style: TextStyle(color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+                onPressed: _navigateToRegister),
+          ],
         ),
       ),
     );

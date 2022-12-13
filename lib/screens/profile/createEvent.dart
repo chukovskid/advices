@@ -110,7 +110,7 @@ class _CreateEventState extends State<CreateEvent> {
                 elevation: 20,
                 contentPadding: EdgeInsets.all(2.0),
                 content: SizedBox(
-                  width: 400,
+                  width: 700,
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
