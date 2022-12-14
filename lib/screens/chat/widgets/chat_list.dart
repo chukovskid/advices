@@ -3,6 +3,7 @@ import 'package:advices/App/models/message.dart';
 import 'package:advices/screens/chat/widgets/sender_message_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../../../assets/utilities/constants.dart';
 import 'my_message_card.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -31,7 +32,7 @@ class _ChatListState extends State<ChatList> {
             return ListView(children: chatMessages.map(_messageCard).toList()
             , reverse: true,);
           }
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator(color: darkGreenColor,));
         });
   }
 

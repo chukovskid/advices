@@ -1,8 +1,10 @@
+import 'package:advices/assets/utilities/constants.dart';
 import 'package:flutter/material.dart';
 import '../colors.dart';
 
 class WebProfileBar extends StatelessWidget {
-  const WebProfileBar({Key? key}) : super(key: key);
+  final String? photoURL;
+  const WebProfileBar(this.photoURL, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +23,20 @@ class WebProfileBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const CircleAvatar(
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: whiteColor,
+            ),
+          ),
+          CircleAvatar(
             backgroundImage: NetworkImage(
-              'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+              photoURL != null
+                  ? photoURL.toString()
+                  : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
             ),
             radius: 20,
           ),

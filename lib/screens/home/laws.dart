@@ -605,6 +605,7 @@ class _LawsState extends State<Laws>
   Widget _card(Service service) {
     return Container(
       width: double.infinity,
+      height: 140,
       decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(color: Colors.grey, width: 0.2)),
@@ -690,3 +691,5 @@ class _LawsState extends State<Laws>
     );
   }
 }
+
+

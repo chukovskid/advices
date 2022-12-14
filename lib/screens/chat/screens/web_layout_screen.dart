@@ -10,7 +10,18 @@ import '../widgets/chat_list.dart';
 import '../widgets/contacts_list.dart';
 import '../widgets/web_chat_appbar.dart';
 import '../widgets/web_profile_bar.dart';
-import '../widgets/web_search_bar.dart';
+
+
+////
+////Remove unnecessary import statements and unused variables/fields.
+// Use final or const keywords where appropriate to make the code more efficient.
+// Use null safety operators (?.) to avoid NullThrownError exceptions.
+// Rename variables and fields to be more descriptive and use camelCase for names.
+// Use setState() in initState() to initialize chatId and user.
+// Use Future and async/await keywords to make the code more readable and improve performance.
+// Use a StreamBuilder instead of a StatefulWidget to update the UI based on real-time changes in the data.
+// Use Theme.of(context).textTheme.bodyText1 instead of hard-coded text styles.
+// Here is the impro
 
 class WebLayoutScreen extends StatefulWidget {
   final String? chatId;
@@ -28,27 +39,31 @@ class _WebLayoutScreenState extends State<WebLayoutScreen> {
   User? user;
   String chatId = "";
   bool mkLanguage = true;
-
+  bool loading = true;
 
   @override
   void initState() {
-    _checkAuthentication();
 
     setState(() {
       chatId = widget.chatId != null ? widget.chatId.toString() : "";
     });
+    _checkAuthentication();
+
+
     super.initState();
+
   }
 
-  Future<void> _checkAuthentication() async {
+  void _checkAuthentication() async{
     user = await _auth.getCurrentUser();
-    setState(() {
-      user = user;
-    });
-    bool userExist = user != null ? true : false;
-    if (!userExist) {
+    // bool userExist = user != null ? true : false;
+    if (user == null) {
       _navigateToAuth();
     }
+    setState(() {
+      user = user;
+      loading = false;
+    });
   }
 
   _navigateToAuth() {
@@ -70,13 +85,15 @@ class _WebLayoutScreenState extends State<WebLayoutScreen> {
     });
   }
 
-   _nextFocus(FocusNode focusNode) {
+  _nextFocus(FocusNode focusNode) {
     FocusScope.of(context).requestFocus(focusNode);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return 
+    loading ? Center(child: CircularProgressIndicator()) :
+    Scaffold(
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -84,7 +101,7 @@ class _WebLayoutScreenState extends State<WebLayoutScreen> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  WebProfileBar(),
+                  WebProfileBar(user?.photoURL),
                   // WebSearchBar(),
                   ContactsList(user!, callbackSelectChat),
                 ],
@@ -109,7 +126,13 @@ class _WebLayoutScreenState extends State<WebLayoutScreen> {
                 const ChatAppBar(),
                 const SizedBox(height: 20),
                 chatId == ""
-                    ? Expanded(child: Text(mkLanguage ? "Одберете разговор" :"Please select a chat", style: TextStyle(color: whiteColor),))
+                    ? Expanded(
+                        child: Text(
+                        mkLanguage
+                            ? "Одберете разговор"
+                            : "Please select a chat",
+                        style: TextStyle(color: whiteColor),
+                      ))
                     : Expanded(
                         child: ChatList(user!, chatId),
                       ),

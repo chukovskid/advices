@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'App/contexts/authContext.dart';
@@ -8,8 +7,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
-    await dotenv.load();
-
   await dotenv.load(fileName: ".env");
 
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,9 +42,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: "Advices",
         onGenerateRoute: router.generateRoute,
-        initialRoute: 'lawyers_profile',
+        initialRoute: '/',
       ),
     );
   }
 }
-

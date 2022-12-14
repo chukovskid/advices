@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import '../../../App/contexts/chatContext.dart';
 import '../../../App/models/chat.dart';
 import '../../../App/models/message.dart';
+import '../../../assets/utilities/constants.dart';
 import '../colors.dart';
 import '../screens/mobile_chat_screen.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class ContactsList extends StatefulWidget {
   final User user;
@@ -46,7 +48,7 @@ class _ContactsListState extends State<ContactsList> {
               return ListView(
                   shrinkWrap: true, children: chats.map(_listItem).toList());
             }
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator(color: darkGreenColor,));
           }),
     );
   }
@@ -64,7 +66,9 @@ class _ContactsListState extends State<ContactsList> {
             padding: const EdgeInsets.only(bottom: 8.0),
             child: ListTile(
               title: Text(
-                chat.displayNames!.firstWhere((e) => e != widget.user.displayName).toString(),
+                chat.displayNames!
+                    .firstWhere((e) => e != widget.user.displayName)
+                    .toString(),
                 style: const TextStyle(
                   fontSize: 18,
                 ),
@@ -83,7 +87,9 @@ class _ContactsListState extends State<ContactsList> {
                 radius: 30,
               ),
               trailing: Text(
-                chat.lastMessageTime.toString(),
+                timeago
+                    .format(chat.lastMessageTime, locale: 'en_short')
+                    .toString(),
                 style: const TextStyle(
                   color: Colors.grey,
                   fontSize: 13,
