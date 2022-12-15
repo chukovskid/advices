@@ -29,7 +29,7 @@ class Chat {
 
   static Chat fromJson(json) => Chat(
       id: json['id'] as String? ?? "",
-      lastMessage: json['lastMessage'] as String? ?? "",
+      lastMessage: json['lastMessage']  as String? ?? "",
       lastMessageTime: json['lastMessageTime'].toDate() ?? DateTime.now(),
       members: (json['members'] as List).map((item) => item as String).toList(),
       displayNames:

@@ -11,7 +11,6 @@ import '../widgets/contacts_list.dart';
 import '../widgets/web_chat_appbar.dart';
 import '../widgets/web_profile_bar.dart';
 
-
 ////
 ////Remove unnecessary import statements and unused variables/fields.
 // Use final or const keywords where appropriate to make the code more efficient.
@@ -43,18 +42,15 @@ class _WebLayoutScreenState extends State<WebLayoutScreen> {
 
   @override
   void initState() {
-
     setState(() {
       chatId = widget.chatId != null ? widget.chatId.toString() : "";
     });
     _checkAuthentication();
 
-
     super.initState();
-
   }
 
-  void _checkAuthentication() async{
+  void _checkAuthentication() async {
     user = await _auth.getCurrentUser();
     // bool userExist = user != null ? true : false;
     if (user == null) {
@@ -91,126 +87,128 @@ class _WebLayoutScreenState extends State<WebLayoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return 
-    loading ? Center(child: CircularProgressIndicator()) :
-    Scaffold(
-      body: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  WebProfileBar(user?.photoURL),
-                  // WebSearchBar(),
-                  ContactsList(user!, callbackSelectChat),
-                ],
-              ),
-            ),
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.75,
-            decoration: const BoxDecoration(
-              border: Border(
-                left: BorderSide(color: dividerColor),
-              ),
-              image: DecorationImage(
-                image: AssetImage(
-                  "../../../lib/assets/images/backgroundImage.png",
-                ),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Column(
+    return loading
+        ? Center(child: CircularProgressIndicator())
+        : Scaffold(
+            body: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const ChatAppBar(),
-                const SizedBox(height: 20),
-                chatId == ""
-                    ? Expanded(
-                        child: Text(
-                        mkLanguage
-                            ? "Одберете разговор"
-                            : "Please select a chat",
-                        style: TextStyle(color: whiteColor),
-                      ))
-                    : Expanded(
-                        child: ChatList(user!, chatId),
-                      ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        WebProfileBar(user?.photoURL),
+                        // WebSearchBar(),
+                        ContactsList(user!, callbackSelectChat),
+                      ],
+                    ),
+                  ),
+                ),
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.07,
-                  padding: const EdgeInsets.all(10),
+                  width: MediaQuery.of(context).size.width * 0.75,
                   decoration: const BoxDecoration(
                     border: Border(
-                      bottom: BorderSide(color: dividerColor),
+                      left: BorderSide(color: dividerColor),
                     ),
-                    color: chatBarMessage,
+                    image: DecorationImage(
+                      image: AssetImage(
+                        "../../../lib/assets/images/backgroundImage.png",
+                      ),
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.emoji_emotions_outlined,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.attach_file,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            left: 10,
-                            right: 15,
-                          ),
-                          child: TextFormField(
-                            keyboardType: TextInputType.emailAddress,
-                            textInputAction: TextInputAction.send,
-                            focusNode: _messageFocusNode,
-                            onFieldSubmitted: (String value) {
-                              _nextFocus(_messageFocusNode);
-                              _submitMessage(value);
-                            },
-                            controller: _messageController,
-                            // validator: (value) => _validateInput(value.toString()),
-                            style: const TextStyle(color: Colors.white),
-                            decoration: const InputDecoration(
-                                fillColor: Colors.transparent,
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Colors.transparent),
+                  child: chatId == ""
+                      ? Center(
+                          child: Text(
+                          mkLanguage
+                              ? "Одберете разговор"
+                              : "Please select a chat",
+                          style: TextStyle(color: whiteColor),
+                        ))
+                      : Column(
+                          children: [
+                            ChatAppBar(chatId),
+                            const SizedBox(height: 20),
+                            Expanded(
+                              child: ChatList(user!, chatId),
+                            ),
+                            Container(
+                              height: MediaQuery.of(context).size.height * 0.07,
+                              padding: const EdgeInsets.all(10),
+                              decoration: const BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(color: dividerColor),
                                 ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Colors.transparent),
-                                ),
-                                labelStyle: TextStyle(
-                                  color: Colors.transparent,
-                                )),
-                          ),
+                                color: chatBarMessage,
+                              ),
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: const Icon(
+                                      Icons.emoji_emotions_outlined,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: const Icon(
+                                      Icons.attach_file,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 10,
+                                        right: 15,
+                                      ),
+                                      child: TextFormField(
+                                        keyboardType:
+                                            TextInputType.emailAddress,
+                                        textInputAction: TextInputAction.send,
+                                        focusNode: _messageFocusNode,
+                                        onFieldSubmitted: (String value) {
+                                          _nextFocus(_messageFocusNode);
+                                          _submitMessage(value);
+                                        },
+                                        controller: _messageController,
+                                        // validator: (value) => _validateInput(value.toString()),
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                        decoration: const InputDecoration(
+                                            fillColor: Colors.transparent,
+                                            enabledBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.transparent),
+                                            ),
+                                            focusedBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.transparent),
+                                            ),
+                                            labelStyle: TextStyle(
+                                              color: Colors.transparent,
+                                            )),
+                                      ),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      print("mic button");
+                                    },
+                                    icon: const Icon(
+                                      Icons.mic,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          print("mic button");
-                        },
-                        icon: const Icon(
-                          Icons.mic,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
               ],
             ),
-          ),
-        ],
-      ),
-    );
+          );
   }
 }

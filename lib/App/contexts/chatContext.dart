@@ -57,8 +57,6 @@ class ChatContext {
       //   return chatId;
       // }
 
-      // CollectionReference refChatMembers = FirebaseFirestore.instance
-      //     .collection('conversation/groups/chats/$chatId/members');
       List<String> membersDisplayNames = [];
       List<String> membersPhotoURLs = [];
       for (var userId in userIds) {
@@ -99,7 +97,8 @@ class ChatContext {
     CollectionReference services =
         FirebaseFirestore.instance.collection('conversation/messages/$chatId');
     // var filteredServices = services.where("chatId", isEqualTo: chatId).snapshots();
-    var filteredServices = services.snapshots();
+    var filteredServices =
+        services.orderBy("createdAt", descending: true).limit(30).snapshots();
     print("filteredServices $filteredServices");
     // final snapshots = filteredservices.orderBy('name').snapshots();
     var message = filteredServices.map(
@@ -119,23 +118,22 @@ class ChatContext {
     return chatIds;
   }
 
-  static Stream<Iterable<Chat>> getChats(
-    // List<String> chatIds
-    String userId
-    ) {
-    // AuthContext _auth = AuthContext();
-    // User? user = await _auth.getCurrentUser();
+  static Stream<Iterable<Chat>> getChats(String userId) {
     CollectionReference userChats =
-        // FirebaseFirestore.instance.collection('conversation/groups/chats');
         FirebaseFirestore.instance.collection('conversation/userChats/$userId');
 
     var snapshotUserChats = userChats.snapshots();
     var filteredUserChats = snapshotUserChats.map(
         (snapshot) => snapshot.docs.map((doc) => Chat.fromJson(doc.data())));
-
-// for (var chat in filteredUserChats) {
-
-// }
     return filteredUserChats;
+  }
+
+  static Stream<Chat> getChat(String chatId) {
+    CollectionReference chats =
+        FirebaseFirestore.instance.collection('conversation/groups/chats');
+    return chats
+        .doc(chatId)
+        .snapshots()
+        .map((snapshot) => Chat.fromJson(snapshot.data()!));
   }
 }

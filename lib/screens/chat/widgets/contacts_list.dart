@@ -13,7 +13,6 @@ import 'package:timeago/timeago.dart' as timeago;
 class ContactsList extends StatefulWidget {
   final User user;
   final Function(String) callback;
-
   const ContactsList(this.user, this.callback, {Key? key}) : super(key: key);
 
   @override
@@ -82,7 +81,7 @@ class _ContactsListState extends State<ContactsList> {
               ),
               leading: CircleAvatar(
                 backgroundImage: NetworkImage(
-                  "info[index]['profilePic'].toString()",
+                  chat.photoURLs!.first.toString(),
                 ),
                 radius: 30,
               ),
