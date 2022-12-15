@@ -1,4 +1,5 @@
 import 'package:advices/screens/chat/screens/mobile_chat_screen.dart';
+import 'package:advices/screens/chat/widgets/chats_call_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:advices/screens/chat/colors.dart';
@@ -11,7 +12,9 @@ import '../../authentication/authentication.dart';
 import '../widgets/contacts_list.dart';
 
 class MobileLayoutScreen extends StatefulWidget {
-  const MobileLayoutScreen({Key? key}) : super(key: key);
+  final Function(String)? callback;
+
+  const MobileLayoutScreen(this.callback, {Key? key}) : super(key: key);
 
   @override
   State<MobileLayoutScreen> createState() => _MobileLayoutScreenState();
@@ -48,6 +51,9 @@ class _MobileLayoutScreenState extends State<MobileLayoutScreen> {
   }
 
   callbackSelectChat(selectedChatId) {
+    if (widget.callback != null) {
+      widget.callback!(selectedChatId);
+    }
     setState(() {
       chatId = selectedChatId;
     });
@@ -62,22 +68,22 @@ class _MobileLayoutScreenState extends State<MobileLayoutScreen> {
           elevation: 0,
           backgroundColor: darkGreenColor,
           centerTitle: false,
-          title: const Text(
-            'Advices chat',
-            style: TextStyle(
-              fontSize: 20,
-              color: Colors.grey,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          // title: const Text(
+          //   'Advices chat',
+          //   style: TextStyle(
+          //     fontSize: 20,
+          //     color: Colors.grey,
+          //     fontWeight: FontWeight.bold,
+          //   ),
+          // ),
           actions: [
+            // IconButton(
+            //   icon: const Icon(Icons.search, color: Colors.grey),
+            //   onPressed: () {},
+            // ),
             IconButton(
-              icon: const Icon(Icons.search, color: Colors.grey),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: const Icon(Icons.more_vert, color: Colors.grey),
-              onPressed: () {},
+              icon: const Icon(Icons.person, color: Colors.grey),
+              onPressed: _navigateToAuth,
             ),
           ],
           bottom: const TabBar(
@@ -90,26 +96,30 @@ class _MobileLayoutScreenState extends State<MobileLayoutScreen> {
             ),
             tabs: [
               Tab(
-                text: 'CHATS',
+                // text: 'ПОРАКИ',
+                icon: Icon(Icons.chat),
               ),
               Tab(
-                text: 'STATUS',
-              ),
-              Tab(
-                text: 'CALLS',
+                // text: 'ПОВИЦИ',
+                icon: Icon(Icons.call),
               ),
             ],
           ),
         ),
-        body: ContactsList(user!, callbackSelectChat),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          backgroundColor: tabColor,
-          child: const Icon(
-            Icons.comment,
-            color: Colors.white,
-          ),
+        body: TabBarView(
+          children: [
+            ContactsList(user!, callbackSelectChat),
+            ChatsCallList(user!, callbackSelectChat),
+          ],
         ),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () {},
+        //   backgroundColor: tabColor,
+        //   child: const Icon(
+        //     Icons.comment,
+        //     color: Colors.white,
+        //   ),
+        // ),
       ),
     );
   }

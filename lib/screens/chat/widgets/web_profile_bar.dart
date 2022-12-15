@@ -32,14 +32,9 @@ class WebProfileBar extends StatelessWidget {
               color: whiteColor,
             ),
           ),
-          CircleAvatar(
-            backgroundImage: NetworkImage(
-              photoURL != null
-                  ? photoURL.toString()
-                  : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-            ),
-            radius: 20,
-          ),
+          photoURL != null && photoURL!.isNotEmpty
+              ? CircleAvatar(radius: 20, child: Image.network(photoURL!))
+              : SizedBox(),
           Row(
             children: [
               IconButton(

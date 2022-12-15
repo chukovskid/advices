@@ -26,7 +26,7 @@ class CallEventsContext {
       "channelName": channelName,
       "title": title,
       "description": description,
-      "dateCreated": DateTime.now().millisecondsSinceEpoch,
+      "dateCreated": DateTime.now(),
       "startDate": dateTime,
       "open": false
     });
@@ -42,7 +42,7 @@ class CallEventsContext {
       "channelName": channelName,
       "title": title,
       "description": description,
-      "dateCreated": DateTime.now().millisecondsSinceEpoch,
+      "dateCreated": DateTime.now(),
       "startDate": dateTime,
       "open": false
     });

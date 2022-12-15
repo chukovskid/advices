@@ -8,6 +8,7 @@ import '../../../App/contexts/chatContext.dart';
 import '../../../App/models/message.dart';
 import '../../authentication/authentication.dart';
 import '../widgets/chat_list.dart';
+import '../widgets/chat_appbar.dart';
 
 class MobileChatScreen extends StatefulWidget {
   final String chatId;
@@ -68,29 +69,33 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: appBarColor,
-        title: Text(
-          info[0]['name'].toString(),
-        ),
-        centerTitle: false,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.video_call),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.call),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.more_vert),
-          ),
-        ],
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: appBarColor,
+      //   title: Text(
+      //     info[0]['name'].toString(),
+      //   ),
+      //   centerTitle: false,
+      //   actions: [
+      //     // IconButton(
+      //     //   onPressed: () {},
+      //     //   icon: const Icon(Icons.video_call),
+      //     // ),
+      //     // IconButton(
+      //     //   onPressed: () {},
+      //     //   icon: const Icon(Icons.call),
+      //     // ),
+      //     // IconButton(
+      //     //   onPressed: () {},
+      //     //   icon: const Icon(Icons.more_vert),
+      //     // ),
+      //   ],
+      // ),
       body: Column(
         children: [
+          Container(
+            width: double.infinity,
+            child: ChatAppBar(widget.chatId),
+          ),
           Expanded(
             child: ChatList(user!, widget.chatId),
           ),
@@ -137,15 +142,16 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
               //     ],
               //   ),
               // ),
-              hintText: 'Type a message!',
+              hintStyle: TextStyle(color: Colors.grey[700]),
+              hintText: 'Напиши порака!',
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
+                // borderRadius: BorderRadius.circular(20.0),
                 borderSide: const BorderSide(
                   width: 0,
                   style: BorderStyle.none,
                 ),
               ),
-              contentPadding: const EdgeInsets.all(10),
+              contentPadding: const EdgeInsets.all(12),
             ),
           ),
         ],

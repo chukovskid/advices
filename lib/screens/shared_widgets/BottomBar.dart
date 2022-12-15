@@ -155,7 +155,7 @@ class BottomBar extends StatelessWidget {
                                     ),
                                     ListTile(
                                       title: Text(
-                                        "Chats",
+                                        "Пораки",
                                         style: TextStyle(color: Colors.white),
                                       ),
                                       leading: Icon(
@@ -210,7 +210,7 @@ class BottomBar extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => ResponsiveLayout(
-                            mobileScreenLayout: MobileLayoutScreen(),
+                            mobileScreenLayout: MobileLayoutScreen(null),
                             webScreenLayout: WebLayoutScreen(null),
                           )),
                 );

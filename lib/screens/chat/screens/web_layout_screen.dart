@@ -8,8 +8,9 @@ import '../../../App/models/message.dart';
 import '../../authentication/authentication.dart';
 import '../widgets/chat_list.dart';
 import '../widgets/contacts_list.dart';
-import '../widgets/web_chat_appbar.dart';
+import '../widgets/chat_appbar.dart';
 import '../widgets/web_profile_bar.dart';
+import 'mobile_layout_screen.dart';
 
 ////
 ////Remove unnecessary import statements and unused variables/fields.
@@ -94,15 +95,20 @@ class _WebLayoutScreenState extends State<WebLayoutScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        WebProfileBar(user?.photoURL),
-                        // WebSearchBar(),
-                        ContactsList(user!, callbackSelectChat),
-                      ],
-                    ),
-                  ),
+                  child: 
+                        MobileLayoutScreen(callbackSelectChat),
+                  
+                  // SingleChildScrollView(
+                  //   child: 
+                    
+                  //   // Column(
+                  //   //   children: [
+                  //   //     WebProfileBar(user?.photoURL),
+                  //   //     // WebSearchBar(),
+                  //   //     ContactsList(user!, callbackSelectChat),
+                  //   //   ],
+                  //   // ),
+                  // ),
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.75,

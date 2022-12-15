@@ -38,7 +38,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => StripePayment());
     case 'chat':
       return MaterialPageRoute(builder: (context) => ResponsiveLayout(
-        mobileScreenLayout: MobileLayoutScreen(),
+        mobileScreenLayout: MobileLayoutScreen(null),
         webScreenLayout: WebLayoutScreen(""),
       ),);
     default:

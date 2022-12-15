@@ -1,36 +1,34 @@
+import 'package:advices/App/contexts/callEventsContext.dart';
 import 'package:advices/App/contexts/usersContext.dart';
 import 'package:advices/App/models/userChat.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../../App/contexts/chatContext.dart';
 import '../../../App/models/chat.dart';
+import '../../../App/models/event.dart';
 import '../../../App/models/message.dart';
 import '../../../assets/utilities/constants.dart';
+import '../../call/call.dart';
 import '../colors.dart';
 import '../screens/mobile_chat_screen.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:intl/intl.dart';
 
-class ContactsList extends StatefulWidget {
+class ChatsCallList extends StatefulWidget {
   final User user;
   final Function(String) callback;
-  const ContactsList(this.user, this.callback, {Key? key}) : super(key: key);
+  const ChatsCallList(this.user, this.callback, {Key? key}) : super(key: key);
 
   @override
-  State<ContactsList> createState() => _ContactsListState();
+  State<ChatsCallList> createState() => _ChatsCallListState();
 }
 
-class _ContactsListState extends State<ContactsList> {
-  _selectChat(chatId) {
-    MediaQuery.of(context).size.width < 850.0
-        ? _navigateToMobileChat(chatId)
-        : widget.callback(chatId);
-  }
+class _ChatsCallListState extends State<ChatsCallList> {
 
-  _navigateToMobileChat(String chatId) {
-    print("_navigateToMobileChat $chatId");
+  _navigateToMobileChat(String callId) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => MobileChatScreen(chatId)),
+      MaterialPageRoute(builder: (context) => Call(callId)),
     );
   }
 
@@ -38,8 +36,8 @@ class _ContactsListState extends State<ContactsList> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 10.0),
-      child: StreamBuilder<Iterable<Chat>>(
-          stream: ChatContext.getChats(widget.user.uid),
+      child: StreamBuilder<Iterable<EventModel>>(
+          stream: CallEventsContext.getAllLEvents(widget.user.uid),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final chats = snapshot.data!;
@@ -55,20 +53,18 @@ class _ContactsListState extends State<ContactsList> {
     );
   }
 
-  Widget _listItem(Chat chat) {
+  Widget _listItem(EventModel callId) {
     return Column(
       children: [
         InkWell(
           onTap: () {
-            _selectChat(chat.id);
+            _navigateToMobileChat(callId.channelName);
           },
           child: Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
             child: ListTile(
               title: Text(
-                chat.displayNames!
-                    .firstWhere((e) => e != widget.user.displayName)
-                    .toString(),
+                callId.title,
                 style: const TextStyle(
                   fontSize: 18,
                 ),
@@ -76,28 +72,25 @@ class _ContactsListState extends State<ContactsList> {
               subtitle: Padding(
                 padding: const EdgeInsets.only(top: 6.0),
                 child: Text(
-                  chat.lastMessage.toString(),
+                  callId.description,
                   style: const TextStyle(fontSize: 15),
                 ),
               ),
-              leading: CircleAvatar(
-                backgroundColor: lightGreenColor,
-                radius: 20,
-                child: chat.photoURLs?.first != null &&
-                        chat.photoURLs!.first.isNotEmpty
-                    ? Image.network(chat.photoURLs!.first)
-                    : Text(chat.displayNames!.first[0], style: TextStyle(color: whiteColor),),
-              ),
+              // leading: CircleAvatar(
+              //   radius: 20,
+              //   child: callId.photoURLs?.first != null &&
+              //           callId.photoURLs!.first.isNotEmpty
+              //       ? Image.network(callId.photoURLs!.first)
+              //       : Text(callId.displayNames!.first[0]),
+              // ),
               // leading: CircleAvatar(
               //   backgroundImage: NetworkImage(
-              //     chat.photoURLs!.first.toString(),
+              //     callId.photoURLs!.first.toString(),
               //   ),
               //   radius: 30,
               // ),
               trailing: Text(
-                timeago
-                    .format(chat.lastMessageTime, locale: 'en_short')
-                    .toString(),
+                "Закажано за: ${DateFormat.yMd().add_Hm().format(callId.startDate)}",
                 style: const TextStyle(
                   color: Colors.grey,
                   fontSize: 13,
