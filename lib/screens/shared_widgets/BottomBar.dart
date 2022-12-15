@@ -191,19 +191,28 @@ class BottomBar extends StatelessWidget {
       child: IconTheme(
         data: IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
+            // IconButton(
+            //   iconSize: 32.0,
+            //   tooltip: 'Open navigation menu',
+            //   icon: const Icon(Icons.menu),
+            //   onPressed: () {
+            //     showMenu();
+            //   },
+            // ),
             IconButton(
               iconSize: 32.0,
-              tooltip: 'Open navigation menu',
-              icon: const Icon(Icons.menu),
+              tooltip: 'Состаноци',
+              icon: const Icon(Icons.call),
               onPressed: () {
-                showMenu();
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Calls()));
               },
             ),
             IconButton(
               iconSize: 32.0,
-              tooltip: 'Open chat',
+              tooltip: 'Пораки',
               icon: const Icon(Icons.chat),
               onPressed: () {
                 Navigator.push(
@@ -218,7 +227,7 @@ class BottomBar extends StatelessWidget {
             ),
             if (centerLocations.contains(fabLocation)) const Spacer(),
             IconButton(
-              tooltip: 'Profile',
+              tooltip: 'Профил',
               icon: const Icon(Icons.person),
               onPressed: () {
                 Navigator.push(

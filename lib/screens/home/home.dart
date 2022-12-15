@@ -139,19 +139,20 @@ class _HomeState extends State<Home> {
         fabLocation: FloatingActionButtonLocation.endDocked,
         shape: CircularNotchedRectangle(),
       ),
-      floatingActionButton: userExist
-          ? FloatingActionButton(
-              onPressed: openCalls,
-              tooltip: 'Create',
-              backgroundColor: lightGreenColor,
-              // child: const Text("lawyer",),
-              child: const Icon(
-                Icons.call,
-                color: Colors.white,
-              ),
-            )
-          : null,
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      // floatingActionButton: userExist
+      //     ? FloatingActionButton(
+      //         onPressed: openCalls,
+      //         tooltip: 'Create',
+      //         backgroundColor: lightGreenColor,
+      //         // child: const Text("lawyer",),
+      //         child: const Icon(
+      //           Icons.call,
+      //           color: Colors.white,
+      //         ),
+      //       )
+      //     : null,
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+     
       // floatingActionButtonLocation:
       //     FloatingActionButtonLocation.miniCenterFloat,
       // floatingActionButton: _next(),

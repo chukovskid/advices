@@ -53,9 +53,9 @@ class ChatContext {
         },
         onError: (e) => print("Error completing: $e"),
       );
-      // if (chatExists == true) {
-      //   return chatId;
-      // }
+      if (chatExists == true) {
+        return chatId;
+      }
 
       List<String> membersDisplayNames = [];
       List<String> membersPhotoURLs = [];

@@ -33,7 +33,7 @@ class _ChatAppBarState extends State<ChatAppBar> {
               return _chatInfo(chatInfo);
             } else if (snapshot.hasError) {
               return const Center(
-                child: Text("Something went wrong!"),
+                child: Text("Твои пораки!", style: TextStyle(color: whiteColor),),
               );
             }
             return Center(
