@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
@@ -11,20 +10,36 @@ import '../models/service.dart';
 FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
 class FirebaseDynamicLinkService {
-
-
-
-  
   static Future<String> createDynamicLink(bool short) async {
     String _linkMessage;
-    // final DynamicLinkParameters parameters = DynamicLinkParameters(
-    //   uriPrefix: 'https://advices.page.link',
-    //   link: Uri.parse('https://advices.web.app/#/register?id=123321'),
+
+    String link = "https://example.com/myapp?id=123";
+
+    // DynamicLinkParameters parameters = DynamicLinkParameters(
+    //   uriPrefix: 'https://example.app.goo.gl',
+    //   link: Uri.parse(link),
     //   androidParameters: AndroidParameters(
-    //     packageName: 'com.chukovski.advices',
-    //     minimumVersion: 125,
+    //     packageName: 'com.example.myapp',
     //   ),
+    //   // iosParameters: IosParameters(
+    //   //   bundleId: 'com.example.myapp',
+    //   //   minimumVersion: '1.0.1',
+    //   // ),
     // );
+
+
+    final DynamicLinkParameters parameters = DynamicLinkParameters(
+      uriPrefix: 'https://advices.page.link',
+      link: Uri.parse('https://advices.web.app/#/register?id=123321'),
+      androidParameters: AndroidParameters(
+        packageName: 'com.chukovski.advices',
+        minimumVersion: 125,
+      ),
+    );
+
+    // Uri dynamicUrl = await parameters.buildUrl();
+
+
 
     String? url;
     if (short) {
@@ -46,10 +61,11 @@ class FirebaseDynamicLinkService {
   static Future<String>? buildDynamicLinks(String theID) async {
     var urlToReturn;
     final String postUrl =
-        'https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key='+ dotenv.env['GOOGLE_API_KEY'].toString();
+        'https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=' +
+            dotenv.env['GOOGLE_API_KEY'].toString();
     String theUrl =
         "https://advices.page.link/?link=https://advices.web.app/lawyers/123/&apn=com.chukovski.advices&isi=125&ibi=com.chukovski.advices&imv=1.0.1&lid=lawyerID123";
-        // "https://advices.web.app/#/register/?isi=125&ibi=com.chukovski.advices&imv=1.0.1&apn=com.chukovski.advices&lawyerId=$theID";
+    // "https://advices.web.app/#/register/?isi=125&ibi=com.chukovski.advices&imv=1.0.1&apn=com.chukovski.advices&lawyerId=$theID";
     await http.post(Uri.tryParse(postUrl)!, body: {
       'longDynamicLink': theUrl,
     }).then(
@@ -65,9 +81,6 @@ class FirebaseDynamicLinkService {
     ).catchError((e) => debugPrint('error $e'));
     return urlToReturn;
   }
-
-
-
 
   // static Future<void> initDynamicLink(BuildContext context) async {
   //   FirebaseDynamicLinks.instance.onLink(

@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:advices/screens/call/call.dart';
 import 'package:advices/screens/shared_widgets/BottomBar.dart';
 import 'package:advices/screens/call/calls.dart';
@@ -76,21 +78,24 @@ class _HomeState extends State<Home> {
   void initDynamicLinks(BuildContext context) async {
     var currentUri = Uri.base;
 
-    // if (window.location.href.contains("/calls")) {
-    //   // await Future.delayed(Duration(seconds: 1));
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(builder: (context) => Calls()),
-    //   );
-    //   return;
-    // } else if (window.location.href.contains("/register")) {
-    //   // await Future.delayed(Duration(seconds: 1));
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(builder: (context) => Register()),
-    //   );
-    // }
+    if (window.location.href.contains("/calls")) {
+      // await Future.delayed(Duration(seconds: 1));
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Calls()),
+      );
+      return;
+    } else if (window.location.href.contains("/register")) {
+      // await Future.delayed(Duration(seconds: 1));
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Register()),
+      );
+    }
 
+
+
+// sreda 11 Davor, Natasa technical (.net)
     FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
     dynamicLinks.onLink.listen((dynamicLinkData) async {
       print('///// Dynamic Link' + dynamicLinkData.link.toString());

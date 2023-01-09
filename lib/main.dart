@@ -6,22 +6,28 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import 'firebase_options.dart';
+
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
 
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+);
   if (kIsWeb) {
-    await Firebase.initializeApp(
-      options: FirebaseOptions(
-        apiKey: dotenv.env['GOOGLE_API_KEY'].toString(),
-        authDomain: "advices-dev.firebaseapp.com",
-        appId: "1:793184649946:web:9551788cf7f51068cd9be3",
-        messagingSenderId: "793184649946",
-        projectId: "advices-dev",
-      ),
-    );
+    // await Firebase.initializeApp(
+    //   options: FirebaseOptions(
+    //     apiKey: dotenv.env['GOOGLE_API_KEY'].toString(),
+    //     authDomain: "advices-dev.firebaseapp.com",
+    //     appId: "1:793184649946:web:9551788cf7f51068cd9be3",
+    //     messagingSenderId: "793184649946",
+    //     projectId: "advices-dev",
+    //   ),
+    // );
   } else {
-    await Firebase.initializeApp();
+    // await Firebase.initializeApp();
   }
 
   runApp(MyApp());
