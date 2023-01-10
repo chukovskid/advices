@@ -1,3 +1,4 @@
+import 'package:advices/App/services/firebase_dynamic_links.dart';
 import 'package:advices/screens/authentication/authentication.dart';
 import 'package:advices/screens/call/calls.dart';
 import 'package:advices/assets/utilities/constants.dart';
@@ -201,6 +202,14 @@ class BottomBar extends StatelessWidget {
             //     showMenu();
             //   },
             // ),
+            IconButton(
+              iconSize: 32.0,
+              tooltip: 'Состаноци',
+              icon: const Icon(Icons.web),
+              onPressed: () async {
+                await FirebaseDynamicLinkService.buildDynamicLinks("opopID");
+              },
+            ),
             IconButton(
               iconSize: 32.0,
               tooltip: 'Состаноци',

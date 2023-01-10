@@ -74,7 +74,7 @@ class _RegisterState extends State<Register> {
         surname: _surnameController.text,
         phoneNumber: _phoneController.text,
         isLawyer: isLawyerConst,
-        lawField: selectedLawAreaName,
+        lawField: selectedLawAreaName ?? "",
         description: _descriptionController.text,
         experience: _experienceController.text,
         yearsOfExperience: _yearsOfExperienceController.text,

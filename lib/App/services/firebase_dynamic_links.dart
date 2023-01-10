@@ -64,7 +64,7 @@ class FirebaseDynamicLinkService {
         'https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=' +
             dotenv.env['GOOGLE_API_KEY'].toString();
     String theUrl =
-        "https://advices.page.link/?link=https://advices.web.app/lawyers/123/&apn=com.chukovski.advices&isi=125&ibi=com.chukovski.advices&imv=1.0.1&lid=lawyerID123";
+        "https://advices.page.link/?link=https://advices.web.app/#/$theID/&apn=com.chukovski.advices&isi=125&ibi=com.chukovski.advices&imv=1.0.1&lid=lawyerID123";
     // "https://advices.web.app/#/register/?isi=125&ibi=com.chukovski.advices&imv=1.0.1&apn=com.chukovski.advices&lawyerId=$theID";
     await http.post(Uri.tryParse(postUrl)!, body: {
       'longDynamicLink': theUrl,

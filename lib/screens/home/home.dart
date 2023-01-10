@@ -1,6 +1,7 @@
 import 'dart:html';
 
 import 'package:advices/screens/call/call.dart';
+import 'package:advices/screens/profile/lawyerProfile.dart';
 import 'package:advices/screens/shared_widgets/BottomBar.dart';
 import 'package:advices/screens/call/calls.dart';
 import 'package:advices/assets/utilities/constants.dart';
@@ -91,9 +92,27 @@ class _HomeState extends State<Home> {
         context,
         MaterialPageRoute(builder: (context) => Register()),
       );
+    } else if (window.location.href.contains("/test")) {
+      // await Future.delayed(Duration(seconds: 1));
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Register()),
+      );
+    } else if (window.location.href.contains("/lawyers")) {
+      // await Future.delayed(Duration(seconds: 1));
+      String url = window.location.href;
+      var parts = url.split("/lawyers/");
+      String lawyerId = parts[1];
+
+      print(lawyerId);
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                LawyerProfile(lawyerId, "")),
+      );
     }
-
-
 
 // sreda 11 Davor, Natasa technical (.net)
     FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
@@ -157,7 +176,7 @@ class _HomeState extends State<Home> {
       //       )
       //     : null,
       // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-     
+
       // floatingActionButtonLocation:
       //     FloatingActionButtonLocation.miniCenterFloat,
       // floatingActionButton: _next(),
