@@ -87,11 +87,8 @@ class _LawyerProfileState extends State<LawyerProfile> {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [
-                Color.fromARGB(255, 214, 223, 243),
-                Color.fromARGB(255, 187, 199, 222),
-              ],
-              stops: [-1, 2],
+              colors: backgroundColor,
+              stops: [-1, 1, 2],
             ),
           ),
           child: Row(

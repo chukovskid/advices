@@ -80,26 +80,22 @@ class _HomeState extends State<Home> {
     var currentUri = Uri.base;
 
     if (window.location.href.contains("/calls")) {
-      // await Future.delayed(Duration(seconds: 1));
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => Calls()),
       );
       return;
     } else if (window.location.href.contains("/register")) {
-      // await Future.delayed(Duration(seconds: 1));
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => Register()),
       );
     } else if (window.location.href.contains("/test")) {
-      // await Future.delayed(Duration(seconds: 1));
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => Register()),
       );
     } else if (window.location.href.contains("/lawyers")) {
-      // await Future.delayed(Duration(seconds: 1));
       String url = window.location.href;
       var parts = url.split("/lawyers/");
       String lawyerId = parts[1];
@@ -114,28 +110,7 @@ class _HomeState extends State<Home> {
       );
     }
 
-// sreda 11 Davor, Natasa technical (.net)
-    FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
-    dynamicLinks.onLink.listen((dynamicLinkData) async {
-      print('///// Dynamic Link' + dynamicLinkData.link.toString());
-      print('///// fragment' + dynamicLinkData.link.fragment);
-      if (dynamicLinkData.link.fragment == "/register") {
-        await Future.delayed(Duration(seconds: 1));
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Register()),
-        );
-      } else if (dynamicLinkData.link.fragment == "/calls") {
-        await Future.delayed(Duration(seconds: 1));
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Calls()),
-        );
-      }
-    }).onError((error) {
-      print('onLink error');
-      print(error.message);
-    });
+
   }
 
   openCalls() async {
@@ -156,88 +131,22 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //       appBar: BaseAppBar(
-      //   appBar: AppBar(),
-      // ),
       bottomNavigationBar: BottomBar(
         fabLocation: FloatingActionButtonLocation.endDocked,
         shape: CircularNotchedRectangle(),
       ),
-      // floatingActionButton: userExist
-      //     ? FloatingActionButton(
-      //         onPressed: openCalls,
-      //         tooltip: 'Create',
-      //         backgroundColor: lightGreenColor,
-      //         // child: const Text("lawyer",),
-      //         child: const Icon(
-      //           Icons.call,
-      //           color: Colors.white,
-      //         ),
-      //       )
-      //     : null,
-      // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-
-      // floatingActionButtonLocation:
-      //     FloatingActionButtonLocation.miniCenterFloat,
-      // floatingActionButton: _next(),
+    
       body: Container(
-          // image
           height: double.infinity,
           width: double.infinity,
           child: Laws()
-
-          // Image.network(
-          //     "https://images.unsplash.com/photo-1505664063603-28e48ca204eb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
-          //     height: 45,
-          //     width: 45,
-          //     fit: BoxFit.fitHeight),
           ),
     );
   }
 
-  Widget _next() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: SizedBox(
-            width: 250,
-            height: 80,
-            child: FittedBox(
-              child: FloatingActionButton.extended(
-                label: Text('      Lets talk...    '),
-                heroTag: "settingsBtn",
-                onPressed: () => {
-                  // DatabaseService.saveLawAreasForLawyerAsArray();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Laws()),
-                  )
-                },
-                backgroundColor: Color.fromRGBO(107, 119, 141, 1),
-                elevation: 0,
-              ),
-            ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: SizedBox(
-            width: 250,
-            height: 80,
-            child: FittedBox(
-              child: FloatingActionButton.extended(
-                label: Text('      Open calls...    '),
-                heroTag: "openCalls",
-                onPressed: openCalls,
-                backgroundColor: Color.fromRGBO(107, 119, 141, 1),
-                elevation: 0,
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+
+
+
+
+
 }

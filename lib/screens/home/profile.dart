@@ -79,7 +79,7 @@ class _ProfileState extends State<Profile> {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: backgroundColor,
-              stops: [-1, 2],
+              stops: [-1, 1, 2],
             ),
           ),
           child: Stack(

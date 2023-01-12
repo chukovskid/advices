@@ -141,7 +141,7 @@ class _RegisterState extends State<Register> {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: backgroundColor,
-              stops: [-1, 2],
+              stops: [-1, 1, 2],
             ),
           ),
           child: _allUsersForm() // _selectLawArea(), // _allUsersForm(),

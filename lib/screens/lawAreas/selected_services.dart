@@ -37,7 +37,7 @@ class _SelectedServicesState extends State<SelectedServices>
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: backgroundColor,
-            stops: [-1, 2],
+            stops: [-1, 1, 2],
           ),
         ),
         child: _cardsList(),

@@ -22,10 +22,10 @@ class _LawsState extends State<Laws>
   bool openContracts = false;
   bool openCompanies = false;
 
-  Color urgentColor = Color.fromARGB(243, 242, 58, 34);
-  Color expatsColor = darkGreenColor;
-  Color contractsColor = darkGreenColor;
-  Color companyColor = darkGreenColor;
+  Color urgentColor = Colors.transparent;
+  Color expatsColor = Colors.transparent;
+  Color contractsColor = Colors.transparent;
+  Color companyColor = Colors.transparent;
   double heightFactorUrgent = 1.8;
   double heightFactorExpats = 1.8;
   double heightFactorContracts = 1.8;
@@ -67,7 +67,7 @@ class _LawsState extends State<Laws>
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: backgroundColor,
-              stops: [-1, 2],
+              stops: [-1, 1, 2],
             ),
           ),
           child: Row(
@@ -94,13 +94,13 @@ class _LawsState extends State<Laws>
     return MouseRegion(
       onEnter: (PointerEvent details) {
         setState(() {
-          urgentColor = Color.fromARGB(243, 242, 103, 34);
+          // urgentColor = Color.fromARGB(243, 242, 103, 34);
           heightFactorUrgent = 2.0;
         });
       },
       onExit: (PointerEvent details) {
         setState(() {
-          urgentColor = Color.fromARGB(243, 242, 58, 34);
+          // urgentColor = Color.fromARGB(243, 242, 58, 34);
           heightFactorUrgent = 1.8;
         });
       },
@@ -155,13 +155,13 @@ class _LawsState extends State<Laws>
     return MouseRegion(
       onEnter: (PointerEvent details) {
         setState(() {
-          expatsColor = greyGreenColor;
+          // expatsColor = greyGreenColor;
           heightFactorExpats = 2.0;
         });
       },
       onExit: (PointerEvent details) {
         setState(() {
-          expatsColor = darkGreenColor;
+          // expatsColor = darkGreenColor;
           heightFactorExpats = 1.8;
         });
       },
@@ -174,7 +174,7 @@ class _LawsState extends State<Laws>
             mainAxisSize: MainAxisSize.max,
             children: [
               AnimatedContainer(
-                duration: Duration(milliseconds: 500),
+                duration: Duration(seconds: 1),
                 curve: Curves.linear,
                 height: MediaQuery.of(context).size.height / heightFactorExpats,
                 child: Column(
@@ -215,14 +215,14 @@ class _LawsState extends State<Laws>
     return MouseRegion(
       onEnter: (PointerEvent details) {
         setState(() {
-          contractsColor = greyGreenColor;
+          // contractsColor = greyGreenColor;
           // contractsColor = Color.fromARGB(255, 124, 159, 169);
           heightFactorContracts = 2.0;
         });
       },
       onExit: (PointerEvent details) {
         setState(() {
-          contractsColor = darkGreenColor;
+          // contractsColor = darkGreenColor;
           heightFactorContracts = 1.8;
         });
       },
@@ -278,13 +278,13 @@ class _LawsState extends State<Laws>
     return MouseRegion(
       onEnter: (PointerEvent details) {
         setState(() {
-          companyColor = greyGreenColor;
+          // companyColor = greyGreenColor;
           heightFactorCompany = 2.0;
         });
       },
       onExit: (PointerEvent details) {
         setState(() {
-          companyColor = darkGreenColor;
+          // companyColor = darkGreenColor;
           heightFactorCompany = 1.8;
         });
       },
@@ -343,11 +343,8 @@ class _LawsState extends State<Laws>
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              darkGreenColor,
-              darkGreenColor,
-            ],
-            stops: [-1, 2],
+            colors: backgroundColor,
+            stops: [-1, 1, 2],
           ),
         ),
         child: Container(
