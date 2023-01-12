@@ -31,6 +31,13 @@ class ChatContext {
     await refMessages
         .doc(now.microsecondsSinceEpoch.toString())
         .set(newMesage.toMap());
+
+    CollectionReference refUserChats = FirebaseFirestore.instance
+        .collection('conversation/userChats/${userId}');
+    await refUserChats.doc(chatId).update({
+      "lastMessage": message,
+      "lastMessageTime": DateTime.now(),
+    });
   }
 
   static Future<String> createNewChat(List<String> userIds) async {

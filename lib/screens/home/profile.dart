@@ -7,7 +7,6 @@ import 'package:advices/screens/shared_widgets/base_app_bar.dart';
 import 'package:advices/assets/utilities/constants.dart';
 import 'package:flutter/material.dart';
 import '../../App/contexts/authContext.dart';
-import '../../App/services/auth.dart';
 import '../authentication/authentication.dart';
 
 class Profile extends StatefulWidget {

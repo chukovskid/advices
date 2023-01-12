@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:advices/App/providers/services_provider.dart';
 import 'package:flutter/material.dart';
 import 'App/contexts/authContext.dart';
 import 'App/helpers/router.dart' as router;
@@ -6,31 +6,25 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import 'App/providers/count_provider.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
-
   WidgetsFlutterBinding.ensureInitialized();
-
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-);
-  if (kIsWeb) {
-    // await Firebase.initializeApp(
-    //   options: FirebaseOptions(
-    //     apiKey: dotenv.env['GOOGLE_API_KEY'].toString(),
-    //     authDomain: "advices-dev.firebaseapp.com",
-    //     appId: "1:793184649946:web:9551788cf7f51068cd9be3",
-    //     messagingSenderId: "793184649946",
-    //     projectId: "advices-dev",
-    //   ),
-    // );
-  } else {
-    // await Firebase.initializeApp();
-  }
-
-  runApp(MyApp());
+  );
+  runApp( /// Providers are above [MyApp] instead of inside it, so that tests
+    /// can use [MyApp] while mocking the providers
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => Counter()),
+        ChangeNotifierProvider(create: (_) => ServicesProvider()),
+      ],
+      child:  MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

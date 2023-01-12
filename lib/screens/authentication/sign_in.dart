@@ -68,20 +68,6 @@ class _SignInState extends State<SignIn> {
     Navigator.pop(context);
   }
 
-  _navigateToAuth() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Authenticate()),
-    );
-  }
-
-  _navigateToHome() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Home()),
-    );
-  }
-
   _navigateToRegister() {
     Navigator.push(
       context,
@@ -91,17 +77,12 @@ class _SignInState extends State<SignIn> {
 
   Future<void> _signInUser(FlutterUser flutUser) async {
     var user = await _auth.signInWithEmailAndPassword(flutUser);
-    if (user != null) {
-      Navigator.pop(context);
-    }
+    if (user != null) goBack();
   }
 
   Future<void> _googleSignIn() async {
-   User? user = await GoogleAuthService.signInWithGoogle(context: context);
-    // await _auth.googleSignIn();
-    if(user != null) Navigator.pop(context);
-
-    // await _navigateToAuth();
+    User? user = await GoogleAuthService.signInWithGoogle(context: context);
+    if (user != null) goBack();
     print(email);
   }
 
@@ -148,10 +129,15 @@ class _SignInState extends State<SignIn> {
               ),
             ),
             const SizedBox(height: 35.0),
-            SizedBox(child: _showEmailSignIn(), width: 660,),
+            SizedBox(
+              child: _showEmailSignIn(),
+              width: 660,
+            ),
             const SizedBox(height: 50.0),
             Text(
-              mkLanguage ? "Или пријавете се со помош на социјалните медиуми" : "Or Sign up using social media",
+              mkLanguage
+                  ? "Или пријавете се со помош на Google"
+                  : "Or Sign up using social media",
               style: TextStyle(
                 fontWeight: FontWeight.normal,
                 color: Colors.white,
@@ -160,8 +146,8 @@ class _SignInState extends State<SignIn> {
             ),
             const SizedBox(height: 10.0),
             Row(
-              mainAxisAlignment: MainAxisAlignment
-                  .center, //Center Row contents horizontally,
+              mainAxisAlignment:
+                  MainAxisAlignment.center, //Center Row contents horizontally,
               children: [
                 Container(
                   height: 60,
@@ -180,59 +166,8 @@ class _SignInState extends State<SignIn> {
                         _googleSignIn();
                       }),
                 ),
-                const SizedBox(width: 15.0),
-                Container(
-                  height: 60,
-                  width: 60,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        onPrimary: Color.fromARGB(255, 184, 15, 15),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(40.0),
-                        ),
-                      ),
-                      // shape: RoundedRectangleBorder(
-                      //   borderRadius: new BorderRadius.circular(40.0),
-                      // ),
-                      // color: Color.fromARGB(255, 255, 255, 255),
-                      child: const Center(
-                        child:
-                            // FaIcon(FontAwesomeIcons.arrowLeft)
-
-                            Icon(
-                          Icons.facebook,
-                          size: 30.0,
-                          color: Color.fromARGB(255, 22, 28, 87),
-                        ),
-                      ),
-                      onPressed: () async {
-                        _googleSignIn();
-                      }),
-                ),
-                const SizedBox(width: 15.0),
-                Container(
-                  height: 60,
-                  width: 60,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        onPrimary: Color.fromARGB(255, 54, 107, 187),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(40.0),
-                        ),
-                      ),
-                      // textColor: Color.fromARGB(255, 54, 107, 187),
-                      // shape: RoundedRectangleBorder(
-                      //   borderRadius: new BorderRadius.circular(40.0),
-                      // ),
-                      // color: Color.fromARGB(255, 255, 255, 255),
-                      child: const Center(
-                          child: FaIcon(FontAwesomeIcons.twitter)),
-                      onPressed: () async {
-                        _googleSignIn();
-                      }),
-                ),
+             
+              
               ],
             ),
             const SizedBox(height: 50.0),
@@ -245,8 +180,10 @@ class _SignInState extends State<SignIn> {
                   elevation: 0.0,
                 ),
                 // color: Colors.transparent,
-                child:  Text(
-                  mkLanguage ? "Почни со регистрација!" :'No account? Create one!',
+                child: Text(
+                  mkLanguage
+                      ? "Почни со регистрација!"
+                      : 'No account? Create one!',
                   style: TextStyle(color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
@@ -279,7 +216,7 @@ class _SignInState extends State<SignIn> {
             focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: Color.fromARGB(255, 255, 255, 255)),
             ),
-            labelText: "Email",
+            labelText: "Е-маил",
             labelStyle: TextStyle(
               color: Color.fromARGB(209, 255, 255, 255),
             )),
@@ -304,7 +241,7 @@ class _SignInState extends State<SignIn> {
             focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: Color.fromARGB(255, 255, 255, 255)),
             ),
-            labelText: "Password",
+            labelText: "Лозинка",
             labelStyle: TextStyle(
               color: Color.fromARGB(209, 255, 255, 255),
             )),
@@ -316,8 +253,10 @@ class _SignInState extends State<SignIn> {
           ),
 
           // color: Color.fromRGBO(225, 103, 104, 1),
-          child: const Text(
-            ' Log In ',
+          child:  Text(
+             mkLanguage
+                  ? "Логирај се"
+                  : ' Log In ',
             style: TextStyle(color: Colors.white),
           ),
           onPressed: () async {

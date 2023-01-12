@@ -16,7 +16,6 @@ import '../video/examples/basic/join_channel_video/join_channel_video.dart';
 import '../video/examples/advanced/index.dart';
 import '../video/examples/basic/index.dart';
 import '../video/config/agora.config.dart' as config;
-import '../../App/services/auth.dart';
 import '../../assets/utilities/constants.dart';
 import '../authentication/authentication.dart';
 import '../shared_widgets/base_app_bar.dart';
@@ -117,7 +116,7 @@ class _CallState extends State<Call> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: backgroundColor,
-            stops: [-1, 1, 2],
+            stops: [-1, 2],
           ),
         ),
         child: _joinChannelButton() // _selectLawArea(), // _allUsersForm(),

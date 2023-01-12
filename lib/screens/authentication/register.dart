@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import '../../App/contexts/authContext.dart';
 import '../../App/models/user.dart';
-import '../../App/services/auth.dart';
 import '../../assets/utilities/constants.dart';
 import '../home/home.dart';
 import 'authentication.dart';

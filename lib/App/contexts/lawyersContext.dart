@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:advices/App/models/event.dart';
 import 'package:advices/App/models/service.dart';
 import 'package:advices/App/models/user.dart';
-import 'package:advices/App/services/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';

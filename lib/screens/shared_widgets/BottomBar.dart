@@ -1,3 +1,4 @@
+import 'package:advices/App/providers/count_provider.dart';
 import 'package:advices/App/services/firebase_dynamic_links.dart';
 import 'package:advices/screens/authentication/authentication.dart';
 import 'package:advices/screens/call/calls.dart';
@@ -7,6 +8,7 @@ import '../chat/screens/mobile_layout_screen.dart';
 import '../chat/screens/web_layout_screen.dart';
 import '../chat/utils/responsive_layout.dart';
 import '../home/home.dart';
+import 'package:provider/provider.dart';
 
 class BottomBar extends StatelessWidget {
   const BottomBar({
@@ -202,14 +204,14 @@ class BottomBar extends StatelessWidget {
             //     showMenu();
             //   },
             // ),
-            IconButton(
-              iconSize: 32.0,
-              tooltip: 'Состаноци',
-              icon: const Icon(Icons.web),
-              onPressed: () async {
-                await FirebaseDynamicLinkService.buildDynamicLinks("opopID");
-              },
-            ),
+            // IconButton(
+            //     iconSize: 32.0,
+            //     tooltip: 'Состаноци',
+            //     icon: const Icon(Icons.web),
+            //     onPressed: () => context.read<Counter>().increment()
+            //     // await FirebaseDynamicLinkService.buildDynamicLinks("opopID");
+
+            //     ),
             IconButton(
               iconSize: 32.0,
               tooltip: 'Состаноци',
