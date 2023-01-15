@@ -122,117 +122,27 @@ class _DogovorZaDarState extends State<DogovorZaDar> {
     );
   }
 
-// @override
-//   Widget build(BuildContext context) {
-//     return ChangeNotifierProvider(
-//       create: (context) => ServicesProvider(),
-//       child: Consumer<ServicesProvider>(
-//         builder: (context, provider, child) {
-//           return Form(
-//             key: provider.formKey,
-//             child: Column(
-//               children: [
-//                 // TextFormField(
-//                 //   controller: provider.emailController,
-//                 //   focusNode: provider.emailFocusNode,
-//                 //   // ... Add other form fields here
-//                 // ),
-//                 ElevatedButton(
-//                   onPressed: provider.submitForm(), child: null,
-//                   // ... Add other buttons here
-//                 ),
-//               ],
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
 
-  @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => ServicesProvider(),
-      child: Consumer<ServicesProvider>(
-        builder: (context, provider, child) {
-          return Form(
-            key: provider.formKey,
-            child: Column(
-              children: [
-                // TextFormField(
-                //   controller: provider.textController1,
-                //   decoration: InputDecoration(labelText: 'Text 1'),
-                //   validator: (value) {
-                //     if (value!.isEmpty) {
-                //       return 'Please enter text';
-                //     }
-                //     return null;
-                //   },
-                // ),
-                // TextFormField(
-                //   controller: provider.textController2,
-                //   decoration: InputDecoration(labelText: 'Text 2'),
-                //   validator: (value) {
-                //     if (value!.isEmpty) {
-                //       return 'Please enter text';
-                //     }
-                //     return null;
-                //   },
-                // ),
-                // TextFormField(
-                //   controller: context.read<ServicesProvider>().textController3,
-                //   // decoration: InputDecoration(labelText: 'Text 3'),
-                //   // validator: (value) {
-                //   //   // if (value!.isEmpty) {
-                //   //   //   return 'Please enter text';
-                //   //   // }
-                //   //   return null;
-                //   // },
-                // ),
-              
-              
-                ElevatedButton(
-                  onPressed: provider.submitForm,
-                  child: Text('Submit'),
-                ),
-              ],
+    return Scaffold(
+
+
+      body: Container(
+          height: double.maxFinite,
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: backgroundColor,
+              stops: [-1, 1, 2],
             ),
-          );
-        },
-      ),
+          ),
+          child: _showRegisterFields() // _selectLawArea(), // _allUsersForm(),
+          // child: _dropdownLawSelect(),
+          ),
     );
   }
-
-
-
-
-
-
-
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     // resizeToAvoidBottomInset: false,
-  //     //       appBar: BaseAppBar(
-  //     //   appBar: AppBar(),
-  //     // ),
-
-  //     // backgroundColor: const Color.fromARGB(255, 226, 146, 100),
-  //     body: Container(
-  //         height: double.maxFinite,
-  //         width: double.infinity,
-  //         decoration: const BoxDecoration(
-  //           gradient: LinearGradient(
-  //             begin: Alignment.topLeft,
-  //             end: Alignment.bottomRight,
-  //             colors: backgroundColor,
-  //             stops: [-1, 1, 2],
-  //           ),
-  //         ),
-  //         child: _showRegisterFields() // _selectLawArea(), // _allUsersForm(),
-  //         // child: _dropdownLawSelect(),
-  //         ),
-  //   );
-  // }
 
   Widget _showRegisterFields() {
     return SingleChildScrollView(
@@ -393,6 +303,8 @@ class _DogovorZaDarState extends State<DogovorZaDar> {
               style: const TextStyle(color: Colors.white),
             ),
             onPressed: () async {
+                  await context.read<ServicesProvider>().submitForm();
+
               // if (isLawyer == false) {
               // } else if (isLawyer == true) {
               setState(() async {

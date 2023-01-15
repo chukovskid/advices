@@ -1,3 +1,5 @@
+import 'package:advices/App/providers/dar_provider.dart';
+import 'package:advices/App/providers/form_builder_provider.dart';
 import 'package:advices/App/providers/services_provider.dart';
 import 'package:flutter/material.dart';
 import 'App/contexts/authContext.dart';
@@ -21,6 +23,8 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => Counter()),
         ChangeNotifierProvider(create: (_) => ServicesProvider()),
+        ChangeNotifierProvider(create: (_) => DogovorZaDarProvider()),
+        ChangeNotifierProvider(create: (_) => FormBuilderProvider()),
       ],
       child:  MyApp(),
     ),

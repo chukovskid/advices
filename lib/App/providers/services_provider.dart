@@ -41,43 +41,37 @@ class ServicesProvider with ChangeNotifier {
   var setDefaultMake = true, setDefaultMakeModel = true;
   bool showSelectService = false;
 
-  // ... Add the _nextFocus, _submitForm, and _validateInput methods here
 
-  // submitForm() async {
-  //   // final isValid = formKey.currentState!.validate();
-  //   // var isLawyerConst = false;
-  //   // isLawyerConst = isLawyer ?? false;
-  //   // if (isValid) {
-  //   FlutterUser fUser = FlutterUser(
-  //     email: emailController.text,
-  //     password: passwordController.text,
-  //     name: nameController.text,
-  //     surname: surnameController.text,
-  //     phoneNumber: phoneController.text,
-  //     // isLawyer: isLawyerConst,
-  //     lawField: selectedLawAreaName ?? "",
-  //     description: descriptionController.text,
-  //     experience: experienceController.text,
-  //     yearsOfExperience: yearsOfExperienceController.text,
-  //     education: educationController.text,
-  //   );
 
-  //   try {
-  //     FlutterUser? createdUser =
-  //         await auth.registerWithEmailAndPassword(fUser, selectedServices);
-  //     // navigateToAuth();
-  //   } catch (e) {
-  //     print(e);
-  //   }
 
-  //   // // If the form passes validation, display a Snackbar.
-  //   // ScaffoldMessenger.of(context).showSnackBar(
-  //   //     const SnackBar(content: const Text('Registration sent')));
+  submitForm() async {
 
-  //   formKey.currentState?.save();
-  //   formKey.currentState?.reset();
-  //   // _nextFocus(_emailFocusNode);
-  // }
+    FlutterUser fUser = FlutterUser(
+      email: emailController.text,
+      password: passwordController.text,
+      name: nameController.text,
+      surname: surnameController.text,
+      phoneNumber: phoneController.text,
+      lawField: selectedLawAreaName ?? "",
+      description: descriptionController.text,
+      experience: experienceController.text,
+      yearsOfExperience: yearsOfExperienceController.text,
+      education: educationController.text,
+    );
+
+    try {
+      FlutterUser? createdUser =
+          await auth.registerWithEmailAndPassword(fUser, selectedServices);
+      // navigateToAuth();
+    } catch (e) {
+      print(e);
+    }
+
+
+    formKey.currentState?.save();
+    formKey.currentState?.reset();
+    // _nextFocus(_emailFocusNode);
+  }
 
   String? validateInput(String value) {
   if (value.trim().isEmpty) {
@@ -96,19 +90,14 @@ final formKey = GlobalKey<FormState>();
   final textController2 = TextEditingController();
   final textController3 = TextEditingController();
 
-  void submitForm() {
-    if (formKey.currentState!.validate()) {
-      formKey.currentState?.save();
-      print("Text 1: ${textController1.text}");
-      print("Text 2: ${textController2.text}");
-      print("Text 3: ${textController3.text}");
-    }
-  }
+ 
 
 
+ final FocusNode _focusNode = FocusNode();
+  final TextEditingController _controller = TextEditingController();
 
-
-
+  FocusNode get focusNode => _focusNode;
+  TextEditingController get controller => _controller;
 
 
 

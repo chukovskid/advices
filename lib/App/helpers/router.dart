@@ -1,6 +1,8 @@
 import 'package:advices/screens/authentication/register.dart';
 import 'package:advices/screens/authentication/sign_in.dart';
 import 'package:advices/screens/profile/lawyerProfile.dart';
+import 'package:advices/screens/services/form_builder.dart';
+import 'package:advices/screens/services/personal_info_form.dart';
 import 'package:flutter/material.dart';
 import '../../screens/home/home.dart';
 import '../../screens/home/laws.dart';
@@ -15,7 +17,7 @@ import '../../screens/chat/utils/responsive_layout.dart';
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case '/':
-      return MaterialPageRoute(builder: (context) => Home());
+      return MaterialPageRoute(builder: (context) => FormBuilder());
     case 'areas':
       return MaterialPageRoute(builder: (context) => Laws());
     case 'lawyers':

@@ -1,6 +1,7 @@
 import 'package:advices/App/models/service.dart';
 import 'package:advices/screens/lawAreas/selected_services.dart';
 import 'package:advices/assets/utilities/constants.dart';
+import 'package:advices/screens/services/personal_info_form.dart';
 import 'package:flutter/material.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 import '../../App/contexts/servicesContext.dart';
@@ -639,7 +640,7 @@ class _LawsState extends State<Laws>
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => Lawyers(service: service.id)),
+                    builder: (context) => PersonalInfoForm()),
               ),
             ),
           ),
@@ -656,7 +657,7 @@ class _LawsState extends State<Laws>
     return InkWell(
       onTap: () => Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Lawyers(service: service.id)),
+        MaterialPageRoute(builder: (context) => PersonalInfoForm()),
       ),
       child: Container(
           padding: const EdgeInsets.all(2),
