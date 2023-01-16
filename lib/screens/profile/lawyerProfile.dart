@@ -1,16 +1,10 @@
-import 'package:advices/App/contexts/chatContext.dart';
 import 'package:advices/App/contexts/lawyersContext.dart';
-import 'package:advices/screens/calendar/add_event.dart';
-import 'package:advices/screens/call/call.dart';
 import 'package:advices/screens/chat/screens/mobile_chat_screen.dart';
 import 'package:advices/screens/profile/createEvent.dart';
-import 'package:advices/App/services/database.dart';
 import 'package:flutter/material.dart';
 import '../../App/models/user.dart';
+import '../../App/providers/chat_provider.dart';
 import '../../assets/utilities/constants.dart';
-import '../authentication/authentication.dart';
-import '../call/calls.dart';
-import '../chat/screens/mobile_layout_screen.dart';
 import '../chat/screens/web_layout_screen.dart';
 import '../chat/utils/responsive_layout.dart';
 import '../shared_widgets/base_app_bar.dart';
@@ -26,6 +20,8 @@ class LawyerProfile extends StatefulWidget {
 }
 
 class _LawyerProfileState extends State<LawyerProfile> {
+    final ChatProvider _chatProvider = ChatProvider();
+
   bool mkLanguage = true;
   FlutterUser? lawyer;
   String minPriceEuro = "30";
@@ -56,7 +52,7 @@ class _LawyerProfileState extends State<LawyerProfile> {
 
   Future<void> _startChatConversation() async {
     print("_startChatConversation");
-    String chatId = await ChatContext.createNewChat([lawyer!.uid]);
+    String chatId = await _chatProvider.createNewChat([lawyer!.uid]);
     Navigator.push(
       context,  
       MaterialPageRoute(

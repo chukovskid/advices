@@ -1,17 +1,10 @@
 import 'package:advices/App/contexts/callEventsContext.dart';
-import 'package:advices/App/contexts/usersContext.dart';
-import 'package:advices/App/models/userChat.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../../App/contexts/chatContext.dart';
-import '../../../App/models/chat.dart';
 import '../../../App/models/event.dart';
-import '../../../App/models/message.dart';
 import '../../../assets/utilities/constants.dart';
 import '../../call/call.dart';
 import '../colors.dart';
-import '../screens/mobile_chat_screen.dart';
-import 'package:timeago/timeago.dart' as timeago;
 import 'package:intl/intl.dart';
 
 class ChatsCallList extends StatefulWidget {

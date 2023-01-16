@@ -1,5 +1,5 @@
-import 'package:advices/App/contexts/chatContext.dart';
 import 'package:advices/App/models/message.dart';
+import 'package:advices/App/providers/chat_provider.dart';
 import 'package:advices/screens/chat/widgets/sender_message_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +16,7 @@ class ChatList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<Iterable<Message>>(
-        stream: ChatContext.getMessagesStreamForChat(chatId),
+        stream: ChatProvider.getMessagesStreamForChat(chatId),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final chatMessages = snapshot.data!;

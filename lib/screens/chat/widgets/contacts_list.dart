@@ -1,10 +1,7 @@
-import 'package:advices/App/contexts/usersContext.dart';
-import 'package:advices/App/models/userChat.dart';
+import 'package:advices/App/providers/chat_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../../App/contexts/chatContext.dart';
 import '../../../App/models/chat.dart';
-import '../../../App/models/message.dart';
 import '../../../assets/utilities/constants.dart';
 import '../colors.dart';
 import '../screens/mobile_chat_screen.dart';
@@ -39,7 +36,7 @@ class _ContactsListState extends State<ContactsList> {
     return Padding(
       padding: const EdgeInsets.only(top: 10.0),
       child: StreamBuilder<Iterable<Chat>>(
-          stream: ChatContext.getChats(widget.user.uid),
+          stream: ChatProvider.getChats(widget.user.uid),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final chats = snapshot.data!;

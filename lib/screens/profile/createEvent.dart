@@ -1,7 +1,7 @@
-import 'package:advices/App/contexts/authContext.dart';
 import 'package:advices/App/contexts/callEventsContext.dart';
 import 'package:advices/App/contexts/servicesContext.dart';
 import 'package:advices/App/models/service.dart';
+import 'package:advices/App/providers/auth_provider.dart';
 import 'package:advices/assets/utilities/constants.dart';
 import 'package:advices/screens/authentication/sign_in.dart';
 import 'package:advices/screens/call/calls.dart';
@@ -100,7 +100,7 @@ class _CreateEventState extends State<CreateEvent> {
   }
 
   Future<void> _saveEvent() async {
-    final AuthContext _auth = AuthContext();
+    final AuthProvider _auth = AuthProvider();
     User? user = await _auth.getCurrentUser();
     bool userExist = user != null ? true : false;
     if (!userExist) {

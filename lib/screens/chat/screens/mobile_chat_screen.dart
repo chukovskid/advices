@@ -1,11 +1,10 @@
+import 'package:advices/App/providers/auth_provider.dart';
 import 'package:advices/screens/chat/colors.dart';
-import 'package:advices/screens/chat/info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../../App/contexts/authContext.dart';
-import '../../../App/contexts/chatContext.dart';
 import '../../../App/models/message.dart';
+import '../../../App/providers/chat_provider.dart';
 import '../../authentication/authentication.dart';
 import '../widgets/chat_list.dart';
 import '../widgets/chat_appbar.dart';
@@ -21,13 +20,11 @@ class MobileChatScreen extends StatefulWidget {
 
 class _MobileChatScreenState extends State<MobileChatScreen> {
   final FocusNode _messageFocusNode = FocusNode();
-
   final TextEditingController _messageController = TextEditingController();
-
-  final AuthContext _auth = AuthContext();
+  final AuthProvider _auth = AuthProvider();
+  final ChatProvider _chatProvider = ChatProvider();
 
   List<Message> messages = [];
-
   User? user;
 
   @override
@@ -57,8 +54,7 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
   _submitMessage(String message) async {
     _messageController.clear();
     print("_submitMessage ${widget.chatId}");
-
-    await ChatContext.sendMessage(user!.uid, message, widget.chatId);
+    await _chatProvider.sendMessage(user!.uid, message, widget.chatId);
     print("Submitet $message");
   }
 
@@ -69,27 +65,6 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: appBarColor,
-      //   title: Text(
-      //     info[0]['name'].toString(),
-      //   ),
-      //   centerTitle: false,
-      //   actions: [
-      //     // IconButton(
-      //     //   onPressed: () {},
-      //     //   icon: const Icon(Icons.video_call),
-      //     // ),
-      //     // IconButton(
-      //     //   onPressed: () {},
-      //     //   icon: const Icon(Icons.call),
-      //     // ),
-      //     // IconButton(
-      //     //   onPressed: () {},
-      //     //   icon: const Icon(Icons.more_vert),
-      //     // ),
-      //   ],
-      // ),
       body: Column(
         children: [
           Container(
@@ -101,51 +76,19 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
           ),
           TextFormField(
             keyboardType: TextInputType.text,
-            // textInputAction: TextInputAction.next,
             focusNode: _messageFocusNode,
             onFieldSubmitted: (String value) {
-              //Do anything with value
               _nextFocus(_messageFocusNode);
-
               _submitMessage(value);
             },
             controller: _messageController,
-            // validator: (value) => _validateInput(value.toString()),
             style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
               filled: true,
               fillColor: mobileChatBoxColor,
-              // prefixIcon: const Padding(
-              //   padding: EdgeInsets.symmetric(horizontal: 20.0),
-              //   child: Icon(
-              //     Icons.emoji_emotions,
-              //     color: Colors.grey,
-              //   ),
-              // ),
-              // suffixIcon: Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.end,
-              //     children: const [
-              //       Icon(
-              //         Icons.camera_alt,
-              //         color: Colors.grey,
-              //       ),
-              //       Icon(
-              //         Icons.attach_file,
-              //         color: Colors.grey,
-              //       ),
-              //       Icon(
-              //         Icons.money,
-              //         color: Colors.grey,
-              //       ),
-              //     ],
-              //   ),
-              // ),
               hintStyle: TextStyle(color: Colors.grey[700]),
               hintText: 'Напиши порака!',
               border: OutlineInputBorder(
-                // borderRadius: BorderRadius.circular(20.0),
                 borderSide: const BorderSide(
                   width: 0,
                   style: BorderStyle.none,

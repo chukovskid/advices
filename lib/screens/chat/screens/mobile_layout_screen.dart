@@ -1,12 +1,8 @@
-import 'package:advices/screens/chat/screens/mobile_chat_screen.dart';
+import 'package:advices/App/providers/auth_provider.dart';
 import 'package:advices/screens/chat/widgets/chats_call_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:advices/screens/chat/colors.dart';
-import 'package:advices/screens/chat/info.dart';
-import 'package:flutter/material.dart';
-
-import '../../../App/contexts/authContext.dart';
 import '../../../assets/utilities/constants.dart';
 import '../../authentication/authentication.dart';
 import '../widgets/contacts_list.dart';
@@ -21,8 +17,7 @@ class MobileLayoutScreen extends StatefulWidget {
 }
 
 class _MobileLayoutScreenState extends State<MobileLayoutScreen> {
-  final AuthContext _auth = AuthContext();
-
+  final AuthProvider _auth = AuthProvider();
   User? user;
   String chatId = "";
 
@@ -68,19 +63,7 @@ class _MobileLayoutScreenState extends State<MobileLayoutScreen> {
           elevation: 0,
           backgroundColor: darkGreenColor,
           centerTitle: false,
-          // title: const Text(
-          //   'Advices chat',
-          //   style: TextStyle(
-          //     fontSize: 20,
-          //     color: Colors.grey,
-          //     fontWeight: FontWeight.bold,
-          //   ),
-          // ),
           actions: [
-            // IconButton(
-            //   icon: const Icon(Icons.search, color: Colors.grey),
-            //   onPressed: () {},
-            // ),
             IconButton(
               icon: const Icon(Icons.person, color: Colors.grey),
               onPressed: _navigateToAuth,
@@ -96,11 +79,9 @@ class _MobileLayoutScreenState extends State<MobileLayoutScreen> {
             ),
             tabs: [
               Tab(
-                // text: 'ПОРАКИ',
                 icon: Icon(Icons.chat),
               ),
               Tab(
-                // text: 'ПОВИЦИ',
                 icon: Icon(Icons.call),
               ),
             ],
@@ -112,14 +93,6 @@ class _MobileLayoutScreenState extends State<MobileLayoutScreen> {
             ChatsCallList(user!, callbackSelectChat),
           ],
         ),
-        // floatingActionButton: FloatingActionButton(
-        //   onPressed: () {},
-        //   backgroundColor: tabColor,
-        //   child: const Icon(
-        //     Icons.comment,
-        //     color: Colors.white,
-        //   ),
-        // ),
       ),
     );
   }

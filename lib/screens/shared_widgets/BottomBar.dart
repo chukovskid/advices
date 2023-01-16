@@ -1,5 +1,4 @@
-import 'package:advices/App/providers/count_provider.dart';
-import 'package:advices/App/services/firebase_dynamic_links.dart';
+import 'package:advices/App/providers/navigation_provider.dart';
 import 'package:advices/screens/authentication/authentication.dart';
 import 'package:advices/screens/call/calls.dart';
 import 'package:advices/assets/utilities/constants.dart';
@@ -8,10 +7,11 @@ import '../chat/screens/mobile_layout_screen.dart';
 import '../chat/screens/web_layout_screen.dart';
 import '../chat/utils/responsive_layout.dart';
 import '../home/home.dart';
-import 'package:provider/provider.dart';
 
 class BottomBar extends StatelessWidget {
-  const BottomBar({
+  final NavigationProvider _navigationProvider = NavigationProvider();
+
+  BottomBar({
     this.fabLocation = FloatingActionButtonLocation.endDocked,
     this.shape = const CircularNotchedRectangle(),
   });
@@ -27,6 +27,8 @@ class BottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _navigationProvider.setContext(context);
+
     showMenu() {
       showModalBottomSheet(
           backgroundColor: Colors.transparent,
@@ -97,12 +99,14 @@ class BottomBar extends StatelessWidget {
                                         color: Colors.white,
                                       ),
                                       onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  Authenticate()),
-                                        );
+                                        NavigationProvider()
+                                            .navigateTo(Authenticate());
+                                        // Navigator.push(
+                                        //   context,
+                                        //   MaterialPageRoute(
+                                        //       builder: (context) =>
+                                        //           Authenticate()),
+                                        // );
                                       },
                                     ),
                                     ListTile(
@@ -115,11 +119,7 @@ class BottomBar extends StatelessWidget {
                                         color: Colors.white,
                                       ),
                                       onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => Home()),
-                                        );
+                                        NavigationProvider().navigateTo(Home());
                                       },
                                     ),
                                     ListTile(
@@ -132,11 +132,7 @@ class BottomBar extends StatelessWidget {
                                         color: Colors.white,
                                       ),
                                       onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => Home()),
-                                        );
+                                        NavigationProvider().navigateTo(Home());
                                       },
                                     ),
                                     ListTile(
@@ -149,11 +145,7 @@ class BottomBar extends StatelessWidget {
                                         color: Colors.white,
                                       ),
                                       onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => Calls()),
-                                        );
+                                        NavigationProvider().privateNav(Calls());
                                       },
                                     ),
                                     ListTile(
@@ -166,11 +158,7 @@ class BottomBar extends StatelessWidget {
                                         color: Colors.white,
                                       ),
                                       onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => Calls()),
-                                        );
+                                        NavigationProvider().privateNav(Calls());
                                       },
                                     ),
                                   ],
@@ -217,8 +205,10 @@ class BottomBar extends StatelessWidget {
               tooltip: 'Состаноци',
               icon: const Icon(Icons.call),
               onPressed: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Calls()));
+                _navigationProvider.privateNav(Calls());
+
+                // Navigator.push(
+                //     context, MaterialPageRoute(builder: (context) => Calls()));
               },
             ),
             IconButton(
@@ -226,14 +216,18 @@ class BottomBar extends StatelessWidget {
               tooltip: 'Пораки',
               icon: const Icon(Icons.chat),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ResponsiveLayout(
+                _navigationProvider.privateNav(ResponsiveLayout(
                             mobileScreenLayout: MobileLayoutScreen(null),
-                            webScreenLayout: WebLayoutScreen(null),
-                          )),
-                );
+                            webScreenLayout: WebLayoutScreen(null)));
+
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //       builder: (context) => ResponsiveLayout(
+                //             mobileScreenLayout: MobileLayoutScreen(null),
+                //             webScreenLayout: WebLayoutScreen(null),
+                //           )),
+                // );
               },
             ),
             if (centerLocations.contains(fabLocation)) const Spacer(),

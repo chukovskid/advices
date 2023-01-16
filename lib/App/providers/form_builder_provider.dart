@@ -80,20 +80,32 @@ class FormBuilderProvider with ChangeNotifier {
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                TextField(
-                  // initialValue: currentTitle,
+                TextFormField(
+                  initialValue: currentTitle,
                   onChanged: (value) => _tempTitle = value,
                 ),
                 Center(
                   child: Column(
                     children: optionFields
-                        .map((optionField) => TextField(
-                              decoration: InputDecoration(
-                                  labelText:
-                                      'Option ${optionFields.indexOf(optionField) + 1}'),
-                              onChanged: (value) {
-                                optionField.onChanged(value);
-                              },
+                        .map((optionField) =>  Column(
+                              children: [
+                                TextFormField(
+                                  initialValue: optionField._tempOption,
+                                  decoration: InputDecoration(
+                                      labelText:
+                                          'Option ${optionFields.indexOf(optionField) + 1}'),
+                                  onChanged: (value) {
+                                    optionField.onChanged(value);
+                                  },
+                                ),
+                                TextFormField(
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(labelText: 'Скокни прашања'),
+                                  onChanged: (value) {
+                                    optionField.onChanged(value);
+                                  },
+                                ),
+                              ],
                             ))
                         .toList(),
                   ),
@@ -135,13 +147,13 @@ class FormBuilderProvider with ChangeNotifier {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              TextField(
-                // initialValue: currentTitle,
+              TextFormField(
+                initialValue: currentTitle,
                 onChanged: (value) => title = value,
                 decoration: InputDecoration(labelText: 'Title'),
               ),
-              TextField(
-                // initialValue: currentDescription,
+              TextFormField(
+                initialValue: currentDescription,
                 onChanged: (value) => description = value,
                 decoration: InputDecoration(labelText: 'Description'),
               ),
@@ -156,22 +168,6 @@ class FormBuilderProvider with ChangeNotifier {
         );
       },
     );
-  }
-
-  void moveQuestionUp(int index) {
-    if (index > 0) {
-      final question = contracts.last.questions.removeAt(index);
-      contracts.last.questions.insert(index - 1, question);
-      notifyListeners();
-    }
-  }
-
-  void moveQuestionDown(int index) {
-    if (index < contracts.last.questions.length - 1) {
-      final question = contracts.last.questions.removeAt(index);
-      contracts.last.questions.insert(index + 1, question);
-      notifyListeners();
-    }
   }
 
   void editQuestion(BuildContext context, int index) async {
@@ -189,6 +185,22 @@ class FormBuilderProvider with ChangeNotifier {
           index: index,
           currentTitle: question.questionText,
           currentOptions: question.options);
+    }
+  }
+
+  void moveQuestionUp(int index) {
+    if (index > 0) {
+      final question = contracts.last.questions.removeAt(index);
+      contracts.last.questions.insert(index - 1, question);
+      notifyListeners();
+    }
+  }
+
+  void moveQuestionDown(int index) {
+    if (index < contracts.last.questions.length - 1) {
+      final question = contracts.last.questions.removeAt(index);
+      contracts.last.questions.insert(index + 1, question);
+      notifyListeners();
     }
   }
 

@@ -1,9 +1,9 @@
+import 'package:advices/App/providers/auth_provider.dart';
 import 'package:advices/App/services/googleAuth.dart';
 import 'package:advices/screens/authentication/register.dart';
 import 'package:advices/assets/utilities/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../App/contexts/authContext.dart';
 import '../../App/models/user.dart';
 import '../home/home.dart';
 import '../shared_widgets/base_app_bar.dart';
@@ -21,7 +21,7 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   bool mkLanguage = true;
 
-  final AuthContext _auth = AuthContext();
+  final AuthProvider _auth = AuthProvider();
   final _formKey = GlobalKey<FormState>();
 
   final FocusNode _emailFocusNode = FocusNode();
@@ -43,10 +43,6 @@ class _SignInState extends State<SignIn> {
     print(user.toString());
 
     await _signInUser(fUser);
-
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text('Успешно регистриран')));
-
     _formKey.currentState?.save();
     _formKey.currentState?.reset();
     _nextFocus(_emailFocusNode);

@@ -1,7 +1,7 @@
 import 'package:advices/assets/utilities/constants.dart';
 import 'package:flutter/material.dart';
-import '../../../App/contexts/chatContext.dart';
 import '../../../App/models/chat.dart';
+import '../../../App/providers/chat_provider.dart';
 import '../colors.dart';
 
 class ChatAppBar extends StatefulWidget {
@@ -14,6 +14,7 @@ class ChatAppBar extends StatefulWidget {
 }
 
 class _ChatAppBarState extends State<ChatAppBar> {
+
   bool mobView =
       MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width <
           850.0;
@@ -26,7 +27,7 @@ class _ChatAppBarState extends State<ChatAppBar> {
       padding: const EdgeInsets.all(10.0),
       color: webAppBarColor,
       child: StreamBuilder<Chat>(
-          stream: ChatContext.getChat(widget.chatId),
+          stream: ChatProvider.getChat(widget.chatId),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final chatInfo = Chat.fromSnapshot(snapshot.data);

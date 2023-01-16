@@ -1,5 +1,8 @@
+import 'package:advices/App/providers/auth_provider.dart';
+import 'package:advices/App/providers/chat_provider.dart';
 import 'package:advices/App/providers/dar_provider.dart';
 import 'package:advices/App/providers/form_builder_provider.dart';
+import 'package:advices/App/providers/navigation_provider.dart';
 import 'package:advices/App/providers/services_provider.dart';
 import 'package:flutter/material.dart';
 import 'App/contexts/authContext.dart';
@@ -17,7 +20,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp( /// Providers are above [MyApp] instead of inside it, so that tests
+  runApp(
+    /// Providers are above [MyApp] instead of inside it, so that tests
     /// can use [MyApp] while mocking the providers
     MultiProvider(
       providers: [
@@ -25,8 +29,11 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => ServicesProvider()),
         ChangeNotifierProvider(create: (_) => DogovorZaDarProvider()),
         ChangeNotifierProvider(create: (_) => FormBuilderProvider()),
+        ChangeNotifierProvider(create: (_) => ChatProvider()),
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => NavigationProvider()),
       ],
-      child:  MyApp(),
+      child: MyApp(),
     ),
   );
 }
@@ -34,13 +41,16 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    NavigationProvider _navigationProvider = NavigationProvider();
+    _navigationProvider.setContext(context);
+
     // SystemChrome.setPreferredOrientations([
     //   DeviceOrientation.portraitUp,
     //   DeviceOrientation.portraitDown,
     // ]);
     // precacheImage(AssetImage("lib/assets/images/background.jpg"), context);
     return StreamProvider.value(
-      value: AuthContext().user,
+      value: AuthProvider().user,
       initialData: null,
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,

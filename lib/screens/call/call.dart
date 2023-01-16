@@ -1,3 +1,4 @@
+import 'package:advices/App/providers/auth_provider.dart';
 import 'package:advices/screens/call/callMethods.dart';
 import 'package:advices/screens/call/calls.dart';
 import 'package:advices/screens/call/testCall.dart';
@@ -9,7 +10,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
-import '../../App/contexts/authContext.dart';
 import '../../App/contexts/callEventsContext.dart';
 import '../video/examples/advanced/enable_virtualbackground/enable_virtualbackground.dart';
 import '../video/examples/basic/join_channel_video/join_channel_video.dart';
@@ -32,7 +32,7 @@ class Call extends StatefulWidget {
 }
 
 class _CallState extends State<Call> {
-  final AuthContext _auth = AuthContext();
+  final AuthProvider _auth = AuthProvider();
   User? user;
   final myController = TextEditingController();
   bool _validateError = false;

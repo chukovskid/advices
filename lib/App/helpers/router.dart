@@ -17,7 +17,7 @@ import '../../screens/chat/utils/responsive_layout.dart';
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case '/':
-      return MaterialPageRoute(builder: (context) => FormBuilder());
+      return MaterialPageRoute(builder: (context) => Home());
     case 'areas':
       return MaterialPageRoute(builder: (context) => Laws());
     case 'lawyers':

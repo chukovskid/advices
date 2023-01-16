@@ -1,11 +1,12 @@
+import 'package:advices/App/providers/auth_provider.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../contexts/authContext.dart';
 import '../models/service.dart';
 import '../models/user.dart';
 
 class ServicesProvider with ChangeNotifier {
-  final AuthContext auth = AuthContext();
+  final AuthProvider auth = AuthProvider();
+
   // final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   final FocusNode emailFocusNode = FocusNode();

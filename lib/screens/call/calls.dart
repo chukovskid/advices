@@ -1,9 +1,9 @@
 import 'package:advices/App/models/event.dart';
+import 'package:advices/App/providers/auth_provider.dart';
 import 'package:advices/screens/call/call.dart';
 import 'package:advices/assets/utilities/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../App/contexts/authContext.dart';
 import '../../App/contexts/callEventsContext.dart';
 import '../authentication/authentication.dart';
 import '../shared_widgets/BottomBar.dart';
@@ -23,7 +23,7 @@ class Calls extends StatefulWidget {
 class _CallsState extends State<Calls>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late AnimationController controller;
-  final AuthContext _auth = AuthContext();
+  final AuthProvider _auth = AuthProvider();
   User? user;
   @override
   void initState() {

@@ -1,5 +1,6 @@
 import 'dart:html';
 
+import 'package:advices/App/providers/auth_provider.dart';
 import 'package:advices/screens/call/call.dart';
 import 'package:advices/screens/profile/lawyerProfile.dart';
 import 'package:advices/screens/shared_widgets/BottomBar.dart';
@@ -9,7 +10,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import '../../App/contexts/authContext.dart';
 import '../../App/contexts/usersContext.dart';
 import '../authentication/register.dart';
 import 'laws.dart';
@@ -22,6 +22,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  
   User? user;
   bool userExist = false;
   @override
@@ -52,7 +53,7 @@ class _HomeState extends State<Home> {
     initDynamicLinks(context);
   }
 
-  final AuthContext _auth = AuthContext();
+  final AuthProvider _auth = AuthProvider();
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
   /// Get the token, save it to the database for current user

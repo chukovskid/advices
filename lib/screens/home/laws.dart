@@ -640,7 +640,7 @@ class _LawsState extends State<Laws>
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => PersonalInfoForm()),
+                    builder: (context) => Lawyers(service: service.id)),
               ),
             ),
           ),
@@ -657,7 +657,7 @@ class _LawsState extends State<Laws>
     return InkWell(
       onTap: () => Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => PersonalInfoForm()),
+        MaterialPageRoute(builder: (context) => Lawyers(service: service.id)),
       ),
       child: Container(
           padding: const EdgeInsets.all(2),

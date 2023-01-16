@@ -1,15 +1,13 @@
 // ignore_for_file: deprecated_member_use
-import 'dart:convert';
 import 'package:advices/App/models/service.dart';
+import 'package:advices/App/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../App/contexts/authContext.dart';
 import '../../App/models/user.dart';
 import '../../App/providers/services_provider.dart';
 import '../../assets/utilities/constants.dart';
 import '../authentication/authentication.dart';
 import '../home/home.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DogovorZaDar extends StatefulWidget {
   final Function? toggleView;
@@ -20,7 +18,7 @@ class DogovorZaDar extends StatefulWidget {
 }
 
 class _DogovorZaDarState extends State<DogovorZaDar> {
-  final AuthContext _auth = AuthContext();
+  final AuthProvider _auth = AuthProvider();
   final _formKey = GlobalKey<FormState>();
 
   final FocusNode _emailFocusNode = FocusNode();

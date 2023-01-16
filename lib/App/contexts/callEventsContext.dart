@@ -1,8 +1,9 @@
-import 'package:advices/App/contexts/authContext.dart';
 import 'package:advices/App/models/event.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import '../providers/auth_provider.dart';
 
 
 class CallEventsContext {
@@ -12,7 +13,7 @@ class CallEventsContext {
 
   static Future<void> saveEvent(lawyerId, title, description, DateTime dateTime) async {
     // save call for cleint
-    final AuthContext _auth = AuthContext();
+    final AuthProvider _auth = AuthProvider();
     User? client = await _auth.getCurrentUser();
     String channelName = lawyerId + "+" + client?.uid;
 
