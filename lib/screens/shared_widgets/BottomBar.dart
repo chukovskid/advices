@@ -145,7 +145,8 @@ class BottomBar extends StatelessWidget {
                                         color: Colors.white,
                                       ),
                                       onTap: () {
-                                        NavigationProvider().privateNav(Calls());
+                                        NavigationProvider()
+                                            .privateNav(Calls());
                                       },
                                     ),
                                     ListTile(
@@ -158,7 +159,8 @@ class BottomBar extends StatelessWidget {
                                         color: Colors.white,
                                       ),
                                       onTap: () {
-                                        NavigationProvider().privateNav(Calls());
+                                        NavigationProvider()
+                                            .privateNav(Calls());
                                       },
                                     ),
                                   ],
@@ -206,9 +208,6 @@ class BottomBar extends StatelessWidget {
               icon: const Icon(Icons.call),
               onPressed: () {
                 _navigationProvider.privateNav(Calls());
-
-                // Navigator.push(
-                //     context, MaterialPageRoute(builder: (context) => Calls()));
               },
             ),
             IconButton(
@@ -217,17 +216,8 @@ class BottomBar extends StatelessWidget {
               icon: const Icon(Icons.chat),
               onPressed: () {
                 _navigationProvider.privateNav(ResponsiveLayout(
-                            mobileScreenLayout: MobileLayoutScreen(null),
-                            webScreenLayout: WebLayoutScreen(null)));
-
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //       builder: (context) => ResponsiveLayout(
-                //             mobileScreenLayout: MobileLayoutScreen(null),
-                //             webScreenLayout: WebLayoutScreen(null),
-                //           )),
-                // );
+                    mobileScreenLayout: MobileLayoutScreen(null),
+                    webScreenLayout: WebLayoutScreen(null)));
               },
             ),
             if (centerLocations.contains(fabLocation)) const Spacer(),

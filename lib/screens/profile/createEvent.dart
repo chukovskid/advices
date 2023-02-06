@@ -367,7 +367,7 @@ class _CreateEventState extends State<CreateEvent> {
                           child: Center(
                             child: Text(
                               mkLanguage
-                                  ? "Селектирај дата и време"
+                                  ? "Дата и време"
                                   : "Select a date",
                               style:
                                   TextStyle(color: Colors.white, fontSize: 20),

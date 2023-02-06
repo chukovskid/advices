@@ -1,7 +1,6 @@
 import 'package:advices/App/models/service.dart';
 import 'package:advices/screens/lawAreas/selected_services.dart';
 import 'package:advices/assets/utilities/constants.dart';
-import 'package:advices/screens/services/personal_info_form.dart';
 import 'package:flutter/material.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 import '../../App/contexts/servicesContext.dart';
@@ -67,8 +66,8 @@ class _LawsState extends State<Laws>
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: backgroundColor,
-              stops: [-1, 1, 2],
+              colors: backgroundColorLaws,
+              stops: [-3, 3],
             ),
           ),
           child: Row(
@@ -156,13 +155,13 @@ class _LawsState extends State<Laws>
     return MouseRegion(
       onEnter: (PointerEvent details) {
         setState(() {
-          // expatsColor = greyGreenColor;
+          // expatsColor = transperentBlackColor;
           heightFactorExpats = 2.0;
         });
       },
       onExit: (PointerEvent details) {
         setState(() {
-          // expatsColor = darkGreenColor;
+          // expatsColor = Colors.transparent;
           heightFactorExpats = 1.8;
         });
       },
@@ -216,14 +215,14 @@ class _LawsState extends State<Laws>
     return MouseRegion(
       onEnter: (PointerEvent details) {
         setState(() {
-          // contractsColor = greyGreenColor;
+          // contractsColor = transperentBlackColor;
           // contractsColor = Color.fromARGB(255, 124, 159, 169);
           heightFactorContracts = 2.0;
         });
       },
       onExit: (PointerEvent details) {
         setState(() {
-          // contractsColor = darkGreenColor;
+          // contractsColor = Colors.transparent;
           heightFactorContracts = 1.8;
         });
       },
@@ -279,13 +278,13 @@ class _LawsState extends State<Laws>
     return MouseRegion(
       onEnter: (PointerEvent details) {
         setState(() {
-          // companyColor = greyGreenColor;
+          // companyColor = transperentBlackColor;
           heightFactorCompany = 2.0;
         });
       },
       onExit: (PointerEvent details) {
         setState(() {
-          // companyColor = darkGreenColor;
+          // companyColor = Colors.transparent;
           heightFactorCompany = 1.8;
         });
       },
@@ -357,13 +356,13 @@ class _LawsState extends State<Laws>
                 child: MouseRegion(
                   onEnter: (PointerEvent details) {
                     setState(() {
-                      expatsColor = greyGreenColor;
+                      expatsColor = transperentBlackColor;
                       heightFactorCompany = 2.0;
                     });
                   },
                   onExit: (PointerEvent details) {
                     setState(() {
-                      expatsColor = darkGreenColor;
+                      expatsColor = Colors.transparent;
                       heightFactorCompany = 1.8;
                     });
                   },
@@ -408,13 +407,13 @@ class _LawsState extends State<Laws>
                 child: MouseRegion(
                   onEnter: (PointerEvent details) {
                     setState(() {
-                      contractsColor = greyGreenColor;
+                      contractsColor = transperentBlackColor;
                       heightFactorCompany = 2.0;
                     });
                   },
                   onExit: (PointerEvent details) {
                     setState(() {
-                      contractsColor = darkGreenColor;
+                      contractsColor = Colors.transparent;
                       heightFactorCompany = 1.8;
                     });
                   },
@@ -457,13 +456,13 @@ class _LawsState extends State<Laws>
                 child: MouseRegion(
                   onEnter: (PointerEvent details) {
                     setState(() {
-                      companyColor = greyGreenColor;
+                      companyColor = transperentBlackColor;
                       heightFactorCompany = 2.0;
                     });
                   },
                   onExit: (PointerEvent details) {
                     setState(() {
-                      companyColor = darkGreenColor;
+                      companyColor = Colors.transparent;
                       heightFactorCompany = 1.8;
                     });
                   },
@@ -513,41 +512,55 @@ class _LawsState extends State<Laws>
                 ),
               ),
               Expanded(
-                child: InkWell(
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SelectedServices(areaId: 1))),
-                  child: Container(
-                    height: double.maxFinite,
-                    width: double.infinity,
-                    color: urgentColor, // height: 200,
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            mkLanguage ? "Итно" : "Urgent",
-                            style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
-                          Text(
-                            mkLanguage ? "____________" : "Company",
-                            style: TextStyle(
-                                fontSize: 25,
-                                color: Color.fromARGB(255, 207, 223, 226)),
-                          ),
-                          Text(
-                            mkLanguage
-                                ? "Оваа секција е за во итни случаи. Во наредните 5-15мин. ќе добиете емаил со адвокати кои се достапни во моментот за консултација"
-                                : "Company",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: Color.fromARGB(255, 207, 223, 226)),
-                          ),
-                        ]),
+                child: MouseRegion(
+                  onEnter: (PointerEvent details) {
+                    setState(() {
+                      urgentColor = transperentBlackColor;
+                      heightFactorUrgent = 2.0;
+                    });
+                  },
+                  onExit: (PointerEvent details) {
+                    setState(() {
+                      urgentColor = Colors.transparent;
+                      heightFactorUrgent = 1.8;
+                    });
+                  },
+                  child: InkWell(
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SelectedServices(areaId: 1))),
+                    child: Container(
+                      height: double.maxFinite,
+                      width: double.infinity,
+                      color: urgentColor, // height: 200,
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              mkLanguage ? "Итно" : "Urgent",
+                              style: TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                            Text(
+                              mkLanguage ? "____________" : "Company",
+                              style: TextStyle(
+                                  fontSize: 25,
+                                  color: Color.fromARGB(255, 207, 223, 226)),
+                            ),
+                            Text(
+                              mkLanguage
+                                  ? "Оваа секција е за во итни случаи. Во наредните 5-15мин. ќе добиете емаил со адвокати кои се достапни во моментот за консултација"
+                                  : "Company",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Color.fromARGB(255, 207, 223, 226)),
+                            ),
+                          ]),
+                    ),
                   ),
                 ),
               ),
@@ -689,5 +702,3 @@ class _LawsState extends State<Laws>
     );
   }
 }
-
-
