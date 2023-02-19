@@ -13,6 +13,7 @@ import '../../screens/calendar/calendar.dart';
 import '../../screens/chat/screens/mobile_layout_screen.dart';
 import '../../screens/chat/screens/web_layout_screen.dart';
 import '../../screens/chat/utils/responsive_layout.dart';
+import '../../screens/services/book_advice.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -36,13 +37,17 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => Register());
     case 'auth':
       return MaterialPageRoute(builder: (context) => Authenticate());
+    case 'book':
+      return MaterialPageRoute(builder: (context) => BookAdvice());
     case 'payment':
       return MaterialPageRoute(builder: (context) => StripePayment());
     case 'chat':
-      return MaterialPageRoute(builder: (context) => ResponsiveLayout(
-        mobileScreenLayout: MobileLayoutScreen(null),
-        webScreenLayout: WebLayoutScreen(""),
-      ),);
+      return MaterialPageRoute(
+        builder: (context) => ResponsiveLayout(
+          mobileScreenLayout: MobileLayoutScreen(null),
+          webScreenLayout: WebLayoutScreen(""),
+        ),
+      );
     default:
       return MaterialPageRoute(builder: (context) => Home());
   }

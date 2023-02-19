@@ -1,34 +1,45 @@
-import 'package:advices/App/contexts/callEventsContext.dart';
-import 'package:advices/App/contexts/servicesContext.dart';
-import 'package:advices/App/models/service.dart';
-import 'package:advices/App/providers/auth_provider.dart';
-import 'package:advices/assets/utilities/constants.dart';
-import 'package:advices/screens/authentication/sign_in.dart';
-import 'package:advices/screens/call/calls.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:time_picker_widget/time_picker_widget.dart';
+import '../../App/contexts/callEventsContext.dart';
+import '../../App/models/service.dart';
+import '../../App/providers/auth_provider.dart';
+import '../../assets/utilities/constants.dart';
+import '../authentication/sign_in.dart';
+import '../call/calls.dart';
 import 'package:intl/intl.dart';
 
-class CreateEvent extends StatefulWidget {
-  final String uid;
-  final String serviceId;
-  final String minPriceEuro;
+const List<String> list = <String>[
+  'Уставно и управно право',
+  'Прекршочно право',
+  'Подароци',
+  'Распределба на имот',
+  "Општо право",
+  "Закон за облигациони односи",
+  "Меѓународно право",
+  "Купо-продажба",
+  "Кривично право",
+  "Имотно право",
+  "Закон за деца и млади",
+  "Семејно право",
+  "Еднаквост и доверба",
+  "Закон за приватизација",
+  "Друго",
+];
 
-  const CreateEvent(this.uid, this.serviceId, this.minPriceEuro, {Key? key})
-      : super(key: key);
+class BookAdvice extends StatefulWidget {
+  const BookAdvice({Key? key}) : super(key: key);
 
   @override
-  _CreateEventState createState() => _CreateEventState();
+  State<BookAdvice> createState() => _BookAdviceState();
 }
 
-class _CreateEventState extends State<CreateEvent> {
+class _BookAdviceState extends State<BookAdvice> {
+  String dropdownValue = list.first;
   late Service service;
   bool mkLanguage = true;
-  bool openEventForm =
-      MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width >
-          850.0;
+  bool openEventForm = true;
 
   var imageUrl =
       "https://devshift.biz/wp-content/uploads/2017/04/profile-icon-png-898.png"; //you can use a image
@@ -38,28 +49,22 @@ class _CreateEventState extends State<CreateEvent> {
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
   late bool processing;
-  // late String _selectedDate = "select date";
   String selectedTime = "кликни тука";
-  // DateFormat.Hm().format(DateTime.now());
-  // DateFormat("hh:mm").parse(DateTime.now().toString()).toString();
   String _selectedDate =
       DateFormat("yyyy-MM-dd").format(DateTime.now()).toString();
-  // DateFormat("yyyy-MM-dd").parse(DateTime.now().toString()).toString();
-
-  String serviceName = "Click here to select service";
+  String serviceName = list.first;
   List<TimeOfDay> _unavailableTimePeriods = [];
 
   @override
   void initState() {
     super.initState();
-    _getService();
     processing = false;
   }
 
   Future<void> _getFreeTimePeriodsForDate() async {
     DateTime selectedDate = DateFormat("yyyy-MM-dd").parse("$_selectedDate");
-    List<DateTime> events =
-        await CallEventsContext.getAllLEventsDateTIme(widget.uid, selectedDate);
+    List<DateTime> events = await CallEventsContext.getAllLEventsDateTIme(
+        "jVKyvVjJwShtSYNH58zy7Sv04yI2", selectedDate);
     _unavailableTimePeriods = [];
     events.forEach((element) {
       DateTime substraction = element;
@@ -124,8 +129,8 @@ class _CreateEventState extends State<CreateEvent> {
     }
     DateTime selectedDateTime =
         DateFormat("yyyy-MM-dd hh:mm").parse("$_selectedDate $selectedTime");
-    await CallEventsContext.saveEvent(
-        widget.uid, _title.text, _description.text, selectedDateTime);
+    await CallEventsContext.saveEvent("jVKyvVjJwShtSYNH58zy7Sv04yI2",
+        _title.text, _description.text, selectedDateTime);
 
     // Uncoment this for enabeling Stripe payment
     // redirectToCheckout(context);
@@ -136,17 +141,6 @@ class _CreateEventState extends State<CreateEvent> {
     );
   }
 
-  Future<void> _getService() async {
-    service = await ServicesContext.getService(widget.serviceId);
-    setState(() {
-      serviceName =
-          "${service.areaName}: ${mkLanguage ? service.nameMk : service.name}";
-      service = service;
-      // _title.text = serviceName;
-      _title = TextEditingController(text: serviceName);
-    });
-  }
-
   bool _isFormEmpty() {
     return (_title.text.isEmpty ||
         _description.text.isEmpty ||
@@ -155,128 +149,40 @@ class _CreateEventState extends State<CreateEvent> {
 
   @override
   Widget build(BuildContext context) {
-    return MediaQuery.of(context).size.width < 850.0
-        // || MediaQuery.of(context).size.height < 2500.0 )
-        ? _mobView()
-        : _webView();
-  }
+    return Container(
+      decoration: BoxDecoration(
+        color: Color(0xff1c4746),
+        image: DecorationImage(
+          image: NetworkImage(imageUrl),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child:
+          MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width <
+                  850.0
+              ? Container(
+                  child: openEventForm
+                      ? _dialogFields(setState)
+                      : Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
 
-  Widget _mobView() {
-    return openEventForm
-        ? Flexible(child: _dialogFields(setState))
-        : Container(
-            height: 100,
-            decoration: BoxDecoration(
-              color: Color(0xffc2cee4),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.blueGrey,
-                  offset: Offset(0.0, 1.0), //(x,y)
-                  blurRadius: 10.0,
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              // crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Flexible(
-                    flex: 3,
-                    child: InkWell(
-                      onTap: (() => {
-                            showDialog(
-                                context: context,
-                                builder: (context) => StatefulBuilder(
-                                      builder: (context,
-                                              StateSetter setStateDialog) =>
-                                          AlertDialog(
-                                        elevation: 20,
-                                        contentPadding: EdgeInsets.all(10),
-                                        content: SizedBox(
-                                          height: 400,
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Flexible(
-                                                  child: _dialogFields(
-                                                      setStateDialog)),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ))
-                          }),
-                      child: Column(
                         children: [
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "€30 ",
-                                style: TextStyle(
-                                    // color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Text(serviceName),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "$_selectedDate $selectedTime",
-                                style: TextStyle(
-                                    decoration: TextDecoration.underline,
-                                    color: selectedTime == 'time'
-                                        ? Color(0xff5bc9bf)
-                                        : Colors.black),
-                              ),
-                            ],
-                          ),
+                          _webView(),
                         ],
-                      ),
-                    )),
-                Flexible(
-                    flex: 1,
-                    child: SizedBox(
-                      height: 50,
-                      width: 150,
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Color(0xff5bc9bf))),
-                        onPressed: () {
-                          print(openEventForm);
-                          _isFormEmpty()
-                              ? setState(() {
-                                  openEventForm = true;
-                                })
-                              : _saveEvent();
-                        },
-                        child: Row(
-                          children: [
-                            Text(
-                              _isFormEmpty() ? "Продолжи" : "Поднеси",
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 255, 255, 255),
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Icon(Icons.chevron_right_sharp)
-                          ],
-                        ),
-                      ),
-                    )),
-              ],
-            ),
-          );
+                      ))
+              : 
+              Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                        padding: EdgeInsets.only(left: 20),
+                        alignment: Alignment.centerLeft,
+                        child: _webView()),
+                  ],
+                ),
+    );
+
+    // _webView();
   }
 
   Widget _webView() {
@@ -288,7 +194,7 @@ class _CreateEventState extends State<CreateEvent> {
             margin:
                 const EdgeInsets.only(top: 35, left: 30, right: 50, bottom: 10),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(4.0),
             ),
             child: openEventForm
                 ? _dialogFields(setState)
@@ -313,34 +219,47 @@ class _CreateEventState extends State<CreateEvent> {
                   alignment: Alignment.center,
                   child: ListView(
                     children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text("Каква правна помош ви е потребна?",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
+                      ),
                       SizedBox(height: 10.0),
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 8.0),
-                        child: TextFormField(
-                          // initialValue: _title.text,
-                          controller: _title,
-                          validator: (value) => (value!.isEmpty)
-                              ? (mkLanguage
-                                  ? "Ве молиме внесере наслов"
-                                  : "Please Enter title")
-                              : null,
-                          style: style,
-                          decoration: InputDecoration(
-                              labelText: mkLanguage ? "Наслов" : "Title",
-                              filled: true,
-                              fillColor: Colors.white,
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10))),
-                        ),
-                      ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 8.0),
+                          child: DropdownButton<String>(
+                            // create a border on the dropdown button
+                            isExpanded: true,
+                            hint: Text("Избери услуга"),
+                            value: dropdownValue,
+                            icon: const Icon(Icons.arrow_downward),
+                            elevation: 16,
+                            underline: Container(
+                              height: 2,
+                            ),
+                            onChanged: (String? value) {
+                              setState(() {
+                                serviceName = value!;
+                                dropdownValue = value!;
+                              });
+                            },
+                            items: list
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                          )),
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 8.0),
+                            horizontal: 16.0, vertical: 4.0),
                         child: TextFormField(
                           controller: _description,
-                          minLines: 3,
-                          maxLines: 5,
+                          minLines: 6,
+                          maxLines: 8,
                           validator: (value) => (value!.isEmpty)
                               ? (mkLanguage
                                   ? "Ве молиме внесете опис"
@@ -352,11 +271,10 @@ class _CreateEventState extends State<CreateEvent> {
                                   ? "Опис на проблемот..."
                                   : "Description...",
                               border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10))),
+                                  borderRadius: BorderRadius.circular(4))),
                         ),
                       ),
                       const SizedBox(height: 10.0),
-                      SizedBox(height: 10.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -365,7 +283,7 @@ class _CreateEventState extends State<CreateEvent> {
                             width: 20,
                           )),
                           Flexible(
-                            flex: 2,
+                            flex: 3,
                             child: DateTimePicker(
                               type: DateTimePickerType.date,
                               dateMask: 'd MMM, yyyy  ',
@@ -407,7 +325,7 @@ class _CreateEventState extends State<CreateEvent> {
                             width: 20,
                           )),
                           Flexible(
-                            flex: 1,
+                            flex: 2,
                             child: Container(
                               child: InkWell(
                                 onTap: () => {
@@ -456,10 +374,7 @@ class _CreateEventState extends State<CreateEvent> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 10.0),
-                      // payingOptions(),
-                      SizedBox(height: 50.0),
-                      // processing ? Center(child: CircularProgressIndicator()):
+                      const SizedBox(height: 50.0),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: Material(
@@ -497,48 +412,13 @@ class _CreateEventState extends State<CreateEvent> {
     );
   }
 
-  void _showToast(BuildContext context) {
-    final scaffold = ScaffoldMessenger.of(context);
-    scaffold.showSnackBar(
-      SnackBar(
-        content: const Text('Please select title and date'),
-        action: SnackBarAction(
-            label: 'Fill form',
-            onPressed: () => {
-                  showDialog(
-                      context: context,
-                      builder: (context) => StatefulBuilder(
-                            builder: (context, StateSetter setStateDialog) =>
-                                AlertDialog(
-                              elevation: 20,
-                              contentPadding: EdgeInsets.all(10),
-                              content: SizedBox(
-                                height: 400,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Flexible(
-                                        child: _dialogFields(setStateDialog)),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ))
-                }),
-      ),
-    );
-  }
-
   Widget _finalResultsTable() {
     return Column(
       children: [
         Table(
           columnWidths: const <int, TableColumnWidth>{
-            // 0: IntrinsicColumnWidth(),
             0: FlexColumnWidth(),
             1: FlexColumnWidth(),
-            // 2: FixedColumnWidth(154),
           },
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           children: <TableRow>[
@@ -546,8 +426,7 @@ class _CreateEventState extends State<CreateEvent> {
               decoration: BoxDecoration(
                 color: Color.fromRGBO(1, 38, 65, 1),
                 borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20)),
+                    topLeft: Radius.circular(4), topRight: Radius.circular(4)),
               ),
               children: <Widget>[
                 Container(

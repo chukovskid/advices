@@ -3,6 +3,7 @@ import 'dart:html';
 import 'package:advices/App/providers/auth_provider.dart';
 import 'package:advices/screens/call/call.dart';
 import 'package:advices/screens/profile/lawyerProfile.dart';
+import 'package:advices/screens/services/book_advice.dart';
 import 'package:advices/screens/shared_widgets/BottomBar.dart';
 import 'package:advices/screens/call/calls.dart';
 import 'package:advices/assets/utilities/constants.dart';
@@ -22,7 +23,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  
   User? user;
   bool userExist = false;
   @override
@@ -91,6 +91,11 @@ class _HomeState extends State<Home> {
         context,
         MaterialPageRoute(builder: (context) => Register()),
       );
+    } else if (window.location.href.contains("/advice_booking")) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => BookAdvice()),
+      );
     } else if (window.location.href.contains("/test")) {
       Navigator.push(
         context,
@@ -105,13 +110,9 @@ class _HomeState extends State<Home> {
 
       Navigator.push(
         context,
-        MaterialPageRoute(
-            builder: (context) =>
-                LawyerProfile(lawyerId, "")),
+        MaterialPageRoute(builder: (context) => LawyerProfile(lawyerId, "")),
       );
     }
-
-
   }
 
   openCalls() async {
@@ -136,18 +137,8 @@ class _HomeState extends State<Home> {
         fabLocation: FloatingActionButtonLocation.endDocked,
         shape: CircularNotchedRectangle(),
       ),
-    
       body: Container(
-          height: double.infinity,
-          width: double.infinity,
-          child: Laws()
-          ),
+          height: double.infinity, width: double.infinity, child: Laws()),
     );
   }
-
-
-
-
-
-
 }

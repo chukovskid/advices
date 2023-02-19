@@ -5,7 +5,6 @@ import 'package:advices/App/providers/form_builder_provider.dart';
 import 'package:advices/App/providers/navigation_provider.dart';
 import 'package:advices/App/providers/services_provider.dart';
 import 'package:flutter/material.dart';
-import 'App/contexts/authContext.dart';
 import 'App/helpers/router.dart' as router;
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -43,12 +42,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     NavigationProvider _navigationProvider = NavigationProvider();
     _navigationProvider.setContext(context);
-
-    // SystemChrome.setPreferredOrientations([
-    //   DeviceOrientation.portraitUp,
-    //   DeviceOrientation.portraitDown,
-    // ]);
-    // precacheImage(AssetImage("lib/assets/images/background.jpg"), context);
     return StreamProvider.value(
       value: AuthProvider().user,
       initialData: null,
@@ -56,7 +49,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: "Advices",
         onGenerateRoute: router.generateRoute,
-        initialRoute: '/',
+        initialRoute: 'book',
       ),
     );
   }
