@@ -22,6 +22,7 @@ class Calls extends StatefulWidget {
 
 class _CallsState extends State<Calls>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+  bool isLoading = false;
   late AnimationController controller;
   final AuthProvider _auth = AuthProvider();
   User? user;
@@ -46,11 +47,17 @@ class _CallsState extends State<Calls>
   }
 
   Future<void> openCall(channelName) async {
+    setState(() {
+      isLoading = true;
+    });
     if (user == null) {
       return null;
     }
     Map<String, dynamic>? result = await CallMethods.makeCloudCall(channelName);
     if (result!['token'] != null) {
+      setState(() {
+        isLoading = false;
+      });
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => Call(channelName)),
@@ -87,7 +94,15 @@ class _CallsState extends State<Calls>
             stops: [-1, 1, 2],
           ),
         ),
-        child: _cardsList(),
+        child: isLoading
+            ? Center(
+                child: Icon(
+                  Icons.hourglass_bottom,
+                  color: Colors.white,
+                  size: 100,
+                ),
+              )
+            : _cardsList(),
       ),
     );
   }
@@ -96,7 +111,12 @@ class _CallsState extends State<Calls>
     return StreamBuilder<Iterable<EventModel>>(
       stream: CallEventsContext.getAllLEvents(user?.uid),
       builder: ((context, snapshot) {
-        if (!snapshot.hasData) return Text("loading data ...");
+        if (!snapshot.hasData)
+          return Icon(
+            Icons.hourglass_bottom,
+            color: Colors.white,
+            size: 100,
+          );
         if (snapshot.hasData) {
           final calls = snapshot.data!;
           return ListView(
@@ -154,9 +174,9 @@ class _CallsState extends State<Calls>
                         Icon(Icons.access_time, size: 16),
                         Text(
                             ' ${DateFormat("yyyy-MM-dd hh:mm").format(call.startDate)}'),
-                        
-                        
-                        SizedBox(width: 24,),
+                        SizedBox(
+                          width: 24,
+                        ),
                         call.open == true
                             ? Text(
                                 'Некој ве чека веќе',

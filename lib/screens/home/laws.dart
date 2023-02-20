@@ -74,23 +74,23 @@ class _LawsState extends State<Laws>
             // mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               Expanded(
-                  child: _scrolable(
+                  child: _scrollable(
                       1, (mkLanguage ? "Итно" : "Urgent"), urgentColor)),
               Flexible(
-                  child: _scrolableExpats(
+                  child: _scrollableExpats(
                       2, mkLanguage ? "Иселеници" : "Expats", expatsColor)),
               Flexible(
-                  child: _scrolableContracts(3,
+                  child: _scrollableContracts(3,
                       mkLanguage ? "Договори" : "Contracts", contractsColor)),
               Flexible(
-                  child: _scrolableCompany(4,
+                  child: _scrollableCompany(4,
                       mkLanguage ? "Фирми" : "Business firms", companyColor)),
             ],
           )),
     );
   }
 
-  Widget _scrolable(int area, String name, Color color) {
+  Widget _scrollable(int area, String name, Color color) {
     return MouseRegion(
       onEnter: (PointerEvent details) {
         setState(() {
@@ -151,7 +151,7 @@ class _LawsState extends State<Laws>
     );
   }
 
-  Widget _scrolableExpats(int area, String name, Color color) {
+  Widget _scrollableExpats(int area, String name, Color color) {
     return MouseRegion(
       onEnter: (PointerEvent details) {
         setState(() {
@@ -211,7 +211,7 @@ class _LawsState extends State<Laws>
     );
   }
 
-  Widget _scrolableContracts(int area, String name, Color color) {
+  Widget _scrollableContracts(int area, String name, Color color) {
     return MouseRegion(
       onEnter: (PointerEvent details) {
         setState(() {
@@ -274,7 +274,7 @@ class _LawsState extends State<Laws>
     );
   }
 
-  Widget _scrolableCompany(int area, String name, Color color) {
+  Widget _scrollableCompany(int area, String name, Color color) {
     return MouseRegion(
       onEnter: (PointerEvent details) {
         setState(() {

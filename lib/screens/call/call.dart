@@ -32,6 +32,7 @@ class Call extends StatefulWidget {
 }
 
 class _CallState extends State<Call> {
+  bool isLoading = false;
   final AuthProvider _auth = AuthProvider();
   User? user;
   final myController = TextEditingController();
@@ -171,64 +172,73 @@ class _CallState extends State<Call> {
           ),
         ],
       ),
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            physics: BouncingScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  child: FaIcon(
-                    FontAwesomeIcons.gavel,
-                    semanticLabel: "label",
-                    size: 50,
-                  ),
-                  height: MediaQuery.of(context).size.height * 0.1,
-                ),
-                Padding(padding: EdgeInsets.only(top: 20)),
-                Text(
-                  'Go to the video call',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                ),
-                Padding(padding: EdgeInsets.symmetric(vertical: 20)),
-                Padding(padding: EdgeInsets.symmetric(vertical: 30)),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.55,
-                  child: MaterialButton(
-                    onPressed: onJoin,
-                    height: 60,
-                    color: orangeColor,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          'Join',
-                          style: TextStyle(color: Colors.white),
+      body: isLoading
+          ? Center(
+              child: Icon(
+                Icons.hourglass_bottom,
+                color: Colors.white,
+                size: 100,
+              ),
+            )
+          : SafeArea(
+              child: Center(
+                child: SingleChildScrollView(
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  physics: BouncingScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        child: FaIcon(
+                          FontAwesomeIcons.gavel,
+                          semanticLabel: "label",
+                          size: 50,
                         ),
-                        Icon(
-                          Icons.arrow_forward,
-                          color: Colors.white,
+                        height: MediaQuery.of(context).size.height * 0.1,
+                      ),
+                      Padding(padding: EdgeInsets.only(top: 20)),
+                      Text(
+                        'Go to the video call',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Padding(padding: EdgeInsets.symmetric(vertical: 20)),
+                      Padding(padding: EdgeInsets.symmetric(vertical: 30)),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.55,
+                        child: MaterialButton(
+                          onPressed: onJoin,
+                          height: 60,
+                          color: orangeColor,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                'Join',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              Icon(
+                                Icons.arrow_forward,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
+                      )
+                    ],
                   ),
-                )
-              ],
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 
   Future<void> onJoin() async {
     setState(() {
+      isLoading = true;
       myController.text.isEmpty
           ? _validateError = true
           : _validateError = false;
@@ -250,6 +260,9 @@ class _CallState extends State<Call> {
 
 // TODO instead of saveOpenCallForUser, create a function setCallToOpen()
 // // meaning there is someone at the call and is WAITING
+    setState(() {
+      isLoading = false;
+    });
     await openCall(widget.channellName);
   }
 

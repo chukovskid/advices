@@ -20,7 +20,7 @@ class LawyerProfile extends StatefulWidget {
 }
 
 class _LawyerProfileState extends State<LawyerProfile> {
-    final ChatProvider _chatProvider = ChatProvider();
+  final ChatProvider _chatProvider = ChatProvider();
 
   bool mkLanguage = true;
   FlutterUser? lawyer;
@@ -54,7 +54,7 @@ class _LawyerProfileState extends State<LawyerProfile> {
     print("_startChatConversation");
     String chatId = await _chatProvider.createNewChat([lawyer!.uid]);
     Navigator.push(
-      context,  
+      context,
       MaterialPageRoute(
           builder: (context) => ResponsiveLayout(
                 mobileScreenLayout: MobileChatScreen(chatId),
@@ -83,8 +83,12 @@ class _LawyerProfileState extends State<LawyerProfile> {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: backgroundColor,
-              stops: [-1, 1, 2],
+              colors: [
+                Colors.white60,
+                Color.fromARGB(255, 211, 218, 228),
+                darkGreenColor
+              ],
+              stops: [-1, 1, 1.1],
             ),
           ),
           child: Row(
@@ -101,91 +105,107 @@ class _LawyerProfileState extends State<LawyerProfile> {
           )),
     );
   }
- 
-  Widget _card() {
-    return 
-    loading ? Center(child: CircularProgressIndicator(color: darkGreenColor,)):
-    Container(
-      height: 900,
-      child: SingleChildScrollView(
-        child: Card(
-          elevation: 0,
-          color: Colors.transparent,
-          margin:
-              const EdgeInsets.only(top: 35, left: 30, right: 10, bottom: 10),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const SizedBox(height: 30),
-              Row(
-                children: [
-                  ClipOval(
-                    child: Image.network(
-                        (lawyer?.photoURL != null &&
-                                lawyer!.photoURL.isNotEmpty)
-                            ? lawyer!.photoURL
-                            : 'https://st.depositphotos.com/2069323/2156/i/600/depositphotos_21568785-stock-photo-man-pointing.jpg',
-                        // scale: 1,
-                        cacheWidth: 1,
-                        width: 100,
-                        height: 100),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "${lawyer?.displayName}",
-                        style: TextStyle(fontSize: 35),
-                      ),
-                      Text("${lawyer?.email}"),
-                    ],
-                  ),
-                ],
-              ),
-              ElevatedButton(
-                  onPressed: _startChatConversation, child: Row( 
-                    mainAxisSize : MainAxisSize.min,
-                    children: [
-                      Icon(Icons.mail, size: 15,),
-                      Text(" Пораки"),
-                    ],
-                  ), style:  ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 15), backgroundColor: lightGreenColor) ,),
-                  //how to get ElevatedButton backgroundColor?
-                  
 
-              const SizedBox(
-                height: 45,
+  Widget _card() {
+    return loading
+        ? Center(
+            child: CircularProgressIndicator(
+            color: darkGreenColor,
+          ))
+        : Container(
+            height: 900,
+            child: SingleChildScrollView(
+              child: Card(
+                elevation: 0,
+                color: Colors.transparent,
+                margin: const EdgeInsets.only(
+                    top: 35, left: 30, right: 10, bottom: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const SizedBox(height: 30),
+                    Row(
+                      children: [
+                        ClipOval(
+                          child: Image.network(
+                              (lawyer?.photoURL != null &&
+                                      lawyer!.photoURL.isNotEmpty)
+                                  ? lawyer!.photoURL
+                                  : 'https://st.depositphotos.com/2069323/2156/i/600/depositphotos_21568785-stock-photo-man-pointing.jpg',
+                              // scale: 1,
+                              cacheWidth: 1,
+                              width: 100,
+                              height: 100),
+                        ),
+                        const SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${lawyer?.displayName}",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            Text("${lawyer?.email}"),
+                          ],
+                        ),
+                      ],
+                    ),
+                    ElevatedButton(
+                      onPressed: _startChatConversation,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.mail,
+                            size: 15,
+                          ),
+                          Text(" Пораки"),
+                        ],
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          textStyle: const TextStyle(fontSize: 15),
+                          backgroundColor: lightGreenColor),
+                    ),
+                    //how to get ElevatedButton backgroundColor?
+
+                    const SizedBox(
+                      height: 45,
+                    ),
+                    _text()
+                  ],
+                ),
               ),
-              _text()
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
   }
 
   Widget _text() {
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.only(top: 10, left: 10, right: 40, bottom: 10),
+      // padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(mkLanguage ? "Кратко био" : "Short bio", style: profileHeader),
           SizedBox(height: 15),
-          Text("${lawyer?.description}", style: helpTextStyle),
+          Text(
+            "${lawyer?.description}",
+            style: helpTextStyle,
+            textAlign: TextAlign.justify,
+          ),
           SizedBox(height: 15),
           Text(mkLanguage ? "Искуство" : "Experience", style: profileHeader),
           SizedBox(height: 15),
-          Text("${lawyer?.experience}", style: helpTextStyle),
+          Text("${lawyer?.experience}",
+              style: helpTextStyle, textAlign: TextAlign.justify),
           SizedBox(height: 15),
           Text("", style: helpTextStyle),
-          SizedBox(height: 40),
+          SizedBox(height: 80),
         ],
       ),
     );
   }
-
 }

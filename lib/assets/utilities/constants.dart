@@ -8,13 +8,13 @@ const nikesPriceId = 'price_1LrkUPH6waKuk26ucUMu99hm';
 
 final kHintTextStyle = TextStyle(
   color: Colors.white54,
-  fontFamily: 'OpenSans',
+  fontFamily: 'Roboto',
 );
 
 final kLabelStyle = TextStyle(
   color: Colors.white,
   fontWeight: FontWeight.bold,
-  fontFamily: 'OpenSans',
+  fontFamily: 'Roboto',
 );
 
 final kBoxDecorationStyle = BoxDecoration(
@@ -24,8 +24,11 @@ final kBoxDecorationStyle = BoxDecoration(
 );
 
 const profileHeader =
-    TextStyle(color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold);
-const helpTextStyle = TextStyle(color: Colors.black, fontSize: 15.0);
+    TextStyle(color: Colors.black, fontSize: 16.0, fontWeight: FontWeight.bold);
+const helpTextStyle = TextStyle(
+  color: Colors.black,
+  fontSize: 16.0,
+);
 
 const lawyersCardHeader =
     TextStyle(color: Colors.black, fontSize: 14.0, fontWeight: FontWeight.bold);
@@ -37,8 +40,13 @@ const darkBlueColor = const Color.fromRGBO(23, 34, 59, 1);
 const orangeColor = const Color.fromRGBO(225, 103, 104, 1);
 const darkGreenColor = const Color(0xff032229);
 const lightGreenColor = const Color(0xff5bc9bf);
-const backgroundColorLaws = [Color(0xff1c4746), Color.fromARGB(255, 254, 254, 254)];
-const backgroundColor = [orangeColor,lightBlueColor, darkGreenColor];
+const backgroundColorLaws = [Color(0xff1c4746),Color.fromARGB(255, 254, 254, 254)];
+// const backgroundColor = [orangeColor,lightBlueColor, darkGreenColor];
+const backgroundColor = [
+  Colors.white60,
+  Color.fromARGB(255, 211, 218, 228),
+  darkGreenColor
+];
 const urgentColor = Color.fromARGB(255, 218, 144, 109);
 const greyGreenColor = Color.fromARGB(255, 188, 190, 182);
 const transperentBlackColor = Color.fromARGB(83, 41, 41, 41);

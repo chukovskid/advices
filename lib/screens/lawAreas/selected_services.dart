@@ -49,7 +49,12 @@ class _SelectedServicesState extends State<SelectedServices>
     return StreamBuilder<Iterable<Service>>(
       stream: ServicesContext.getAllServicesByArea(widget.areaId),
       builder: ((context, snapshot) {
-        if (!snapshot.hasData) return Text("loading data ...");
+        if (!snapshot.hasData)
+          return Icon(
+            Icons.hourglass_bottom,
+            color: Colors.white,
+            size: 100,
+          );
         if (snapshot.hasData) {
           final services = snapshot.data!;
           return Container(

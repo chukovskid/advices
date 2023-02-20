@@ -10,7 +10,6 @@ import '../../App/models/user.dart';
 import '../../App/services/database.dart';
 import '../shared_widgets/BottomBar.dart';
 
-
 class Lawyers extends StatefulWidget {
   final String service;
   const Lawyers({Key? key, required this.service}) : super(key: key);
@@ -23,7 +22,6 @@ class _LawyersState extends State<Lawyers>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late AnimationController controller;
   bool mkLanguage = true;
-
 
   @override
   void initState() {}
@@ -46,7 +44,7 @@ class _LawyersState extends State<Lawyers>
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: backgroundColor,
-              stops: [-1, 1, 2],
+            stops: [-1, 1, 2],
           ),
         ),
         child: _cardsList(),
@@ -58,7 +56,12 @@ class _LawyersState extends State<Lawyers>
     return StreamBuilder<Iterable<FlutterUser>>(
       stream: LawyersContext.getFilteredLawyers(widget.service),
       builder: ((context, snapshot) {
-        if (!snapshot.hasData) return Text("loading data ...");
+        if (!snapshot.hasData)
+          return Icon(
+            Icons.hourglass_bottom,
+            color: Colors.white,
+            size: 100,
+          );
         if (snapshot.hasData) {
           final users = snapshot.data!;
           return Container(
@@ -102,7 +105,8 @@ class _LawyersState extends State<Lawyers>
     return InkWell(
       onTap: () => Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => LawyerProfile(fUser.uid, widget.service)),
+        MaterialPageRoute(
+            builder: (context) => LawyerProfile(fUser.uid, widget.service)),
       ),
       child: Card(
         elevation: 30,
@@ -178,11 +182,13 @@ class _LawyersState extends State<Lawyers>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(mkLanguage ? "Кратко био" :"Short bio", style: lawyersCardHeader),
+          Text(mkLanguage ? "Кратко био" : "Short bio",
+              style: lawyersCardHeader),
           SizedBox(height: 12),
           Text("${fUser.description}", style: lawyersCardTextStyle),
           SizedBox(height: 15),
-          Text(mkLanguage ? "Искуство" :"Experience", style: lawyersCardHeader),
+          Text(mkLanguage ? "Искуство" : "Experience",
+              style: lawyersCardHeader),
           SizedBox(height: 15),
           Text("${fUser.experience}", style: lawyersCardTextStyle),
           // SizedBox(height: 15),

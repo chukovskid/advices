@@ -33,7 +33,7 @@ class _CreateEventState extends State<CreateEvent> {
   var imageUrl =
       "https://devshift.biz/wp-content/uploads/2017/04/profile-icon-png-898.png"; //you can use a image
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-  TextEditingController _title = TextEditingController(text: "Everyone");
+  TextEditingController _title = TextEditingController(text: "Внеси наслов");
   final TextEditingController _description = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
@@ -140,9 +140,8 @@ class _CreateEventState extends State<CreateEvent> {
     service = await ServicesContext.getService(widget.serviceId);
     setState(() {
       serviceName =
-          "${service.areaName}: ${mkLanguage ? service.nameMk : service.name}";
+          "${mkLanguage ? service.nameMk : service.name}";
       service = service;
-      // _title.text = serviceName;
       _title = TextEditingController(text: serviceName);
     });
   }
@@ -217,12 +216,13 @@ class _CreateEventState extends State<CreateEvent> {
                           Row(
                             children: [
                               Text(
-                                "€30 ",
+                                "400ден/час",
                                 style: TextStyle(
                                     // color: Colors.white,
-                                    fontSize: 20,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.bold),
                               ),
+                              SizedBox(width: 1,),
                               Text(serviceName),
                             ],
                           ),
@@ -248,7 +248,7 @@ class _CreateEventState extends State<CreateEvent> {
                     flex: 1,
                     child: SizedBox(
                       height: 50,
-                      width: 150,
+                      width: 180,
                       child: ElevatedButton(
                         style: ButtonStyle(
                             backgroundColor:
@@ -264,7 +264,7 @@ class _CreateEventState extends State<CreateEvent> {
                         child: Row(
                           children: [
                             Text(
-                              _isFormEmpty() ? "Продолжи" : "Поднеси",
+                              _isFormEmpty() ? "Уреди" : "Поднеси",
                               style: TextStyle(
                                   color: Color.fromARGB(255, 255, 255, 255),
                                   fontWeight: FontWeight.bold),
@@ -478,7 +478,7 @@ class _CreateEventState extends State<CreateEvent> {
                               }
                             },
                             child: Text(
-                              mkLanguage ? "Продолжи" : "Save",
+                              mkLanguage ? "Зачувај" : "Save",
                               style: style.copyWith(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
