@@ -179,22 +179,27 @@ class _LawyersState extends State<Lawyers>
   Widget _text(FlutterUser fUser) {
     return Padding(
       padding: const EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(mkLanguage ? "Кратко био" : "Short bio",
-              style: lawyersCardHeader),
-          SizedBox(height: 12),
-          Text("${fUser.description}", style: lawyersCardTextStyle),
-          SizedBox(height: 15),
-          Text(mkLanguage ? "Искуство" : "Experience",
-              style: lawyersCardHeader),
-          SizedBox(height: 15),
-          Text("${fUser.experience}", style: lawyersCardTextStyle),
-          // SizedBox(height: 15),
-          // Text("", style: lawyersCardTextStyle),
-          // SizedBox(height: 40),
-        ],
+      child: Container(
+        height: 200,
+        child: SingleChildScrollView (
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(mkLanguage ? "Кратко био" : "Short bio",
+                  style: lawyersCardHeader),
+              SizedBox(height: 12),
+              Text("${fUser.description}", style: lawyersCardTextStyle),
+              SizedBox(height: 15),
+              Text(mkLanguage ? "Искуство" : "Experience",
+                  style: lawyersCardHeader),
+              SizedBox(height: 15),
+              Text("${fUser.experience}", style: lawyersCardTextStyle),
+              // SizedBox(height: 15),
+              // Text("", style: lawyersCardTextStyle),
+              // SizedBox(height: 40),
+            ],
+          ),
+        ),
       ),
     );
   }

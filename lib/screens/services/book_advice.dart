@@ -10,6 +10,8 @@ import '../authentication/sign_in.dart';
 import '../call/calls.dart';
 import 'package:intl/intl.dart';
 
+import '../shared_widgets/base_app_bar.dart';
+
 const List<String> list = <String>[
   'Уставно и управно право',
   'Прекршочно право',
@@ -49,7 +51,12 @@ class _BookAdviceState extends State<BookAdvice> {
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
   late bool processing;
-  String selectedTime = "кликни тука";
+
+  // final now = DateTime.now();
+  // final formatter = DateFormat('HH:mm');
+  // final dateTimeNowStringHHMM = formatter.format(now);
+
+  String selectedTime = DateFormat("HH:MM").format(DateTime.now()).toString();
   String _selectedDate =
       DateFormat("yyyy-MM-dd").format(DateTime.now()).toString();
   String serviceName = list.first;
@@ -80,7 +87,7 @@ class _BookAdviceState extends State<BookAdvice> {
     print(_unavailableTimePeriods);
   }
 
-  Future<void> showTimePicherWidget(StateSetter setStateDialog) async {
+  Future<void> showTimePickerWidget(StateSetter setStateDialog) async {
     return await showCustomTimePicker(
         context: context,
         builder: (BuildContext context, Widget? child) {
@@ -149,37 +156,41 @@ class _BookAdviceState extends State<BookAdvice> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Color(0xff1c4746),
-        image: DecorationImage(
-          image: NetworkImage(imageUrl),
-          fit: BoxFit.cover,
-        ),
+    return Scaffold(
+      appBar: BaseAppBar(
+        appBar: AppBar(),
       ),
-      child:
-          MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width <
-                  850.0
-              ? Container(
-                  child: openEventForm
-                      ? _dialogFields(setState)
-                      : Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-
+      body: Container(
+        decoration: BoxDecoration(
+          color: Color(0xff1c4746),
+          image: DecorationImage(
+            image: NetworkImage(imageUrl),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: MediaQueryData.fromWindow(WidgetsBinding.instance.window)
+                    .size
+                    .width <
+                850.0
+            ? Container(
+                child: openEventForm
+                    ? _dialogFields(setState)
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           _webView(),
                         ],
                       ))
-              : 
-              Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                        padding: EdgeInsets.only(left: 20),
-                        alignment: Alignment.centerLeft,
-                        child: _webView()),
-                  ],
-                ),
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                      padding: EdgeInsets.only(left: 20),
+                      alignment: Alignment.centerLeft,
+                      child: _webView()),
+                ],
+              ),
+      ),
     );
 
     // _webView();
@@ -187,6 +198,9 @@ class _BookAdviceState extends State<BookAdvice> {
 
   Widget _webView() {
     return SingleChildScrollView(
+        child: Center(
+      child: Container(
+        constraints: BoxConstraints(maxWidth: 600),
         child: Card(
             shadowColor: Color(0xff5bc9bf),
             elevation: 10.0,
@@ -196,9 +210,10 @@ class _BookAdviceState extends State<BookAdvice> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(4.0),
             ),
-            child: openEventForm
-                ? _dialogFields(setState)
-                : _finalResultsTable()));
+            child:
+                openEventForm ? _dialogFields(setState) : _finalResultsTable()),
+      ),
+    ));
   }
 
   Widget _dialogFields(StateSetter setStateDialog) {
@@ -209,81 +224,81 @@ class _BookAdviceState extends State<BookAdvice> {
           // color: Color.fromRGBO(253, 240, 240, 1),
           width: 500,
           height: 500,
-          child: Scaffold(
-            key: _key,
-            body: Form(
-              key: _formKey,
-              child: Center(
-                child: Container(
-                  color: whiteColor,
-                  alignment: Alignment.center,
-                  child: ListView(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text("Каква правна помош ви е потребна?",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold)),
-                      ),
-                      SizedBox(height: 10.0),
-                      Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 8.0),
-                          child: DropdownButton<String>(
-                            // create a border on the dropdown button
-                            isExpanded: true,
-                            hint: Text("Избери услуга"),
-                            value: dropdownValue,
-                            icon: const Icon(Icons.arrow_downward),
-                            elevation: 16,
-                            underline: Container(
-                              height: 2,
-                            ),
-                            onChanged: (String? value) {
-                              setState(() {
-                                serviceName = value!;
-                                dropdownValue = value!;
-                              });
-                            },
-                            items: list
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                          )),
-                      Padding(
+          child: Form(
+            key: _formKey,
+            child: Center(
+              child: Container(
+                color: whiteColor,
+                alignment: Alignment.center,
+                child: ListView(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text("Каква правна помош ви е потребна?",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold)),
+                    ),
+                    SizedBox(height: 10.0),
+                    Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 4.0),
-                        child: TextFormField(
-                          controller: _description,
-                          minLines: 6,
-                          maxLines: 8,
-                          validator: (value) => (value!.isEmpty)
-                              ? (mkLanguage
-                                  ? "Ве молиме внесете опис"
-                                  : "Please Enter description")
-                              : null,
-                          style: style,
-                          decoration: InputDecoration(
-                              labelText: mkLanguage
-                                  ? "Опис на проблемот..."
-                                  : "Description...",
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(4))),
-                        ),
+                            horizontal: 16.0, vertical: 8.0),
+                        child: DropdownButton<String>(
+                          // create a border on the dropdown button
+                          isExpanded: true,
+                          hint: Text("Избери услуга"),
+                          value: dropdownValue,
+                          icon: const Icon(Icons.arrow_downward),
+                          elevation: 16,
+                          underline: Container(
+                            height: 2,
+                          ),
+                          onChanged: (String? value) {
+                            setState(() {
+                              serviceName = value!;
+                              dropdownValue = value!;
+                            });
+                          },
+                          items: list
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        )),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 4.0),
+                      child: TextFormField(
+                        controller: _description,
+                        minLines: 6,
+                        maxLines: 8,
+                        validator: (value) => (value!.isEmpty)
+                            ? (mkLanguage
+                                ? "Ве молиме внесете опис"
+                                : "Please Enter description")
+                            : null,
+                        style: style,
+                        decoration: InputDecoration(
+                            labelText: mkLanguage
+                                ? "Опис на проблемот..."
+                                : "Description...",
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(4))),
                       ),
-                      const SizedBox(height: 10.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Flexible(
-                              child: SizedBox(
-                            width: 20,
-                          )),
-                          Flexible(
-                            flex: 3,
+                    ),
+                    const SizedBox(height: 10.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Flexible(
+                            child: SizedBox(
+                          width: 20,
+                        )),
+                        Flexible(
+                          flex: 3,
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
                             child: DateTimePicker(
                               type: DateTimePickerType.date,
                               dateMask: 'd MMM, yyyy  ',
@@ -308,7 +323,7 @@ class _BookAdviceState extends State<BookAdvice> {
                                   _selectedDate = val;
                                 }),
                                 await _getFreeTimePeriodsForDate(),
-                                await showTimePicherWidget(setStateDialog),
+                                await showTimePickerWidget(setStateDialog),
                               },
                               validator: (val) {
                                 print("validator $val");
@@ -316,93 +331,89 @@ class _BookAdviceState extends State<BookAdvice> {
                               },
                               onSaved: (val) async => {
                                 print("onSaved $val"),
-                                // await showTimePicherWidget()
+                                // await showTimePickerWidget()
                               },
                             ),
                           ),
-                          Flexible(
-                              child: SizedBox(
-                            width: 20,
-                          )),
-                          Flexible(
-                            flex: 2,
-                            child: Container(
-                              child: InkWell(
-                                onTap: () => {
-                                  showTimePicherWidget(setStateDialog),
+                        ),
+                        Flexible(
+                            child: SizedBox(
+                          width: 20,
+                        )),
+                        Flexible(
+                          flex: 2,
+                          child: Container(
+                            child: InkWell(
+                              mouseCursor: SystemMouseCursors.grab,
+                              onTap: () => {
+                                showTimePickerWidget(setStateDialog),
+                              },
+                              child: TextFormField(
+                                key: Key(selectedTime), // <- Magic!
+                                initialValue: selectedTime,
+                                enabled: false,
+                                validator: (value) {
+                                  if (value == null ||
+                                      value.isEmpty ||
+                                      value == "кликни тука") {
+                                    return 'Внесете време';
+                                  }
+                                  return null;
                                 },
-                                child: MouseRegion(
-                                  cursor: SystemMouseCursors.grabbing,
-                                  child: TextFormField(
-                                    key: Key(selectedTime), // <- Magic!
-                                    initialValue: selectedTime,
-                                    enabled: false,
-                                    validator: (value) {
-                                      if (value == null ||
-                                          value.isEmpty ||
-                                          value == "кликни тука") {
-                                        return 'Внесете време';
-                                      }
-                                      return null;
-                                    },
 
-                                    decoration: InputDecoration(
-                                        errorStyle: TextStyle(
+                                decoration: InputDecoration(
+                                    errorStyle: TextStyle(
+                                      color: Color.fromRGBO(225, 103, 104, 1),
+                                    ),
+                                    fillColor: Colors.orange,
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
                                           color:
-                                              Color.fromRGBO(225, 103, 104, 1),
-                                        ),
-                                        fillColor: Colors.orange,
-                                        enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Color.fromRGBO(
-                                                  225, 103, 104, 1)),
-                                        ),
-                                        focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Color.fromARGB(
-                                                  255, 255, 255, 255)),
-                                        ),
-                                        labelText:
-                                            mkLanguage ? "Време" : "time",
-                                        labelStyle: TextStyle(
-                                          color: Color.fromARGB(209, 0, 0, 0),
-                                        )),
-                                  ),
-                                ),
+                                              Color.fromRGBO(225, 103, 104, 1)),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255)),
+                                    ),
+                                    labelText: mkLanguage ? "Време" : "time",
+                                    labelStyle: TextStyle(
+                                      color: Color.fromARGB(209, 0, 0, 0),
+                                    )),
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 50.0),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Material(
-                          elevation: 5.0,
-                          borderRadius: BorderRadius.circular(30.0),
-                          color: Theme.of(context).primaryColor,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    Color(0xff5bc9bf))),
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                setState(() {
-                                  openEventForm = false;
-                                });
-                              }
-                            },
-                            child: Text(
-                              mkLanguage ? "Продолжи" : "Save",
-                              style: style.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 50.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Material(
+                        elevation: 5.0,
+                        borderRadius: BorderRadius.circular(30.0),
+                        color: Theme.of(context).primaryColor,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Color(0xff5bc9bf))),
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              setState(() {
+                                openEventForm = false;
+                              });
+                            }
+                          },
+                          child: Text(
+                            mkLanguage ? "Продолжи" : "Save",
+                            style: style.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),

@@ -39,7 +39,7 @@ class _CreateEventState extends State<CreateEvent> {
   final _key = GlobalKey<ScaffoldState>();
   late bool processing;
   // late String _selectedDate = "select date";
-  String selectedTime = "кликни тука";
+  String selectedTime = "16:00";
   // DateFormat.Hm().format(DateTime.now());
   // DateFormat("hh:mm").parse(DateTime.now().toString()).toString();
   String _selectedDate =
@@ -75,7 +75,7 @@ class _CreateEventState extends State<CreateEvent> {
     print(_unavailableTimePeriods);
   }
 
-  Future<void> showTimePicherWidget(StateSetter setStateDialog) async {
+  Future<void> showTimePickerWidget(StateSetter setStateDialog) async {
     return await showCustomTimePicker(
         context: context,
         builder: (BuildContext context, Widget? child) {
@@ -390,7 +390,7 @@ class _CreateEventState extends State<CreateEvent> {
                                   _selectedDate = val;
                                 }),
                                 await _getFreeTimePeriodsForDate(),
-                                await showTimePicherWidget(setStateDialog),
+                                await showTimePickerWidget(setStateDialog),
                               },
                               validator: (val) {
                                 print("validator $val");
@@ -398,7 +398,7 @@ class _CreateEventState extends State<CreateEvent> {
                               },
                               onSaved: (val) async => {
                                 print("onSaved $val"),
-                                // await showTimePicherWidget()
+                                // await showTimePickerWidget()
                               },
                             ),
                           ),
@@ -411,7 +411,7 @@ class _CreateEventState extends State<CreateEvent> {
                             child: Container(
                               child: InkWell(
                                 onTap: () => {
-                                  showTimePicherWidget(setStateDialog),
+                                  showTimePickerWidget(setStateDialog),
                                 },
                                 child: MouseRegion(
                                   cursor: SystemMouseCursors.grabbing,

@@ -6,14 +6,12 @@ import 'package:advices/screens/profile/lawyerProfile.dart';
 import 'package:advices/screens/services/book_advice.dart';
 import 'package:advices/screens/shared_widgets/BottomBar.dart';
 import 'package:advices/screens/call/calls.dart';
-import 'package:advices/assets/utilities/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import '../../App/contexts/usersContext.dart';
 import '../authentication/register.dart';
-import 'laws.dart';
+import 'homeWidget.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -138,7 +136,7 @@ class _HomeState extends State<Home> {
         shape: CircularNotchedRectangle(),
       ),
       body: Container(
-          height: double.infinity, width: double.infinity, child: Laws()),
+          height: double.infinity, width: double.infinity, child: HomeWidget()),
     );
   }
 }

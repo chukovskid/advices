@@ -67,6 +67,17 @@ class ServicesContext {
   }
 
 
+  static Stream<Iterable<Service>> getAllLaws() {
+    CollectionReference services =
+        FirebaseFirestore.instance.collection('laws');
+    var filteredServices = services.snapshots();
+
+    // final snapshots = filteredservices.orderBy('name').snapshots();
+    var flutterLaw = filteredServices.map(
+        (snapshot) => snapshot.docs.map((doc) => Service.fromJson(doc.data())));
+    return flutterLaw;
+  }
+
 
 
 }

@@ -56,7 +56,7 @@ class _AddEventPageState extends State<AddEventPage> {
     print(_unavailableTimePeriods);
   }
 
-  showTimePicherWidget() async {
+  showTimePickerWidget() async {
     return await showCustomTimePicker(
         context: context,
         builder: (BuildContext context, Widget? child) {
@@ -186,15 +186,15 @@ class _AddEventPageState extends State<AddEventPage> {
                             }),
                             await _getFreeTimePeriodsForDate(),
                             // TODO get val.date and
-                            showTimePicherWidget()
+                            showTimePickerWidget()
                           },
                           validator: (val) {
                             print("validator $val");
-                            // showTimePicherWidget();
+                            // showTimePickerWidget();
                             return null;
                           },
                           onSaved: (val) async =>
-                              {print("onSaved $val"), showTimePicherWidget()},
+                              {print("onSaved $val"), showTimePickerWidget()},
                         ),
                       ),
                       Flexible(

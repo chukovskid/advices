@@ -40,7 +40,10 @@ const darkBlueColor = const Color.fromRGBO(23, 34, 59, 1);
 const orangeColor = const Color.fromRGBO(225, 103, 104, 1);
 const darkGreenColor = const Color(0xff032229);
 const lightGreenColor = const Color(0xff5bc9bf);
-const backgroundColorLaws = [Color(0xff1c4746),Color.fromARGB(255, 254, 254, 254)];
+const advokatGreenColor = const Color(0xff1c4746);
+const backgroundColorLaws = [advokatGreenColor,Color.fromARGB(255, 254, 254, 254)];
+const backgroundColorLawsMobile = [Color(0xff1c4746),darkGreenColor];
+
 // const backgroundColor = [orangeColor,lightBlueColor, darkGreenColor];
 const backgroundColor = [
   Colors.white60,

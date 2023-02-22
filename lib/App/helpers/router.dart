@@ -3,6 +3,7 @@ import 'package:advices/screens/authentication/sign_in.dart';
 import 'package:advices/screens/profile/lawyerProfile.dart';
 import 'package:advices/screens/services/form_builder.dart';
 import 'package:advices/screens/services/personal_info_form.dart';
+import 'package:advices/screens/webView/IframeScreen.dart';
 import 'package:flutter/material.dart';
 import '../../screens/home/home.dart';
 import '../../screens/home/laws.dart';
@@ -39,6 +40,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => Authenticate());
     case 'book':
       return MaterialPageRoute(builder: (context) => BookAdvice());
+    case 'iframe':
+      return MaterialPageRoute(builder: (context) => IframeScreen());
+
     case 'payment':
       return MaterialPageRoute(builder: (context) => StripePayment());
     case 'chat':
