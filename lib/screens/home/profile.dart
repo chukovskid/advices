@@ -68,7 +68,7 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BaseAppBar(appBar: AppBar(), redirectToHome: true),
+      appBar: BaseAppBar(appBar: AppBar(), redirectToHome: false),
       backgroundColor: Color.fromARGB(255, 226, 146, 100),
       body: Container(
           height: double.maxFinite,
