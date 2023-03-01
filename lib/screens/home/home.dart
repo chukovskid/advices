@@ -1,5 +1,6 @@
-import 'dart:html';
+import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:advices/App/providers/auth_provider.dart';
 import 'package:advices/screens/call/call.dart';
 import 'package:advices/screens/profile/lawyerProfile.dart';
@@ -54,7 +55,6 @@ class _HomeState extends State<Home> {
   final AuthProvider _auth = AuthProvider();
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
-  /// Get the token, save it to the database for current user
   _saveDeviceToken() async {
     user = await _auth.getCurrentUser();
     setState(() {
@@ -77,55 +77,47 @@ class _HomeState extends State<Home> {
 
   void initDynamicLinks(BuildContext context) async {
     var currentUri = Uri.base;
+    String uri = '';
 
-    if (window.location.href.contains("/calls")) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Calls()),
-      );
-      return;
-    } else if (window.location.href.contains("/register")) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Register()),
-      );
-    } else if (window.location.href.contains("/advice_booking")) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => BookAdvice()),
-      );
-    } else if (window.location.href.contains("/test")) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Register()),
-      );
-    } else if (window.location.href.contains("/lawyers")) {
-      String url = window.location.href;
-      var parts = url.split("/lawyers/");
-      String lawyerId = parts[1];
-
-      print(lawyerId);
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => LawyerProfile(lawyerId, "")),
-      );
+    if (kIsWeb) {
+      uri = Uri.base.toString();
+      if (uri.contains("/calls")) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Calls()),
+        );
+        return;
+      } else if (uri.contains("/register")) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Register()),
+        );
+      } else if (uri.contains("/advice_booking")) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => BookAdvice()),
+        );
+      } else if (uri.contains("/test")) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Register()),
+        );
+      } else if (uri.contains("/lawyers")) {
+        String url = uri;
+        var parts = url.split("/lawyers/");
+        String lawyerId = parts[1];
+        print(lawyerId);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LawyerProfile(lawyerId, "")),
+        );
+      }
     }
   }
 
   openCalls() async {
     // Navigator.pushNamed(context, 'payment');
-
-    // if (kIsWeb && MediaQuery.of(context).size.width > 850.0) {
-    //   Uri url = Uri.parse("http://localhost:59445/#/calls");
-    //   if (await canLaunchUrl(url)) {
-    //     await launchUrl(url, webOnlyWindowName: '_self');
-    //   } else {
-    //     throw "Could not launch $url";
-    //   }
-    // } else {
     Navigator.push(context, MaterialPageRoute(builder: (context) => Calls()));
-    // }
   }
 
   @override

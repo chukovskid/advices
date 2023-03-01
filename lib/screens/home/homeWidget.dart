@@ -1,8 +1,10 @@
 import 'package:advices/assets/utilities/constants.dart';
 import 'package:advices/screens/services/book_advice.dart';
-import 'package:advices/screens/webView/IframeScreen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
+
+import '../webView/IframeWidget.dart';
 
 class HomeWidget extends StatefulWidget {
   const HomeWidget({Key? key}) : super(key: key);
@@ -208,8 +210,13 @@ class _HomeWidgetState extends State<HomeWidget>
 
   Widget _contracts(int area, String name, Color color) {
     return InkWell(
-      onTap: () => Navigator.push(
-          context, MaterialPageRoute(builder: (context) => IframeScreen())),
+      onTap: () => {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => IframeWidget(
+                    src: 'https://advokat.mk/services/documents_iframe.html'))),
+      },
       child: MouseRegion(
         onEnter: (PointerEvent details) {
           setState(() {
@@ -298,10 +305,14 @@ class _HomeWidgetState extends State<HomeWidget>
                     });
                   },
                   child: InkWell(
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => IframeScreen())),
+                    onTap: () => {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => IframeWidget(
+                                  src:
+                                      'https://advokat.mk/services/documents_iframe.html'))),
+                    },
                     child: Card(
                       color: advokatGreenColor,
                       elevation: 5,
