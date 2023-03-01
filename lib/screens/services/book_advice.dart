@@ -255,7 +255,7 @@ class _BookAdviceState extends State<BookAdvice> {
                           onChanged: (String? value) {
                             setState(() {
                               serviceName = value!;
-                              dropdownValue = value!;
+                              dropdownValue = value;
                             });
                           },
                           items: list

@@ -124,7 +124,7 @@ class FormBuilder extends StatelessWidget {
                                       (FormFieldState<List<String>> state) {
                                     return InputDecorator(
                                       decoration: InputDecoration(
-                                        labelText: question.questionText ?? '',
+                                        labelText: question.questionText,
                                         errorText: state.hasError
                                             ? state.errorText
                                             : null,
