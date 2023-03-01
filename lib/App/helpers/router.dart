@@ -3,7 +3,6 @@ import 'package:advices/screens/authentication/sign_in.dart';
 import 'package:advices/screens/profile/lawyerProfile.dart';
 import 'package:advices/screens/services/form_builder.dart';
 import 'package:advices/screens/services/personal_info_form.dart';
-import 'package:advices/screens/webView/IframeScreen.dart';
 import 'package:flutter/material.dart';
 import '../../screens/home/home.dart';
 import '../../screens/home/laws.dart';
@@ -15,6 +14,7 @@ import '../../screens/chat/screens/mobile_layout_screen.dart';
 import '../../screens/chat/screens/web_layout_screen.dart';
 import '../../screens/chat/utils/responsive_layout.dart';
 import '../../screens/services/book_advice.dart';
+import '../../screens/webView/IframeWidget.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -41,7 +41,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case 'book':
       return MaterialPageRoute(builder: (context) => BookAdvice());
     case 'iframe':
-      return MaterialPageRoute(builder: (context) => IframeScreen());
+      return MaterialPageRoute(
+          builder: (context) => IframeWidget(
+              src: 'https://advokat.mk/services/documents_iframe.html'));
 
     case 'payment':
       return MaterialPageRoute(builder: (context) => StripePayment());
