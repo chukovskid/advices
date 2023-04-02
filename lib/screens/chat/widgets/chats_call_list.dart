@@ -18,10 +18,10 @@ class ChatsCallList extends StatefulWidget {
 
 class _ChatsCallListState extends State<ChatsCallList> {
 
-  _navigateToMobileChat(String callId) {
+  _navigateToMobileChat(EventModel call) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Call(callId)),
+      MaterialPageRoute(builder: (context) => Call(call)),
     );
   }
 
@@ -46,18 +46,18 @@ class _ChatsCallListState extends State<ChatsCallList> {
     );
   }
 
-  Widget _listItem(EventModel callId) {
+  Widget _listItem(EventModel call) {
     return Column(
       children: [
         InkWell(
           onTap: () {
-            _navigateToMobileChat(callId.channelName);
+            _navigateToMobileChat(call);
           },
           child: Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
             child: ListTile(
               title: Text(
-                callId.title,
+                call.title,
                 style: const TextStyle(
                   fontSize: 18,
                 ),
@@ -65,25 +65,25 @@ class _ChatsCallListState extends State<ChatsCallList> {
               subtitle: Padding(
                 padding: const EdgeInsets.only(top: 6.0),
                 child: Text(
-                  callId.description,
+                  call.description,
                   style: const TextStyle(fontSize: 15),
                 ),
               ),
               // leading: CircleAvatar(
               //   radius: 20,
-              //   child: callId.photoURLs?.first != null &&
-              //           callId.photoURLs!.first.isNotEmpty
-              //       ? Image.network(callId.photoURLs!.first)
-              //       : Text(callId.displayNames!.first[0]),
+              //   child: call.photoURLs?.first != null &&
+              //           call.photoURLs!.first.isNotEmpty
+              //       ? Image.network(call.photoURLs!.first)
+              //       : Text(call.displayNames!.first[0]),
               // ),
               // leading: CircleAvatar(
               //   backgroundImage: NetworkImage(
-              //     callId.photoURLs!.first.toString(),
+              //     call.photoURLs!.first.toString(),
               //   ),
               //   radius: 30,
               // ),
               trailing: Text(
-                "Закажано за: ${DateFormat.yMd().add_Hm().format(callId.startDate)}",
+                "Закажано за: ${DateFormat.yMd().add_Hm().format(call.startDate)}",
                 style: const TextStyle(
                   color: Colors.grey,
                   fontSize: 13,

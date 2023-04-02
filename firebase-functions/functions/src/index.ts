@@ -1,6 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import { sendEmail } from './services/email';
+import axios from 'axios';
 
 
 admin.initializeApp();
@@ -16,20 +17,13 @@ export const callUser = functions.https.onCall(async (data, context) => {
   // let callerId = context.auth?.uid;
   let receiverId = data.receiverId;
   let channelName = data.channelName;
-  let displayName = "A user";
-  const querySnapshot = await db
-    .collection('users')
-    .doc(receiverId)
-    .collection('tokens')
-    .get();
-  const userRef = await db
-    .collection('users')
-    .doc(receiverId);
-  userRef.get().then((doc) => {
+  let displayName = "Некој";
+  const querySnapshot = await db.collection('users').doc(receiverId).collection('tokens').get();
+  const userRef = await db.collection('users').doc(receiverId);
+  await userRef.get().then((doc) => {
     if (doc.exists) {
       let data = doc.data()
       console.log("Document Id:", data!.uid);
-
       console.log("Document displayName:", data!.displayName);
       displayName = data!.displayName;
     } else {
@@ -43,8 +37,8 @@ export const callUser = functions.https.onCall(async (data, context) => {
   console.log("tokens ==== ", tokens);
   const payload: admin.messaging.MessagingPayload = {
     notification: {
-      title: 'Tap to join call!',
-      body: `${displayName} has starter a call with you.`,
+      title: 'Отвори повик',
+      body: `${displayName} ти ѕвони`,
       icon: 'your-icon-url',
       click_action: 'FLUTTER_NOTIFICATION_CLICK',
     },
@@ -60,48 +54,7 @@ export const notifyNewCalls = functions.firestore
   .document('users/{callerId}/pendingCalls/{channelName}')
   .onWrite(async (snapshot, context) => {
     let callerId = context.params.callerId;
-    let channelName = context.params.channelName;
-    let displayName = "A user";
-    let data = snapshot.after.data();
-    console.log("///// data", data)
-    console.log("///// data.lawyerId", data?.lawyerId)
-    console.log("///// other info ", callerId, channelName, displayName)
-    // const querySnapshot = await db
-    //   .collection('users')
-    //   .doc(callerId)
-    //   .collection('tokens')
-    //   .get();
-    // const userRef = await db
-    //   .collection('users')
-    //   .doc(callerId);
-    // userRef.get().then((doc) => {
-    //   if (doc.exists) {
-    //     let data = doc.data()
-    //     console.log("Document Id:", data!.uid);
 
-    //     console.log("Document displayName:", data!.displayName);
-    //     displayName = data!.displayName;
-    //   } else {
-    //     // doc.data() will be undefined in this case
-    //     console.log("No such document!");
-    //   }
-    // }).catch((error) => {
-    //   console.log("Error getting document:", error);
-    // });
-    // const tokens = querySnapshot.docs.map((snap: any) => snap.id); // TODO check the  token!
-    // console.log("tokens ==== ", tokens);
-    // const payload: admin.messaging.MessagingPayload = {
-    //   notification: {
-    //     title: 'Tap to join call!',
-    //     body: `${displayName} has starter a call with you.`,
-    //     icon: 'your-icon-url',
-    //     click_action: 'FLUTTER_NOTIFICATION_CLICK',
-    //   },
-    //   data: {
-    //     channelName: channelName
-    //   }
-    // };
-    // return fcm.sendToDevice(tokens, payload);
     const userRef = await db
       .collection('users')
       .doc(callerId).get();
@@ -109,6 +62,129 @@ export const notifyNewCalls = functions.firestore
     console.log("///// notifyNewCalls", user)
   });
 
+
+
+export const notificationForNewMessage = functions.firestore.document('/conversation/groups/chats/{chatId}').onWrite(async snapshot => {
+  let data = snapshot.after.data();
+  if (!data) return "no data";
+  const senderId = data!.senderId ? data!.senderId : '';
+  let members = data!.members ? data!.members : [];
+  let receiverId = members.filter((member: any) => member !== senderId)[0];
+  let lastMessage = data!.lastMessage ? data!.lastMessage : '';
+  let lastMessageTime = data!.lastMessageTime ? data!.lastMessageTime : '';
+  let displayNames = data!.displayNames ? data!.displayNames : [];
+  let photoURLs = data!.photoURLs ? data!.photoURLs : [];
+  let senderName = displayNames.filter((name: any) => name !== senderId)[0];
+  let senderPhotoURL = photoURLs.filter((photoURL: any) => photoURL !== senderId)[0];
+
+  const querySnapshot = await db.collection('users').doc(receiverId).collection('tokens').get();
+  const tokens = querySnapshot.docs.map((snap: any) => snap.id); // TODO check the  token!
+  const payload: admin.messaging.MessagingPayload = {
+    notification: {
+      title: senderName,
+      body: lastMessage,
+      icon: senderPhotoURL,
+      click_action: 'FLUTTER_NOTIFICATION_CLICK',
+    },
+    data: {
+      senderId: senderId,
+      receiverId: receiverId,
+      lastMessage: lastMessage,
+      lastMessageTime: lastMessageTime,
+      senderName: senderName,
+      senderPhotoURL: senderPhotoURL,
+    }
+  };
+
+  return fcm.sendToDevice(tokens, payload);
+});
+
+
+
+
+
+async function callGPT(prompt: string) {
+  const apiKey = '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';
+  const url = 'https://api.openai.com/v1/engines/text-davinci-003/completions';
+
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${apiKey}`
+  };
+
+  const data = {
+    'prompt': prompt,
+    'max_tokens': 50,
+    'temperature': 0.7
+  };
+
+  try {
+    const response = await axios.post(url, data, { headers: headers });
+    return response.data.choices[0].text.trim();
+  } catch (error) {
+    console.error('Error calling GPT API:', error);
+    return null;
+  }
+}
+
+async function extractKeyClausesAndTerms(preprocessedText: string) {
+  const prompt = `Given the following contract text, extract key clauses and terms in Macedonian language : "${preprocessedText}"`;
+  return await callGPT(prompt);
+}
+
+async function identifyIssuesAndRisks(preprocessedText: string) {
+  const prompt = `Given the following contract text, identify potential issues, risks, or discrepancies in Macedonian language: "${preprocessedText}"`;
+  return await callGPT(prompt);
+}
+
+async function generateExplanationsAndRecommendations(issuesAndRisks: string) {
+  const prompt = `Given the following issues and risks found in a contract, provide plain-English explanations and recommendations in Macedonian language: "${issuesAndRisks}"`;
+  return await callGPT(prompt);
+}
+
+async function compareWithTemplates(preprocessedText: string) {
+  const prompt = `Given the following contract text, compare it with standard templates or best practices in Macedonian language: "${preprocessedText}"`;
+  return await callGPT(prompt);
+}
+
+async function processContract(contractText: string) {
+  const preprocessedText = preprocess(contractText);
+  const keyClausesAndTerms = await extractKeyClausesAndTerms(preprocessedText);
+  const issuesAndRisks = await identifyIssuesAndRisks(preprocessedText);
+  const explanationsAndRecommendations = await generateExplanationsAndRecommendations(issuesAndRisks);
+  const comparisonResults = await compareWithTemplates(preprocessedText);
+
+  const analysisResults = {
+    summary: keyClausesAndTerms,
+    issues: issuesAndRisks,
+    explanations: explanationsAndRecommendations,
+    comparison: comparisonResults
+  };
+
+  return analysisResults;
+}
+
+function preprocess(contractText: string) {
+  // Simple preprocessing: Convert to lowercase and remove extra spaces
+  return contractText.toLowerCase().replace(/\s+/g, ' ').trim();
+}
+
+
+export const analyzeContract = functions.https.onRequest(async (req, res) => {
+  const contractText = req.body.contractText as string;
+
+  if (!contractText) {
+    res.status(400).json({ error: 'Missing contractText parameter.' });
+    return;
+  }
+
+  try {
+    const analysisResults = await processContract(contractText);
+    res.status(200).json({ analysisResults });
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred during contract analysis.' });
+  }
+});
 
 
 

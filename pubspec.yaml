@@ -43,7 +43,7 @@ dependencies:
   js: ^0.6.4
   flutter_dotenv: ^5.0.2
   timeago: ^3.3.0
-  flutter_widget_from_html: ^0.6.1
+  flutter_widget_from_html: ^0.9.1
 
 
 

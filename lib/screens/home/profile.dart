@@ -68,7 +68,7 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BaseAppBar(appBar: AppBar(), redirectToHome: false),
+      appBar: BaseAppBar(appBar: AppBar(), redirectToHome: true),
       backgroundColor: Color.fromARGB(255, 226, 146, 100),
       body: Container(
           height: double.maxFinite,
@@ -115,90 +115,91 @@ class _ProfileState extends State<Profile> {
 
   Widget _info() {
     return Card(
-      elevation: 0.3,
-      margin: const EdgeInsets.only(top: 0, left: 10, right: 10, bottom: 10),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Container(
-        width: double.infinity / 0.2,
-        // margin: const EdgeInsets.all(5),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              "  ${_fireUser?.displayName}",
-              style: const TextStyle(
-                fontWeight: FontWeight.normal,
-                color: Color.fromRGBO(23, 34, 59, 1),
-                fontSize: 25,
-              ),
-            ),
-            const SizedBox(height: 20.0),
-            RichText(
-              text: TextSpan(children: [
-                const WidgetSpan(
-                  child: Icon(Icons.phone, size: 14),
-                ),
-                TextSpan(
-                  text: "  ${_fireUser?.email}",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.normal,
-                    color: Color.fromRGBO(23, 34, 59, 1),
-                    fontSize: 18,
-                  ),
-                ),
-              ]),
-            ),
-            const SizedBox(height: 20.0),
-            RichText(
-              text: TextSpan(children: [
-                const WidgetSpan(
-                  child: Icon(Icons.web, size: 14),
-                ),
-                TextSpan(
-                  text: "  ${_fireUser?.phoneNumber}",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.normal,
-                    color: Color.fromRGBO(23, 34, 59, 1),
-                    fontSize: 18,
-                  ),
-                ),
-              ]),
-            ),
-            const SizedBox(height: 20.0),
-            RichText(
-              text: TextSpan(children: [
-                const WidgetSpan(
-                  child: Icon(Icons.email, size: 14),
-                ),
-                TextSpan(
-                  text: "  ${_fireUser?.uid}",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.normal,
-                    color: Color.fromRGBO(23, 34, 59, 1),
-                    fontSize: 12,
-                  ),
-                ),
-              ]),
-            ),
-            const SizedBox(height: 40.0),
-            ElevatedButton(
-                style: ButtonStyle(
-                    foregroundColor:
-                        MaterialStateProperty.all<Color>(Colors.black)),
-                // color: Color.fromRGBO(23, 34, 59, 1),
-                child: const Text(
-                  'Sign out',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () async {
-                  await _signOut();
-                }),
-          ],
+        elevation: 0.3,
+        margin: const EdgeInsets.only(top: 0, left: 10, right: 10, bottom: 10),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
         ),
-      ),
-    );
+        child: Container(
+          width:
+              MediaQuery.of(context).size.width > 500 ? 500 : double.infinity,
+          margin: const EdgeInsets.all(10),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  "  ${_fireUser?.displayName}",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.normal,
+                    color: Color.fromRGBO(23, 34, 59, 1),
+                    fontSize: 25,
+                  ),
+                ),
+                const SizedBox(height: 20.0),
+                RichText(
+                  text: TextSpan(children: [
+                    const WidgetSpan(
+                      child: Icon(Icons.phone, size: 14),
+                    ),
+                    TextSpan(
+                      text: "  ${_fireUser?.email}",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: Color.fromRGBO(23, 34, 59, 1),
+                        fontSize: 18,
+                      ),
+                    ),
+                  ]),
+                ),
+                const SizedBox(height: 20.0),
+                RichText(
+                  text: TextSpan(children: [
+                    const WidgetSpan(
+                      child: Icon(Icons.web, size: 14),
+                    ),
+                    TextSpan(
+                      text: "  ${_fireUser?.phoneNumber}",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: Color.fromRGBO(23, 34, 59, 1),
+                        fontSize: 18,
+                      ),
+                    ),
+                  ]),
+                ),
+                const SizedBox(height: 20.0),
+                RichText(
+                  text: TextSpan(children: [
+                    const WidgetSpan(
+                      child: Icon(Icons.email, size: 14),
+                    ),
+                    TextSpan(
+                      text: "  ${_fireUser?.uid}",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: Color.fromRGBO(23, 34, 59, 1),
+                        fontSize: 12,
+                      ),
+                    ),
+                  ]),
+                ),
+                ElevatedButton(
+                    style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.black)),
+                    // color: Color.fromRGBO(23, 34, 59, 1),
+                    child: const Text(
+                      'Sign out',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () async {
+                      await _signOut();
+                    }),
+              ],
+            ),
+          ),
+        ));
   }
 
   void _showToast(BuildContext context, String text) {

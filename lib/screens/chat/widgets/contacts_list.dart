@@ -2,6 +2,8 @@ import 'package:advices/App/providers/chat_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../../App/models/chat.dart';
+import '../../../App/models/user.dart';
+import '../../../App/providers/auth_provider.dart';
 import '../../../assets/utilities/constants.dart';
 import '../colors.dart';
 import '../screens/mobile_chat_screen.dart';
@@ -17,6 +19,10 @@ class ContactsList extends StatefulWidget {
 }
 
 class _ContactsListState extends State<ContactsList> {
+  final AuthProvider _auth = AuthProvider();
+
+   String? loggedUserDisplayName = "";
+
   _selectChat(chatId) {
     MediaQuery.of(context).size.width < 850.0
         ? _navigateToMobileChat(chatId)
@@ -29,6 +35,22 @@ class _ContactsListState extends State<ContactsList> {
       context,
       MaterialPageRoute(builder: (context) => MobileChatScreen(chatId)),
     );
+  }
+
+  Future<void> getLoggedUser() async {
+    // bool loggedIn = await _auth.isSignIn();
+    FlutterUser? user = await _auth.getMyProfileInfo();
+    bool userExist = user != null? true : false;
+    print("USER ////2 ${user?.displayName} ");
+
+    setState(() => {loggedUserDisplayName = user?.displayName});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getLoggedUser();
+    print("USER ${loggedUserDisplayName} ");
   }
 
   @override
@@ -64,7 +86,7 @@ class _ContactsListState extends State<ContactsList> {
             child: ListTile(
               title: Text(
                 chat.displayNames!
-                    .firstWhere((e) => e != widget.user.displayName)
+                    .firstWhere((e) => e != loggedUserDisplayName)
                     .toString(),
                 style: const TextStyle(
                   fontSize: 18,
@@ -83,7 +105,10 @@ class _ContactsListState extends State<ContactsList> {
                 child: chat.photoURLs?.first != null &&
                         chat.photoURLs!.first.isNotEmpty
                     ? Image.network(chat.photoURLs!.first)
-                    : Text(chat.displayNames!.first[0], style: TextStyle(color: whiteColor),),
+                    : Text(
+                        chat.displayNames!.first[0],
+                        style: TextStyle(color: whiteColor),
+                      ),
               ),
               // leading: CircleAvatar(
               //   backgroundImage: NetworkImage(

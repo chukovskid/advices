@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../App/contexts/callEventsContext.dart';
+import '../../App/models/event.dart';
 import '../video/examples/advanced/enable_virtualbackground/enable_virtualbackground.dart';
 import '../video/examples/basic/join_channel_video/join_channel_video.dart';
 import '../video/examples/advanced/index.dart';
@@ -19,13 +20,14 @@ import '../video/config/agora.config.dart' as config;
 import '../../assets/utilities/constants.dart';
 import '../authentication/authentication.dart';
 import '../shared_widgets/base_app_bar.dart';
+import 'EventDesctiprion.dart';
 
 /// This widget is the root of your application.
 class Call extends StatefulWidget {
-  final String channellName;
+  final EventModel call;
 
   /// Construct the [Call]
-  const Call(this.channellName, {Key? key}) : super(key: key);
+  const Call(this.call, {Key? key}) : super(key: key);
 
   @override
   State<Call> createState() => _CallState();
@@ -81,7 +83,7 @@ class _CallState extends State<Call> {
   }
 
   _navigateToLawyerProfile() {
-    List<String> lawyerIdandclientId = widget.channellName.split("+");
+    List<String> lawyerIdandclientId = widget.call.channelName.split("+");
     String lawyerId = lawyerIdandclientId[0];
     Navigator.pushReplacement(
       context,
@@ -181,32 +183,51 @@ class _CallState extends State<Call> {
               ),
             )
           : SafeArea(
-              child: Center(
+              child: Container(
+                width: double.infinity,
                 child: SingleChildScrollView(
                   clipBehavior: Clip.antiAliasWithSaveLayer,
                   physics: BouncingScrollPhysics(),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
+                      // Container(
+                      //   child: FaIcon(
+                      //     FontAwesomeIcons.gavel,
+                      //     semanticLabel: "label",
+                      //     size: 50,
+                      //   ),
+                      //   height: MediaQuery.of(context).size.height * 0.1,
+                      // ),
+                      // Padding(padding: EdgeInsets.only(top: 20)),
+
                       Container(
-                        child: FaIcon(
-                          FontAwesomeIcons.gavel,
-                          semanticLabel: "label",
-                          size: 50,
+                        width: MediaQuery.of(context).size.width > 500
+                            ? 500
+                            : double.infinity,
+                        height: MediaQuery.of(context).size.height > 500
+                            ? 300
+                            : double.infinity,
+                        child: Padding(
+                          padding: EdgeInsets.all(
+                              10.0), // 8.0 is the amount of padding in logical pixels
+                          child: EventWidget(event: widget.call),
                         ),
-                        height: MediaQuery.of(context).size.height * 0.1,
                       ),
-                      Padding(padding: EdgeInsets.only(top: 20)),
+                      // Container(
+                      //   child: EventWidget(event: widget.call),
+                      // ),
+                      SizedBox(height: 60),
                       Text(
-                        'Go to the video call',
+                        'Продолжи кон видео повикот!',
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
                       ),
-                      Padding(padding: EdgeInsets.symmetric(vertical: 20)),
-                      Padding(padding: EdgeInsets.symmetric(vertical: 30)),
+                      SizedBox(height: 20),
+
                       Container(
                         width: MediaQuery.of(context).size.width * 0.55,
                         child: MaterialButton(
@@ -217,7 +238,7 @@ class _CallState extends State<Call> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                'Join',
+                                'Продолжи',
                                 style: TextStyle(color: Colors.white),
                               ),
                               Icon(
@@ -247,7 +268,7 @@ class _CallState extends State<Call> {
       await [Permission.microphone, Permission.camera].request();
     }
 
-    List<String> lawyerIdandclientId = widget.channellName.split("+");
+    List<String> lawyerIdandclientId = widget.call.channelName.split("+");
     String lawyerId = lawyerIdandclientId[0];
     String clientId = lawyerIdandclientId[1];
     String receiverId = user!.uid == clientId ? lawyerId : clientId;
@@ -256,14 +277,14 @@ class _CallState extends State<Call> {
     // String channelName =
     //     await DatabaseService.updateAsOpenCallForUsers(lawyerId, clientId);
 
-    await CallEventsContext.callUser(widget.channellName, receiverId);
+    await CallEventsContext.callUser(widget.call.channelName, receiverId);
 
 // TODO instead of saveOpenCallForUser, create a function setCallToOpen()
 // // meaning there is someone at the call and is WAITING
     setState(() {
       isLoading = false;
     });
-    await openCall(widget.channellName);
+    await openCall(widget.call.channelName);
   }
 
   // Future<void> _handleCameraAndMic(Permission permission) async {

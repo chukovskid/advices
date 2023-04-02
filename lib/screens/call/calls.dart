@@ -46,21 +46,21 @@ class _CallsState extends State<Calls>
     }
   }
 
-  Future<void> openCall(channelName) async {
+  Future<void> openCall(EventModel call) async {
     setState(() {
       isLoading = true;
     });
     if (user == null) {
       return null;
     }
-    Map<String, dynamic>? result = await CallMethods.makeCloudCall(channelName);
+    Map<String, dynamic>? result = await CallMethods.makeCloudCall(call.channelName);
     if (result!['token'] != null) {
       setState(() {
         isLoading = false;
       });
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Call(channelName)),
+        MaterialPageRoute(builder: (context) => Call(call)),
       );
     }
   }
@@ -71,6 +71,10 @@ class _CallsState extends State<Calls>
       MaterialPageRoute(builder: (context) => Authenticate()),
     );
   }
+
+  String trimString(String str) {
+  return str.length > 45 ? '${str.substring(0, 42)}...' : str;
+}
 
   @override
   Widget build(BuildContext context) {
@@ -166,7 +170,11 @@ class _CallsState extends State<Calls>
                           Icons.description,
                           size: 16,
                         ),
-                        Text(' ${call.description}'),
+                        Text(
+                          ' ${trimString(call.description)}',
+                          softWrap: true,
+                          textAlign: TextAlign.center,
+                        ),
                       ],
                     ),
                     Row(
@@ -190,7 +198,7 @@ class _CallsState extends State<Calls>
                 ),
               ],
             ),
-            onTap: () => openCall(call.channelName),
+            onTap: () => openCall(call),
           ),
           const SizedBox(
             height: 20,

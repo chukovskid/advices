@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 
 import '../webView/IframeWidget.dart';
+import 'lawyers.dart';
 
 class HomeWidget extends StatefulWidget {
   const HomeWidget({Key? key}) : super(key: key);
@@ -151,7 +152,7 @@ class _HomeWidgetState extends State<HomeWidget>
   Widget _advices(int area, String name, Color color) {
     return InkWell(
       onTap: () => Navigator.push(
-          context, MaterialPageRoute(builder: (context) => BookAdvice())),
+          context, MaterialPageRoute(builder: (context) => Lawyers(service: "buyAndSaleId"))),
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         onEnter: (PointerEvent details) {
@@ -366,7 +367,7 @@ class _HomeWidgetState extends State<HomeWidget>
                   child: InkWell(
                     onHover: (value) => {},
                     onTap: () => Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => BookAdvice())),
+                        MaterialPageRoute(builder: (context) => Lawyers(service: "buyAndSaleId"))),
                     child: Card(
                       color: advokatGreenColor,
                       elevation: 5,
@@ -394,7 +395,7 @@ class _HomeWidgetState extends State<HomeWidget>
                                   ),
                                   Text(
                                     mkLanguage
-                                        ? "Оваа секција е за во итни случаи. Во наредните 5-15мин. ќе добиете емаил со адвокати кои се достапни во моментот за консултација"
+                                        ? "Закажете состанок со адвокат и добијте совет/консултаација"
                                         : "Company",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(

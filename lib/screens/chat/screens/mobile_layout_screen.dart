@@ -57,7 +57,7 @@ class _MobileLayoutScreenState extends State<MobileLayoutScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -69,7 +69,7 @@ class _MobileLayoutScreenState extends State<MobileLayoutScreen> {
               onPressed: _navigateToAuth,
             ),
           ],
-          bottom: const TabBar(
+          bottom:  TabBar(
             indicatorColor: tabColor,
             indicatorWeight: 4,
             labelColor: tabColor,

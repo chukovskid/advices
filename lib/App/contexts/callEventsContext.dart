@@ -4,14 +4,15 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../providers/auth_provider.dart';
-
+import '../providers/chat_provider.dart';
 
 class CallEventsContext {
   CallEventsContext(String s,
       {required EventModel Function(dynamic id, dynamic data) fromDS,
       required Function(dynamic event) toMap});
 
-  static Future<void> saveEvent(lawyerId, title, description, DateTime dateTime) async {
+  static Future<void> saveEvent(
+      lawyerId, title, description, DateTime dateTime) async {
     // save call for cleint
     final AuthProvider _auth = AuthProvider();
     User? client = await _auth.getCurrentUser();
@@ -47,9 +48,20 @@ class CallEventsContext {
       "startDate": dateTime,
       "open": false
     });
+
+    // Create room for lawyer and client
+    final ChatProvider _chatProvider = ChatProvider();
+    String chatId = await _chatProvider.createNewChat([lawyerId]);
+    // Send message to client from the lawyer
+    _chatProvider.sendMessage(lawyerId, title, chatId); // TODO: Change message
+    _chatProvider.sendMessage(
+        lawyerId, description, chatId); // TODO: Change message
+    _chatProvider.sendMessage(
+        lawyerId, dateTime.toString(), chatId); // TODO: Change message
   }
 
-  static Future<List<DateTime>> getAllLEventsDateTIme(lawyerId, DateTime date) async {
+  static Future<List<DateTime>> getAllLEventsDateTIme(
+      lawyerId, DateTime date) async {
     List<EventModel> data = [];
     List<DateTime> dataDateTime = [];
     DateTime endDate = date.add(Duration(days: 1));
@@ -94,7 +106,41 @@ class CallEventsContext {
     return userCalls;
   }
 
-  static Future<Map<String, dynamic>?> callUser(String channelName, String receiverId) async {
+  static Future<EventModel> getEvent(String channelName) async {
+    // get logged user uid
+    final AuthProvider _auth = AuthProvider();
+    User? user = await _auth.getCurrentUser();
+    String uid = user?.uid ?? "";
+
+    CollectionReference events = FirebaseFirestore.instance
+        .collection("users")
+        .doc(uid)
+        .collection('pendingCalls');
+
+    // write a where clause to filter for a specific channelName
+    Query filteredCalls = events.where("channelName", isEqualTo: channelName);
+
+    // write an orderBy clause to sort by a field
+    // Query orderedCalls = filteredCalls.orderBy("startTime");
+
+    QuerySnapshot snapshot = await filteredCalls.limit(1).get();
+
+    // return the first event that matches the given channelName
+    if (snapshot.docs.isNotEmpty) {
+      EventModel event = EventModel.fromJson(snapshot.docs.first);
+      return event;
+    } else {
+      return EventModel(
+          title: "Не постои овој евент",
+          description: "Пробајте повторно",
+          startDate: DateTime.now(),
+          channelName: '',
+          open: false);
+    }
+  }
+
+  static Future<Map<String, dynamic>?> callUser(
+      String channelName, String receiverId) async {
     try {
       HttpsCallable callable =
           FirebaseFunctions.instance.httpsCallable('callUser');

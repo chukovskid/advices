@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:advices/App/contexts/callEventsContext.dart';
 import 'package:flutter/foundation.dart';
 import 'package:advices/App/providers/auth_provider.dart';
 import 'package:advices/screens/call/call.dart';
@@ -11,6 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import '../../App/contexts/usersContext.dart';
+import '../../App/models/event.dart';
 import '../authentication/register.dart';
 import 'homeWidget.dart';
 
@@ -69,9 +71,11 @@ class _HomeState extends State<Home> {
     if (user == null) {
       return null;
     }
+    EventModel event = await CallEventsContext.getEvent(channelName);
+    // get event with this channel name.
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Call(channelName)),
+      MaterialPageRoute(builder: (context) => Call(event)),
     );
   }
 

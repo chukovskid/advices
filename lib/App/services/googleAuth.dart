@@ -119,11 +119,11 @@ class GoogleAuthService {
       }
       await FirebaseAuth.instance.signOut();
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        customSnackBar(
-          content: 'Error signing out. Try again.',
-        ),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   customSnackBar(
+      //     content: 'Error signing out. Try again.',
+      //   ),
+      // );
     }
   }
 

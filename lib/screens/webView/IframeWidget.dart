@@ -22,7 +22,7 @@ class _IframeWidgetState extends State<IframeWidget> {
     // Create the HTML widget using the src argument
     _widget = HtmlWidget(
       '<iframe src="${widget.src}"></iframe>',
-      webView: true,
+      // webView: true,
     );
   }
 

@@ -46,7 +46,7 @@ class _BookAdviceState extends State<BookAdvice> {
   var imageUrl =
       "https://devshift.biz/wp-content/uploads/2017/04/profile-icon-png-898.png"; //you can use a image
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-  TextEditingController _title = TextEditingController(text: "Everyone");
+  TextEditingController _title = TextEditingController(text: list.first);
   final TextEditingController _description = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
@@ -71,7 +71,7 @@ class _BookAdviceState extends State<BookAdvice> {
   Future<void> _getFreeTimePeriodsForDate() async {
     DateTime selectedDate = DateFormat("yyyy-MM-dd").parse("$_selectedDate");
     List<DateTime> events = await CallEventsContext.getAllLEventsDateTIme(
-        "jVKyvVjJwShtSYNH58zy7Sv04yI2", selectedDate);
+        "Lk37HV68oaPxOA8AHpNqcSoFgEA3", selectedDate);
     _unavailableTimePeriods = [];
     events.forEach((element) {
       DateTime substraction = element;
@@ -136,7 +136,7 @@ class _BookAdviceState extends State<BookAdvice> {
     }
     DateTime selectedDateTime =
         DateFormat("yyyy-MM-dd hh:mm").parse("$_selectedDate $selectedTime");
-    await CallEventsContext.saveEvent("jVKyvVjJwShtSYNH58zy7Sv04yI2",
+    await CallEventsContext.saveEvent("Lk37HV68oaPxOA8AHpNqcSoFgEA3",
         _title.text, _description.text, selectedDateTime);
 
     // Uncoment this for enabeling Stripe payment
@@ -256,6 +256,7 @@ class _BookAdviceState extends State<BookAdvice> {
                             setState(() {
                               serviceName = value!;
                               dropdownValue = value;
+                              _title = TextEditingController(text: value);
                             });
                           },
                           items: list
@@ -288,6 +289,8 @@ class _BookAdviceState extends State<BookAdvice> {
                       ),
                     ),
                     const SizedBox(height: 10.0),
+                  
+                    
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [

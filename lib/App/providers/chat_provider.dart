@@ -8,16 +8,18 @@ import '../models/userChat.dart';
 import 'auth_provider.dart';
 
 class ChatProvider with ChangeNotifier {
-    final AuthProvider _auth = AuthProvider();
+  final AuthProvider _auth = AuthProvider();
   final UsersContext _usersContext = UsersContext();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<void> sendMessage(String userId, String message, String? chatId) async {
+  Future<void> sendMessage(
+      String userId, String message, String? chatId) async {
     try {
       final fUser = await UsersContext.getUser(userId);
-      final refMessages = _firestore.collection('conversation/messages/$chatId');
+      final refMessages =
+          _firestore.collection('conversation/messages/$chatId');
       final now = DateTime.now();
-      final newMesage = Message(
+      final newMessage = Message(
         chatId: chatId!,
         message: message,
         senderId: userId,
@@ -28,14 +30,25 @@ class ChatProvider with ChangeNotifier {
       );
       await refMessages
           .doc(now.microsecondsSinceEpoch.toString())
-          .set(newMesage.toMap());
+          .set(newMessage.toMap());
 
-      final refUserChats =
-          _firestore.collection('conversation/userChats/$userId');
-      await refUserChats.doc(chatId).update({
+      // final refUserChats =
+      //     _firestore.collection('conversation/userChats/$userId');
+      // await refUserChats.doc(chatId).update({
+      //   "lastMessage": message,
+      //   "lastMessageTime": DateTime.now(),
+      // });
+
+
+      print(chatId);
+      final refChat =
+          _firestore.collection('conversation/groups/chats');
+      await refChat.doc(chatId).update({
+        "senderId": userId,
         "lastMessage": message,
         "lastMessageTime": DateTime.now(),
       });
+
       notifyListeners();
     } catch (e) {
       print(e);
@@ -48,7 +61,8 @@ class ChatProvider with ChangeNotifier {
       return "GroupChat";
     }
     userIds.add(user.uid);
-    var chatId = new DateTime.now().millisecondsSinceEpoch.toString();
+    // var chatId = new DateTime.now().millisecondsSinceEpoch.toString();
+    var chatId = userIds.join('+');
     final refChat = _firestore.collection('conversation/groups/chats');
     final chats = refChat.where("members", isEqualTo: userIds).get();
     bool chatExists = false;
@@ -73,8 +87,8 @@ class ChatProvider with ChangeNotifier {
       refUserChats.doc(chatId).set({
         "id": chatId,
         "contacts": userIds,
-        "lastMessage": "Почнете муабет",
-        "lastMessageTime": DateTime.now(),
+        // "lastMessage": "Почнете муабет",
+        // "lastMessageTime": DateTime.now(),
         "members": userIds,
         "photoURLs": membersPhotoURLs,
         "displayNames": membersDisplayNames
@@ -83,7 +97,7 @@ class ChatProvider with ChangeNotifier {
 
     final newChat = Chat(
         id: chatId,
-        lastMessage: "All mesages read",
+        lastMessage: "Почнете муабет!",
         lastMessageTime: DateTime.now(),
         members: userIds,
         displayNames: membersDisplayNames,
@@ -92,12 +106,7 @@ class ChatProvider with ChangeNotifier {
     return chatId;
   }
 
-
-
-
-
-
-   static Stream<Iterable<Message>> getMessagesStreamForChat(String chatId) {
+  static Stream<Iterable<Message>> getMessagesStreamForChat(String chatId) {
     print("get messages for Chat");
     CollectionReference services =
         FirebaseFirestore.instance.collection('conversation/messages/$chatId');
@@ -125,13 +134,35 @@ class ChatProvider with ChangeNotifier {
 
   static Stream<Iterable<Chat>> getChats(String userId) {
     CollectionReference userChats =
-        FirebaseFirestore.instance.collection('conversation/userChats/$userId');
+        FirebaseFirestore.instance.collection('conversation/groups/chats');
 
-    var snapshotUserChats = userChats.snapshots();
+    var snapshotUserChats =
+        userChats.where('id', isGreaterThanOrEqualTo: userId).snapshots();
     var filteredUserChats = snapshotUserChats.map(
         (snapshot) => snapshot.docs.map((doc) => Chat.fromJson(doc.data())));
     return filteredUserChats;
   }
+
+  // static Stream<Iterable<Chat>> getChats(String userId) {
+  //   CollectionReference userChats =
+  //       FirebaseFirestore.instance.collection('conversation/userChats/$userId');
+
+  //   var snapshotUserChats = userChats.snapshots();
+  //   var filteredUserChats = snapshotUserChats.map(
+  //       (snapshot) => snapshot.docs.map((doc) => Chat.fromJson(doc.data())));
+  //   return filteredUserChats;
+  // }
+  // static Stream<Iterable<Chat>> getChats(String userId) {
+  //   CollectionReference userChats =
+  //       FirebaseFirestore.instance.collection('conversation/userChats/$userId');
+
+  //   // Order the chats by the most recent message date
+  //   var orderedChats = userChats.orderBy('lastMessageDate', descending: true);
+
+  //   // Return a stream of the ordered chats, updated in real-time
+  //   return orderedChats.snapshots().map((snapshot) =>
+  //       snapshot.docs.map((doc) => Chat.fromJson(doc.data())).toList());
+  // }
 
   static Stream<Chat> getChat(String chatId) {
     CollectionReference chats =
@@ -140,5 +171,19 @@ class ChatProvider with ChangeNotifier {
         .doc(chatId)
         .snapshots()
         .map((snapshot) => Chat.fromJson(snapshot.data()!));
+  }
+
+  String getOtherUserId(String chatId, String currentUserId) {
+    List<String> ids = chatId.split('+');
+    if (ids.length != 2) {
+      throw Exception('Invalid chat ID format');
+    }
+    if (ids[0] == currentUserId) {
+      return ids[1];
+    } else if (ids[1] == currentUserId) {
+      return ids[0];
+    } else {
+      throw Exception('Current user ID not found in chat ID');
+    }
   }
 }
