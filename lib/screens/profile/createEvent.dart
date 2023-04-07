@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:time_picker_widget/time_picker_widget.dart';
 import 'package:intl/intl.dart';
 
+import '../payment/checkout/checkout.dart';
+
 class CreateEvent extends StatefulWidget {
   final String uid;
   final String serviceId;
@@ -38,13 +40,9 @@ class _CreateEventState extends State<CreateEvent> {
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
   late bool processing;
-  // late String _selectedDate = "select date";
   String selectedTime = "16:00";
-  // DateFormat.Hm().format(DateTime.now());
-  // DateFormat("hh:mm").parse(DateTime.now().toString()).toString();
   String _selectedDate =
       DateFormat("yyyy-MM-dd").format(DateTime.now()).toString();
-  // DateFormat("yyyy-MM-dd").parse(DateTime.now().toString()).toString();
 
   String serviceName = "Click here to select service";
   List<TimeOfDay> _unavailableTimePeriods = [];
@@ -128,12 +126,12 @@ class _CreateEventState extends State<CreateEvent> {
         widget.uid, _title.text, _description.text, selectedDateTime);
 
     // Uncoment this for enabeling Stripe payment
-    // redirectToCheckout(context);
+    redirectToCheckout(context);
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Calls()),
-    );
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => Calls()),
+    // );
   }
 
   Future<void> _getService() async {

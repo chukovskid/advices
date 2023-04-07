@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:url_launcher/url_launcher.dart';
+import 'dart:js' as js;
 
 import 'package:advices/App/contexts/callEventsContext.dart';
 import 'package:flutter/foundation.dart';
@@ -14,6 +16,7 @@ import 'package:flutter/material.dart';
 import '../../App/contexts/usersContext.dart';
 import '../../App/models/event.dart';
 import '../authentication/register.dart';
+import '../payment/web/calls_timer_popup.dart';
 import 'homeWidget.dart';
 
 class Home extends StatefulWidget {
@@ -86,10 +89,14 @@ class _HomeState extends State<Home> {
     if (kIsWeb) {
       uri = Uri.base.toString();
       if (uri.contains("/calls")) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Calls()),
-        );
+        Future.delayed(Duration(seconds: 2), () {
+          showPopup(context);
+        });
+
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => Calls()),
+        // );
         return;
       } else if (uri.contains("/register")) {
         Navigator.push(
@@ -119,8 +126,37 @@ class _HomeState extends State<Home> {
     }
   }
 
+  void showPopup(BuildContext context) {
+    print("Show Popup");
+    showDialog(
+      context: context,
+      builder: (context) {
+        // Create the AlertDialog
+        return AlertDialog(
+            content: SingleChildScrollView(
+          child: Container(
+            // width: double.maxFinite,
+            child: CallsTimerPopupWidget(),
+          ),
+        ));
+      },
+    );
+    Future.delayed(Duration(seconds: 4), () {
+      redirectToWebsite("https://advices.page.link/home");
+    });
+  }
+
+  void redirectToWebsite(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri,
+          mode: LaunchMode.inAppWebView, webOnlyWindowName: "_self");
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   openCalls() async {
-    // Navigator.pushNamed(context, 'payment');
     Navigator.push(context, MaterialPageRoute(builder: (context) => Calls()));
   }
 
