@@ -155,9 +155,10 @@ class _LawyersState extends State<Lawyers>
                         ListTile(
                           leading: ClipOval(
                             child: Image.network(
-                              fUser.photoURL.length > 20
-                                  ? fUser.photoURL
-                                  : 'https://st.depositphotos.com/2069323/2156/i/600/depositphotos_21568785-stock-photo-man-pointing.jpg',
+                              // fUser.photoURL.length > 20
+                              //     ? fUser.photoURL
+                              //     :
+                                   'https://st.depositphotos.com/2069323/2156/i/600/depositphotos_21568785-stock-photo-man-pointing.jpg',
                             ),
                           ),
                           title: Text(

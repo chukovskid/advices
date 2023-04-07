@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../call/callMethods.dart';
 import '../../../../call/calls.dart';
 import '../../../../../App/services/database.dart';
+import '../../../../chat/screens/mobile_chat_screen.dart';
 
 /// MultiChannel Example
 class JoinChannelVideo extends StatefulWidget {
@@ -31,7 +32,12 @@ class JoinChannelVideo extends StatefulWidget {
 class _State extends State<JoinChannelVideo> {
   late final RtcEngine _engine;
 
-  bool isJoined = false, switchCamera = true, switchRender = true, muted = false;
+  bool isJoined = false,
+      switchCamera = true,
+      switchRender = true,
+      muted = false,
+      chatOn = false,
+      cameraOn = true;
   List<int> remoteUid = [];
   late TextEditingController _controller;
   bool _isRenderSurfaceView = false;
@@ -149,6 +155,18 @@ class _State extends State<JoinChannelVideo> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           RawMaterialButton(
+            onPressed: () => _onCallEnd(context),
+            child: Icon(
+              Icons.call_end,
+              color: Colors.white,
+              size: 20.0,
+            ),
+            shape: CircleBorder(),
+            elevation: 2.0,
+            fillColor: Colors.redAccent,
+            padding: const EdgeInsets.all(12.0),
+          ),
+          RawMaterialButton(
             onPressed: _onToggleMute,
             child: Icon(
               muted ? Icons.mic_off : Icons.mic,
@@ -161,18 +179,6 @@ class _State extends State<JoinChannelVideo> {
             padding: const EdgeInsets.all(12.0),
           ),
           RawMaterialButton(
-            onPressed: () => _onCallEnd(context),
-            child: Icon(
-              Icons.call_end,
-              color: Colors.white,
-              size: 35.0,
-            ),
-            shape: CircleBorder(),
-            elevation: 2.0,
-            fillColor: Colors.redAccent,
-            padding: const EdgeInsets.all(15.0),
-          ),
-          RawMaterialButton(
             onPressed: _onSwitchCamera,
             child: Icon(
               Icons.switch_camera,
@@ -183,7 +189,43 @@ class _State extends State<JoinChannelVideo> {
             elevation: 2.0,
             fillColor: Colors.white,
             padding: const EdgeInsets.all(12.0),
-          )
+          ),
+          RawMaterialButton(
+            onPressed: _onToggleCamera,
+            child: Icon(
+              cameraOn ? Icons.videocam : Icons.videocam_off,
+              color: cameraOn ? Colors.blueAccent : Colors.white,
+              size: 20.0,
+            ),
+            shape: CircleBorder(),
+            elevation: 2.0,
+            fillColor: cameraOn ? Colors.white : Colors.blueAccent,
+            padding: const EdgeInsets.all(12.0),
+          ),
+          RawMaterialButton(
+            onPressed: _onToggleChat,
+            child: Icon(
+              chatOn ? Icons.chat_outlined : Icons.subtitles_off_outlined,
+              color: chatOn ? Colors.blueAccent : Colors.white,
+              size: 20.0,
+            ),
+            shape: CircleBorder(),
+            elevation: 2.0,
+            fillColor: chatOn ? Colors.white : Colors.blueAccent,
+            padding: const EdgeInsets.all(12.0),
+          ),
+          RawMaterialButton(
+            onPressed: () => _confirmPayment(context),
+            child: Icon(
+              Icons.payments_outlined,
+              color: Colors.white,
+              size: 20.0,
+            ),
+            shape: CircleBorder(),
+            elevation: 2.0,
+            fillColor: Colors.greenAccent,
+            padding: const EdgeInsets.all(12.0),
+          ),
         ],
       ),
     );
@@ -196,7 +238,20 @@ class _State extends State<JoinChannelVideo> {
       body: Center(
         child: Stack(
           children: <Widget>[
-            _viewRows(),
+            Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: _viewRows(),
+                ),
+                chatOn
+                    ? Expanded(
+                        flex: 1,
+                        child: MobileChatScreen(channelName),
+                      )
+                    : Container(),
+              ],
+            ),
             _toolbar(),
           ],
         ),
@@ -291,130 +346,30 @@ class _State extends State<JoinChannelVideo> {
   void _onSwitchCamera() {
     _engine.switchCamera();
   }
+
+  void _onToggleCamera() {
+    cameraOn ? _engine.disableVideo() : _engine.enableVideo();
+    setState(() {
+      cameraOn = !cameraOn;
+    });
+  }
+
+  void _onToggleChat() {
+    setState(() {
+      chatOn = !chatOn;
+    });
+  }
 }
 
+_confirmPayment(BuildContext context) {
+  showPopup(context);
+}
 
-
-
-
-
-
-
-
-
-/////////////////////// OLD UI >>>>>
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Stack(
-  //     children: [
-  //       Column(
-  //         mainAxisAlignment: MainAxisAlignment.start,
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           TextFormField(
-  //             onFieldSubmitted: (String value) async {
-  //               _changeChannel();
-  //             },
-  //             controller: _controller,
-  //             decoration: const InputDecoration(hintText: 'Channel ID'),
-  //           ),
-  //           if (!kIsWeb &&
-  //               (defaultTargetPlatform == TargetPlatform.android ||
-  //                   defaultTargetPlatform == TargetPlatform.iOS))
-  //             Row(
-  //               mainAxisSize: MainAxisSize.min,
-  //               mainAxisAlignment: MainAxisAlignment.start,
-  //               children: [
-  //                 const Text(
-  //                     'Rendered by SurfaceView \n(default TextureView): '),
-  //                 Switch(
-  //                   value: _isRenderSurfaceView,
-  //                   onChanged: isJoined
-  //                       ? null
-  //                       : (changed) {
-  //                           setState(() {
-  //                             _isRenderSurfaceView = changed;
-  //                           });
-  //                         },
-  //                 )
-  //               ],
-  //             ),
-  //           Row(
-  //             children: [
-  //               Expanded(
-  //                 flex: 1,
-  //                 child: ElevatedButton(
-  //                   onPressed: isJoined ? _leaveChannel : _joinChannel,
-  //                   child: Text('${isJoined ? 'Leave' : 'Join'} channel'),
-  //                 ),
-  //               )
-  //             ],
-  //           ),
-  //           _renderVideo(),
-  //         ],
-  //       ),
-  //       if (defaultTargetPlatform == TargetPlatform.android ||
-  //           defaultTargetPlatform == TargetPlatform.iOS)
-  //         Align(
-  //           alignment: Alignment.bottomRight,
-  //           child: Column(
-  //             mainAxisSize: MainAxisSize.min,
-  //             children: [
-  //               ElevatedButton(
-  //                 onPressed: _switchCamera,
-  //                 child: Text('Camera ${switchCamera ? 'front' : 'rear'}'),
-  //               ),
-  //             ],
-  //           ),
-  //         )
-  //     ],
-  //   );
-  // }
-
-  // _renderVideo() {
-  //   return Expanded(
-  //     child: Stack(
-  //       children: [
-  //         Container(
-  //           child: (kIsWeb || _isRenderSurfaceView)
-  //               ? const rtc_local_view.SurfaceView(
-  //                   zOrderMediaOverlay: true,
-  //                   zOrderOnTop: true,
-  //                 )
-  //               : const rtc_local_view.TextureView(),
-  //         ),
-  //         Align(
-  //           alignment: Alignment.topLeft,
-  //           child: SingleChildScrollView(
-  //             scrollDirection: Axis.horizontal,
-  //             child: Row(
-  //               children: List.of(remoteUid.map(
-  //                 (e) => GestureDetector(
-  //                   onTap: _switchRender,
-  //                   child: SizedBox(
-  //                     width: 120,
-  //                     height: 120,
-  //                     child: (kIsWeb || _isRenderSurfaceView)
-  //                         ? rtc_remote_view.SurfaceView(
-  //                             uid: e,
-  //                             channelId: _controller.text,
-  //                           )
-  //                         : rtc_remote_view.TextureView(
-  //                             uid: e,
-  //                             channelId: _controller.text,
-  //                           ),
-  //                   ),
-  //                 ),
-  //               )),
-  //             ),
-  //           ),
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
-
-
-
-
-
+void showPopup(BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(
+      backgroundColor: Colors.greenAccent,
+      content: Text('Успешна наплата'),
+    ),
+  );
+}

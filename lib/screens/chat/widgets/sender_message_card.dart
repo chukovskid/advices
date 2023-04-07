@@ -24,30 +24,44 @@ class SenderMessageCard extends StatelessWidget {
           color: senderMessageColor,
           margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
           child: Stack(
-            children: [
+           children: [
               Padding(
                 padding: const EdgeInsets.only(
-                  left: 10,
-                  right: 30,
+                  left: 6,
+                  right: 70,
                   top: 5,
                   bottom: 20,
                 ),
                 child: Text(
                   message,
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
+                    color: Colors.white60,
                   ),
                 ),
               ),
               Positioned(
-                bottom: 2,
+                bottom: 4,
                 right: 10,
-                child: Text(
-                  date,
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.grey[600],
-                  ),
+                child: Row(
+                  children: [
+                    Text(
+                      date,
+                      style: const TextStyle(
+                        fontSize: 10,
+                        color: Color.fromARGB(255, 185, 185, 185),
+
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    const Icon(
+                      Icons.done_all,
+                      size: 20,
+                      color: Colors.white60,
+                    ),
+                  ],
                 ),
               ),
             ],

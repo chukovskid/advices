@@ -10,11 +10,14 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 void redirectToCheckout(BuildContext context) async {
   final sessionId = await Server().createCheckout();
-  Navigator.of(context).push(MaterialPageRoute(
-    builder: (_) => CheckoutPage(sessionId: sessionId),
-  ));
+  if (Platform.isIOS || Platform.isAndroid) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (_) => CheckoutPage(sessionId: sessionId),
+    ));
+  } else {
+    print("unsupported platform");
+  }
 }
-
 class CheckoutPage extends StatefulWidget {
   final String sessionId;
 

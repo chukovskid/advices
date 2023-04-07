@@ -15,38 +15,27 @@ class ChatList extends StatelessWidget {
 
   const ChatList(this.user, this.chatId, {Key? key}) : super(key: key);
 
-
-//   @override
-// Widget build(BuildContext context) {
-//   final Stream<Iterable<Message>> messagesStream = ChatProvider.getMessagesStreamForChat(chatId);
-  
-//   return StreamBuilder<Iterable<Message>>(
-//     stream: messagesStream,
-//     builder: (context, snapshot) {
-//       if (snapshot.hasData) {
-//         final chatMessages = snapshot.data!;
-//         return ListView(children: chatMessages.map(_messageCard).toList(), reverse: true,);
-//       }
-//       return Center(
-//         child: CircularProgressIndicator(
-//           color: darkGreenColor,
-//         ),
-//       );
-//     },
-//   );
-// }
-@override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       body: StreamBuilder<Iterable<Message>>(
         stream: ChatProvider.getMessagesStreamForChat(chatId),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final chatMessages = snapshot.data!;
-            return ListView(
-              children: chatMessages.map(_messageCard).toList(),
-              reverse: true,
+            return Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: AssetImage(
+                    "../../../lib/assets/images/backgroundImage.png",
+                  ),
+                ),
+              ),
+              child: ListView(
+                children: chatMessages.map(_messageCard).toList(),
+                reverse: true,
+              ),
             );
           }
           return Center(
@@ -71,61 +60,3 @@ class ChatList extends StatelessWidget {
     }
   }
 }
-
-
-// class ChatList extends StatefulWidget {
-//   final User user;
-//   final String chatId;
-
-//   const ChatList(this.user, this.chatId, {Key? key}) : super(key: key);
-
-//   @override
-//   _ChatListState createState() => _ChatListState();
-// }
-
-// class _ChatListState extends State<ChatList> {
-//   late StreamSubscription<Iterable<Message>> _streamSubscription;
-  
-//   late List<Message> _chatMessages = [];
-  
-//   @override
-//   void initState() {
-//     super.initState();
-//     _streamSubscription = ChatProvider.getMessagesStreamForChat(widget.chatId).listen((snapshot) {
-//       if (snapshot.isNotEmpty) {
-//         final chatMessages = snapshot.toList();
-//         setState(() {
-//           _chatMessages = chatMessages;
-//         });
-//       }
-//     });
-//   }
-  
-//   @override
-//   void dispose() {
-//     _streamSubscription.cancel();
-//     super.dispose();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return ListView(
-//       children: _chatMessages.map(_messageCard).toList(),
-//       reverse: true,
-//     );
-//   }
-
-//   Widget _messageCard(Message message) {
-//     if (message.senderId == widget.user.uid) {
-//       return MyMessageCard(
-//         message: message.message,
-//         date: timeago.format(message.createdAt, locale: 'en_short'),
-//       );
-//     } else {
-//       return SenderMessageCard(
-//         message: message.message,
-//         date: timeago.format(message.createdAt, locale: 'en_short'),
-//       );
-//     }
-//   }
-// }
