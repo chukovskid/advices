@@ -45,6 +45,13 @@
             {
               "client_id": "793184649946-3evlk734paq8msu53a78min0bacp7vrs.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "793184649946-f4v5k8rn5a63qf58v8u77759bou95ieg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.agora.agoraRtcEngineExample"
+              }
             }
           ]
         }
@@ -82,6 +89,13 @@
             {
               "client_id": "793184649946-3evlk734paq8msu53a78min0bacp7vrs.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "793184649946-f4v5k8rn5a63qf58v8u77759bou95ieg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.agora.agoraRtcEngineExample"
+              }
             }
           ]
         }

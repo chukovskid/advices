@@ -53,11 +53,12 @@ class CallEventsContext {
     final ChatProvider _chatProvider = ChatProvider();
     String chatId = await _chatProvider.createNewChat([lawyerId]);
     // Send message to client from the lawyer
-    _chatProvider.sendMessage(lawyerId, title, chatId); // TODO: Change message
-    _chatProvider.sendMessage(
-        lawyerId, description, chatId); // TODO: Change message
-    _chatProvider.sendMessage(
-        lawyerId, dateTime.toString(), chatId); // TODO: Change message
+    String message = "$title \n $description \n $dateTime";
+    _chatProvider.sendMessage(client!.uid, message, chatId); // TODO: Change message
+    // _chatProvider.sendMessage(
+    //     lawyerId, description, chatId); // TODO: Change message
+    // _chatProvider.sendMessage(
+    //     lawyerId, dateTime.toString(), chatId); // TODO: Change message
   }
 
   static Future<List<DateTime>> getAllLEventsDateTIme(

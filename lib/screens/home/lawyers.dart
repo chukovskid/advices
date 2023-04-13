@@ -132,6 +132,7 @@ class _LawyersState extends State<Lawyers>
               builder: (context) => LawyerProfile(fUser.uid, widget.service)),
         ),
         child: Card(
+          
           elevation: 30,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(4),
@@ -151,7 +152,7 @@ class _LawyersState extends State<Lawyers>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const SizedBox(height: 8),
+                        // const SizedBox(height: 8),
                         ListTile(
                           leading: ClipOval(
                             child: Image.network(
@@ -182,7 +183,7 @@ class _LawyersState extends State<Lawyers>
                             ],
                           ),
                         ),
-                        const SizedBox(height: 15),
+                        // const SizedBox(height: 15),
                         _text(fUser)
                       ],
                     ),

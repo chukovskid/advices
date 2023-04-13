@@ -13,6 +13,7 @@ import '../../../../call/callMethods.dart';
 import '../../../../call/calls.dart';
 import '../../../../../App/services/database.dart';
 import '../../../../chat/screens/mobile_chat_screen.dart';
+import '../../../../payment/checkout/checkout.dart';
 
 /// MultiChannel Example
 class JoinChannelVideo extends StatefulWidget {
@@ -363,6 +364,8 @@ class _State extends State<JoinChannelVideo> {
 
 _confirmPayment(BuildContext context) {
   showPopup(context);
+    redirectToCheckout(context);
+
 }
 
 void showPopup(BuildContext context) {

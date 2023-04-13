@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 
 import '../webView/IframeWidget.dart';
+import 'laws.dart';
 import 'lawyers.dart';
 
 class HomeWidget extends StatefulWidget {

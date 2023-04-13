@@ -11,6 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:time_picker_widget/time_picker_widget.dart';
 import 'package:intl/intl.dart';
 
+import '../../App/providers/chat_provider.dart';
+import '../chat/screens/mobile_chat_screen.dart';
+import '../chat/screens/web_layout_screen.dart';
+import '../chat/utils/responsive_layout.dart';
 import '../payment/checkout/checkout.dart';
 
 class CreateEvent extends StatefulWidget {
@@ -26,6 +30,8 @@ class CreateEvent extends StatefulWidget {
 }
 
 class _CreateEventState extends State<CreateEvent> {
+  final ChatProvider _chatProvider = ChatProvider();
+
   late Service service;
   bool mkLanguage = true;
   bool openEventForm =
@@ -126,19 +132,32 @@ class _CreateEventState extends State<CreateEvent> {
         widget.uid, _title.text, _description.text, selectedDateTime);
 
     // Uncoment this for enabeling Stripe payment
-    redirectToCheckout(context);
+    // redirectToCheckout(context);
 
+    await _startChatConversation(widget.uid);
     // Navigator.push(
     //   context,
     //   MaterialPageRoute(builder: (context) => Calls()),
     // );
   }
 
+  Future<void> _startChatConversation(String lawyerId) async {
+    print("_startChatConversation");
+    String chatId = await _chatProvider.createNewChat([lawyerId]);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => ResponsiveLayout(
+                mobileScreenLayout: MobileChatScreen(chatId),
+                webScreenLayout: WebLayoutScreen(chatId),
+              )),
+    );
+  }
+
   Future<void> _getService() async {
     service = await ServicesContext.getService(widget.serviceId);
     setState(() {
-      serviceName =
-          "${mkLanguage ? service.nameMk : service.name}";
+      serviceName = "${mkLanguage ? service.nameMk : service.name}";
       service = service;
       _title = TextEditingController(text: serviceName);
     });
@@ -220,7 +239,9 @@ class _CreateEventState extends State<CreateEvent> {
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold),
                               ),
-                              SizedBox(width: 1,),
+                              SizedBox(
+                                width: 1,
+                              ),
                               Text(serviceName),
                             ],
                           ),
@@ -645,17 +666,19 @@ class _CreateEventState extends State<CreateEvent> {
                   height: 100,
                   child: Center(
                     child: Text(
-                      mkLanguage ? "Вкупно" : "Total",
+                      mkLanguage ? "Цена" : "Total",
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ),
                 ),
                 Center(
                   child: Text(
-                    "${0} денари",
+                    // "${0} денари",
+                    "Цената ќе биде пресметана според избраниот сервис",
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 35,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
                 ),

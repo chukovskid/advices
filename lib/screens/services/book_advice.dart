@@ -540,17 +540,19 @@ class _BookAdviceState extends State<BookAdvice> {
                   height: 100,
                   child: Center(
                     child: Text(
-                      mkLanguage ? "Вкупно" : "Total",
+                      mkLanguage ? "Цена" : "Total",
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ),
                 ),
                 Center(
                   child: Text(
-                    "${0} денари",
+                    // "${0} денари",
+                    "Цената ќе биде пресметана според избраниот сервис",
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 35,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),
                 ),
