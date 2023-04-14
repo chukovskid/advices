@@ -1,6 +1,6 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-
+import 'package:webview_flutter/webview_flutter.dart';
 import '../shared_widgets/base_app_bar.dart';
 
 class IframeWidget extends StatefulWidget {
@@ -13,18 +13,8 @@ class IframeWidget extends StatefulWidget {
 }
 
 class _IframeWidgetState extends State<IframeWidget> {
-  late HtmlWidget _widget;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // Create the HTML widget using the src argument
-    _widget = HtmlWidget(
-      '<iframe src="${widget.src}"></iframe>',
-      // webView: true,
-    );
-  }
+  final Completer<WebViewController> _controller =
+      Completer<WebViewController>();
 
   @override
   Widget build(BuildContext context) {
@@ -33,12 +23,33 @@ class _IframeWidgetState extends State<IframeWidget> {
         appBar: AppBar(),
       ),
       body: SafeArea(
-        child: Container(
-          width: double.infinity,
-          height: double.infinity,
-          child: _widget,
+        child: WebView(
+          initialUrl: "https://www.chatpdf.com/",
+          javascriptMode: JavascriptMode.unrestricted,
+          onWebViewCreated: (WebViewController webViewController) {
+            _controller.complete(webViewController);
+          },
+          onPageFinished: (String url) {
+            _removeHtmlElements();
+          },
         ),
       ),
     );
   }
+
+  void _removeHtmlElements() async {
+  final controller = await _controller.future;
+  // Replace 'elementSelector' with the appropriate CSS selector
+  // for the HTML elements you want to remove.
+  String elementSelector = '.header-buttons'; // Example: removes elements with class 'example-class'
+  controller.runJavascript('''
+    (() => {
+      const elements = document.querySelectorAll('$elementSelector');
+      for (const element of elements) {
+        element.parentNode.removeChild(element);
+      }
+    })();  
+  ''');
+}
+
 }

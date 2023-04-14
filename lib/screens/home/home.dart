@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:js' as js;
 
 import 'package:advices/App/contexts/callEventsContext.dart';
 import 'package:flutter/foundation.dart';

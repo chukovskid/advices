@@ -23,11 +23,8 @@ export const callUser = functions.https.onCall(async (data, context) => {
   await userRef.get().then((doc) => {
     if (doc.exists) {
       let data = doc.data()
-      console.log("Document Id:", data!.uid);
-      console.log("Document displayName:", data!.displayName);
       displayName = data!.displayName;
     } else {
-      // doc.data() will be undefined in this case
       console.log("No such document!");
     }
   }).catch((error) => {
@@ -54,7 +51,6 @@ export const notifyNewCalls = functions.firestore
   .document('users/{callerId}/pendingCalls/{channelName}')
   .onWrite(async (snapshot, context) => {
     let callerId = context.params.callerId;
-
     const userRef = await db
       .collection('users')
       .doc(callerId).get();
@@ -67,16 +63,25 @@ export const notifyNewCalls = functions.firestore
 export const notificationForNewMessage = functions.firestore.document('/conversation/groups/chats/{chatId}').onWrite(async snapshot => {
   let data = snapshot.after.data();
   if (!data) return "no data";
-  const senderId = data!.senderId ? data!.senderId : '';
   let members = data!.members ? data!.members : [];
+  const senderId = data!.senderId ? data!.senderId : '';
+  let lastMessageTime = data!.lastMessageTime ? new Date(data!.lastMessageTime.toMillis()).toISOString() : '';
   let receiverId = members.filter((member: any) => member !== senderId)[0];
   let lastMessage = data!.lastMessage ? data!.lastMessage : '';
-  let lastMessageTime = data!.lastMessageTime ? data!.lastMessageTime : '';
-  let displayNames = data!.displayNames ? data!.displayNames : [];
-  let photoURLs = data!.photoURLs ? data!.photoURLs : [];
-  let senderName = displayNames.filter((name: any) => name !== senderId)[0];
-  let senderPhotoURL = photoURLs.filter((photoURL: any) => photoURL !== senderId)[0];
-
+  let senderName;
+  let senderPhotoURL;
+  const senderRef = await db.collection('users').doc(senderId);
+  await senderRef.get().then((doc) => {
+    if (doc.exists) {
+      let data = doc.data()
+      senderName = data!.displayName;
+      senderPhotoURL = data!.photoURL;
+    } else {
+      console.log("No such document!");
+    }
+  }).catch((error) => {
+    console.log("Error getting document:", error);
+  });
   const querySnapshot = await db.collection('users').doc(receiverId).collection('tokens').get();
   const tokens = querySnapshot.docs.map((snap: any) => snap.id); // TODO check the  token!
   const payload: admin.messaging.MessagingPayload = {
@@ -91,8 +96,8 @@ export const notificationForNewMessage = functions.firestore.document('/conversa
       receiverId: receiverId,
       lastMessage: lastMessage,
       lastMessageTime: lastMessageTime,
-      senderName: senderName,
-      senderPhotoURL: senderPhotoURL,
+      senderName: senderName ? senderName : '',
+      senderPhotoURL: senderPhotoURL ? senderPhotoURL : '',
     }
   };
 
