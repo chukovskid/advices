@@ -14,9 +14,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import '../../App/contexts/usersContext.dart';
 import '../../App/models/event.dart';
+import '../../App/models/user.dart';
+import '../authentication/lawyerBasedRedirect.dart';
 import '../authentication/register.dart';
 import '../payment/web/calls_timer_popup.dart';
 import 'homeWidget.dart';
+import 'lawyerHomeWidget.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -28,6 +31,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   User? user;
   bool userExist = false;
+
   @override
   void initState() {
     super.initState();
@@ -61,10 +65,7 @@ class _HomeState extends State<Home> {
 
   _saveDeviceToken() async {
     user = await _auth.getCurrentUser();
-    setState(() {
-      userExist = user != null ? true : false;
-    });
-    if (userExist) {
+    if (user != null) {
       await UsersContext.saveDeviceToken(user!.uid);
     }
   }
@@ -74,7 +75,6 @@ class _HomeState extends State<Home> {
       return null;
     }
     EventModel event = await CallEventsContext.getEvent(channelName);
-    // get event with this channel name.
     await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => Call(event)),
@@ -167,7 +167,13 @@ class _HomeState extends State<Home> {
         shape: CircularNotchedRectangle(),
       ),
       body: Container(
-          height: double.infinity, width: double.infinity, child: HomeWidget()),
+        height: double.infinity,
+        width: double.infinity,
+        child: LawyerBasedRedirect(
+          lawyerWidget: LawyerHomeWidget(),
+          nonLawyerWidget: HomeWidget(),
+        ),
+      ),
     );
   }
 }

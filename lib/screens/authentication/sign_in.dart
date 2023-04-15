@@ -12,7 +12,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SignIn extends StatefulWidget {
   final Function? toggleView;
-  SignIn({this.toggleView});
+  final bool fromAuth;
+
+  SignIn({this.toggleView, this.fromAuth = false});
 
   @override
   _SignInState createState() => _SignInState();
@@ -71,10 +73,19 @@ class _SignInState extends State<SignIn> {
     );
   }
 
-  Future<void> _signInUser(FlutterUser flutUser) async {
-    var user = await _auth.signInWithEmailAndPassword(flutUser);
-    if (user != null) goBack();
+Future<void> _signInUser(FlutterUser flutUser) async {
+  var user = await _auth.signInWithEmailAndPassword(flutUser);
+  if (user != null) {
+    if (widget.fromAuth) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Home()),
+      );
+    } else {
+      goBack();
+    }
   }
+}
 
   Future<void> _googleSignIn() async {
     User? user = await GoogleAuthService.signInWithGoogle(context: context);
@@ -162,8 +173,6 @@ class _SignInState extends State<SignIn> {
                         _googleSignIn();
                       }),
                 ),
-             
-              
               ],
             ),
             const SizedBox(height: 50.0),
@@ -249,10 +258,8 @@ class _SignInState extends State<SignIn> {
           ),
 
           // color: Color.fromRGBO(225, 103, 104, 1),
-          child:  Text(
-             mkLanguage
-                  ? "Логирај се"
-                  : ' Log In ',
+          child: Text(
+            mkLanguage ? "Логирај се" : ' Log In ',
             style: TextStyle(color: Colors.white),
           ),
           onPressed: () async {

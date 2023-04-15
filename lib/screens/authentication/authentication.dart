@@ -12,19 +12,16 @@ class Authenticate extends StatefulWidget {
 
 class _AuthenticateState extends State<Authenticate> {
   final AuthProvider _auth = AuthProvider();
-  bool showSignIn = true;
-  bool isLoggedIn = true;
+  bool isLoggedIn = false;
+
   @override
   void initState() {
     super.initState();
-    toggleView();
-  }
-
-  Future<void> toggleView() async {
-    // bool loggedIn = await _auth.isSignIn();
-    User? user = await _auth.getCurrentUser();
-    bool userExist = user != null? true : false;
-    setState(() => {showSignIn = !showSignIn, isLoggedIn = userExist});
+    _auth.user.listen((user) {
+      setState(() {
+        isLoggedIn = user != null;
+      });
+    });
   }
 
   @override
@@ -32,7 +29,12 @@ class _AuthenticateState extends State<Authenticate> {
     if (isLoggedIn) {
       return Profile();
     } else {
-        return SignIn(toggleView: toggleView);
+      return SignIn(
+        toggleView: () {
+          // You can leave this empty if you don't need any specific actions here.
+        },
+        fromAuth: true, // Add this line
+      );
     }
   }
 }

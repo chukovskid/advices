@@ -13,20 +13,21 @@ class AuthProvider with ChangeNotifier {
   final storage = new FlutterSecureStorage();
   final userStream = FirebaseAuth.instance.authStateChanges();
 
-  // auth change user stream
-  Stream<FlutterUser> get user {
+  Stream<FlutterUser?> get user {
     return _auth
         .authStateChanges()
-        .map((firebaseUser) => _userFromFirebaseUser(firebaseUser!));
+        .asyncMap((firebaseUser) => _userFromFirebaseUser(firebaseUser!));
   }
 
-//  // auth change user stream
-//   Stream<FlutterUser> get fireUser {
-//     return _auth
-//         .authStateChanges()
-//         .map((firebaseUser) => _userFromFirebaseUser(firebaseUser!));
-//   }
-  // sign out
+  Future<bool> isUserLawyer() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      FlutterUser? lawyer = await LawyersContext.getLawyer(user.uid);
+      return lawyer != null;
+    }
+    return false;
+  }
+
   Future signOut() async {
     try {
       GoogleAuthService.googleSignOut();
@@ -50,12 +51,10 @@ class AuthProvider with ChangeNotifier {
     return fUser;
   }
 
-  // create user obj based on firebase user
   FlutterUser _userFromFirebaseUser(User user) {
     return FlutterUser(uid: user.uid, email: '');
   }
 
-  // sign in Anon
   Future signInAnon() async {
     try {
       var result = await _auth.signInAnonymously();
@@ -67,7 +66,6 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  // sign in with email and password
   Future<User?> signInWithEmailAndPassword(FlutterUser flutUser) async {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(
@@ -80,11 +78,9 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  // register with email and password
   Future registerWithEmailAndPassword(
       FlutterUser newFUser, List<Service?> services) async {
     try {
-      // const email = newFUser.email;
       UserCredential credential = await _auth.createUserWithEmailAndPassword(
           email: newFUser.email, password: newFUser.password);
       User? user = credential.user;

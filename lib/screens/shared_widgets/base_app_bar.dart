@@ -14,7 +14,7 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     _navigate() {
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
             builder: (context) => redirectToHome ? Home() : Authenticate()),

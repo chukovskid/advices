@@ -1,4 +1,5 @@
 import 'package:advices/App/contexts/callEventsContext.dart';
+import 'package:advices/screens/webView/IframeWidget.dart';
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as rtc_local_view;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as rtc_remote_view;
@@ -38,6 +39,7 @@ class _State extends State<JoinChannelVideo> {
       switchRender = true,
       muted = false,
       chatOn = false,
+      docAi = false,
       cameraOn = true;
   List<int> remoteUid = [];
   late TextEditingController _controller;
@@ -215,6 +217,18 @@ class _State extends State<JoinChannelVideo> {
             fillColor: chatOn ? Colors.white : Colors.blueAccent,
             padding: const EdgeInsets.all(12.0),
           ),
+           RawMaterialButton(
+            onPressed: _onToggleDocAi,
+            child: Icon(
+              docAi ? Icons.document_scanner_outlined : Icons.edit_document,
+              color: docAi ? Colors.blueAccent : Colors.white,
+              size: 20.0,
+            ),
+            shape: CircleBorder(),
+            elevation: 2.0,
+            fillColor: docAi ? Colors.white : Colors.blueAccent,
+            padding: const EdgeInsets.all(12.0),
+          ),
           RawMaterialButton(
             onPressed: () => _confirmPayment(context),
             child: Icon(
@@ -241,6 +255,12 @@ class _State extends State<JoinChannelVideo> {
           children: <Widget>[
             Row(
               children: [
+                docAi
+                    ? Expanded(
+                        flex: 1,
+                        child: IframeWidget(src: "https://www.chatpdf.com/"),
+                      )
+                    : Container(),
                 Expanded(
                   flex: 2,
                   child: _viewRows(),
@@ -360,12 +380,17 @@ class _State extends State<JoinChannelVideo> {
       chatOn = !chatOn;
     });
   }
+
+  void _onToggleDocAi() {
+    setState(() {
+      docAi = !docAi;
+    });
+  }
 }
 
 _confirmPayment(BuildContext context) {
   showPopup(context);
-    redirectToCheckout(context);
-
+  redirectToCheckout(context);
 }
 
 void showPopup(BuildContext context) {
