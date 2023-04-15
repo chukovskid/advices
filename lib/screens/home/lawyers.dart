@@ -5,8 +5,26 @@ import 'package:advices/assets/utilities/constants.dart';
 import 'package:flutter/material.dart';
 import '../../App/contexts/lawyersContext.dart';
 import '../../App/models/user.dart';
-import '../../App/services/database.dart';
 import '../shared_widgets/BottomBar.dart';
+
+const List<String> list = <String>[
+  'Сите области',
+  'Уставно и управно право',
+  'Прекршочно право',
+  'Подароци',
+  'Распределба на имот',
+  "Општо право",
+  "Закон за облигациони односи",
+  "Меѓународно право",
+  "Купо-продажба",
+  "Кривично право",
+  "Имотно право",
+  "Закон за деца и млади",
+  "Семејно право",
+  "Еднаквост и доверба",
+  "Закон за приватизација",
+  "Друго",
+];
 
 class Lawyers extends StatefulWidget {
   final String service;
@@ -16,24 +34,18 @@ class Lawyers extends StatefulWidget {
   State<Lawyers> createState() => _LawyersState();
 }
 
-class _LawyersState extends State<Lawyers>
-     {
-  // late AnimationController controller;
+class _LawyersState extends State<Lawyers> {
   bool mkLanguage = true;
-
+  List<String> filterOptions = ['Option 1', 'Option 2', 'Option 3'];
+  String? selectedFilter = list.first;
 
   @override
   void initState() {
     super.initState();
-    // controller = AnimationController(
-    //   duration: const Duration(seconds: 2),
-    //   vsync: this,
-    // );
   }
 
   @override
   void dispose() {
-    // controller.dispose();
     super.dispose();
   }
 
@@ -48,8 +60,7 @@ class _LawyersState extends State<Lawyers>
         shape: const CircularNotchedRectangle(),
       ),
       body: Container(
-        height: double
-            .infinity, // Use `double.infinity` instead of `double.maxFinite`
+        height: double.infinity,
         width: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -59,7 +70,52 @@ class _LawyersState extends State<Lawyers>
             stops: [-1, 1, 2],
           ),
         ),
-        child: _cardsList(),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  SizedBox(width: 5,),
+                  Icon(Icons.filter_alt_rounded, color: darkGreenColor,),
+                  Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: DropdownButton<String>(
+                      value: selectedFilter,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      elevation: 16,
+                      style: const TextStyle(color: darkGreenColor),
+                      underline: Container(
+                        height: 2,
+                        color: darkGreenColor,
+                      ),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedFilter = newValue;
+                        });
+                      },
+                      items: list.map<DropdownMenuItem<String>>(
+                        (String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        },
+                      ).toList(),
+                    ),
+                  ),
+                ],
+              ),
+              _cardsList(),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -69,7 +125,6 @@ class _LawyersState extends State<Lawyers>
       stream: LawyersContext.getFilteredLawyers(widget.service),
       builder: ((context, snapshot) {
         if (!snapshot.hasData) {
-          // Wrap the Icon widget in a Center widget
           return Center(
             child: Icon(
               Icons.hourglass_bottom,
@@ -85,12 +140,10 @@ class _LawyersState extends State<Lawyers>
                 const EdgeInsets.only(top: 35, left: 30, right: 50, bottom: 10),
             child: MediaQuery.of(context).size.width < 850.0
                 ? ListView(
-                  
                     padding: const EdgeInsets.symmetric(
                       horizontal: 10.0,
                       vertical: 50.0,
                     ),
-                    // Use the `shrinkWrap` property instead of the `physics` property
                     shrinkWrap: true,
                     children: users.map(_card).toList())
                 : GridView.count(
@@ -118,13 +171,9 @@ class _LawyersState extends State<Lawyers>
   }
 
   Widget _card(FlutterUser fUser) {
-    //   var img = imageBytes != null ? Image.memory(
-    //   imageBytes,
-    //   fit: BoxFit.cover,
-    // ) : Text(errorMsg != null ? errorMsg : "Loading...");
     return SizedBox(
-      height: 300, // Adjust this value as needed
-      width: 300, // Adjust this value as needed
+      height: 300,
+      width: 300,
       child: InkWell(
         onTap: () => Navigator.push(
           context,
@@ -132,7 +181,6 @@ class _LawyersState extends State<Lawyers>
               builder: (context) => LawyerProfile(fUser.uid, widget.service)),
         ),
         child: Card(
-          
           elevation: 30,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(4),
@@ -141,7 +189,6 @@ class _LawyersState extends State<Lawyers>
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Container(
-                // height: 500,
                 child: SingleChildScrollView(
                   child: Card(
                     elevation: 0,
@@ -152,14 +199,13 @@ class _LawyersState extends State<Lawyers>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        // const SizedBox(height: 8),
                         ListTile(
                           leading: ClipOval(
                             child: Image.network(
                               // fUser.photoURL.length > 20
                               //     ? fUser.photoURL
                               //     :
-                                   'https://st.depositphotos.com/2069323/2156/i/600/depositphotos_21568785-stock-photo-man-pointing.jpg',
+                              'https://st.depositphotos.com/2069323/2156/i/600/depositphotos_21568785-stock-photo-man-pointing.jpg',
                             ),
                           ),
                           title: Text(
@@ -183,7 +229,6 @@ class _LawyersState extends State<Lawyers>
                             ],
                           ),
                         ),
-                        // const SizedBox(height: 15),
                         _text(fUser)
                       ],
                     ),

@@ -2,9 +2,9 @@ import 'dart:io';
 import 'package:advices/App/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class UsersContext {
-  
   static Future<FlutterUser?> updateUserData(FlutterUser user) async {
     CollectionReference lawyers =
         FirebaseFirestore.instance.collection('lawyers');
@@ -45,7 +45,7 @@ class UsersContext {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     final snapshot = await users.doc(userId).get();
     // if (snapshot.exists) {
-    var flutterUser =  FlutterUser.fromJson(snapshot.data()!);
+    var flutterUser = FlutterUser.fromJson(snapshot.data()!);
     return flutterUser;
     // }
     // return null;
@@ -75,6 +75,17 @@ class UsersContext {
         'createdAt': DateTime.now().millisecondsSinceEpoch, // optional
         'platform': Platform.operatingSystem // optional
       });
+    }
+  }
+
+  static Future<String?> getImageUrl(String imagePath) async {
+    try {
+      final storageReference = FirebaseStorage.instance.ref(imagePath);
+      final String imageUrl = await storageReference.getDownloadURL();
+      return imageUrl;
+    } catch (e) {
+      print("Error in getImageUrl: $e");
+      return null;
     }
   }
 }

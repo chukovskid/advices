@@ -2,6 +2,7 @@ import 'package:advices/App/contexts/lawyersContext.dart';
 import 'package:advices/screens/chat/screens/mobile_chat_screen.dart';
 import 'package:advices/screens/profile/createEvent.dart';
 import 'package:flutter/material.dart';
+import '../../App/contexts/usersContext.dart';
 import '../../App/models/user.dart';
 import '../../App/providers/chat_provider.dart';
 import '../../assets/utilities/constants.dart';
@@ -128,28 +129,23 @@ class _LawyerProfileState extends State<LawyerProfile> {
                   children: <Widget>[
                     const SizedBox(height: 30),
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         ClipOval(
-                          child: Image.network(
-                              (lawyer?.photoURL != null &&
-                                      lawyer!.photoURL.isNotEmpty)
-                                  ? lawyer!.photoURL
-                                  : 'https://st.depositphotos.com/2069323/2156/i/600/depositphotos_21568785-stock-photo-man-pointing.jpg',
-                              // scale: 1,
-                              cacheWidth: 1,
-                              width: 100,
-                              height: 100),
+                          child: _buildProfileImage(lawyer?.photoURL ?? ''),
                         ),
                         const SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "${lawyer?.displayName}",
-                              style: TextStyle(fontSize: 20),
-                            ),
-                            Text("${lawyer?.email}"),
-                          ],
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${lawyer?.displayName}",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              Text("${lawyer?.email}"),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -169,8 +165,6 @@ class _LawyerProfileState extends State<LawyerProfile> {
                           textStyle: const TextStyle(fontSize: 15),
                           backgroundColor: lightGreenColor),
                     ),
-                    //how to get ElevatedButton backgroundColor?
-
                     const SizedBox(
                       height: 45,
                     ),
@@ -206,6 +200,33 @@ class _LawyerProfileState extends State<LawyerProfile> {
           SizedBox(height: 80),
         ],
       ),
+    );
+  }
+
+  Widget _buildProfileImage(String imagePath) {
+    return FutureBuilder<String?>(
+      future: UsersContext.getImageUrl(imagePath),
+      builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.data != null) {
+            return Image.network(
+              snapshot.data!,
+              width: 100,
+              height: 100,
+              fit: BoxFit.cover,
+            );
+          } else {
+            return Image.network(
+              'https://st.depositphotos.com/2069323/2156/i/600/depositphotos_21568785-stock-photo-man-pointing.jpg',
+              width: 100,
+              height: 100,
+              fit: BoxFit.cover,
+            );
+          }
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
     );
   }
 }
