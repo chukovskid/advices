@@ -206,18 +206,6 @@ class _State extends State<JoinChannelVideo> {
             padding: const EdgeInsets.all(12.0),
           ),
           RawMaterialButton(
-            onPressed: _onToggleChat,
-            child: Icon(
-              chatOn ? Icons.chat_outlined : Icons.subtitles_off_outlined,
-              color: chatOn ? Colors.blueAccent : Colors.white,
-              size: 20.0,
-            ),
-            shape: CircleBorder(),
-            elevation: 2.0,
-            fillColor: chatOn ? Colors.white : Colors.blueAccent,
-            padding: const EdgeInsets.all(12.0),
-          ),
-           RawMaterialButton(
             onPressed: _onToggleDocAi,
             child: Icon(
               docAi ? Icons.document_scanner_outlined : Icons.edit_document,
@@ -227,6 +215,18 @@ class _State extends State<JoinChannelVideo> {
             shape: CircleBorder(),
             elevation: 2.0,
             fillColor: docAi ? Colors.white : Colors.blueAccent,
+            padding: const EdgeInsets.all(12.0),
+          ),
+          RawMaterialButton(
+            onPressed: _onToggleChat,
+            child: Icon(
+              chatOn ? Icons.chat_outlined : Icons.subtitles_off_outlined,
+              color: chatOn ? Colors.blueAccent : Colors.white,
+              size: 20.0,
+            ),
+            shape: CircleBorder(),
+            elevation: 2.0,
+            fillColor: chatOn ? Colors.white : Colors.blueAccent,
             padding: const EdgeInsets.all(12.0),
           ),
           RawMaterialButton(

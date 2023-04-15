@@ -21,7 +21,7 @@ class ContactsList extends StatefulWidget {
 class _ContactsListState extends State<ContactsList> {
   final AuthProvider _auth = AuthProvider();
 
-   String? loggedUserDisplayName = "";
+  String? loggedUserDisplayName = "";
 
   _selectChat(chatId) {
     MediaQuery.of(context).size.width < 850.0
@@ -40,7 +40,7 @@ class _ContactsListState extends State<ContactsList> {
   Future<void> getLoggedUser() async {
     // bool loggedIn = await _auth.isSignIn();
     FlutterUser? user = await _auth.getMyProfileInfo();
-    bool userExist = user != null? true : false;
+    bool userExist = user != null ? true : false;
     print("USER ////2 ${user?.displayName} ");
 
     setState(() => {loggedUserDisplayName = user?.displayName});
@@ -51,6 +51,10 @@ class _ContactsListState extends State<ContactsList> {
     super.initState();
     getLoggedUser();
     print("USER ${loggedUserDisplayName} ");
+  }
+
+  String trimString(String str) {
+    return str.length > 80 ? '${str.substring(0, 42)}...' : str;
   }
 
   @override
@@ -95,7 +99,7 @@ class _ContactsListState extends State<ContactsList> {
               subtitle: Padding(
                 padding: const EdgeInsets.only(top: 6.0),
                 child: Text(
-                  chat.lastMessage.toString(),
+                  trimString(chat.lastMessage.toString()),
                   style: const TextStyle(fontSize: 15),
                 ),
               ),

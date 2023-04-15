@@ -196,7 +196,7 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
                       ),
                       Text(
                         mkLanguage
-                            ? "Лесно и брзо направете договор за вашата потреба."
+                            ? "Лесно и брзо добијте ги релевантни информации."
                             : "Get the contract ready \n next week",
                         textAlign: TextAlign.center,
                         // "Explain your needs in the description part and the lawyer will be more prepared",

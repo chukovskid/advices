@@ -3,6 +3,7 @@ import 'package:advices/screens/chat/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../../App/helpers/resizableWidget.dart';
 import '../../../App/models/message.dart';
 import '../../../App/providers/chat_provider.dart';
 import '../../authentication/authentication.dart';
@@ -23,6 +24,7 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
   final TextEditingController _messageController = TextEditingController();
   final AuthProvider _auth = AuthProvider();
   final ChatProvider _chatProvider = ChatProvider();
+  int? price;
 
   List<Message> messages = [];
   User? user;
@@ -74,31 +76,142 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
           Expanded(
             child: ChatList(user!, widget.chatId),
           ),
-          TextFormField(
-            keyboardType: TextInputType.text,
-            focusNode: _messageFocusNode,
-            onFieldSubmitted: (String value) {
-              _nextFocus(_messageFocusNode);
-              _submitMessage(value);
-            },
-            controller: _messageController,
-            style: const TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: mobileChatBoxColor,
-              hintStyle: TextStyle(color: Colors.grey[700]),
-              hintText: 'Напиши порака!',
-              border: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  width: 0,
-                  style: BorderStyle.none,
+          Container(
+            color: mobileChatBoxColor,
+            child: Row(
+              children: [
+                Expanded(
+                  child: ResizableWidget(
+                    minHeight: 56,
+                    maxHeight: MediaQuery.of(context).size.height / 2,
+                    child: Container(
+                      color: mobileChatBoxColor,
+                      child: TextFormField(
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
+                        focusNode: _messageFocusNode,
+                        controller: _messageController,
+                        style: const TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          alignLabelWithHint: true,
+                          filled: true,
+                          fillColor: mobileChatBoxColor,
+                          hintStyle: TextStyle(color: Colors.grey[700]),
+                          hintText: 'Напиши порака!',
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              width: 0,
+                              style: BorderStyle.none,
+                            ),
+                          ),
+                          contentPadding: const EdgeInsets.all(12),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-              contentPadding: const EdgeInsets.all(12),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SizedBox(
+                    height: 56,
+                    child: Container(
+                      color: mobileChatBoxColor,
+                      child: Row(
+                        children: [
+                          IconButton(
+                            icon: _buildPriceButton(),
+                            onPressed: () {
+                              _showPriceBottomSheet();
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.send, color: Colors.white),
+                            onPressed: () {
+                              _nextFocus(_messageFocusNode);
+                              _submitMessage(_messageController.text);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
       ),
     );
+  }
+
+  void _showPriceBottomSheet() {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          TextEditingController priceController = TextEditingController();
+
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Внесете цена во денари',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 16),
+                TextField(
+                  controller: priceController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: 'Цена',
+                    hintText: 'Внесете цена',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    int? enteredPrice =
+                        int.tryParse(priceController.text.trim());
+                    if (enteredPrice != null) {
+                      setState(() {
+                        price = enteredPrice;
+                      });
+                      Navigator.pop(context);
+                    } else {
+                      // Show error message or handle invalid price input
+                    }
+                  },
+                  child: Text('Зачувај'),
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
+  Widget _buildPriceButton() {
+    return price != null
+        ? Row(
+            children: [
+              Icon(
+                Icons.lock,
+                color: Colors.white,
+                size: 10,
+              ),
+              Text(
+                ' \$${price}',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12, // Set the font size as needed
+                ),
+              ),
+            ],
+          )
+        : Icon(
+            Icons.payment,
+            color: tabColor,
+          );
   }
 }
