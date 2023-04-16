@@ -3,6 +3,7 @@ import 'package:advices/screens/chat/colors.dart';
 import 'package:advices/screens/authentication/authentication.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../../../App/helpers/CustomCircularProgressIndicator.dart';
 import '../../../App/providers/chat_provider.dart';
 import '../../../assets/utilities/constants.dart';
 import '../widgets/chat_appbar.dart';
@@ -66,7 +67,7 @@ class _WebLayoutScreenState extends State<WebLayoutScreen> {
   Widget build(BuildContext context) {
     FocusScope.of(context).requestFocus(_textFieldFocusNode);
     return loading
-        ? Center(child: CircularProgressIndicator())
+        ? Center(child: CustomCircularProgressIndicator())
         : Scaffold(
             body: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,

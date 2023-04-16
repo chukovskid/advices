@@ -26,8 +26,8 @@
                 "-d",
                 "chrome",
                 "--web-port",
-                "--web-renderer",
-                "html",
+                // "--web-renderer",
+                // "html",
                 "8000"
             ],
         }

@@ -1,11 +1,16 @@
 import 'package:advices/App/contexts/lawyersContext.dart';
 import 'package:advices/screens/chat/screens/mobile_chat_screen.dart';
 import 'package:advices/screens/profile/createEvent.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../App/contexts/usersContext.dart';
+import '../../App/helpers/CustomCircularProgressIndicator.dart';
 import '../../App/models/user.dart';
+import '../../App/providers/auth_provider.dart';
 import '../../App/providers/chat_provider.dart';
+import '../../App/services/googleAuth.dart';
 import '../../assets/utilities/constants.dart';
+import '../authentication/sign_in.dart';
 import '../chat/screens/web_layout_screen.dart';
 import '../chat/utils/responsive_layout.dart';
 import '../shared_widgets/base_app_bar.dart';
@@ -22,18 +27,20 @@ class LawyerProfile extends StatefulWidget {
 
 class _LawyerProfileState extends State<LawyerProfile> {
   final ChatProvider _chatProvider = ChatProvider();
+  final AuthProvider _auth = AuthProvider();
 
   bool mkLanguage = true;
   FlutterUser? lawyer;
   String minPriceEuro = "30";
   bool loading = true;
-
+  bool isLoggedUserTheLawyer = false;
   var imageUrl =
       "https://devshift.biz/wp-content/uploads/2017/04/profile-icon-png-898.png"; //you can use a image
 
   @override
   void initState() {
     _getLawyer();
+    _isLoggedUserTheLawyer();
     super.initState();
   }
 
@@ -64,11 +71,30 @@ class _LawyerProfileState extends State<LawyerProfile> {
     );
   }
 
+  Future<void> _signOut() async {
+    await _auth.signOut();
+    await GoogleAuthService.signOutWithGoogle(context: context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SignIn()),
+    );
+  }
+
+  Future<void> _isLoggedUserTheLawyer() async {
+    User? user = await _auth.getCurrentUser();
+    if (user != null && user.uid == widget.uid) {
+      setState(() {
+        isLoggedUserTheLawyer = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BaseAppBar(
         appBar: AppBar(),
+        redirectToHome: true,
       ),
 
       bottomSheet: Container(
@@ -149,21 +175,46 @@ class _LawyerProfileState extends State<LawyerProfile> {
                         ),
                       ],
                     ),
-                    ElevatedButton(
-                      onPressed: _startChatConversation,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.mail,
-                            size: 15,
+                    Row(
+                      children: [
+                        ElevatedButton(
+                          onPressed: _startChatConversation,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.mail,
+                                size: 15,
+                              ),
+                              Text(" Пораки"),
+                            ],
                           ),
-                          Text(" Пораки"),
-                        ],
-                      ),
-                      style: ElevatedButton.styleFrom(
-                          textStyle: const TextStyle(fontSize: 15),
-                          backgroundColor: lightGreenColor),
+                          style: ElevatedButton.styleFrom(
+                              textStyle: const TextStyle(fontSize: 15),
+                              backgroundColor: lightGreenColor),
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        isLoggedUserTheLawyer
+                            ? ElevatedButton(
+                                onPressed: _signOut,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.logout,
+                                      size: 15,
+                                    ),
+                                    Text("Одјави се"),
+                                  ],
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                    textStyle: const TextStyle(fontSize: 15),
+                                    backgroundColor: orangeColor),
+                              )
+                            : SizedBox(),
+                      ],
                     ),
                     const SizedBox(
                       height: 45,
@@ -224,7 +275,7 @@ class _LawyerProfileState extends State<LawyerProfile> {
             );
           }
         } else {
-          return CircularProgressIndicator();
+          return CustomCircularProgressIndicator();
         }
       },
     );

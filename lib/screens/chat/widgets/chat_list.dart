@@ -5,6 +5,7 @@ import 'package:advices/App/providers/chat_provider.dart';
 import 'package:advices/screens/chat/widgets/sender_message_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../../../App/helpers/CustomCircularProgressIndicator.dart';
 import '../../../assets/utilities/constants.dart';
 import 'my_message_card.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -39,7 +40,7 @@ class ChatList extends StatelessWidget {
             );
           }
           return Center(
-            child: CircularProgressIndicator(),
+            child: CustomCircularProgressIndicator(),
           );
         },
       ),

@@ -88,7 +88,7 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
                   child: _urgentEvents(
                       3,
                       mkLanguage ? "Итни случаи" : "Chat with any document",
-                      contractsColor)),
+                      urgentColor)),
             ],
           )),
     );
@@ -202,7 +202,7 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
                       ),
                       Text(
                         mkLanguage
-                            ? "Лесно и брзо добијте ги релевантни информации."
+                            ? "Лесно и брзо добијте релевантни информации."
                             : "Get the contract ready \n next week",
                         textAlign: TextAlign.center,
                         // "Explain your needs in the description part and the lawyer will be more prepared",
@@ -228,14 +228,14 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
       child: MouseRegion(
         onEnter: (PointerEvent details) {
           setState(() {
-            contractsColor = Color.fromARGB(45, 26, 40, 23);
-            heightFactorContracts = 1;
+            urgentColor = Color.fromARGB(45, 26, 40, 23);
+            heightFactorUrgent = 1;
           });
         },
         onExit: (PointerEvent details) {
           setState(() {
-            contractsColor = Colors.transparent;
-            heightFactorContracts = 1;
+            urgentColor = Colors.transparent;
+            heightFactorUrgent = 1;
           });
         },
         child: AnimatedContainer(

@@ -6,6 +6,7 @@ import 'package:time_picker_widget/time_picker_widget.dart';
 import 'package:intl/intl.dart';
 
 import '../../App/contexts/callEventsContext.dart';
+import '../../App/helpers/CustomCircularProgressIndicator.dart';
 
 class AddEventPage extends StatefulWidget {
   final String uid;
@@ -228,7 +229,7 @@ class _AddEventPageState extends State<AddEventPage> {
                   ),
                   SizedBox(height: 10.0),
                   processing
-                      ? Center(child: CircularProgressIndicator())
+                      ? Center(child: CustomCircularProgressIndicator())
                       : Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: Material(

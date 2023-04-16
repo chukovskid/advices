@@ -73,24 +73,32 @@ class _SignInState extends State<SignIn> {
     );
   }
 
-Future<void> _signInUser(FlutterUser flutUser) async {
-  var user = await _auth.signInWithEmailAndPassword(flutUser);
-  if (user != null) {
-    if (widget.fromAuth) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => Home()),
-      );
-    } else {
-      goBack();
+  Future<void> _signInUser(FlutterUser flutUser) async {
+    var user = await _auth.signInWithEmailAndPassword(flutUser);
+    if (user != null) {
+      if (widget.fromAuth) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Home()),
+        );
+      } else {
+        goBack();
+      }
     }
   }
-}
 
   Future<void> _googleSignIn() async {
     User? user = await GoogleAuthService.signInWithGoogle(context: context);
-    if (user != null) goBack();
-    print(email);
+    if (user != null) {
+      if (widget.fromAuth) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Home()),
+        );
+      } else {
+        goBack();
+      }
+    }
   }
 
   @override

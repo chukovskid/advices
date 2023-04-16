@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:advices/screens/video/config/agora.config.dart' as config;
 
+import '../../App/helpers/CustomCircularProgressIndicator.dart';
+
 const appId = "03f0c2c7973949b3afe5e475f15a350e";
 const token =
     "00603f0c2c7973949b3afe5e475f15a350eIABp/OxbbkBAHMVsPgwzNxnG+ARuGPifSxSsCrRlnOEwEWK47TwAAAAAIgAhWaSBpv06YwQAAQA2ujljAgA2ujljAwA2ujljBAA2ujlj";
@@ -110,7 +112,7 @@ class _TestCallState extends State<TestCall> {
               child: Center(
                 child: _localUserJoined
                     ? RtcLocalView.SurfaceView()
-                    : CircularProgressIndicator(),
+                    : CustomCircularProgressIndicator(),
               ),
             ),
           ),

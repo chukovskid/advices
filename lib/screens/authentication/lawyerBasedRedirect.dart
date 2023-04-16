@@ -2,6 +2,8 @@ import 'package:advices/App/providers/auth_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../App/helpers/CustomCircularProgressIndicator.dart';
+
 class LawyerBasedRedirect extends StatefulWidget {
   final Widget lawyerWidget;
   final Widget nonLawyerWidget;
@@ -35,7 +37,7 @@ class _LawyerBasedRedirectState extends State<LawyerBasedRedirect> {
   Future<void> _fetchUserAndLawyerStatus() async {
     User? user = await _auth.getCurrentUser();
     if (user != null) {
-      isLawyer = await _auth.isUserLawyer();
+      isLawyer = await _auth.isUserLawyer(user);
     } else {
       isLawyer = false;
     }
@@ -47,10 +49,9 @@ class _LawyerBasedRedirectState extends State<LawyerBasedRedirect> {
   @override
   Widget build(BuildContext context) {
     if (!dataLoaded) {
-      return CircularProgressIndicator();
+      return CustomCircularProgressIndicator();
     } else {
       return isLawyer ? widget.lawyerWidget : widget.nonLawyerWidget;
     }
   }
 }
-

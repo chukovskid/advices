@@ -19,13 +19,9 @@ class AuthProvider with ChangeNotifier {
         .asyncMap((firebaseUser) => _userFromFirebaseUser(firebaseUser!));
   }
 
-  Future<bool> isUserLawyer() async {
-    User? user = _auth.currentUser;
-    if (user != null) {
-      FlutterUser? lawyer = await LawyersContext.getLawyer(user.uid);
-      return lawyer != null;
-    }
-    return false;
+  Future<bool> isUserLawyer(User user) async {
+    FlutterUser? fUser = await UsersContext.getUser(user.uid);
+    return fUser.isLawyer;
   }
 
   Future signOut() async {

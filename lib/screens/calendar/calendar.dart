@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../App/contexts/callEventsContext.dart';
+import '../../App/helpers/CustomCircularProgressIndicator.dart';
 
 // import '../../../../core/presentation/res/colors.dart';
 // import '../../../../core/presentation/res/sizes.dart';
@@ -158,7 +159,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 ],
               );
             }
-            return CircularProgressIndicator();
+            return CustomCircularProgressIndicator();
           },
         ),
       ),
