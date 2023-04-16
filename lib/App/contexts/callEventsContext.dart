@@ -11,8 +11,8 @@ class CallEventsContext {
       {required EventModel Function(dynamic id, dynamic data) fromDS,
       required Function(dynamic event) toMap});
 
-  static Future<void> saveEvent(
-      lawyerId, title, description, DateTime dateTime) async {
+  static Future<void> saveEvent(lawyerId, title, description, DateTime dateTime,
+      {urgent = false}) async {
     // save call for cleint
     final AuthProvider _auth = AuthProvider();
     User? client = await _auth.getCurrentUser();
@@ -30,7 +30,8 @@ class CallEventsContext {
       "description": description,
       "dateCreated": DateTime.now(),
       "startDate": dateTime,
-      "open": false
+      "open": false,
+      "urgent": urgent,
     });
 
     // save call for lawyer
@@ -46,7 +47,8 @@ class CallEventsContext {
       "description": description,
       "dateCreated": DateTime.now(),
       "startDate": dateTime,
-      "open": false
+      "open": false,
+      "urgent": urgent,
     });
 
     // Create room for lawyer and client
@@ -54,14 +56,15 @@ class CallEventsContext {
     String chatId = await _chatProvider.createNewChat([lawyerId]);
     // Send message to client from the lawyer
     String message = "$title \n $description \n $dateTime";
-    _chatProvider.sendMessage(client!.uid, message, chatId); // TODO: Change message
+    _chatProvider.sendMessage(
+        client!.uid, message, chatId); // TODO: Change message
     // _chatProvider.sendMessage(
     //     lawyerId, description, chatId); // TODO: Change message
     // _chatProvider.sendMessage(
     //     lawyerId, dateTime.toString(), chatId); // TODO: Change message
   }
 
-  static Future<List<DateTime>> getAllLEventsDateTIme(
+  static Future<List<DateTime>> getAllEventsDateTIme(
       lawyerId, DateTime date) async {
     List<EventModel> data = [];
     List<DateTime> dataDateTime = [];
@@ -93,15 +96,29 @@ class CallEventsContext {
     return flutterEvents;
   }
 
-  static Stream<Iterable<EventModel>> getAllLEvents(uid) {
+  static Stream<Iterable<EventModel>> getAllEvents(uid) {
     CollectionReference calls = FirebaseFirestore.instance
         .collection("users")
         .doc(uid)
         .collection('pendingCalls');
 
     // var filteredCalls = calls.doc(uid).collection("open");
-    final orderedCalls = calls.orderBy("open"); // TODO Use to order calls
+    // final orderedCalls = calls.orderBy("open"); // TODO Use to order calls
     final snapshots = calls.snapshots();
+    var userCalls = snapshots.map((snapshot) =>
+        snapshot.docs.map((doc) => EventModel.fromJson(doc.data())));
+    return userCalls;
+  }
+
+  static Stream<Iterable<EventModel>> getAllUrgentEvents(uid) {
+    CollectionReference calls = FirebaseFirestore.instance
+        .collection("users")
+        .doc(uid)
+        .collection('pendingCalls');
+
+    // var filteredCalls = calls.doc(uid).collection("open");
+    // final orderedCalls = calls.orderBy("open"); // TODO Use to order calls
+    final snapshots = calls.where("urgent", isEqualTo: true).snapshots();
     var userCalls = snapshots.map((snapshot) =>
         snapshot.docs.map((doc) => EventModel.fromJson(doc.data())));
     return userCalls;
@@ -136,7 +153,8 @@ class CallEventsContext {
           description: "Пробајте повторно",
           startDate: DateTime.now(),
           channelName: '',
-          open: false);
+          open: false,
+          urgent: false);
     }
   }
 

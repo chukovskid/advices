@@ -1,5 +1,6 @@
 import 'package:advices/assets/utilities/constants.dart';
 import 'package:advices/screens/services/book_advice.dart';
+import 'package:advices/screens/urgent/urgentEventsPage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
@@ -79,7 +80,14 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
               Expanded(
                   child: _docAi(
                       3,
-                      mkLanguage ? "Разговарајте со кој било документ" : "Chat with any document",
+                      mkLanguage
+                          ? "Разговарајте со кој било документ"
+                          : "Chat with any document",
+                      contractsColor)),
+              Expanded(
+                  child: _urgentEvents(
+                      3,
+                      mkLanguage ? "Итни случаи" : "Chat with any document",
                       contractsColor)),
             ],
           )),
@@ -89,9 +97,7 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
   Widget _dates(int area, String name, Color color) {
     return InkWell(
       onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Calls())),
+          context, MaterialPageRoute(builder: (context) => Calls())),
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         onEnter: (PointerEvent details) {
@@ -154,8 +160,8 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => IframeWidget(
-                    src: 'https://chatpdf.com/'))),
+                builder: (context) =>
+                    IframeWidget(src: 'https://chatpdf.com/'))),
       },
       child: MouseRegion(
         onEnter: (PointerEvent details) {
@@ -197,6 +203,68 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
                       Text(
                         mkLanguage
                             ? "Лесно и брзо добијте ги релевантни информации."
+                            : "Get the contract ready \n next week",
+                        textAlign: TextAlign.center,
+                        // "Explain your needs in the description part and the lawyer will be more prepared",
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _urgentEvents(int area, String name, Color color) {
+    return InkWell(
+      onTap: () => {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => UrgentEvents())),
+      },
+      child: MouseRegion(
+        onEnter: (PointerEvent details) {
+          setState(() {
+            contractsColor = Color.fromARGB(45, 26, 40, 23);
+            heightFactorContracts = 1;
+          });
+        },
+        onExit: (PointerEvent details) {
+          setState(() {
+            contractsColor = Colors.transparent;
+            heightFactorContracts = 1;
+          });
+        },
+        child: AnimatedContainer(
+          duration: Duration(seconds: 1),
+          curve: Curves.linear,
+          color: color,
+          child: new SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                AnimatedContainer(
+                  duration: Duration(seconds: 1),
+                  curve: Curves.linear,
+                  height: MediaQuery.of(context).size.height /
+                      heightFactorContracts,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        name,
+                        style: TextStyle(color: Colors.white, fontSize: 25),
+                      ),
+                      Text(
+                        "______________________",
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      ),
+                      Text(
+                        mkLanguage
+                            ? "Најдете слободни случаи и контактирајте со клиент"
                             : "Get the contract ready \n next week",
                         textAlign: TextAlign.center,
                         // "Explain your needs in the description part and the lawyer will be more prepared",
@@ -338,6 +406,70 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
                                   Text(
                                     mkLanguage
                                         ? "Закажете состанок со адвокат и добијте совет/консултаација"
+                                        : "Company",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color:
+                                            Color.fromARGB(255, 207, 223, 226)),
+                                  ),
+                                ],
+                              )
+                            ]),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: MouseRegion(
+                  onEnter: (PointerEvent details) {
+                    setState(() {
+                      companyColor = transperentBlackColor;
+                      heightFactorCompany = 2.0;
+                    });
+                  },
+                  onExit: (PointerEvent details) {
+                    setState(() {
+                      companyColor = Colors.transparent;
+                      heightFactorCompany = 1.8;
+                    });
+                  },
+                  child: InkWell(
+                    onHover: (value) => {},
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                UrgentEvents())),
+                    child: Card(
+                      color: advokatGreenColor,
+                      elevation: 5,
+                      child: Container(
+                        width: double.infinity,
+                        color: companyColor,
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                children: [
+                                  Text(
+                                    mkLanguage ? "Итни случаи" : "Meets",
+                                    style: TextStyle(
+                                        fontSize: 25,
+                                        color:
+                                            Color.fromARGB(255, 207, 223, 226)),
+                                  ),
+                                  Text(
+                                    mkLanguage ? "____________" : "Company",
+                                    style: TextStyle(
+                                        fontSize: 25,
+                                        color:
+                                            Color.fromARGB(255, 207, 223, 226)),
+                                  ),
+                                  Text(
+                                    mkLanguage
+                                        ? "Најдете слободни случаи и контактирајте со клиент"
                                         : "Company",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(

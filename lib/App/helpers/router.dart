@@ -14,6 +14,7 @@ import '../../screens/chat/screens/mobile_layout_screen.dart';
 import '../../screens/chat/screens/web_layout_screen.dart';
 import '../../screens/chat/utils/responsive_layout.dart';
 import '../../screens/services/book_advice.dart';
+import '../../screens/urgent/urgentEventsPage.dart';
 import '../../screens/webView/IframeWidget.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -40,6 +41,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => Authenticate());
     case 'book':
       return MaterialPageRoute(builder: (context) => BookAdvice());
+    case 'urgent_events':
+      return MaterialPageRoute(builder: (context) => UrgentEvents());
     case 'iframe':
       return MaterialPageRoute(
           builder: (context) => IframeWidget(

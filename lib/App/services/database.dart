@@ -205,7 +205,7 @@
 //     });
 //   }
 
-//   static Future<List<DateTime>> getAllLEventsDateTIme(
+//   static Future<List<DateTime>> getAllEventsDateTIme(
 //       lawyerId, DateTime date) async {
 //     List<EventModel> data = [];
 //     List<DateTime> dataDateTime = [];
@@ -237,7 +237,7 @@
 //     return flutterEvents;
 //   }
 
-//   static Stream<Iterable<EventModel>> getAllLEvents(uid) {
+//   static Stream<Iterable<EventModel>> getAllEvents(uid) {
 //     CollectionReference calls = FirebaseFirestore.instance
 //         .collection("users")
 //         .doc(uid)

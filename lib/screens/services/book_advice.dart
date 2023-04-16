@@ -70,7 +70,7 @@ class _BookAdviceState extends State<BookAdvice> {
 
   Future<void> _getFreeTimePeriodsForDate() async {
     DateTime selectedDate = DateFormat("yyyy-MM-dd").parse("$_selectedDate");
-    List<DateTime> events = await CallEventsContext.getAllLEventsDateTIme(
+    List<DateTime> events = await CallEventsContext.getAllEventsDateTIme(
         "Lk37HV68oaPxOA8AHpNqcSoFgEA3", selectedDate);
     _unavailableTimePeriods = [];
     events.forEach((element) {
@@ -137,7 +137,7 @@ class _BookAdviceState extends State<BookAdvice> {
     DateTime selectedDateTime =
         DateFormat("yyyy-MM-dd hh:mm").parse("$_selectedDate $selectedTime");
     await CallEventsContext.saveEvent("Lk37HV68oaPxOA8AHpNqcSoFgEA3",
-        _title.text, _description.text, selectedDateTime);
+        _title.text, _description.text, selectedDateTime, urgent: true );
 
     // Uncoment this for enabeling Stripe payment
     // redirectToCheckout(context);

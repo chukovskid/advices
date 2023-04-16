@@ -30,7 +30,7 @@ class _ChatsCallListState extends State<ChatsCallList> {
     return Padding(
       padding: const EdgeInsets.only(top: 10.0),
       child: StreamBuilder<Iterable<EventModel>>(
-          stream: CallEventsContext.getAllLEvents(widget.user.uid),
+          stream: CallEventsContext.getAllEvents(widget.user.uid),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final chats = snapshot.data!;

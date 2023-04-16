@@ -39,7 +39,7 @@ class _AddEventPageState extends State<AddEventPage> {
 
   Future<void> _getFreeTimePeriodsForDate() async {
     DateTime selectedDate = DateFormat("yyyy-MM-dd").parse("$_selectedDate");
-    List<DateTime> events = await CallEventsContext.getAllLEventsDateTIme(
+    List<DateTime> events = await CallEventsContext.getAllEventsDateTIme(
         widget.uid, selectedDate); 
     _unavailableTimePeriods = [];
     events.forEach((element) {

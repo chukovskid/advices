@@ -6,21 +6,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../App/contexts/callEventsContext.dart';
 import '../authentication/authentication.dart';
+import '../call/callMethods.dart';
 import '../shared_widgets/BottomBar.dart';
 import '../shared_widgets/base_app_bar.dart';
 import 'package:intl/intl.dart';
-import 'callMethods.dart';
 
-class Calls extends StatefulWidget {
-  const Calls({
+class UrgentEvents extends StatefulWidget {
+  const UrgentEvents({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<Calls> createState() => _CallsState();
+  State<UrgentEvents> createState() => _UrgentEventsState();
 }
 
-class _CallsState extends State<Calls>
+class _UrgentEventsState extends State<UrgentEvents>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   bool isLoading = false;
   late AnimationController controller;
@@ -113,7 +113,7 @@ class _CallsState extends State<Calls>
 
   Widget _cardsList() {
     return StreamBuilder<Iterable<EventModel>>(
-      stream: CallEventsContext.getAllEvents(user?.uid),
+      stream: CallEventsContext.getAllUrgentEvents(user?.uid),
       builder: ((context, snapshot) {
         if (!snapshot.hasData)
           return Icon(

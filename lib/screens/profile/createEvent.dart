@@ -63,7 +63,7 @@ class _CreateEventState extends State<CreateEvent> {
   Future<void> _getFreeTimePeriodsForDate() async {
     DateTime selectedDate = DateFormat("yyyy-MM-dd").parse("$_selectedDate");
     List<DateTime> events =
-        await CallEventsContext.getAllLEventsDateTIme(widget.uid, selectedDate);
+        await CallEventsContext.getAllEventsDateTIme(widget.uid, selectedDate);
     _unavailableTimePeriods = [];
     events.forEach((element) {
       DateTime substraction = element;
