@@ -137,7 +137,8 @@ class _BookAdviceState extends State<BookAdvice> {
     DateTime selectedDateTime =
         DateFormat("yyyy-MM-dd hh:mm").parse("$_selectedDate $selectedTime");
     await CallEventsContext.saveEvent("Lk37HV68oaPxOA8AHpNqcSoFgEA3",
-        _title.text, _description.text, selectedDateTime, urgent: true );
+        _title.text, _description.text, selectedDateTime,
+        urgent: true);
 
     // Uncoment this for enabeling Stripe payment
     // redirectToCheckout(context);
@@ -216,7 +217,7 @@ class _BookAdviceState extends State<BookAdvice> {
     ));
   }
 
-  Widget _dialogFields(StateSetter setStateDialog) {
+  Widget _dialogFields(StateSetter setStateDialog, {bool asPopup = false}) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -289,8 +290,6 @@ class _BookAdviceState extends State<BookAdvice> {
                       ),
                     ),
                     const SizedBox(height: 10.0),
-                  
-                    
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -406,6 +405,9 @@ class _BookAdviceState extends State<BookAdvice> {
                                 openEventForm = false;
                               });
                             }
+                            if (asPopup) {
+                              Navigator.pop(context);
+                            }
                           },
                           child: Text(
                             mkLanguage ? "Продолжи" : "Save",
@@ -473,7 +475,8 @@ class _BookAdviceState extends State<BookAdvice> {
                                 builder: (context,
                                         StateSetter setStateDialog) =>
                                     AlertDialog(
-                                        content: _dialogFields(setStateDialog)),
+                                        content: _dialogFields(setStateDialog,
+                                            asPopup: true)),
                               ));
                     },
                     child: Text(
@@ -515,7 +518,8 @@ class _BookAdviceState extends State<BookAdvice> {
                                 builder: (context,
                                         StateSetter setStateDialog) =>
                                     AlertDialog(
-                                        content: _dialogFields(setStateDialog)),
+                                        content: _dialogFields(setStateDialog,
+                                            asPopup: true)),
                               ));
                     },
                     child: Text(
@@ -548,7 +552,7 @@ class _BookAdviceState extends State<BookAdvice> {
                 Center(
                   child: Text(
                     // "${0} денари",
-                    "Цената ќе биде пресметана според избраниот сервис",
+                    "Цената ќе биде пресметана според комплексноста на случајот",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white,
@@ -576,7 +580,8 @@ class _BookAdviceState extends State<BookAdvice> {
                       builder: (context) => StatefulBuilder(
                             builder: (context, StateSetter setStateDialog) =>
                                 AlertDialog(
-                                    content: _dialogFields(setStateDialog)),
+                                    content: _dialogFields(setStateDialog,
+                                        asPopup: true)),
                           ))
                   : _saveEvent();
             },
@@ -607,7 +612,8 @@ class _BookAdviceState extends State<BookAdvice> {
                     builder: (context) => StatefulBuilder(
                           builder: (context, StateSetter setStateDialog) =>
                               AlertDialog(
-                                  content: _dialogFields(setStateDialog)),
+                                  content: _dialogFields(setStateDialog,
+                                      asPopup: true)),
                         ))
                 : _saveEvent();
           },
@@ -631,7 +637,8 @@ class _BookAdviceState extends State<BookAdvice> {
                       builder: (context) => StatefulBuilder(
                             builder: (context, StateSetter setStateDialog) =>
                                 AlertDialog(
-                                    content: _dialogFields(setStateDialog)),
+                                    content: _dialogFields(setStateDialog,
+                                        asPopup: true)),
                           ))
                   : _saveEvent();
             },

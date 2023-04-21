@@ -2,6 +2,7 @@ import 'package:advices/App/models/event.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 import '../providers/auth_provider.dart';
 import '../providers/chat_provider.dart';
@@ -23,7 +24,7 @@ class CallEventsContext {
         .doc(client?.uid)
         .collection("pendingCalls");
     pendingCallsClient.doc(channelName).set({
-      "cleintId": client?.uid,
+      "clientId": client?.uid,
       "lawyerId": lawyerId,
       "channelName": channelName,
       "title": title,
@@ -40,7 +41,7 @@ class CallEventsContext {
         .doc(lawyerId)
         .collection("pendingCalls");
     lawyerPendingCalls.doc(channelName).set({
-      "cleintId": client?.uid,
+      "clientId": client?.uid,
       "lawyerId": lawyerId,
       "channelName": channelName,
       "title": title,
@@ -101,7 +102,6 @@ class CallEventsContext {
         .collection("users")
         .doc(uid)
         .collection('pendingCalls');
-
     // var filteredCalls = calls.doc(uid).collection("open");
     // final orderedCalls = calls.orderBy("open"); // TODO Use to order calls
     final snapshots = calls.snapshots();
@@ -115,7 +115,6 @@ class CallEventsContext {
         .collection("users")
         .doc(uid)
         .collection('pendingCalls');
-
     // var filteredCalls = calls.doc(uid).collection("open");
     // final orderedCalls = calls.orderBy("open"); // TODO Use to order calls
     final snapshots = calls.where("urgent", isEqualTo: true).snapshots();
@@ -129,20 +128,15 @@ class CallEventsContext {
     final AuthProvider _auth = AuthProvider();
     User? user = await _auth.getCurrentUser();
     String uid = user?.uid ?? "";
-
     CollectionReference events = FirebaseFirestore.instance
         .collection("users")
         .doc(uid)
         .collection('pendingCalls');
-
     // write a where clause to filter for a specific channelName
     Query filteredCalls = events.where("channelName", isEqualTo: channelName);
-
     // write an orderBy clause to sort by a field
     // Query orderedCalls = filteredCalls.orderBy("startTime");
-
     QuerySnapshot snapshot = await filteredCalls.limit(1).get();
-
     // return the first event that matches the given channelName
     if (snapshot.docs.isNotEmpty) {
       EventModel event = EventModel.fromJson(snapshot.docs.first);
@@ -152,6 +146,7 @@ class CallEventsContext {
           title: "Не постои овој евент",
           description: "Пробајте повторно",
           startDate: DateTime.now(),
+          dateCreated: DateTime.now(),
           channelName: '',
           open: false,
           urgent: false);
@@ -164,12 +159,10 @@ class CallEventsContext {
       HttpsCallable callable =
           FirebaseFunctions.instance.httpsCallable('callUser');
       // dynamic resp = await callable.call();
-
       dynamic resp = await callable.call(<String, dynamic>{
         "receiverId": receiverId,
         "channelName": channelName,
       });
-
       Map<String, dynamic> res = {
         "receiverId": receiverId,
         "channelName": channelName,
@@ -191,25 +184,54 @@ class CallEventsContext {
 
   static Future<String> updateAsClosedCallForUsers(lawyerId, clientId) async {
     String channelName = lawyerId + "+" + clientId;
-
     CollectionReference clientCalls = FirebaseFirestore.instance
         .collection("users")
         .doc(clientId)
         .collection("pendingCalls");
-
     CollectionReference lawyerCalls = FirebaseFirestore.instance
         .collection("users")
         .doc(lawyerId)
         .collection("pendingCalls");
-
     // save call for client
     clientCalls.doc(channelName).update(
         {"dateOpened": DateTime.now().millisecondsSinceEpoch, "open": false});
-
     // save call for lawyer
     lawyerCalls.doc(channelName).update(
         {"dateOpened": DateTime.now().millisecondsSinceEpoch, "open": false});
 
     return channelName;
+  }
+
+// Lawyer availability feature
+//
+//
+  static Future<void> saveUnavailablePeriod(String lawyerId, DateTime date,
+      TimeOfDay startTime, TimeOfDay endTime) async {
+    final DateTime startDateTime = DateTime(
+        date.year, date.month, date.day, startTime.hour, startTime.minute);
+    final DateTime endDateTime =
+        DateTime(date.year, date.month, date.day, endTime.hour, endTime.minute);
+
+    CollectionReference unavailablePeriods = FirebaseFirestore.instance
+        .collection("users")
+        .doc(lawyerId)
+        .collection("unavailablePeriods");
+
+    await unavailablePeriods.add({
+      "startDate": startDateTime,
+      "endDate": endDateTime,
+    });
+  }
+
+  static Future<List<Map<String, dynamic>>> getWorkingHours(
+      String lawyerId) async {
+    CollectionReference workingHoursRef = FirebaseFirestore.instance
+        .collection("users")
+        .doc(lawyerId)
+        .collection("workingHours");
+    QuerySnapshot snapshot = await workingHoursRef.get();
+    return snapshot.docs
+        .map((doc) => doc.data() as Map<String, dynamic>)
+        .toList();
   }
 }

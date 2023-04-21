@@ -1,4 +1,5 @@
 import 'package:advices/App/contexts/callEventsContext.dart';
+import 'package:advices/screens/authentication/lawyerBasedRedirect.dart';
 import 'package:advices/screens/webView/IframeWidget.dart';
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as rtc_local_view;
@@ -150,106 +151,254 @@ class _State extends State<JoinChannelVideo> {
   }
 
   /// Toolbar layout
-  Widget _toolbar() {
+  Widget _toolbarWeb() {
     return Container(
       alignment: Alignment.bottomCenter,
       padding: const EdgeInsets.symmetric(vertical: 48),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          RawMaterialButton(
-            onPressed: () => _onCallEnd(context),
-            child: Icon(
-              Icons.call_end,
-              color: Colors.white,
-              size: 20.0,
+          Tooltip(
+            message: 'End Call',
+            child: RawMaterialButton(
+              onPressed: () => _onCallEnd(context),
+              child: Icon(
+                Icons.call_end,
+                color: Colors.white,
+                size: 20.0,
+              ),
+              shape: CircleBorder(),
+              elevation: 2.0,
+              fillColor: Colors.redAccent,
+              padding: const EdgeInsets.all(12.0),
             ),
-            shape: CircleBorder(),
-            elevation: 2.0,
-            fillColor: Colors.redAccent,
-            padding: const EdgeInsets.all(12.0),
           ),
-          RawMaterialButton(
-            onPressed: _onToggleMute,
-            child: Icon(
-              muted ? Icons.mic_off : Icons.mic,
-              color: muted ? Colors.white : Colors.blueAccent,
-              size: 20.0,
+          Tooltip(
+            message: muted ? 'Unmute' : 'Mute',
+            child: RawMaterialButton(
+              onPressed: _onToggleMute,
+              child: Icon(
+                muted ? Icons.mic_off : Icons.mic,
+                color: muted ? Colors.white : Colors.blueAccent,
+                size: 20.0,
+              ),
+              shape: CircleBorder(),
+              elevation: 2.0,
+              fillColor: muted ? Colors.blueAccent : Colors.white,
+              padding: const EdgeInsets.all(12.0),
             ),
-            shape: CircleBorder(),
-            elevation: 2.0,
-            fillColor: muted ? Colors.blueAccent : Colors.white,
-            padding: const EdgeInsets.all(12.0),
           ),
-          RawMaterialButton(
-            onPressed: _onSwitchCamera,
-            child: Icon(
-              Icons.switch_camera,
-              color: Colors.blueAccent,
-              size: 20.0,
+          kIsWeb
+              ? SizedBox()
+              : Tooltip(
+                  message: 'Switch Camera',
+                  child: RawMaterialButton(
+                    onPressed: _onSwitchCamera,
+                    child: Icon(
+                      Icons.switch_camera,
+                      color: Colors.blueAccent,
+                      size: 20.0,
+                    ),
+                    shape: CircleBorder(),
+                    elevation: 2.0,
+                    fillColor: Colors.white,
+                    padding: const EdgeInsets.all(12.0),
+                  ),
+                ),
+          Tooltip(
+            message: cameraOn ? 'Turn off camera' : 'Turn on camera',
+            child: RawMaterialButton(
+              onPressed: _onToggleCamera,
+              child: Icon(
+                cameraOn ? Icons.videocam : Icons.videocam_off,
+                color: cameraOn ? Colors.blueAccent : Colors.white,
+                size: 20.0,
+              ),
+              shape: CircleBorder(),
+              elevation: 2.0,
+              fillColor: cameraOn ? Colors.white : Colors.blueAccent,
+              padding: const EdgeInsets.all(12.0),
             ),
-            shape: CircleBorder(),
-            elevation: 2.0,
-            fillColor: Colors.white,
-            padding: const EdgeInsets.all(12.0),
           ),
-          RawMaterialButton(
-            onPressed: _onToggleCamera,
-            child: Icon(
-              cameraOn ? Icons.videocam : Icons.videocam_off,
-              color: cameraOn ? Colors.blueAccent : Colors.white,
-              size: 20.0,
-            ),
-            shape: CircleBorder(),
-            elevation: 2.0,
-            fillColor: cameraOn ? Colors.white : Colors.blueAccent,
-            padding: const EdgeInsets.all(12.0),
-          ),
-          RawMaterialButton(
-            onPressed: _onToggleDocAi,
-            child: Icon(
-              docAi ? Icons.document_scanner_outlined : Icons.edit_document,
-              color: docAi ? Colors.blueAccent : Colors.white,
-              size: 20.0,
-            ),
-            shape: CircleBorder(),
-            elevation: 2.0,
-            fillColor: docAi ? Colors.white : Colors.blueAccent,
-            padding: const EdgeInsets.all(12.0),
-          ),
-          RawMaterialButton(
-            onPressed: _onToggleChat,
-            child: Icon(
-              chatOn ? Icons.chat_outlined : Icons.subtitles_off_outlined,
-              color: chatOn ? Colors.blueAccent : Colors.white,
-              size: 20.0,
-            ),
-            shape: CircleBorder(),
-            elevation: 2.0,
-            fillColor: chatOn ? Colors.white : Colors.blueAccent,
-            padding: const EdgeInsets.all(12.0),
-          ),
-          RawMaterialButton(
-            onPressed: () => _confirmPayment(context),
-            child: Icon(
-              Icons.payments_outlined,
-              color: Colors.white,
-              size: 20.0,
-            ),
-            shape: CircleBorder(),
-            elevation: 2.0,
-            fillColor: Colors.greenAccent,
-            padding: const EdgeInsets.all(12.0),
-          ),
+          LawyerBasedRedirect(
+              lawyerWidget: Tooltip(
+                message: docAi ? 'Disable Document AI' : 'Enable Document AI',
+                child: RawMaterialButton(
+                  onPressed: _onToggleDocAi,
+                  child: Icon(
+                    docAi
+                        ? Icons.edit_document
+                        : Icons.document_scanner_outlined,
+                    color: docAi ? Colors.blueAccent : Colors.white,
+                    size: 20.0,
+                  ),
+                  shape: CircleBorder(),
+                  elevation: 2.0,
+                  fillColor: docAi ? Colors.white : Colors.blueAccent,
+                  padding: const EdgeInsets.all(12.0),
+                ),
+              ),
+              nonLawyerWidget: SizedBox()),
+          Tooltip(
+              message: chatOn ? 'Disable Chat' : 'Enable Chat',
+              child: RawMaterialButton(
+                onPressed: _onToggleChat,
+                child: Icon(
+                  chatOn ? Icons.chat_outlined : Icons.subtitles_off_outlined,
+                  color: chatOn ? Colors.blueAccent : Colors.white,
+                  size: 20.0,
+                ),
+                shape: CircleBorder(),
+                elevation: 2.0,
+                fillColor: chatOn ? Colors.white : Colors.blueAccent,
+                padding: const EdgeInsets.all(12.0),
+              )),
+          // RawMaterialButton(
+          //   onPressed: () => _confirmPayment(context),
+          //   child: Icon(
+          //     Icons.payments_outlined,
+          //     color: Colors.white,
+          //     size: 20.0,
+          //   ),
+          //   shape: CircleBorder(),
+          //   elevation: 2.0,
+          //   fillColor: Colors.greenAccent,
+          //   padding: const EdgeInsets.all(12.0),
+          // ),
         ],
       ),
     );
   }
 
-  @override
+  /// Toolbar layout for mobile
+  Widget _toolbarMobile() {
+    return Container(
+      alignment: Alignment.bottomLeft,
+      padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 12),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: _toolbarButtons(),
+      ),
+    );
+  }
+
+    /// Toolbar layout
+  List<Widget> _toolbarButtons() {
+    return  <Widget>[
+          Tooltip(
+            message: 'End Call',
+            child: RawMaterialButton(
+              onPressed: () => _onCallEnd(context),
+              child: Icon(
+                Icons.call_end,
+                color: Colors.white,
+                size: 20.0,
+              ),
+              shape: CircleBorder(),
+              elevation: 2.0,
+              fillColor: Colors.redAccent,
+              padding: const EdgeInsets.all(12.0),
+            ),
+          ),
+          Tooltip(
+            message: muted ? 'Unmute' : 'Mute',
+            child: RawMaterialButton(
+              onPressed: _onToggleMute,
+              child: Icon(
+                muted ? Icons.mic_off : Icons.mic,
+                color: muted ? Colors.white : Colors.blueAccent,
+                size: 20.0,
+              ),
+              shape: CircleBorder(),
+              elevation: 2.0,
+              fillColor: muted ? Colors.blueAccent : Colors.white,
+              padding: const EdgeInsets.all(12.0),
+            ),
+          ),
+          kIsWeb
+              ? SizedBox()
+              : Tooltip(
+                  message: 'Switch Camera',
+                  child: RawMaterialButton(
+                    onPressed: _onSwitchCamera,
+                    child: Icon(
+                      Icons.switch_camera,
+                      color: Colors.blueAccent,
+                      size: 20.0,
+                    ),
+                    shape: CircleBorder(),
+                    elevation: 2.0,
+                    fillColor: Colors.white,
+                    padding: const EdgeInsets.all(12.0),
+                  ),
+                ),
+          Tooltip(
+            message: cameraOn ? 'Turn off camera' : 'Turn on camera',
+            child: RawMaterialButton(
+              onPressed: _onToggleCamera,
+              child: Icon(
+                cameraOn ? Icons.videocam : Icons.videocam_off,
+                color: cameraOn ? Colors.blueAccent : Colors.white,
+                size: 20.0,
+              ),
+              shape: CircleBorder(),
+              elevation: 2.0,
+              fillColor: cameraOn ? Colors.white : Colors.blueAccent,
+              padding: const EdgeInsets.all(12.0),
+            ),
+          ),
+          LawyerBasedRedirect(
+              lawyerWidget: Tooltip(
+                message: docAi ? 'Disable Document AI' : 'Enable Document AI',
+                child: RawMaterialButton(
+                  onPressed: _onToggleDocAi,
+                  child: Icon(
+                    docAi
+                        ? Icons.edit_document
+                        : Icons.document_scanner_outlined,
+                    color: docAi ? Colors.blueAccent : Colors.white,
+                    size: 20.0,
+                  ),
+                  shape: CircleBorder(),
+                  elevation: 2.0,
+                  fillColor: docAi ? Colors.white : Colors.blueAccent,
+                  padding: const EdgeInsets.all(12.0),
+                ),
+              ),
+              nonLawyerWidget: SizedBox()),
+          Tooltip(
+              message: chatOn ? 'Disable Chat' : 'Enable Chat',
+              child: RawMaterialButton(
+                onPressed: _onToggleChat,
+                child: Icon(
+                  chatOn ? Icons.chat_outlined : Icons.subtitles_off_outlined,
+                  color: chatOn ? Colors.blueAccent : Colors.white,
+                  size: 20.0,
+                ),
+                shape: CircleBorder(),
+                elevation: 2.0,
+                fillColor: chatOn ? Colors.white : Colors.blueAccent,
+                padding: const EdgeInsets.all(12.0),
+              )),
+          // RawMaterialButton(
+          //   onPressed: () => _confirmPayment(context),
+          //   child: Icon(
+          //     Icons.payments_outlined,
+          //     color: Colors.white,
+          //     size: 20.0,
+          //   ),
+          //   shape: CircleBorder(),
+          //   elevation: 2.0,
+          //   fillColor: Colors.greenAccent,
+          //   padding: const EdgeInsets.all(12.0),
+          // ),
+        ];
+  }
+
+
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.black,
       body: Center(
         child: Stack(
           children: <Widget>[
@@ -273,12 +422,13 @@ class _State extends State<JoinChannelVideo> {
                     : Container(),
               ],
             ),
-            _toolbar(),
+            kIsWeb ? _toolbarWeb() : _toolbarMobile(),
           ],
         ),
       ),
     );
   }
+
 
   /// Helper function to get list of native views
   List<Widget> _getRenderViews() {

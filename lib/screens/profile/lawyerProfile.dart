@@ -1,6 +1,9 @@
 import 'package:advices/App/contexts/lawyersContext.dart';
+import 'package:advices/screens/authentication/lawyerBasedRedirect.dart';
 import 'package:advices/screens/chat/screens/mobile_chat_screen.dart';
 import 'package:advices/screens/profile/createEvent.dart';
+import 'package:advices/screens/profile/unavailablePeriods.dart';
+import 'package:advices/screens/profile/workingHours.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../App/contexts/usersContext.dart';
@@ -33,14 +36,12 @@ class _LawyerProfileState extends State<LawyerProfile> {
   FlutterUser? lawyer;
   String minPriceEuro = "30";
   bool loading = true;
-  bool isLoggedUserTheLawyer = false;
   var imageUrl =
       "https://devshift.biz/wp-content/uploads/2017/04/profile-icon-png-898.png"; //you can use a image
 
   @override
   void initState() {
     _getLawyer();
-    _isLoggedUserTheLawyer();
     super.initState();
   }
 
@@ -80,26 +81,19 @@ class _LawyerProfileState extends State<LawyerProfile> {
     );
   }
 
-  Future<void> _isLoggedUserTheLawyer() async {
-    User? user = await _auth.getCurrentUser();
-    if (user != null && user.uid == widget.uid) {
-      setState(() {
-        isLoggedUserTheLawyer = true;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BaseAppBar(
         appBar: AppBar(),
         redirectToHome: true,
-      ),
+      ), 
 
       bottomSheet: Container(
         child: MediaQuery.of(context).size.width < 850.0
-            ? CreateEvent(widget.uid, widget.serviceId, minPriceEuro)
+            ? 
+            // UnavailablePeriodsWidget(lawyerId: widget.uid)
+            CreateEvent(widget.uid, widget.serviceId, minPriceEuro)
             : SizedBox(),
       ),
       // floatingActionButton: _openProfileBtn(),
@@ -125,9 +119,12 @@ class _LawyerProfileState extends State<LawyerProfile> {
               MediaQuery.of(context).size.width < 850.0
                   ? SizedBox()
                   : Flexible(
-                      flex: 2,
-                      child: CreateEvent(
-                          widget.uid, widget.serviceId, minPriceEuro)),
+                      flex: 2, 
+                      // child: WorkingHoursScreen(lawyerId: widget.uid))
+              // child: UnavailablePeriodsWidget(lawyerId: widget.uid))
+
+              child: CreateEvent(
+                  widget.uid, widget.serviceId, minPriceEuro)),
             ],
           )),
     );
@@ -196,24 +193,24 @@ class _LawyerProfileState extends State<LawyerProfile> {
                         SizedBox(
                           width: 8,
                         ),
-                        isLoggedUserTheLawyer
-                            ? ElevatedButton(
-                                onPressed: _signOut,
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(
-                                      Icons.logout,
-                                      size: 15,
-                                    ),
-                                    Text("Одјави се"),
-                                  ],
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                    textStyle: const TextStyle(fontSize: 15),
-                                    backgroundColor: orangeColor),
-                              )
-                            : SizedBox(),
+                        LawyerBasedRedirect(
+                            lawyerWidget: ElevatedButton(
+                              onPressed: _signOut,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.logout,
+                                    size: 15,
+                                  ),
+                                  Text("Одјави се"),
+                                ],
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                  textStyle: const TextStyle(fontSize: 15),
+                                  backgroundColor: orangeColor),
+                            ),
+                            nonLawyerWidget: SizedBox()),
                       ],
                     ),
                     const SizedBox(

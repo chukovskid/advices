@@ -178,7 +178,7 @@
 //         .doc(client?.uid)
 //         .collection("pendingCalls");
 //     pendingCallsClient.doc(channelName).set({
-//       "cleintId": client?.uid,
+//       "clientId": client?.uid,
 //       "lawyerId": lawyerId,
 //       "channelName": channelName,
 //       "title": title,
@@ -194,7 +194,7 @@
 //         .doc(lawyerId)
 //         .collection("pendingCalls");
 //     lawyerPendingCalls.doc(channelName).set({
-//       "cleintId": client?.uid,
+//       "clientId": client?.uid,
 //       "lawyerId": lawyerId,
 //       "channelName": channelName,
 //       "title": title,

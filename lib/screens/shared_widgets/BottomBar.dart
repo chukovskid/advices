@@ -1,5 +1,6 @@
 import 'package:advices/App/providers/navigation_provider.dart';
 import 'package:advices/screens/authentication/authentication.dart';
+import 'package:advices/screens/authentication/lawyerBasedRedirect.dart';
 import 'package:advices/screens/call/calls.dart';
 import 'package:advices/assets/utilities/constants.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import '../chat/screens/mobile_layout_screen.dart';
 import '../chat/screens/web_layout_screen.dart';
 import '../chat/utils/responsive_layout.dart';
 import '../home/home.dart';
+import '../urgent/urgentEventsPage.dart';
 
 class BottomBar extends StatelessWidget {
   final NavigationProvider _navigationProvider = NavigationProvider();
@@ -202,13 +204,23 @@ class BottomBar extends StatelessWidget {
             //     // await FirebaseDynamicLinkService.buildDynamicLinks("opopID");
 
             //     ),
-            IconButton(
-              iconSize: 32.0,
-              tooltip: 'Состаноци',
-              icon: const Icon(Icons.call),
-              onPressed: () {
-                _navigationProvider.privateNav(Calls());
-              },
+            LawyerBasedRedirect(
+              lawyerWidget: IconButton(
+                iconSize: 32.0,
+                tooltip: 'Нови случаи',
+                icon: const Icon(Icons.notification_important_outlined),
+                onPressed: () {
+                  _navigationProvider.privateNav(UrgentEvents());
+                },
+              ),
+              nonLawyerWidget: IconButton(
+                iconSize: 32.0,
+                tooltip: 'Состаноци',
+                icon: const Icon(Icons.call),
+                onPressed: () {
+                  _navigationProvider.privateNav(Calls());
+                },
+              ),
             ),
             IconButton(
               iconSize: 32.0,

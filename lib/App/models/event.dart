@@ -5,7 +5,7 @@ class EventModel {
   final String description;
   final DateTime startDate;
   final bool urgent;
-  // final DateTime dateCreated;
+  final DateTime dateCreated;
 
   final bool open;
 
@@ -15,7 +15,7 @@ class EventModel {
       required this.channelName,
       required this.description,
       required this.startDate,
-      // required this.dateCreated,
+      required this.dateCreated,
       required this.open,
       required this.urgent});
 
@@ -25,7 +25,7 @@ class EventModel {
       channelName: data['channelName'],
       description: data['description'],
       startDate: data['startDate'],
-      // // dateCreated: data['dateCreated'],
+      dateCreated: data['dateCreated'],
       open: data['open'],
       urgent: data['urgent'],
     );
@@ -38,7 +38,7 @@ class EventModel {
       channelName: data['channelName'],
       description: data['description'],
       startDate: data['startDate'].toDate(),
-      // // dateCreated: data['dateCreated'].toDate() as DateTime? ?? DateTime.now(),
+      dateCreated: data['dateCreated'].toDate() as DateTime? ?? DateTime.now(),
       open: data['open'],
       urgent: data['urgent'],
     );
@@ -49,7 +49,7 @@ class EventModel {
         title: json['title'] as String? ?? "",
         channelName: json['channelName'] as String? ?? "",
         startDate: json['startDate'].toDate(),
-        // // dateCreated: json['dateCreated'].toDate() as DateTime? ?? DateTime.now(),
+        dateCreated: json['dateCreated'].toDate() as DateTime? ?? DateTime.now(),
         description: json['description'] as String? ?? "",
         open: json['open'] as bool? ?? false,
         urgent: json['urgent'] as bool? ?? false,
@@ -61,7 +61,7 @@ class EventModel {
       "channelName": channelName,
       "description": description,
       "startDate": startDate,
-      // // "dateCreated": dateCreated,
+      // "dateCreated": dateCreated,
       "id": id,
       "open": open,
       "urgent": urgent,

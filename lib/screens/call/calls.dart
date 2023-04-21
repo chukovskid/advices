@@ -53,7 +53,8 @@ class _CallsState extends State<Calls>
     if (user == null) {
       return null;
     }
-    Map<String, dynamic>? result = await CallMethods.makeCloudCall(call.channelName);
+    Map<String, dynamic>? result =
+        await CallMethods.makeCloudCall(call.channelName);
     if (result!['token'] != null) {
       setState(() {
         isLoading = false;
@@ -73,8 +74,8 @@ class _CallsState extends State<Calls>
   }
 
   String trimString(String str) {
-  return str.length > 45 ? '${str.substring(0, 42)}...' : str;
-}
+    return str.length > 45 ? '${str.substring(0, 42)}...' : str;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -143,67 +144,70 @@ class _CallsState extends State<Calls>
   }
 
   Widget _card(EventModel call) {
-    return Card(
-      elevation: 25,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Column(
-        // mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          ListTile(
-            // leading: const Icon(Icons.person),
-            title: Text(call.title.toString()),
-            subtitle: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              // mainAxisSize: MainAxisSize.min,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 4,
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.description,
-                          size: 16,
-                        ),
-                        Text(
-                          ' ${trimString(call.description)}',
-                          softWrap: true,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Icon(Icons.access_time, size: 16),
-                        Text(
-                            ' ${DateFormat("yyyy-MM-dd hh:mm").format(call.startDate)}'),
-                        SizedBox(
-                          width: 24,
-                        ),
-                        call.open == true
-                            ? Text(
-                                'Некој ве чека веќе',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: Colors.green),
-                              )
-                            : Text('Сеуште нема никој')
-                      ],
-                    ),
-                  ],
-                ),
-              ],
+    return Center(
+      child: Card(
+        elevation: 25,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
+          // side: BorderSide(color: Color.fromARGB(255, 244, 236, 166), width: 1.5),
+        ),
+        child: Column(
+          // mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              // leading: const Icon(Icons.person),
+              title: Text(call.title.toString()),
+              subtitle: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                // mainAxisSize: MainAxisSize.min,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.description,
+                            size: 16,
+                          ),
+                          Text(
+                            ' ${trimString(call.description)}',
+                            softWrap: true,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Icon(Icons.access_time, size: 16),
+                          Text(
+                              ' ${DateFormat("yyyy-MM-dd hh:mm").format(call.startDate)}'),
+                          SizedBox(
+                            width: 24,
+                          ),
+                          call.open == true
+                              ? Text(
+                                  'Некој ве чека веќе',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.green),
+                                )
+                              : Text('Сеуште нема никој')
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              onTap: () => openCall(call),
             ),
-            onTap: () => openCall(call),
-          ),
-          const SizedBox(
-            height: 20,
-          )
-        ],
+            const SizedBox(
+              height: 20,
+            )
+          ],
+        ),
       ),
     );
   }

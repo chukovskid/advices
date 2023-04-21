@@ -84,11 +84,11 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
                           ? "Разговарајте со кој било документ"
                           : "Chat with any document",
                       contractsColor)),
-              Expanded(
-                  child: _urgentEvents(
-                      3,
-                      mkLanguage ? "Итни случаи" : "Chat with any document",
-                      urgentColor)),
+              // Expanded(
+              //     child: _urgentEvents(
+              //         3,
+              //         mkLanguage ? "Итни случаи" : "Chat with any document",
+              //         urgentColor)),
             ],
           )),
     );
@@ -130,7 +130,7 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
                     children: [
                       Text(
                         name,
-                        style: TextStyle(color: Colors.white, fontSize: 25),
+                        style: TextStyle(color: Colors.white, fontSize: 30),
                       ),
                       Text(
                         "______________________",
@@ -138,7 +138,7 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
                       ),
                       Text(
                         mkLanguage
-                            ? "Закажете состанок со адвокат и добијте совет/консултаација"
+                            ? "Закажани состаноци со Вас"
                             : "Schedule a date with your lawyer \n and get the full service",
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Colors.white, fontSize: 15),
@@ -194,7 +194,7 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
                     children: [
                       Text(
                         name,
-                        style: TextStyle(color: Colors.white, fontSize: 25),
+                        style: TextStyle(color: Colors.white, fontSize: 30),
                       ),
                       Text(
                         "______________________",
@@ -298,65 +298,65 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
             mainAxisSize: MainAxisSize.max,
             children: [
               SizedBox(height: 10),
-              Expanded(
-                child: MouseRegion(
-                  onEnter: (PointerEvent details) {
-                    setState(() {
-                      contractsColor = transperentBlackColor;
-                      heightFactorCompany = 2.0;
-                    });
-                  },
-                  onExit: (PointerEvent details) {
-                    setState(() {
-                      contractsColor = Colors.transparent;
-                      heightFactorCompany = 1.8;
-                    });
-                  },
-                  child: InkWell(
-                    onTap: () => {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => IframeWidget(
-                                  src:
-                                      'https://advokat.mk/services/documents_iframe.html'))),
-                    },
-                    child: Card(
-                      color: advokatGreenColor,
-                      elevation: 5,
-                      child: Container(
-                        width: double.infinity,
-                        color: contractsColor,
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                mkLanguage ? "Договори" : "Contracts",
-                                style: TextStyle(
-                                    fontSize: 25,
-                                    color: Color.fromARGB(255, 207, 223, 226)),
-                              ),
-                              Text(
-                                mkLanguage ? "____________" : "Company",
-                                style: TextStyle(
-                                    fontSize: 25,
-                                    color: Color.fromARGB(255, 207, 223, 226)),
-                              ),
-                              Text(
-                                mkLanguage
-                                    ? "Лесно и брзо направете договор за вашата потреба."
-                                    : "Get the contract ready \n next week",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    color: Color.fromARGB(255, 207, 223, 226)),
-                              ),
-                            ]),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              // Expanded(
+              //   child: MouseRegion(
+              //     onEnter: (PointerEvent details) {
+              //       setState(() {
+              //         contractsColor = transperentBlackColor;
+              //         heightFactorCompany = 2.0;
+              //       });
+              //     },
+              //     onExit: (PointerEvent details) {
+              //       setState(() {
+              //         contractsColor = Colors.transparent;
+              //         heightFactorCompany = 1.8;
+              //       });
+              //     },
+              //     child: InkWell(
+              //       onTap: () => {
+              //         Navigator.push(
+              //             context,
+              //             MaterialPageRoute(
+              //                 builder: (context) => IframeWidget(
+              //                     src:
+              //                         'https://advokat.mk/services/documents_iframe.html'))),
+              //       },
+              //       child: Card(
+              //         color: advokatGreenColor,
+              //         elevation: 5,
+              //         child: Container(
+              //           width: double.infinity,
+              //           color: contractsColor,
+              //           child: Column(
+              //               mainAxisAlignment: MainAxisAlignment.center,
+              //               children: [
+              //                 Text(
+              //                   mkLanguage ? "Договори" : "Contracts",
+              //                   style: TextStyle(
+              //                       fontSize: 25,
+              //                       color: Color.fromARGB(255, 207, 223, 226)),
+              //                 ),
+              //                 Text(
+              //                   mkLanguage ? "____________" : "Company",
+              //                   style: TextStyle(
+              //                       fontSize: 25,
+              //                       color: Color.fromARGB(255, 207, 223, 226)),
+              //                 ),
+              //                 Text(
+              //                   mkLanguage
+              //                       ? "Лесно и брзо направете договор за вашата потреба."
+              //                       : "Get the contract ready \n next week",
+              //                   textAlign: TextAlign.center,
+              //                   style: TextStyle(
+              //                       fontSize: 14,
+              //                       color: Color.fromARGB(255, 207, 223, 226)),
+              //                 ),
+              //               ]),
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),             
               Expanded(
                 child: MouseRegion(
                   onEnter: (PointerEvent details) {
@@ -393,6 +393,7 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
                                     mkLanguage ? "Состаноци" : "Meets",
                                     style: TextStyle(
                                         fontSize: 25,
+                                        fontWeight: FontWeight.w600,
                                         color:
                                             Color.fromARGB(255, 207, 223, 226)),
                                   ),
@@ -405,7 +406,7 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
                                   ),
                                   Text(
                                     mkLanguage
-                                        ? "Закажете состанок со адвокат и добијте совет/консултаација"
+                                        ? "Закажани состаноци со Вас"
                                         : "Company",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
@@ -454,7 +455,7 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
                               Column(
                                 children: [
                                   Text(
-                                    mkLanguage ? "Итни случаи" : "Meets",
+                                    mkLanguage ? "Разговарај со документите" : "Meets",
                                     style: TextStyle(
                                         fontSize: 25,
                                         color:
@@ -469,7 +470,7 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
                                   ),
                                   Text(
                                     mkLanguage
-                                        ? "Најдете слободни случаи и контактирајте со клиент"
+                                        ? "Вештачка интелегенција која ќе го прочита дадениот документ и одговара на вашите праашања"
                                         : "Company",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(

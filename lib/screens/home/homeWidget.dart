@@ -80,11 +80,11 @@ class _HomeWidgetState extends State<HomeWidget>
               Expanded(
                   child: _advices(
                       2, mkLanguage ? "Консултации" : "Expats", expatsColor)),
-              Expanded(
-                  child: _contracts(
-                      3,
-                      mkLanguage ? "Договори/Преддоговори" : "Contracts",
-                      contractsColor)),
+              // Expanded(
+              //     child: _contracts(
+              //         3,
+              //         mkLanguage ? "Договори/Преддоговори" : "Contracts",
+              //         contractsColor)),
             ],
           )),
     );
@@ -292,65 +292,66 @@ class _HomeWidgetState extends State<HomeWidget>
             mainAxisSize: MainAxisSize.max,
             children: [
               SizedBox(height: 10),
-              Expanded(
-                child: MouseRegion(
-                  onEnter: (PointerEvent details) {
-                    setState(() {
-                      contractsColor = transperentBlackColor;
-                      heightFactorCompany = 2.0;
-                    });
-                  },
-                  onExit: (PointerEvent details) {
-                    setState(() {
-                      contractsColor = Colors.transparent;
-                      heightFactorCompany = 1.8;
-                    });
-                  },
-                  child: InkWell(
-                    onTap: () => {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => IframeWidget(
-                                  src:
-                                      'https://advokat.mk/services/documents_iframe.html'))),
-                    },
-                    child: Card(
-                      color: advokatGreenColor,
-                      elevation: 5,
-                      child: Container(
-                        width: double.infinity,
-                        color: contractsColor,
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                mkLanguage ? "Договори" : "Contracts",
-                                style: TextStyle(
-                                    fontSize: 25,
-                                    color: Color.fromARGB(255, 207, 223, 226)),
-                              ),
-                              Text(
-                                mkLanguage ? "____________" : "Company",
-                                style: TextStyle(
-                                    fontSize: 25,
-                                    color: Color.fromARGB(255, 207, 223, 226)),
-                              ),
-                              Text(
-                                mkLanguage
-                                    ? "Лесно и брзо направете договор за вашата потреба."
-                                    : "Get the contract ready \n next week",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    color: Color.fromARGB(255, 207, 223, 226)),
-                              ),
-                            ]),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              // Expanded(
+              //   child: MouseRegion(
+              //     onEnter: (PointerEvent details) {
+              //       setState(() {
+              //         contractsColor = transperentBlackColor;
+              //         heightFactorCompany = 2.0;
+              //       });
+              //     },
+              //     onExit: (PointerEvent details) {
+              //       setState(() {
+              //         contractsColor = Colors.transparent;
+              //         heightFactorCompany = 1.8;
+              //       });
+              //     },
+              //     child: InkWell(
+              //       onTap: () => {
+              //         Navigator.push(
+              //             context,
+              //             MaterialPageRoute(
+              //                 builder: (context) => IframeWidget(
+              //                     src:
+              //                         'https://advokat.mk/services/documents_iframe.html'))),
+              //       },
+              //       child: Card(
+              //         color: advokatGreenColor,
+              //         elevation: 5,
+              //         child: Container(
+              //           width: double.infinity,
+              //           color: contractsColor,
+              //           child: Column(
+              //               mainAxisAlignment: MainAxisAlignment.center,
+              //               children: [
+              //                 Text(
+              //                   mkLanguage ? "Договори" : "Contracts",
+              //                   style: TextStyle(
+              //                       fontSize: 25,
+              //                       color: Color.fromARGB(255, 207, 223, 226)),
+              //                 ),
+              //                 Text(
+              //                   mkLanguage ? "____________" : "Company",
+              //                   style: TextStyle(
+              //                       fontSize: 25,
+              //                       color: Color.fromARGB(255, 207, 223, 226)),
+              //                 ),
+              //                 Text(
+              //                   mkLanguage
+              //                       ? "Лесно и брзо направете договор за вашата потреба."
+              //                       : "Get the contract ready \n next week",
+              //                   textAlign: TextAlign.center,
+              //                   style: TextStyle(
+              //                       fontSize: 14,
+              //                       color: Color.fromARGB(255, 207, 223, 226)),
+              //                 ),
+              //               ]),
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+             
               Expanded(
                 child: MouseRegion(
                   onEnter: (PointerEvent details) {

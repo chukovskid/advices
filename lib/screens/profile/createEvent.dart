@@ -17,6 +17,19 @@ import '../chat/screens/web_layout_screen.dart';
 import '../chat/utils/responsive_layout.dart';
 import '../payment/checkout/checkout.dart';
 
+extension TimeOfDayExtension on TimeOfDay {
+  bool isBefore(TimeOfDay other) {
+    return (hour == other.hour) ? (minute < other.minute) : (hour < other.hour);
+  }
+
+  TimeOfDay add({int hours = 0, int minutes = 0}) {
+    int totalMinutes = this.hour * 60 + this.minute + hours * 60 + minutes;
+    int newHour = (totalMinutes ~/ 60) % 24;
+    int newMinute = totalMinutes % 60;
+    return TimeOfDay(hour: newHour, minute: newMinute);
+  }
+}
+
 class CreateEvent extends StatefulWidget {
   final String uid;
   final String serviceId;
@@ -52,31 +65,116 @@ class _CreateEventState extends State<CreateEvent> {
 
   String serviceName = "Click here to select service";
   List<TimeOfDay> _unavailableTimePeriods = [];
+  List<TimeOfDay> _availableTimeSlots = [];
+  List<Map<String, dynamic>> _workingHours = [];
+  List<int?> _workingDays = [];
 
   @override
   void initState() {
     super.initState();
     _getService();
     processing = false;
+    _fetchWorkingHours();
+  }
+
+  Future<List<Map<String, dynamic>>> _fetchWorkingHours() async {
+    try {
+      _workingHours = await CallEventsContext.getWorkingHours(widget.uid);
+      populateWorkingDays();
+      if (_workingHours.isNotEmpty) {
+        _getInitialDate();
+      }
+      return _workingHours;
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
+
+  int dayToWeekday(String day) {
+    switch (day.toLowerCase()) {
+      case "monday":
+        return DateTime.monday;
+      case "tuesday":
+        return DateTime.tuesday;
+      case "wednesday":
+        return DateTime.wednesday;
+      case "thursday":
+        return DateTime.thursday;
+      case "friday":
+        return DateTime.friday;
+      case "saturday":
+        return DateTime.saturday;
+      case "sunday":
+        return DateTime.sunday;
+      default:
+        throw ArgumentError('Invalid day: $day');
+    }
+  }
+
+  DateTime _getInitialDate() {
+    print("Getting initial date...");
+    if (_workingHours.isNotEmpty) {
+      DateTime today = DateTime.now();
+      List<int> weekdays =
+          _workingHours.map((e) => dayToWeekday(e["day"])).toList();
+      List<DateTime> availableDates = weekdays.map((weekday) {
+        int daysToAdd = (DateTime.daysPerWeek + weekday - today.weekday) %
+            DateTime.daysPerWeek;
+        return today.add(Duration(days: daysToAdd));
+      }).toList();
+      availableDates.sort((a, b) => a.compareTo(b));
+      DateTime nextAvailableDay = availableDates.first;
+      return nextAvailableDay;
+    }
+    print("No available dates.");
+    return DateTime.now();
+  }
+
+  void populateWorkingDays() {
+    _workingDays = _workingHours.map((workingHour) {
+      return dayToWeekday(workingHour["day"]);
+    }).toList();
   }
 
   Future<void> _getFreeTimePeriodsForDate() async {
     DateTime selectedDate = DateFormat("yyyy-MM-dd").parse("$_selectedDate");
     List<DateTime> events =
         await CallEventsContext.getAllEventsDateTIme(widget.uid, selectedDate);
+    List<Map<String, dynamic>> workingHours =
+        await CallEventsContext.getWorkingHours(widget.uid);
+    List<Map<String, dynamic>> workingHoursForSelectedDate =
+        workingHours.where((workingHour) {
+      return DateFormat('EEEE').format(selectedDate) == workingHour['day'];
+    }).toList();
     _unavailableTimePeriods = [];
+    List<TimeOfDay> availableTimeSlots = [];
+    workingHoursForSelectedDate.forEach((workingHour) {
+      TimeOfDay startTime = TimeOfDay.fromDateTime(
+          DateFormat("HH:mm").parse(workingHour['startTime']));
+      TimeOfDay endTime = TimeOfDay.fromDateTime(
+          DateFormat("HH:mm").parse(workingHour['endTime']));
+      TimeOfDay currentTime = startTime;
+
+      while (currentTime.isBefore(endTime)) {
+        availableTimeSlots.add(currentTime);
+        currentTime = currentTime.add(minutes: 10);
+      }
+    });
     events.forEach((element) {
-      DateTime substraction = element;
+      DateTime subtraction = element;
       for (int i = 0; i <= 5; i++) {
         element = element.add(new Duration(minutes: 10));
         _unavailableTimePeriods.add(TimeOfDay.fromDateTime(element));
       }
       for (int i = 0; i <= 5; i++) {
-        substraction = substraction.subtract(new Duration(minutes: 10));
-        _unavailableTimePeriods.add(TimeOfDay.fromDateTime(substraction));
+        subtraction = subtraction.subtract(new Duration(minutes: 10));
+        _unavailableTimePeriods.add(TimeOfDay.fromDateTime(subtraction));
       }
     });
-    print(_unavailableTimePeriods);
+    _availableTimeSlots = availableTimeSlots.where((timeSlot) {
+      return !_unavailableTimePeriods.contains(timeSlot);
+    }).toList();
   }
 
   Future<void> showTimePickerWidget(StateSetter setStateDialog) async {
@@ -89,18 +187,18 @@ class _CreateEventState extends State<CreateEvent> {
           );
         },
         onFailValidation: (context) => print('Unavailable selection'),
-        initialTime: TimeOfDay(hour: 6, minute: 10),
+        initialTime: _availableTimeSlots.first,
         selectableTimePredicate: (time) =>
-            time!.minute % 10 == 0 &&
-            !_unavailableTimePeriods.contains(time)).then((time) => {
-          print(time?.format(context)),
-          setState(() => {
-                selectedTime = time!.format(context),
-              }),
-          setStateDialog(() => {
-                selectedTime = time!.format(context),
-              }),
-        });
+            time!.minute % 10 == 0 && _availableTimeSlots.contains(time)).then(
+        (time) => {
+              print(time?.format(context)),
+              setState(() => {
+                    selectedTime = time!.format(context),
+                  }),
+              setStateDialog(() => {
+                    selectedTime = time!.format(context),
+                  }),
+            });
   }
 
   Future<void> _saveEvent() async {
@@ -314,7 +412,7 @@ class _CreateEventState extends State<CreateEvent> {
                 : _finalResultsTable()));
   }
 
-  Widget _dialogFields(StateSetter setStateDialog) {
+  Widget _dialogFields(StateSetter setStateDialog, {asPopup = false}) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -383,43 +481,73 @@ class _CreateEventState extends State<CreateEvent> {
                               child: SizedBox(
                             width: 20,
                           )),
-                          Flexible(
-                            flex: 2,
-                            child: DateTimePicker(
-                              type: DateTimePickerType.date,
-                              dateMask: 'd MMM, yyyy  ',
-                              autocorrect: true,
-                              dateHintText: "12 12 12",
-                              initialValue: DateTime.now().toString(),
-                              firstDate: DateTime.now(),
-                              lastDate: DateTime(2100),
-                              icon: Icon(Icons.event),
-                              dateLabelText: mkLanguage ? "Дата" : 'Date',
-                              timeLabelText: "Time",
-                              selectableDayPredicate: (date) {
-                                // Disable weekend days to select from the calendar
-                                // if (date.weekday == 6 || date.weekday == 7) {
-                                //   return false;
-                                // }
-                                return true;
-                              },
-                              onChanged: (val) async => {
-                                print("onChanged $val"),
-                                setState(() {
-                                  _selectedDate = val;
-                                }),
-                                await _getFreeTimePeriodsForDate(),
-                                await showTimePickerWidget(setStateDialog),
-                              },
-                              validator: (val) {
-                                print("validator $val");
-                                return null;
-                              },
-                              onSaved: (val) async => {
-                                print("onSaved $val"),
-                                // await showTimePickerWidget()
-                              },
-                            ),
+                          FutureBuilder(
+                            future: _fetchWorkingHours(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<void> snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                return Flexible(
+                                  flex: 2,
+                                  child: _workingHours.isNotEmpty
+                                      ? DateTimePicker(
+                                          type: DateTimePickerType.date,
+                                          dateMask: 'd MMM, yyyy  ',
+                                          autocorrect: true,
+                                          dateHintText: "12 12 12",
+                                          initialValue:
+                                              _getInitialDate().toString(),
+                                          firstDate: DateTime.now(),
+                                          lastDate: DateTime(2100),
+                                          icon: Icon(Icons.event),
+                                          dateLabelText:
+                                              mkLanguage ? "Дата" : 'Date',
+                                          timeLabelText: "Time",
+                                          selectableDayPredicate: (date) {
+                                            // Check if the date's weekday is in the _workingDays list
+                                            if (_workingDays
+                                                .contains(date.weekday)) {
+                                              return true;
+                                            }
+                                            // Disable the date if its weekday is not in the _workingDays list
+                                            return false;
+                                            // Disable weekend days to select from the calendar
+                                            // if (date.weekday == 6 || date.weekday == 7) {
+                                            //   return false;
+                                            // }
+                                            // String selectedWeekday =
+                                            //     DateFormat('EEEE').format(date);
+                                            // bool hasWorkingHours = _workingHours.any(
+                                            //     (workingHour) =>
+                                            //         workingHour['day'] == selectedWeekday);
+
+                                            // // Enable the date if there are working hours, otherwise disable it
+                                            // return hasWorkingHours;
+                                          },
+                                          onChanged: (val) async => {
+                                            print("onChanged $val"),
+                                            setState(() {
+                                              _selectedDate = val;
+                                            }),
+                                            await _getFreeTimePeriodsForDate(),
+                                            await showTimePickerWidget(
+                                                setStateDialog),
+                                          },
+                                          validator: (val) {
+                                            print("validator $val");
+                                            return null;
+                                          },
+                                          onSaved: (val) async => {
+                                            print("onSaved $val"),
+                                            // await showTimePickerWidget()
+                                          },
+                                        )
+                                      : Text("Нема слободни термини"),
+                                );
+                              } else {
+                                return CircularProgressIndicator(); // Show a loading indicator while waiting for data
+                              }
+                            },
                           ),
                           Flexible(
                               child: SizedBox(
@@ -495,6 +623,9 @@ class _CreateEventState extends State<CreateEvent> {
                                   openEventForm = false;
                                 });
                               }
+                              if (asPopup) {
+                                Navigator.pop(context);
+                              }
                             },
                             child: Text(
                               mkLanguage ? "Зачувај" : "Save",
@@ -512,39 +643,6 @@ class _CreateEventState extends State<CreateEvent> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  void _showToast(BuildContext context) {
-    final scaffold = ScaffoldMessenger.of(context);
-    scaffold.showSnackBar(
-      SnackBar(
-        content: const Text('Please select title and date'),
-        action: SnackBarAction(
-            label: 'Fill form',
-            onPressed: () => {
-                  showDialog(
-                      context: context,
-                      builder: (context) => StatefulBuilder(
-                            builder: (context, StateSetter setStateDialog) =>
-                                AlertDialog(
-                              elevation: 20,
-                              contentPadding: EdgeInsets.all(10),
-                              content: SizedBox(
-                                height: 400,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Flexible(
-                                        child: _dialogFields(setStateDialog)),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ))
-                }),
       ),
     );
   }
@@ -599,7 +697,8 @@ class _CreateEventState extends State<CreateEvent> {
                                 builder: (context,
                                         StateSetter setStateDialog) =>
                                     AlertDialog(
-                                        content: _dialogFields(setStateDialog)),
+                                        content: _dialogFields(setStateDialog,
+                                            asPopup: true)),
                               ));
                     },
                     child: Text(
@@ -641,7 +740,8 @@ class _CreateEventState extends State<CreateEvent> {
                                 builder: (context,
                                         StateSetter setStateDialog) =>
                                     AlertDialog(
-                                        content: _dialogFields(setStateDialog)),
+                                        content: _dialogFields(setStateDialog,
+                                            asPopup: true)),
                               ));
                     },
                     child: Text(
@@ -674,7 +774,7 @@ class _CreateEventState extends State<CreateEvent> {
                 Center(
                   child: Text(
                     // "${0} денари",
-                    "Цената ќе биде пресметана според избраниот сервис",
+                    "Цената ќе биде пресметана според комплексноста на случајот",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white,
@@ -702,7 +802,8 @@ class _CreateEventState extends State<CreateEvent> {
                       builder: (context) => StatefulBuilder(
                             builder: (context, StateSetter setStateDialog) =>
                                 AlertDialog(
-                                    content: _dialogFields(setStateDialog)),
+                                    content: _dialogFields(setStateDialog,
+                                        asPopup: true)),
                           ))
                   : _saveEvent();
             },
@@ -733,7 +834,8 @@ class _CreateEventState extends State<CreateEvent> {
                     builder: (context) => StatefulBuilder(
                           builder: (context, StateSetter setStateDialog) =>
                               AlertDialog(
-                                  content: _dialogFields(setStateDialog)),
+                                  content: _dialogFields(setStateDialog,
+                                      asPopup: true)),
                         ))
                 : _saveEvent();
           },
@@ -757,7 +859,8 @@ class _CreateEventState extends State<CreateEvent> {
                       builder: (context) => StatefulBuilder(
                             builder: (context, StateSetter setStateDialog) =>
                                 AlertDialog(
-                                    content: _dialogFields(setStateDialog)),
+                                    content: _dialogFields(setStateDialog,
+                                        asPopup: true)),
                           ))
                   : _saveEvent();
             },
@@ -772,6 +875,40 @@ class _CreateEventState extends State<CreateEvent> {
           ),
         ),
       ],
+    );
+  }
+
+  void _showToast(BuildContext context) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: const Text('Please select title and date'),
+        action: SnackBarAction(
+            label: 'Fill form',
+            onPressed: () => {
+                  showDialog(
+                      context: context,
+                      builder: (context) => StatefulBuilder(
+                            builder: (context, StateSetter setStateDialog) =>
+                                AlertDialog(
+                              elevation: 20,
+                              contentPadding: EdgeInsets.all(10),
+                              content: SizedBox(
+                                height: 400,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Flexible(
+                                        child: _dialogFields(setStateDialog,
+                                            asPopup: true)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ))
+                }),
+      ),
     );
   }
 
