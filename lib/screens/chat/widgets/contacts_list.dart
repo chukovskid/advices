@@ -24,18 +24,10 @@ class _ContactsListState extends State<ContactsList> {
   String? loggedUserDisplayName = "";
 
   _selectChat(chatId) {
-    MediaQuery.of(context).size.width < 850.0
-        ? _navigateToMobileChat(chatId)
-        : widget.callback(chatId);
+    widget.callback(chatId);
   }
 
-  _navigateToMobileChat(String chatId) {
-    print("_navigateToMobileChat $chatId");
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MobileChatScreen(chatId)),
-    );
-  }
+
 
   Future<void> getLoggedUser() async {
     // bool loggedIn = await _auth.isSignIn();

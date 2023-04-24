@@ -60,8 +60,8 @@ class _CreateEventState extends State<CreateEvent> {
   final _key = GlobalKey<ScaffoldState>();
   late bool processing;
   String selectedTime = "16:00";
-  String _selectedDate =
-      DateFormat("yyyy-MM-dd").format(DateTime.now()).toString();
+  String _selectedDate = "";
+  // DateFormat("yyyy-MM-dd").format(DateTime.now()).toString();
 
   String serviceName = "Click here to select service";
   List<TimeOfDay> _unavailableTimePeriods = [];
@@ -114,6 +114,12 @@ class _CreateEventState extends State<CreateEvent> {
 
   DateTime _getInitialDate() {
     print("Getting initial date...");
+    if (_selectedDate.isNotEmpty) {
+      return DateTime(
+          int.parse(_selectedDate.split("-")[0]),
+          int.parse(_selectedDate.split("-")[1]),
+          int.parse(_selectedDate.split("-")[2]));
+    }
     if (_workingHours.isNotEmpty) {
       DateTime today = DateTime.now();
       List<int> weekdays =
@@ -137,47 +143,77 @@ class _CreateEventState extends State<CreateEvent> {
     }).toList();
   }
 
-  Future<void> _getFreeTimePeriodsForDate() async {
-    DateTime selectedDate = DateFormat("yyyy-MM-dd").parse("$_selectedDate");
-    List<DateTime> events =
-        await CallEventsContext.getAllEventsDateTIme(widget.uid, selectedDate);
-    List<Map<String, dynamic>> workingHours =
-        await CallEventsContext.getWorkingHours(widget.uid);
-    List<Map<String, dynamic>> workingHoursForSelectedDate =
-        workingHours.where((workingHour) {
-      return DateFormat('EEEE').format(selectedDate) == workingHour['day'];
-    }).toList();
-    _unavailableTimePeriods = [];
-    List<TimeOfDay> availableTimeSlots = [];
-    workingHoursForSelectedDate.forEach((workingHour) {
-      TimeOfDay startTime = TimeOfDay.fromDateTime(
-          DateFormat("HH:mm").parse(workingHour['startTime']));
-      TimeOfDay endTime = TimeOfDay.fromDateTime(
-          DateFormat("HH:mm").parse(workingHour['endTime']));
-      TimeOfDay currentTime = startTime;
-
-      while (currentTime.isBefore(endTime)) {
-        availableTimeSlots.add(currentTime);
-        currentTime = currentTime.add(minutes: 10);
-      }
-    });
-    events.forEach((element) {
-      DateTime subtraction = element;
-      for (int i = 0; i <= 5; i++) {
-        element = element.add(new Duration(minutes: 10));
-        _unavailableTimePeriods.add(TimeOfDay.fromDateTime(element));
-      }
-      for (int i = 0; i <= 5; i++) {
-        subtraction = subtraction.subtract(new Duration(minutes: 10));
-        _unavailableTimePeriods.add(TimeOfDay.fromDateTime(subtraction));
-      }
-    });
-    _availableTimeSlots = availableTimeSlots.where((timeSlot) {
-      return !_unavailableTimePeriods.contains(timeSlot);
-    }).toList();
+  String convertTo24HourFormat(String time12Hour) {
+    DateTime time = DateFormat.jm().parse(time12Hour);
+    return DateFormat.Hm().format(time);
   }
 
+Future<void> _getFreeTimePeriodsForDate() async {
+  DateTime selectedDate = DateFormat("yyyy-MM-dd").parse("$_selectedDate");
+  List<DateTime> events =
+      await CallEventsContext.getAllEventsDateTIme(widget.uid, selectedDate);
+  List<Map<String, dynamic>> workingHours =
+      await CallEventsContext.getWorkingHours(widget.uid);
+  List<Map<String, dynamic>> workingHoursForSelectedDate =
+      workingHours.where((workingHour) {
+    return DateFormat('EEEE').format(selectedDate) == workingHour['day'];
+  }).toList();
+  _unavailableTimePeriods = [];
+  List<TimeOfDay> availableTimeSlots = [];
+  workingHoursForSelectedDate.forEach((workingHour) {
+    TimeOfDay startTime = TimeOfDay.fromDateTime(
+        DateFormat("HH:mm").parse(convertTo24HourFormat(workingHour['startTime'])));
+    TimeOfDay endTime = TimeOfDay.fromDateTime(
+        DateFormat("HH:mm").parse(convertTo24HourFormat(workingHour['endTime'])));
+    TimeOfDay currentTime = startTime;
+
+    while (currentTime.isBefore(endTime)) {
+      availableTimeSlots.add(currentTime);
+      currentTime = currentTime.add(minutes: 10);
+    }
+  });
+  events.forEach((element) {
+    DateTime subtraction = element;
+    for (int i = 0; i <= 5; i++) {
+      element = element.add(new Duration(minutes: 10));
+      _unavailableTimePeriods.add(TimeOfDay.fromDateTime(element));
+    }
+    for (int i = 0; i <= 5; i++) {
+      subtraction = subtraction.subtract(new Duration(minutes: 10));
+      _unavailableTimePeriods.add(TimeOfDay.fromDateTime(subtraction));
+    }
+  });
+  _availableTimeSlots = availableTimeSlots.where((timeSlot) {
+    return !_unavailableTimePeriods.contains(timeSlot);
+  }).toList();
+
+  // Add print statements
+  print("Selected Date: $_selectedDate");
+  print("Working Hours: $workingHours");
+  print("Working Hours for Selected Date: $workingHoursForSelectedDate");
+  print("Available Time Slots: $_availableTimeSlots");
+  print("Unavailable Time Periods: $_unavailableTimePeriods");
+}
+
   Future<void> showTimePickerWidget(StateSetter setStateDialog) async {
+    // Call _getFreeTimePeriodsForDate to get available time slots for the selected date
+    // await _getFreeTimePeriodsForDate();
+
+    DateTime selectedDateTime = DateFormat("yyyy-MM-dd").parse(_selectedDate);
+    String selectedDay = DateFormat('EEEE').format(selectedDateTime);
+
+    // Find the working hour for the selected date
+    Map<String, dynamic>? workingHourForSelectedDate = _workingHours.firstWhere(
+      (workingHour) => workingHour['day'] == selectedDay,
+      orElse: () => <String, dynamic>{},
+    );
+
+    // Set the initialTime to the startTime of the working hour for the selected date, or use the first available time slot
+    TimeOfDay initialTime = workingHourForSelectedDate != null
+        ? TimeOfDay.fromDateTime(
+            DateFormat("HH:mm").parse(workingHourForSelectedDate['startTime']))
+        : _availableTimeSlots.first;
+
     return await showCustomTimePicker(
         context: context,
         builder: (BuildContext context, Widget? child) {
@@ -187,7 +223,7 @@ class _CreateEventState extends State<CreateEvent> {
           );
         },
         onFailValidation: (context) => print('Unavailable selection'),
-        initialTime: _availableTimeSlots.first,
+        initialTime: TimeOfDay(hour: 14, minute: 0),
         selectableTimePredicate: (time) =>
             time!.minute % 10 == 0 && _availableTimeSlots.contains(time)).then(
         (time) => {
@@ -504,25 +540,15 @@ class _CreateEventState extends State<CreateEvent> {
                                               mkLanguage ? "Дата" : 'Date',
                                           timeLabelText: "Time",
                                           selectableDayPredicate: (date) {
-                                            // Check if the date's weekday is in the _workingDays list
                                             if (_workingDays
                                                 .contains(date.weekday)) {
                                               return true;
                                             }
-                                            // Disable the date if its weekday is not in the _workingDays list
                                             return false;
                                             // Disable weekend days to select from the calendar
                                             // if (date.weekday == 6 || date.weekday == 7) {
                                             //   return false;
                                             // }
-                                            // String selectedWeekday =
-                                            //     DateFormat('EEEE').format(date);
-                                            // bool hasWorkingHours = _workingHours.any(
-                                            //     (workingHour) =>
-                                            //         workingHour['day'] == selectedWeekday);
-
-                                            // // Enable the date if there are working hours, otherwise disable it
-                                            // return hasWorkingHours;
                                           },
                                           onChanged: (val) async => {
                                             print("onChanged $val"),

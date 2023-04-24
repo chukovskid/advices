@@ -89,6 +89,7 @@ class _UnavailablePeriodsWidgetState extends State<UnavailablePeriodsWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text('Set Unavailable Periods'),
       ),
       body: Column(

@@ -26,12 +26,15 @@ class ChatList extends StatelessWidget {
             final chatMessages = snapshot.data!;
             return Container(
               decoration: const BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage(
-                    "../../../lib/assets/images/backgroundImage.png",
-                  ),
-                ),
+                color: const Color(
+                    0xFF001529), // Replace with your desired dark blue color
+
+                // image: DecorationImage(
+                //   fit: BoxFit.cover,
+                //   image: AssetImage(
+                //     "../../../lib/assets/images/backgroundImage.png",
+                //   ),
+                // ),
               ),
               child: ListView(
                 children: chatMessages.map(_messageCard).toList(),

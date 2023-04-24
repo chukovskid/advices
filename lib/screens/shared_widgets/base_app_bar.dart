@@ -6,10 +6,12 @@ import '../home/home.dart';
 class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
   final AppBar appBar;
   bool redirectToHome;
+  bool openChat;
+  final VoidCallback? onChatPressed;
 
   /// you can add more fields that meet your needs
 
-  BaseAppBar({required this.appBar, this.redirectToHome = false});
+  BaseAppBar({required this.appBar, this.redirectToHome = false, this.openChat = false, this.onChatPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -53,9 +55,9 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
           style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(Colors.white)),
           // textColor: Colors.white,
-          icon: Icon(redirectToHome ? Icons.home : Icons.person),
+          icon: openChat ? Icon(Icons.chat) : Icon(Icons.person),
           label: Text(''),
-          onPressed: _navigate,
+          onPressed: openChat ? onChatPressed : _navigate,
         ),
       ],
     );
