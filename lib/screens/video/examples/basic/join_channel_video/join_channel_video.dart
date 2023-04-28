@@ -407,7 +407,7 @@ class _State extends State<JoinChannelVideo> {
                 docAi
                     ? Expanded(
                         flex: 1,
-                        child: IframeWidget(src: "https://www.chatpdf.com/"),
+                        child: IframeWidget(src: "https://doc-ai-ten.vercel.app/"),
                       )
                     : Container(),
                 Expanded(

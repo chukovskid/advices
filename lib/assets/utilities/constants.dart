@@ -50,6 +50,8 @@ const backgroundColor = [
   Color.fromARGB(255, 211, 218, 228),
   darkGreenColor
 ];
+const backgroundColor2 = [  Color(0xFFC1C1C1),  Color(0xFF9A9A9A),  Color(0xFF757575),];
+
 const urgentColor = Color.fromARGB(255, 218, 144, 109);
 const greyGreenColor = Color.fromARGB(255, 188, 190, 182);
 const transperentBlackColor = Color.fromARGB(83, 41, 41, 41);

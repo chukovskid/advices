@@ -126,7 +126,7 @@ class _RegisterState extends State<Register> {
   Widget build(BuildContext context) {
     return Scaffold(
       // resizeToAvoidBottomInset: false,
-            //       appBar: BaseAppBar(
+      //       appBar: BaseAppBar(
       //   appBar: AppBar(),
       // ),
 
@@ -138,8 +138,8 @@ class _RegisterState extends State<Register> {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: backgroundColor,
-              stops: [-1, 1, 2],
+              colors: backgroundColor2,
+              stops: [0.0, 0.5, 1.0],
             ),
           ),
           child: _allUsersForm() // _selectLawArea(), // _allUsersForm(),
@@ -149,45 +149,49 @@ class _RegisterState extends State<Register> {
   }
 
   Widget _allUsersForm() {
-    return Form(
-      key: _formKey,
-      child: SingleChildScrollView(
-        child: Container(
-          // height: 60,
-          margin: const EdgeInsets.all(35),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            // mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text(
-                "Register",
-                style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  color: Colors.white,
-                  fontSize: 30,
+    return Container(
+      constraints: BoxConstraints(
+        maxWidth: 640,
+      ),
+      child: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Container(
+            margin: const EdgeInsets.all(35),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              // mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Text(
+                  "Register",
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    color: Colors.white,
+                    fontSize: 30,
+                  ),
                 ),
-              ),
-              Text(
-                registerAsText,
-                style: const TextStyle(
-                  color: Colors.white,
+                Text(
+                  registerAsText,
+                  style: const TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 35.0),
-              isLawyer == null ? _isLawyerBool() : const SizedBox(),
-              const SizedBox(
-                height: 10,
-              ),
-              const SizedBox(height: 20.0),
-              isLawyer != null
-                  ? (_openLawyerInputs
-                      ? (showSelectService == false
-                          ? _showLawyerRegisterFields()
-                          : _dropdownLawSelect())
-                      : _showRegisterFields())
-                  : const SizedBox(),
-            ],
+                const SizedBox(height: 35.0),
+                isLawyer == null ? _isLawyerBool() : const SizedBox(),
+                const SizedBox(
+                  height: 10,
+                ),
+                const SizedBox(height: 20.0),
+                isLawyer != null
+                    ? (_openLawyerInputs
+                        ? (showSelectService == false
+                            ? _showLawyerRegisterFields()
+                            : _dropdownLawSelect())
+                        : _showRegisterFields())
+                    : const SizedBox(),
+              ],
+            ),
           ),
         ),
       ),
@@ -652,7 +656,7 @@ class _RegisterState extends State<Register> {
       children: [
         DropdownButtonHideUnderline(
             child: StreamBuilder<Iterable<Service>>(
-                stream: ServicesContext.getAllServices(),
+                stream: ServicesContext.getAllLaws(),
                 builder: (context, snapshot) {
                   // Safety check to ensure that snapshot contains data
                   // without this safety check, StreamBuilder dirty state warnings will be thrown

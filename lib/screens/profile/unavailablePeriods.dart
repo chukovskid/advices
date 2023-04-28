@@ -1,3 +1,4 @@
+import 'package:advices/assets/utilities/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:time_picker_widget/time_picker_widget.dart';
@@ -55,7 +56,7 @@ class _UnavailablePeriodsWidgetState extends State<UnavailablePeriodsWidget> {
             child: child ?? Container(),
           );
         },
-        onFailValidation: (context) => print('Unavailable selection'),
+        onFailValidation: (context) => print('Недостапни термини'),
         initialTime: TimeOfDay(hour: 6, minute: 10),
         selectableTimePredicate: (time) =>
             time!.minute % 10 == 0 &&
@@ -90,13 +91,14 @@ class _UnavailablePeriodsWidgetState extends State<UnavailablePeriodsWidget> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('Set Unavailable Periods'),
+        title: Text('Намести недостапни термини'),
+        backgroundColor: lightGreenColor,
       ),
       body: Column(
         children: [
           // Date picker
           ListTile(
-            title: Text('Select date:'),
+            title: Text('Селектирај дата:'),
             subtitle: Text(_selectedDate),
             onTap: () async {
               final DateTime? pickedDate = await showDatePicker(
@@ -117,7 +119,7 @@ class _UnavailablePeriodsWidgetState extends State<UnavailablePeriodsWidget> {
           ),
           // Time picker
           ListTile(
-            title: Text('Select start time:'),
+            title: Text('Селектирај почетно време:'),
             subtitle: Text(selectedTime),
             onTap: () {
               showDialog(
@@ -125,23 +127,23 @@ class _UnavailablePeriodsWidgetState extends State<UnavailablePeriodsWidget> {
                 builder: (BuildContext context) {
                   return StatefulBuilder(builder: (context, setStateDialog) {
                     return AlertDialog(
-                      title: Text('Select start time:'),
+                      title: Text('Селектирај почетно време:'),
                       content: SingleChildScrollView(
                         child: ListBody(
                           children: <Widget>[
-                            Text('Start Time: $selectedTime'),
+                            Text('Почетно време: $selectedTime'),
                           ],
                         ),
                       ),
                       actions: <Widget>[
                         TextButton(
-                          child: Text('Select time'),
+                          child: Text('Селектирај време'),
                           onPressed: () {
                             showTimePickerWidget(setStateDialog);
                           },
                         ),
                         TextButton(
-                          child: Text('Save'),
+                          child: Text('Зачувај'),
                           onPressed: () async {
                             if (selectedTime.isNotEmpty) {
                               await _saveUnavailablePeriod();
@@ -149,14 +151,14 @@ class _UnavailablePeriodsWidgetState extends State<UnavailablePeriodsWidget> {
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text('Please select a time first.'),
+                                  content: Text('Ве молиме одберете прво време.'),
                                 ),
                               );
                             }
                           },
                         ),
                         TextButton(
-                          child: Text('Cancel'),
+                          child: Text('Откажи'),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
@@ -175,7 +177,7 @@ class _UnavailablePeriodsWidgetState extends State<UnavailablePeriodsWidget> {
               itemBuilder: (context, index) {
                 final unavailableTime = _unavailableTimePeriods[index];
                 return ListTile(
-                  title: Text('Unavailable Time Period:'),
+                  title: Text('Недостапни термини:'),
                   subtitle: Text('${unavailableTime.format(context)}'),
                 );
               },

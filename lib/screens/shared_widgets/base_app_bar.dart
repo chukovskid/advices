@@ -55,7 +55,7 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
           style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(Colors.white)),
           // textColor: Colors.white,
-          icon: openChat ? Icon(Icons.chat) : Icon(Icons.person),
+          icon: openChat ? Icon(Icons.chat) : (redirectToHome ? Icon(Icons.home): Icon(Icons.person)),
           label: Text(''),
           onPressed: openChat ? onChatPressed : _navigate,
         ),

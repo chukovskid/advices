@@ -53,6 +53,7 @@ class _LawyersState extends State<Lawyers> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BaseAppBar(
+        redirectToHome : true,
         appBar: AppBar(),
       ),
       bottomNavigationBar: BottomBar(

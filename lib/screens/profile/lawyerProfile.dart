@@ -38,10 +38,12 @@ class _LawyerProfileState extends State<LawyerProfile> {
   bool loading = true;
   var imageUrl =
       "https://devshift.biz/wp-content/uploads/2017/04/profile-icon-png-898.png"; //you can use a image
+  bool isLoggedUserTheLawyer = false;
 
   @override
   void initState() {
     _getLawyer();
+    _isLoggedUserTheLawyer();
     super.initState();
   }
 
@@ -81,19 +83,28 @@ class _LawyerProfileState extends State<LawyerProfile> {
     );
   }
 
+  Future<void> _isLoggedUserTheLawyer() async {
+    User? user = await _auth.getCurrentUser();
+    if (user != null && user.uid == widget.uid) {
+      setState(() {
+        isLoggedUserTheLawyer = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BaseAppBar(
         appBar: AppBar(),
         redirectToHome: true,
-      ), 
+      ),
 
       bottomSheet: Container(
         child: MediaQuery.of(context).size.width < 850.0
-            ? 
-            // UnavailablePeriodsWidget(lawyerId: widget.uid)
-            CreateEvent(widget.uid, widget.serviceId, minPriceEuro)
+            ? (isLoggedUserTheLawyer
+                ? WorkingHoursScreen(lawyerId: widget.uid)
+                : CreateEvent(widget.uid, widget.serviceId, minPriceEuro))
             : SizedBox(),
       ),
       // floatingActionButton: _openProfileBtn(),
@@ -119,12 +130,11 @@ class _LawyerProfileState extends State<LawyerProfile> {
               MediaQuery.of(context).size.width < 850.0
                   ? SizedBox()
                   : Flexible(
-                      flex: 2, 
-                      // child: WorkingHoursScreen(lawyerId: widget.uid))
-              // child: UnavailablePeriodsWidget(lawyerId: widget.uid))
-
-              child: CreateEvent(
-                  widget.uid, widget.serviceId, minPriceEuro)),
+                      flex: 2,
+                      child: isLoggedUserTheLawyer
+                          ? WorkingHoursScreen(lawyerId: widget.uid)
+                          : CreateEvent(
+                              widget.uid, widget.serviceId, minPriceEuro)),
             ],
           )),
     );
@@ -193,24 +203,24 @@ class _LawyerProfileState extends State<LawyerProfile> {
                         SizedBox(
                           width: 8,
                         ),
-                        LawyerBasedRedirect(
-                            lawyerWidget: ElevatedButton(
-                              onPressed: _signOut,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    Icons.logout,
-                                    size: 15,
-                                  ),
-                                  Text("Одјави се"),
-                                ],
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                  textStyle: const TextStyle(fontSize: 15),
-                                  backgroundColor: orangeColor),
-                            ),
-                            nonLawyerWidget: SizedBox()),
+                        isLoggedUserTheLawyer
+                            ? ElevatedButton(
+                                onPressed: _signOut,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.logout,
+                                      size: 15,
+                                    ),
+                                    Text("Одјави се"),
+                                  ],
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                    textStyle: const TextStyle(fontSize: 15),
+                                    backgroundColor: orangeColor),
+                              )
+                            : SizedBox(),
                       ],
                     ),
                     const SizedBox(

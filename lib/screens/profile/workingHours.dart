@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:time_picker_widget/time_picker_widget.dart';
 
 import '../../App/contexts/callEventsContext.dart';
+import '../../assets/utilities/constants.dart';
 
 class WorkingHoursScreen extends StatefulWidget {
   final String lawyerId;
@@ -24,6 +26,17 @@ class _WorkingHoursScreenState extends State<WorkingHoursScreen> {
   Future<void> _fetchWorkingHours() async {
     _workingHours = await CallEventsContext.getWorkingHours(widget.lawyerId);
     setState(() {});
+  }
+
+  Future<void> _removeWorkingHours(String day) async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(widget.lawyerId)
+        .collection("workingHours")
+        .doc(day)
+        .delete();
+
+    _fetchWorkingHours();
   }
 
   Future<void> _updateWorkingHours(
@@ -72,7 +85,7 @@ class _WorkingHoursScreenState extends State<WorkingHoursScreen> {
       context: context,
       builder: (BuildContext context) {
         return SimpleDialog(
-          title: const Text('Select Day'),
+          title: const Text('Селектирај ден'),
           children: <Widget>[
             SimpleDialogOption(
               onPressed: () {
@@ -126,21 +139,17 @@ class _WorkingHoursScreenState extends State<WorkingHoursScreen> {
     }
 
     // Show time picker for start time
-    selectedStartTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
+    selectedStartTime = await showCustomTimePicker(
+        context: context, initialTime: TimeOfDay(hour: 10, minute: 0));
 
     if (selectedStartTime == null) {
       return;
     }
 
     // Show time picker for end time
-    selectedEndTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-
+    selectedEndTime = await showCustomTimePicker(
+        context: context, initialTime: TimeOfDay(hour: 6, minute: 0));
+        
     if (selectedEndTime == null) {
       return;
     }
@@ -167,7 +176,9 @@ class _WorkingHoursScreenState extends State<WorkingHoursScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Working Hours"),
+        automaticallyImplyLeading: false,
+        title: Text('Намести недостапни термини'),
+        backgroundColor: lightGreenColor,
         actions: [
           IconButton(
             icon: Icon(Icons.add),
@@ -186,6 +197,12 @@ class _WorkingHoursScreenState extends State<WorkingHoursScreen> {
             onTap: () {
               _updateWorkingHours(context, workingHour);
             },
+            trailing: IconButton(
+              icon: Icon(Icons.close),
+              onPressed: () {
+                _removeWorkingHours(workingHour['day']);
+              },
+            ),
           );
         },
       ),

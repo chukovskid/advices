@@ -161,7 +161,7 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    IframeWidget(src: 'https://chatpdf.com/'))),
+                    IframeWidget(src: 'https://doc-ai-ten.vercel.app/'))),
       },
       child: MouseRegion(
         onEnter: (PointerEvent details) {
@@ -442,7 +442,7 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                UrgentEvents())),
+                                IframeWidget(src: 'https://doc-ai-ten.vercel.app/',))),
                     child: Card(
                       color: advokatGreenColor,
                       elevation: 5,
@@ -455,7 +455,7 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
                               Column(
                                 children: [
                                   Text(
-                                    mkLanguage ? "Разговарај со документите" : "Meets",
+                                    mkLanguage ? "Комуницирај со документ" : "Meets",
                                     style: TextStyle(
                                         fontSize: 25,
                                         color:
