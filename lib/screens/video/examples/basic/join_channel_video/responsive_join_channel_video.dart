@@ -307,7 +307,7 @@ class _State extends State<JoinChannelVideo> {
                 right: 0,
                 bottom: 0,
                 width: screenWidth * 0.85,
-                child: IframeWidget(src: "https://doc-ai-ten.vercel.app/"),
+                child: IframeWidget(src: "https://doc-ai-two.vercel.app/"),
               ),
             if (chatOn && isMobileLayout)
               Positioned(

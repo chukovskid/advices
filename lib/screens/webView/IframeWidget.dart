@@ -1,5 +1,8 @@
+import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import '../../App/providers/auth_provider.dart';
 import '../chat/screens/mobile_layout_screen.dart';
 import '../chat/screens/web_layout_screen.dart';
 import '../chat/utils/responsive_layout.dart';
@@ -20,12 +23,38 @@ class _IframeWidgetState extends State<IframeWidget> {
   @override
   void initState() {
     super.initState();
+    _initializeWidgetWithToken();
+  }
 
-    // Create the HTML widget using the src argument
-    _widget = HtmlWidget(
-      '<iframe src="${widget.src}"></iframe>',
-      // webView: true,
-    );
+Future<String?> _getAuthToken() async {
+  final AuthProvider _auth = AuthProvider();
+  User? user = await  _auth.getCurrentUser();
+
+  if (user == null) {
+    return null;
+  }
+
+  try {
+    HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('getCustomToken');
+    HttpsCallableResult result = await callable.call();
+    String? token = result.data['token'];
+    return token;
+  } catch (error) {
+    print('Error fetching custom token: $error');
+    return null;
+  }
+}
+
+  void _initializeWidgetWithToken() async {
+    String? token = await _getAuthToken();
+    String urlWithToken =
+        token != null ? '${widget.src}?token=$token' : widget.src;
+
+    setState(() {
+      _widget = HtmlWidget(
+        '<iframe src="$urlWithToken"></iframe>',
+      );
+    });
   }
 
   void _navigateToChat(BuildContext context) {
@@ -82,7 +111,6 @@ class _IframeWidgetState extends State<IframeWidget> {
                   ],
                 ),
               ),
-              
             ],
           );
         },

@@ -10,7 +10,21 @@ const db = admin.firestore();
 const fcm = admin.messaging();
 
 
+export const getCustomToken = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
+  }
 
+  const uid = context.auth.uid;
+  try {
+    console.log('Creating custom token for UID ', uid);
+    const customToken = await admin.auth().createCustomToken(uid);
+    return { token: customToken };
+  } catch (error) {
+    console.log('Error creating custom token:', error);
+    throw new functions.https.HttpsError('internal', 'Error creating custom token');
+  }
+});
 
 
 export const callUser = functions.https.onCall(async (data, context) => {
