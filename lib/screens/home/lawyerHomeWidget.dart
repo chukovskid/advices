@@ -161,7 +161,7 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    IframeWidget(src: 'https://doc-ai-ten.vercel.app/'))),
+                    IframeWidget(src: 'https://doc-ai-two.vercel.app/'))),
       },
       child: MouseRegion(
         onEnter: (PointerEvent details) {
@@ -442,7 +442,7 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                IframeWidget(src: 'https://doc-ai-ten.vercel.app/',))),
+                                IframeWidget(src: 'https://doc-ai-two.vercel.app/',))),
                     child: Card(
                       color: advokatGreenColor,
                       elevation: 5,
