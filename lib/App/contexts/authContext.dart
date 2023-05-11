@@ -84,7 +84,7 @@ class AuthContext {
         await user.reload();
       }
       if (user == null) return null;
-
+      await signInWithEmailAndPassword(newFUser);
       print(user.uid);
       newFUser.uid = user.uid;
       await UsersContext.updateUserData(newFUser);

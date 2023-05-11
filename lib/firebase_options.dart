@@ -44,42 +44,40 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAMiXYCdnUTqZItvme_QYds_TTNCLXGmac',
-    appId: '1:793184649946:web:9551788cf7f51068cd9be3',
-    messagingSenderId: '793184649946',
-    projectId: 'advices-dev',
-    authDomain: 'advices-dev.firebaseapp.com',
-    storageBucket: 'advices-dev.appspot.com',
-    measurementId: 'G-QPSYB5REK5',
+    apiKey: 'AIzaSyCIiAEEwDoeQx_Q1_Kj94RyxbVOJR02ifo',
+    appId: '1:968596221490:web:2b4163af286075dc80962b',
+    messagingSenderId: '968596221490',
+    projectId: 'advices-prod',
+    authDomain: 'advices-prod.firebaseapp.com',
+    storageBucket: 'advices-prod.appspot.com',
+    measurementId: 'G-3BJ9SPYJEJ',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCxQB46UzQC_tOe8kdMkt7FIA4SnQdOa44',
-    appId: '1:793184649946:android:d270d7ce1f7b80e3cd9be3',
-    messagingSenderId: '793184649946',
-    projectId: 'advices-dev',
-    storageBucket: 'advices-dev.appspot.com',
+    apiKey: 'AIzaSyB2YNLDG1iyhp7CvcIsahiY2pJAwCNdmNI',
+    appId: '1:968596221490:android:bef2f61a12920d5780962b',
+    messagingSenderId: '968596221490',
+    projectId: 'advices-prod',
+    storageBucket: 'advices-prod.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBVP_mV2EHY-QXzQfVbWGWw8qLZXySoymo',
-    appId: '1:793184649946:ios:24fd3d8f1d398e20cd9be3',
-    messagingSenderId: '793184649946',
-    projectId: 'advices-dev',
-    storageBucket: 'advices-dev.appspot.com',
-    androidClientId: '793184649946-73809u4lilv8vllsl1i79f89550c7pti.apps.googleusercontent.com',
-    iosClientId: '793184649946-f4v5k8rn5a63qf58v8u77759bou95ieg.apps.googleusercontent.com',
+    apiKey: 'AIzaSyC2jeGN8TewtAY27yKsiqvNME5eAruxqtw',
+    appId: '1:968596221490:ios:2e2893b0a35b068380962b',
+    messagingSenderId: '968596221490',
+    projectId: 'advices-prod',
+    storageBucket: 'advices-prod.appspot.com',
+    iosClientId: '968596221490-28hi03nage2rsni8kl1k0998oka6dg0p.apps.googleusercontent.com',
     iosBundleId: 'io.agora.agoraRtcEngineExample',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBVP_mV2EHY-QXzQfVbWGWw8qLZXySoymo',
-    appId: '1:793184649946:ios:24fd3d8f1d398e20cd9be3',
-    messagingSenderId: '793184649946',
-    projectId: 'advices-dev',
-    storageBucket: 'advices-dev.appspot.com',
-    androidClientId: '793184649946-73809u4lilv8vllsl1i79f89550c7pti.apps.googleusercontent.com',
-    iosClientId: '793184649946-f4v5k8rn5a63qf58v8u77759bou95ieg.apps.googleusercontent.com',
+    apiKey: 'AIzaSyC2jeGN8TewtAY27yKsiqvNME5eAruxqtw',
+    appId: '1:968596221490:ios:2e2893b0a35b068380962b',
+    messagingSenderId: '968596221490',
+    projectId: 'advices-prod',
+    storageBucket: 'advices-prod.appspot.com',
+    iosClientId: '968596221490-28hi03nage2rsni8kl1k0998oka6dg0p.apps.googleusercontent.com',
     iosBundleId: 'io.agora.agoraRtcEngineExample',
   );
 }
