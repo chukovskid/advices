@@ -72,8 +72,6 @@ export const notifyNewCalls = functions.firestore
     console.log("///// notifyNewCalls", user)
   });
 
-
-
 export const notificationForNewMessage = functions.firestore.document('/conversation/groups/chats/{chatId}').onWrite(async snapshot => {
   let data = snapshot.after.data();
   if (!data) return "no data";
@@ -117,10 +115,6 @@ export const notificationForNewMessage = functions.firestore.document('/conversa
 
   return fcm.sendToDevice(tokens, payload);
 });
-
-
-
-
 
 async function callGPT(prompt: string) {
   const apiKey = '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';
