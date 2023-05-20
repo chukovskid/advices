@@ -86,11 +86,6 @@ class _RegisterState extends State<Register> {
       } catch (e) {
         print(e);
       }
-
-      // // If the form passes validation, display a Snackbar.
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //     const SnackBar(content: const Text('Registration sent')));
-
       _formKey.currentState?.save();
       _formKey.currentState?.reset();
       _nextFocus(_emailFocusNode);
@@ -115,22 +110,10 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  _navigateToHome() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const Home()),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // resizeToAvoidBottomInset: false,
-      //       appBar: BaseAppBar(
-      //   appBar: AppBar(),
-      // ),
-
-      // backgroundColor: const Color.fromARGB(255, 226, 146, 100),
       body: Container(
           height: double.maxFinite,
           width: double.infinity,
@@ -143,7 +126,6 @@ class _RegisterState extends State<Register> {
             ),
           ),
           child: _allUsersForm() // _selectLawArea(), // _allUsersForm(),
-          // child: _dropdownLawSelect(),
           ),
     );
   }
@@ -161,7 +143,6 @@ class _RegisterState extends State<Register> {
             child: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
-              // mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 const Text(
                   "Register",
@@ -223,11 +204,6 @@ class _RegisterState extends State<Register> {
                           borderRadius: new BorderRadius.circular(40.0),
                         ),
                       ),
-                      // textColor: const Color.fromARGB(255, 9, 123, 161),
-                      // shape: RoundedRectangleBorder(
-                      //   borderRadius: new BorderRadius.circular(40.0),
-                      // ),
-                      // color: const Color.fromARGB(255, 255, 255, 255),
                       child: const Center(
                           child: FaIcon(
                         FontAwesomeIcons.user,
@@ -263,12 +239,6 @@ class _RegisterState extends State<Register> {
                           borderRadius: new BorderRadius.circular(40.0),
                         ),
                       ),
-
-                      // textColor: const Color.fromARGB(255, 161, 113, 9),
-                      // shape: RoundedRectangleBorder(
-                      //   borderRadius: new BorderRadius.circular(40.0),
-                      // ),
-                      // color: const Color.fromARGB(255, 255, 255, 255),
                       child: const Center(
                           child: FaIcon(
                         FontAwesomeIcons.gavel,
@@ -484,37 +454,6 @@ class _RegisterState extends State<Register> {
     return SingleChildScrollView(
       child: Expanded(
         child: Column(children: <Widget>[
-          // TextFormField(
-          //   keyboardType: TextInputType.text,
-          //   textInputAction: TextInputAction.next,
-          //   focusNode: _lawFieldFocusNode,
-          //   onFieldSubmitted: (String value) {
-          //     //Do anything with value
-          //     _nextFocus(_descriptionFocusNode);
-          //   },
-          //   controller: _lawFieldController,
-          //   validator: (value) => _validateInput(value!),
-          //   style: const TextStyle(color: Colors.white),
-          //   decoration: const InputDecoration(
-          //       errorStyle: TextStyle(
-          //         color: Color.fromRGBO(225, 103, 104, 1),
-          //       ),
-          //       fillColor: Colors.orange,
-          //       enabledBorder: UnderlineInputBorder(
-          //         borderSide:
-          //             BorderSide(color: Color.fromRGBO(225, 103, 104, 1)),
-          //       ),
-          //       focusedBorder: UnderlineInputBorder(
-          //         borderSide:
-          //             BorderSide(color: Color.fromARGB(255, 255, 255, 255)),
-          //       ),
-          //       labelText: "Law field",
-          //       labelStyle: TextStyle(
-          //         color: Color.fromARGB(209, 255, 255, 255),
-          //       )),
-          // ),
-
-          // const SizedBox(height: 20.0),
           TextFormField(
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.next,
@@ -658,27 +597,18 @@ class _RegisterState extends State<Register> {
             child: StreamBuilder<Iterable<Service>>(
                 stream: ServicesContext.getAllLaws(),
                 builder: (context, snapshot) {
-                  // Safety check to ensure that snapshot contains data
-                  // without this safety check, StreamBuilder dirty state warnings will be thrown
                   if (!snapshot.hasData) return Container();
-                  // Set this value for default,
-                  // setDefault will change if an item was selected
-                  // First item from the List will be displayed
                   if (setDefaultMake) {
                     selectedLawAreaName = snapshot.data?.first.name;
                   }
                   final laws = snapshot.data!;
-
                   return Container(
-                      // height: 100,
                       child: Column(
                     children: <Widget>[
                       MultiSelectDialogField(
                         dialogWidth: MediaQuery.of(context).size.width * 0.7,
                         decoration: const BoxDecoration(
-                          // color: Colors.white,
                           border: Border(
-                              // width: 2,
                               bottom: BorderSide(color: orangeColor)),
                         ),
                         listType: MultiSelectListType.LIST,
@@ -688,9 +618,6 @@ class _RegisterState extends State<Register> {
                           style: TextStyle(color: Colors.white),
                         ),
                         title: const Text("Права"),
-                        // initialValue: selectedServices
-                        //     .map((e) => MultiSelectItem(e, e!.index.toString()))
-                        //     .toList(),
                         validator: (values) {
                           if (values == null || values.isEmpty) {
                             return "Required";
@@ -741,10 +668,7 @@ class _RegisterState extends State<Register> {
               style: TextStyle(color: Colors.white),
             ),
             onPressed: () {
-              print("hey");
-
               setState(() {
-                // DatabaseService.saveLawAreasForLawyer("uid", selectedServices);
                 _submitForm();
               });
             })

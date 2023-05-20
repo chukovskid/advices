@@ -196,24 +196,16 @@ Future<void> _getFreeTimePeriodsForDate() async {
 }
 
   Future<void> showTimePickerWidget(StateSetter setStateDialog) async {
-    // Call _getFreeTimePeriodsForDate to get available time slots for the selected date
-    // await _getFreeTimePeriodsForDate();
-
     DateTime selectedDateTime = DateFormat("yyyy-MM-dd").parse(_selectedDate);
     String selectedDay = DateFormat('EEEE').format(selectedDateTime);
-
-    // Find the working hour for the selected date
     Map<String, dynamic>? workingHourForSelectedDate = _workingHours.firstWhere(
       (workingHour) => workingHour['day'] == selectedDay,
       orElse: () => <String, dynamic>{},
     );
-
-    // Set the initialTime to the startTime of the working hour for the selected date, or use the first available time slot
     TimeOfDay initialTime = workingHourForSelectedDate != null
         ? TimeOfDay.fromDateTime(
             DateFormat("HH:mm").parse(workingHourForSelectedDate['startTime']))
         : _availableTimeSlots.first;
-
     return await showCustomTimePicker(
         context: context,
         builder: (BuildContext context, Widget? child) {

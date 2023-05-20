@@ -83,7 +83,7 @@ class _CallState extends State<Call> {
   }
 
   _navigateToLawyerProfile() {
-    List<String> lawyerIdandclientId = widget.call.channelName.split("+");
+    List<String> lawyerIdandclientId = widget.call.channelName.split("-");
     String lawyerId = lawyerIdandclientId[0];
     Navigator.pushReplacement(
       context,
@@ -268,7 +268,7 @@ class _CallState extends State<Call> {
       await [Permission.microphone, Permission.camera].request();
     }
 
-    List<String> lawyerIdandclientId = widget.call.channelName.split("+");
+    List<String> lawyerIdandclientId = widget.call.channelName.split("-");
     String lawyerId = lawyerIdandclientId[0];
     String clientId = lawyerIdandclientId[1];
     String receiverId = user!.uid == clientId ? lawyerId : clientId;

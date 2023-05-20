@@ -171,7 +171,7 @@
 //     // save call for cleint
 //     final AuthService _auth = AuthService();
 //     User? client = await _auth.getCurrentUser();
-//     String channelName = lawyerId + "+" + client?.uid;
+//     String channelName = lawyerId + "-" + client?.uid;
 
 //     CollectionReference pendingCallsClient = FirebaseFirestore.instance
 //         .collection("users")
@@ -304,7 +304,7 @@
 //   static Future<String> updateAsOpenCallForUsers(lawyerId, clientId) async {
 //     // final AuthService _auth = AuthService();
 //     // User? user = await _auth.getCurrentUser();
-//     String channelName = lawyerId + "+" + clientId;
+//     String channelName = lawyerId + "-" + clientId;
 
 //     CollectionReference clientCalls = FirebaseFirestore.instance
 //         .collection("users")
@@ -331,7 +331,7 @@
 //   }
 
 //   static Future<String> updateAsClosedCallForUsers(lawyerId, clientId) async {
-//     String channelName = lawyerId + "+" + clientId;
+//     String channelName = lawyerId + "-" + clientId;
 
 //     CollectionReference clientCalls = FirebaseFirestore.instance
 //         .collection("users")
@@ -366,7 +366,7 @@
 //   }
 
 //   static Future<void> closeCall(channellName) async {
-//     List<String> lawyerIdandclientId = channellName.split("+");
+//     List<String> lawyerIdandclientId = channellName.split("-");
 //     String lawyerId = lawyerIdandclientId[0];
 //     String clientId = lawyerIdandclientId[1];
 

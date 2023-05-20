@@ -62,8 +62,14 @@ class _LawyerProfileState extends State<LawyerProfile> {
   }
 
   Future<void> _startChatConversation() async {
-    print("_startChatConversation");
+    bool isLoggedIn = await _auth.getCurrentUser() != null ? true : false;
+    if (!isLoggedIn)
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => SignIn()),
+      );
     String chatId = await _chatProvider.createNewChat([lawyer!.uid]);
+
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -274,11 +280,15 @@ class _LawyerProfileState extends State<LawyerProfile> {
               fit: BoxFit.cover,
             );
           } else {
-            return Image.network(
-              'https://st.depositphotos.com/2069323/2156/i/600/depositphotos_21568785-stock-photo-man-pointing.jpg',
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
+            return CircleAvatar(
+              backgroundColor: lightGreenColor,
+              radius: 20,
+              child: imagePath.isNotEmpty
+                  ? Image.network(imagePath)
+                  : Text(
+                      " ${lawyer?.name[0].toUpperCase() ?? ''}  ${lawyer?.surname[0].toUpperCase() ?? ''}",
+                      style: TextStyle(color: whiteColor),
+                    ),
             );
           }
         } else {

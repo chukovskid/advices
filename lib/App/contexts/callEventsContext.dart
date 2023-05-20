@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:advices/App/models/event.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
@@ -14,10 +16,10 @@ class CallEventsContext {
 
   static Future<void> saveEvent(lawyerId, title, description, DateTime dateTime,
       {urgent = false}) async {
-    // save call for cleint
+    // save call for client
     final AuthProvider _auth = AuthProvider();
     User? client = await _auth.getCurrentUser();
-    String channelName = lawyerId + "+" + client?.uid;
+    String channelName = lawyerId + "-" + client?.uid;
 
     CollectionReference pendingCallsClient = FirebaseFirestore.instance
         .collection("users")
@@ -27,10 +29,17 @@ class CallEventsContext {
       "clientId": client?.uid,
       "lawyerId": lawyerId,
       "channelName": channelName,
-      "title": title,
-      "description": description,
       "dateCreated": DateTime.now(),
       "startDate": dateTime,
+    });
+
+    pendingCallsClient
+        .doc(channelName)
+        .collection('details')
+        .doc(channelName)
+        .set({
+      "title": title,
+      "description": description,
       "open": false,
       "urgent": urgent,
     });
@@ -44,14 +53,20 @@ class CallEventsContext {
       "clientId": client?.uid,
       "lawyerId": lawyerId,
       "channelName": channelName,
-      "title": title,
-      "description": description,
       "dateCreated": DateTime.now(),
       "startDate": dateTime,
+    });
+
+    lawyerPendingCalls
+        .doc(channelName)
+        .collection('details')
+        .doc(channelName)
+        .set({
+      "title": title,
+      "description": description,
       "open": false,
       "urgent": urgent,
     });
-
     // Create room for lawyer and client
     final ChatProvider _chatProvider = ChatProvider();
     String chatId = await _chatProvider.createNewChat([lawyerId]);
@@ -77,50 +92,91 @@ class CallEventsContext {
     var calls = pendingCalls
         .where("startDate", isGreaterThan: date)
         .where("startDate", isLessThan: endDate);
-    await calls.get().then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        data.add(EventModel.fromJson(doc.data()));
-      });
+    await calls.get().then((QuerySnapshot querySnapshot) async {
+      for (var doc in querySnapshot.docs) {
+        var detailsDoc =
+            await doc.reference.collection('details').doc('details').get();
+        data.add(EventModel.fromJson(doc.data(), detailsDoc.data()));
+      }
     });
-    data.toList().forEach((element) {
+    data.forEach((element) {
       dataDateTime.add(element.startDate);
     });
     return dataDateTime;
   }
 
-  static Stream<List<EventModel>> getAllEventsStream() {
+  static Stream<List<EventModel>> getAllEventsStream() async* {
     CollectionReference events =
         FirebaseFirestore.instance.collection('events');
     final snapshots = events.orderBy('title').snapshots();
-    var flutterEvents = snapshots.map((snapshot) =>
-        snapshot.docs.map((doc) => EventModel.fromJson(doc.data())).toList());
-    return flutterEvents;
+
+    await for (var snapshot in snapshots) {
+      var events = <EventModel>[];
+      for (var doc in snapshot.docs) {
+        var detailsDoc =
+            await doc.reference.collection('details').doc('details').get();
+        events.add(EventModel.fromJson(doc.data(), detailsDoc.data()));
+      }
+      yield events;
+    }
   }
 
-  static Stream<Iterable<EventModel>> getAllEvents(uid) {
-    CollectionReference calls = FirebaseFirestore.instance
-        .collection("users")
-        .doc(uid)
-        .collection('pendingCalls');
-    // var filteredCalls = calls.doc(uid).collection("open");
-    // final orderedCalls = calls.orderBy("open"); // TODO Use to order calls
-    final snapshots = calls.snapshots();
-    var userCalls = snapshots.map((snapshot) =>
-        snapshot.docs.map((doc) => EventModel.fromJson(doc.data())));
-    return userCalls;
-  }
+static Stream<Iterable<EventModel>> getAllEvents(uid) {
+  CollectionReference calls = FirebaseFirestore.instance
+      .collection("users")
+      .doc(uid)
+      .collection('pendingCalls');
+
+  final snapshots = calls.snapshots();
+
+  return snapshots.transform<Iterable<EventModel>>(
+    StreamTransformer<QuerySnapshot<Map<String, dynamic>>,
+        Iterable<EventModel>>.fromHandlers(
+      handleData: (QuerySnapshot<Map<String, dynamic>> data,
+          EventSink<Iterable<EventModel>> sink) async {
+        List<EventModel> eventModels = [];
+
+        for (var doc in data.docs) {
+          var detailsDoc =
+              await doc.reference.collection('details').doc(doc.id).get();
+          
+          if (detailsDoc.exists) {
+            eventModels.add(EventModel.fromJson(doc.data(), detailsDoc.data()));
+          } else {
+            print("No details document for document ID: ${doc.id}");
+          }
+        }
+
+        sink.add(eventModels);
+      },
+    ),
+  );
+}
 
   static Stream<Iterable<EventModel>> getAllUrgentEvents(uid) {
     CollectionReference calls = FirebaseFirestore.instance
         .collection("users")
         .doc(uid)
         .collection('pendingCalls');
-    // var filteredCalls = calls.doc(uid).collection("open");
-    // final orderedCalls = calls.orderBy("open"); // TODO Use to order calls
+
     final snapshots = calls.where("urgent", isEqualTo: true).snapshots();
-    var userCalls = snapshots.map((snapshot) =>
-        snapshot.docs.map((doc) => EventModel.fromJson(doc.data())));
-    return userCalls;
+
+    return snapshots.transform(
+      StreamTransformer<QuerySnapshot, Iterable<EventModel>>.fromHandlers(
+        handleData:
+            (QuerySnapshot data, EventSink<Iterable<EventModel>> sink) async {
+          List<EventModel> eventModels = [];
+
+          for (var doc in data.docs) {
+            var detailsDoc =
+                await doc.reference.collection('details').doc('details').get();
+            eventModels.add(EventModel.fromJson(doc.data(), detailsDoc.data()));
+          }
+
+          sink.add(eventModels);
+        },
+      ),
+    );
   }
 
   static Future<EventModel> getEvent(String channelName) async {
@@ -128,18 +184,26 @@ class CallEventsContext {
     final AuthProvider _auth = AuthProvider();
     User? user = await _auth.getCurrentUser();
     String uid = user?.uid ?? "";
-    CollectionReference events = FirebaseFirestore.instance
+    CollectionReference calls = FirebaseFirestore.instance
         .collection("users")
         .doc(uid)
         .collection('pendingCalls');
     // write a where clause to filter for a specific channelName
-    Query filteredCalls = events.where("channelName", isEqualTo: channelName);
+    Query filteredCalls = calls.where("channelName", isEqualTo: channelName);
     // write an orderBy clause to sort by a field
     // Query orderedCalls = filteredCalls.orderBy("startTime");
     QuerySnapshot snapshot = await filteredCalls.limit(1).get();
     // return the first event that matches the given channelName
     if (snapshot.docs.isNotEmpty) {
-      EventModel event = EventModel.fromJson(snapshot.docs.first);
+      DocumentSnapshot detailsSnapshot = await calls
+          .doc(channelName)
+          .collection('details')
+          .doc(channelName)
+          .get();
+      EventModel event = EventModel.fromJson(
+        snapshot.docs.first.data(),
+        detailsSnapshot.data(),
+      );
       return event;
     } else {
       return EventModel(
@@ -175,7 +239,7 @@ class CallEventsContext {
   }
 
   static Future<void> closeCall(channellName) async {
-    List<String> lawyerIdandclientId = channellName.split("+");
+    List<String> lawyerIdandclientId = channellName.split("-");
     String lawyerId = lawyerIdandclientId[0];
     String clientId = lawyerIdandclientId[1];
     await updateAsClosedCallForUsers(lawyerId, clientId);
@@ -183,7 +247,7 @@ class CallEventsContext {
   }
 
   static Future<String> updateAsClosedCallForUsers(lawyerId, clientId) async {
-    String channelName = lawyerId + "+" + clientId;
+    String channelName = lawyerId + "-" + clientId;
     CollectionReference clientCalls = FirebaseFirestore.instance
         .collection("users")
         .doc(clientId)

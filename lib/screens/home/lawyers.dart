@@ -53,7 +53,7 @@ class _LawyersState extends State<Lawyers> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BaseAppBar(
-        redirectToHome : true,
+        redirectToHome: true,
         appBar: AppBar(),
       ),
       bottomNavigationBar: BottomBar(
@@ -77,8 +77,13 @@ class _LawyersState extends State<Lawyers> {
             children: [
               Row(
                 children: [
-                  SizedBox(width: 5,),
-                  Icon(Icons.filter_alt_rounded, color: darkGreenColor,),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Icon(
+                    Icons.filter_alt_rounded,
+                    color: darkGreenColor,
+                  ),
                   Container(
                     padding:
                         EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
@@ -201,14 +206,25 @@ class _LawyersState extends State<Lawyers> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         ListTile(
-                          leading: ClipOval(
-                            child: Image.network(
-                              // fUser.photoURL.length > 20
-                              //     ? fUser.photoURL
-                              //     :
-                              'https://st.depositphotos.com/2069323/2156/i/600/depositphotos_21568785-stock-photo-man-pointing.jpg',
-                            ),
+                          leading: CircleAvatar(
+                            backgroundColor: lightGreenColor,
+                            radius: 20,
+                            child: fUser.photoURL != null &&
+                                    fUser.photoURL.isNotEmpty
+                                ? Image.network(fUser.photoURL)
+                                : Text(
+                                    fUser.name[0].toUpperCase() +  fUser.surname[0].toUpperCase(),
+                                    style: TextStyle(color: whiteColor),
+                                  ),
                           ),
+                          //  ClipOval(
+                          //   child: Image.network(
+                          //     // fUser.photoURL.length > 20
+                          //     //     ? fUser.photoURL
+                          //     //     :
+                          //     'https://st.depositphotos.com/2069323/2156/i/600/depositphotos_21568785-stock-photo-man-pointing.jpg',
+                          //   ),
+                          // ),
                           title: Text(
                             "${fUser.displayName}",
                             style: const TextStyle(fontSize: 25),

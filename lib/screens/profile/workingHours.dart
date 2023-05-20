@@ -148,7 +148,7 @@ class _WorkingHoursScreenState extends State<WorkingHoursScreen> {
 
     // Show time picker for end time
     selectedEndTime = await showCustomTimePicker(
-        context: context, initialTime: TimeOfDay(hour: 6, minute: 0));
+        context: context, initialTime: TimeOfDay(hour: 18, minute: 0));
         
     if (selectedEndTime == null) {
       return;

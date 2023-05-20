@@ -52,7 +52,7 @@ class ChatProvider with ChangeNotifier {
       return "GroupChat";
     }
     userIds.add(user.uid);
-    var chatId = userIds.join('+');
+    var chatId = userIds.join("-");
     final refChat = _firestore.collection('conversation/groups/chats');
     final chats = refChat.where("members", isEqualTo: userIds).get();
     bool chatExists = false;
@@ -136,7 +136,7 @@ class ChatProvider with ChangeNotifier {
   }
 
   String getOtherUserId(String chatId, String currentUserId) {
-    List<String> ids = chatId.split('+');
+    List<String> ids = chatId.split("-");
     if (ids.length != 2) {
       throw Exception('Invalid chat ID format');
     }
