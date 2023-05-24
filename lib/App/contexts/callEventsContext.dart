@@ -179,7 +179,7 @@ static Stream<Iterable<EventModel>> getAllEvents(uid) {
     );
   }
 
-  static Future<EventModel> getEvent(String channelName) async {
+static Future<EventModel> getEvent(String channelName) async {
     // get logged user uid
     final AuthProvider _auth = AuthProvider();
     User? user = await _auth.getCurrentUser();
@@ -196,15 +196,26 @@ static Stream<Iterable<EventModel>> getAllEvents(uid) {
     // return the first event that matches the given channelName
     if (snapshot.docs.isNotEmpty) {
       DocumentSnapshot detailsSnapshot = await calls
-          .doc(channelName)
+          .doc(snapshot.docs.first.id) // changed to use doc id
           .collection('details')
-          .doc(channelName)
+          .doc(snapshot.docs.first.id) // changed to use doc id
           .get();
-      EventModel event = EventModel.fromJson(
-        snapshot.docs.first.data(),
-        detailsSnapshot.data(),
-      );
-      return event;
+      if (detailsSnapshot.exists) {
+        EventModel event = EventModel.fromJson(
+          snapshot.docs.first.data(),
+          detailsSnapshot.data(),
+        );
+        return event;
+      } else {
+        return EventModel(
+            title: "Не постои овој евент",
+            description: "Пробајте повторно",
+            startDate: DateTime.now(),
+            dateCreated: DateTime.now(),
+            channelName: '',
+            open: false,
+            urgent: false);
+      }
     } else {
       return EventModel(
           title: "Не постои овој евент",

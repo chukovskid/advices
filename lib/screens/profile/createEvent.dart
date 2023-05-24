@@ -44,29 +44,24 @@ class CreateEvent extends StatefulWidget {
 
 class _CreateEventState extends State<CreateEvent> {
   final ChatProvider _chatProvider = ChatProvider();
-
+  TextEditingController _title = TextEditingController(text: "Внеси наслов");
+  final TextEditingController _description = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final _key = GlobalKey<ScaffoldState>();
   late Service service;
   bool mkLanguage = true;
   bool openEventForm =
       MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width >
           850.0;
-
-  var imageUrl =
-      "https://devshift.biz/wp-content/uploads/2017/04/profile-icon-png-898.png"; //you can use a image
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-  TextEditingController _title = TextEditingController(text: "Внеси наслов");
-  final TextEditingController _description = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-  final _key = GlobalKey<ScaffoldState>();
   late bool processing;
-  String selectedTime = "16:00";
+  String selectedTime = "13:00";
   String _selectedDate = "";
-  // DateFormat("yyyy-MM-dd").format(DateTime.now()).toString();
-
-  String serviceName = "Click here to select service";
+  TimeOfDay firstAvailableTimeSlot = TimeOfDay(hour: 14, minute: 0);
+  // String serviceName = "Click here to select service";
+  List<Map<String, dynamic>> _workingHours = [];
   List<TimeOfDay> _unavailableTimePeriods = [];
   List<TimeOfDay> _availableTimeSlots = [];
-  List<Map<String, dynamic>> _workingHours = [];
   List<int?> _workingDays = [];
 
   @override
@@ -75,6 +70,7 @@ class _CreateEventState extends State<CreateEvent> {
     _getService();
     processing = false;
     _fetchWorkingHours();
+    _getFreeTimePeriodsForDate();
   }
 
   Future<List<Map<String, dynamic>>> _fetchWorkingHours() async {
@@ -131,6 +127,9 @@ class _CreateEventState extends State<CreateEvent> {
       }).toList();
       availableDates.sort((a, b) => a.compareTo(b));
       DateTime nextAvailableDay = availableDates.first;
+      setState(() {
+        _selectedDate = DateFormat("yyyy-MM-dd").format(nextAvailableDay);
+      });
       return nextAvailableDay;
     }
     print("No available dates.");
@@ -148,52 +147,62 @@ class _CreateEventState extends State<CreateEvent> {
     return DateFormat.Hm().format(time);
   }
 
-Future<void> _getFreeTimePeriodsForDate() async {
-  DateTime selectedDate = DateFormat("yyyy-MM-dd").parse("$_selectedDate");
-  List<DateTime> events =
-      await CallEventsContext.getAllEventsDateTIme(widget.uid, selectedDate);
-  List<Map<String, dynamic>> workingHours =
-      await CallEventsContext.getWorkingHours(widget.uid);
-  List<Map<String, dynamic>> workingHoursForSelectedDate =
-      workingHours.where((workingHour) {
-    return DateFormat('EEEE').format(selectedDate) == workingHour['day'];
-  }).toList();
-  _unavailableTimePeriods = [];
-  List<TimeOfDay> availableTimeSlots = [];
-  workingHoursForSelectedDate.forEach((workingHour) {
-    TimeOfDay startTime = TimeOfDay.fromDateTime(
-        DateFormat("HH:mm").parse(convertTo24HourFormat(workingHour['startTime'])));
-    TimeOfDay endTime = TimeOfDay.fromDateTime(
-        DateFormat("HH:mm").parse(convertTo24HourFormat(workingHour['endTime'])));
-    TimeOfDay currentTime = startTime;
+  Future<void> _getFreeTimePeriodsForDate() async {
+    await _fetchWorkingHours();
+    print(_selectedDate);
+    DateTime selectedDate = DateFormat("yyyy-MM-dd").parse("$_selectedDate");
+    List<DateTime> events =
+        await CallEventsContext.getAllEventsDateTIme(widget.uid, selectedDate);
+    List<Map<String, dynamic>> workingHours =
+        await CallEventsContext.getWorkingHours(widget.uid);
+    List<Map<String, dynamic>> workingHoursForSelectedDate =
+        workingHours.where((workingHour) {
+      return DateFormat('EEEE').format(selectedDate) == workingHour['day'];
+    }).toList();
+    _unavailableTimePeriods = [];
+    List<TimeOfDay> availableTimeSlots = [];
+    workingHoursForSelectedDate.forEach((workingHour) {
+      TimeOfDay startTime = TimeOfDay.fromDateTime(DateFormat("HH:mm")
+          .parse(convertTo24HourFormat(workingHour['startTime'])));
+      TimeOfDay endTime = TimeOfDay.fromDateTime(DateFormat("HH:mm")
+          .parse(convertTo24HourFormat(workingHour['endTime'])));
+      TimeOfDay currentTime = startTime;
 
-    while (currentTime.isBefore(endTime)) {
-      availableTimeSlots.add(currentTime);
-      currentTime = currentTime.add(minutes: 10);
-    }
-  });
-  events.forEach((element) {
-    DateTime subtraction = element;
-    for (int i = 0; i <= 5; i++) {
-      element = element.add(new Duration(minutes: 10));
-      _unavailableTimePeriods.add(TimeOfDay.fromDateTime(element));
-    }
-    for (int i = 0; i <= 5; i++) {
-      subtraction = subtraction.subtract(new Duration(minutes: 10));
-      _unavailableTimePeriods.add(TimeOfDay.fromDateTime(subtraction));
-    }
-  });
-  _availableTimeSlots = availableTimeSlots.where((timeSlot) {
-    return !_unavailableTimePeriods.contains(timeSlot);
-  }).toList();
+      while (currentTime.isBefore(endTime)) {
+        availableTimeSlots.add(currentTime);
+        currentTime = currentTime.add(minutes: 10);
+      }
+    });
+    events.forEach((element) {
+      DateTime subtraction = element;
+      for (int i = 0; i <= 5; i++) {
+        element = element.add(new Duration(minutes: 10));
+        _unavailableTimePeriods.add(TimeOfDay.fromDateTime(element));
+      }
+      for (int i = 0; i <= 5; i++) {
+        subtraction = subtraction.subtract(new Duration(minutes: 10));
+        _unavailableTimePeriods.add(TimeOfDay.fromDateTime(subtraction));
+      }
+    });
+    _availableTimeSlots = availableTimeSlots.where((timeSlot) {
+      return !_unavailableTimePeriods.contains(timeSlot);
+    }).toList();
 
-  // Add print statements
-  print("Selected Date: $_selectedDate");
-  print("Working Hours: $workingHours");
-  print("Working Hours for Selected Date: $workingHoursForSelectedDate");
-  print("Available Time Slots: $_availableTimeSlots");
-  print("Unavailable Time Periods: $_unavailableTimePeriods");
-}
+    if (_availableTimeSlots.isNotEmpty) {
+      setState(() {
+        firstAvailableTimeSlot = _availableTimeSlots.first;
+        selectedTime =
+            "${firstAvailableTimeSlot.hour.toString().padLeft(2, '0')}:${firstAvailableTimeSlot.minute.toString().padLeft(2, '0')}";
+      });
+    }
+
+    // Add print statements
+    print("Selected Date: $_selectedDate");
+    print("Working Hours: $workingHours");
+    print("Working Hours for Selected Date: $workingHoursForSelectedDate");
+    print("Available Time Slots: $_availableTimeSlots");
+    print("Unavailable Time Periods: $_unavailableTimePeriods");
+  }
 
   Future<void> showTimePickerWidget(StateSetter setStateDialog) async {
     DateTime selectedDateTime = DateFormat("yyyy-MM-dd").parse(_selectedDate);
@@ -215,7 +224,7 @@ Future<void> _getFreeTimePeriodsForDate() async {
           );
         },
         onFailValidation: (context) => print('Unavailable selection'),
-        initialTime: TimeOfDay(hour: 14, minute: 0),
+        initialTime: firstAvailableTimeSlot,
         selectableTimePredicate: (time) =>
             time!.minute % 10 == 0 && _availableTimeSlots.contains(time)).then(
         (time) => {
@@ -283,9 +292,9 @@ Future<void> _getFreeTimePeriodsForDate() async {
   Future<void> _getService() async {
     service = await ServicesContext.getService(widget.serviceId);
     setState(() {
-      serviceName = "${mkLanguage ? service.nameMk : service.name}";
+      // serviceName = "${mkLanguage ? service.nameMk : service.name}";
       service = service;
-      _title = TextEditingController(text: serviceName);
+      _title = TextEditingController(text: "${mkLanguage ? service.nameMk : service.name}");
     });
   }
 
@@ -359,7 +368,7 @@ Future<void> _getFreeTimePeriodsForDate() async {
                           Row(
                             children: [
                               Text(
-                                "400ден/час",
+                                "Тема:", // TODO selectedTime Should be here 
                                 style: TextStyle(
                                     // color: Colors.white,
                                     fontSize: 14,
@@ -368,7 +377,7 @@ Future<void> _getFreeTimePeriodsForDate() async {
                               SizedBox(
                                 width: 1,
                               ),
-                              Text(serviceName),
+                              Text(_title.text),
                             ],
                           ),
                           SizedBox(
@@ -401,9 +410,30 @@ Future<void> _getFreeTimePeriodsForDate() async {
                         onPressed: () {
                           print(openEventForm);
                           _isFormEmpty()
-                              ? setState(() {
-                                  openEventForm = true;
-                                })
+                              ? showDialog(
+                                  context: context,
+                                  builder: (context) => StatefulBuilder(
+                                        builder: (context,
+                                                StateSetter setStateDialog) =>
+                                            AlertDialog(
+                                          elevation: 20,
+                                          contentPadding: EdgeInsets.all(10),
+                                          content: SizedBox(
+                                            height: 400,
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Flexible(
+                                                    child: _dialogFields(
+                                                        setStateDialog,
+                                                        asPopup: true)),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ))
                               : _saveEvent();
                         },
                         child: Row(
@@ -637,6 +667,9 @@ Future<void> _getFreeTimePeriodsForDate() async {
                                     Color(0xff5bc9bf))),
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
+                                if (_isFormEmpty()) {
+                                  return;
+                                }
                                 setState(() {
                                   openEventForm = false;
                                 });
@@ -720,7 +753,7 @@ Future<void> _getFreeTimePeriodsForDate() async {
                               ));
                     },
                     child: Text(
-                      serviceName,
+                      _title.text,
                       style: TextStyle(
                           color: selectedTime == 'time'
                               ? Colors.white

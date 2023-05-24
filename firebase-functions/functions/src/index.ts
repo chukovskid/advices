@@ -1,6 +1,8 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import { sendEmail } from './services/email';
+const agora_access_token_1 = require('agora-access-token');
+
 import axios from 'axios';
 
 
@@ -202,36 +204,33 @@ export const analyzeContract = functions.https.onRequest(async (req, res) => {
 
 
 /////// VERY IMPORTANT
-// exports.createCallsWithTokens = functions.https.onCall((data, context) => {
-//   // console.log("context.auth.uid===========: ", context.auth.uid);
-//   console.log("context.auth.data=========: ", data);
-//   try {
-//       const appId = "03f0c2c7973949b3afe5e475f15a350e";
-//       const appCertificate = "3c274947f08447ebb0a83f1ecc43beda";
-//       const role = agora_access_token_1.RtcRole.PUBLISHER;
-//       const expirationTimeInSeconds = 3600;
-//       const currentTimestamp = Math.floor(Date.now() / 1000);
-//       const privilegeExpired = currentTimestamp + expirationTimeInSeconds;
-//       const uid = 0;
-//       // const channelName = Math.floor(Math.random() * 100).toString();
-//       const channelName = data.channelName.toString();
-//       const token = agora_access_token_1.RtcTokenBuilder.buildTokenWithUid(appId, appCertificate, channelName, uid, role, privilegeExpired);
-//       return {
-//           data: {
-//               token: token,
-//               channelId: channelName,
-//           },
-//       };
-//   }
-//   catch (error) {
-//       console.log(error);
-//   }
-// });
-
-
-
-
-
+export const createCallsWithTokens = functions.https.onCall((data, context) => {
+  // console.log("context.auth.uid===========: ", context.auth.uid);
+  console.log("context.auth.data=========: ", data);
+  try {
+  const appId = "03f0c2c7973949b3afe5e475f15a350e";
+  const appCertificate = "3c274947f08447ebb0a83f1ecc43beda";
+  const role = agora_access_token_1.RtcRole.PUBLISHER;
+  const expirationTimeInSeconds = 3600;
+  const currentTimestamp = Math.floor(Date.now() / 1000);
+  const privilegeExpired = currentTimestamp + expirationTimeInSeconds;
+  const uid = 0;
+  // const channelName = Math.floor(Math.random() * 100).toString();
+  const channelName = data.channelName.toString();
+  const token = agora_access_token_1.RtcTokenBuilder.buildTokenWithUid(appId, appCertificate, channelName, uid, role, privilegeExpired);
+  return {
+  data: {
+  token: token,
+  channelId: channelName,
+  },
+  };
+  }
+  catch (error) {
+  console.log(error);
+  }
+  return null;
+ });
+ 
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////

@@ -1,6 +1,8 @@
 import 'package:advices/assets/utilities/constants.dart';
 import 'package:flutter/material.dart';
 import '../../../App/models/chat.dart';
+import '../../../App/models/user.dart';
+import '../../../App/providers/auth_provider.dart';
 import '../../../App/providers/chat_provider.dart';
 import '../colors.dart';
 
@@ -14,10 +16,25 @@ class ChatAppBar extends StatefulWidget {
 }
 
 class _ChatAppBarState extends State<ChatAppBar> {
-
   bool mobView =
       MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width <
           850.0;
+  final AuthProvider _auth = AuthProvider();
+  String? loggedUserDisplayName = "";
+
+  @override
+  void initState() {
+    super.initState();
+    getLoggedUser();
+    print("USER ${loggedUserDisplayName} ");
+  }
+
+  Future<void> getLoggedUser() async {
+    FlutterUser? user = await _auth.getMyProfileInfo();
+    bool userExist = user != null ? true : false;
+    print("USER ////2 ${user?.displayName} ");
+    setState(() => {loggedUserDisplayName = user?.displayName});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +51,10 @@ class _ChatAppBarState extends State<ChatAppBar> {
               return _chatInfo(chatInfo);
             } else if (snapshot.hasError) {
               return const Center(
-                child: Text("Твои пораки!", style: TextStyle(color: whiteColor),),
+                child: Text(
+                  "Твои пораки!",
+                  style: TextStyle(color: whiteColor),
+                ),
               );
             }
             return Center(
@@ -62,7 +82,9 @@ class _ChatAppBarState extends State<ChatAppBar> {
                       chat.photoURLs!.first.isNotEmpty
                   ? Image.network(chat.photoURLs!.first)
                   : Text(
-                      chat.displayNames!.first[0],
+                      chat.displayNames!
+                          .firstWhere((e) => e != loggedUserDisplayName)
+                          .toString()[0],
                       style: TextStyle(color: whiteColor),
                     ),
             ),
@@ -78,7 +100,10 @@ class _ChatAppBarState extends State<ChatAppBar> {
               // width: MediaQuery.of(context).size.width * 0.01,
             ),
             Text(
-              chat.displayNames?.first ?? "Селектирајте некој од контактите",
+              chat.displayNames!
+                      .firstWhere((e) => e != loggedUserDisplayName)
+                      .toString() ??
+                  "Селектирајте некој од контактите",
               style: TextStyle(fontSize: 18, color: whiteColor),
             ),
           ],
