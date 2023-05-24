@@ -9,7 +9,9 @@ import '../authentication/authentication.dart';
 import '../shared_widgets/BottomBar.dart';
 import '../shared_widgets/base_app_bar.dart';
 import 'package:intl/intl.dart';
+import 'calendarWidget.dart';
 import 'callMethods.dart';
+import 'customCallCard.dart';
 
 class Calls extends StatefulWidget {
   const Calls({
@@ -80,36 +82,41 @@ class _CallsState extends State<Calls>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BaseAppBar(
-        appBar: AppBar(),
-        redirectToHome: true,
-      ),
-      bottomNavigationBar: BottomBar(
-        fabLocation: FloatingActionButtonLocation.endDocked,
-        shape: CircularNotchedRectangle(),
-      ),
-      body: Container(
-        height: double.maxFinite,
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: backgroundColor,
-            stops: [-1, 1, 2],
-          ),
+        appBar: BaseAppBar(
+          appBar: AppBar(),
+          redirectToHome: true,
         ),
-        child: isLoading
-            ? Center(
-                child: Icon(
-                  Icons.hourglass_bottom,
-                  color: Colors.white,
-                  size: 100,
-                ),
-              )
-            : _cardsList(),
-      ),
-    );
+        bottomNavigationBar: BottomBar(
+          fabLocation: FloatingActionButtonLocation.endDocked,
+          shape: CircularNotchedRectangle(),
+        ),
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            if (constraints.maxWidth > 600) {
+              // For larger screens, display the calendar on the right side
+              return Row(
+                children: [
+                  Expanded(child: _cardsList()),
+                  Expanded(
+                      child: CalendarWidget(
+                    user: user,
+                  )),
+                ],
+              );
+            } else {
+              // For smaller screens, display the calendar above the list
+              return Column(
+                children: [
+                  Expanded(
+                      child: CalendarWidget(
+                    user: user,
+                  )),
+                  // Expanded(child: _cardsList()),
+                ],
+              );
+            }
+          },
+        ));
   }
 
   Widget _cardsList() {
@@ -144,71 +151,74 @@ class _CallsState extends State<Calls>
   }
 
   Widget _card(EventModel call) {
-    return Center(
-      child: Card(
-        elevation: 25,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
-          // side: BorderSide(color: Color.fromARGB(255, 244, 236, 166), width: 1.5),
-        ),
-        child: Column(
-          // mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ListTile(
-              // leading: const Icon(Icons.person),
-              title: Text(call.title.toString()),
-              subtitle: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                // mainAxisSize: MainAxisSize.min,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 4,
-                      ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.description,
-                            size: 16,
-                          ),
-                          Text(
-                            ' ${trimString(call.description)}',
-                            softWrap: true,
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Icon(Icons.access_time, size: 16),
-                          Text(
-                              ' ${DateFormat("yyyy-MM-dd hh:mm").format(call.startDate)}'),
-                          SizedBox(
-                            width: 24,
-                          ),
-                          call.open == true
-                              ? Text(
-                                  'Некој ве чека веќе',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.green),
-                                )
-                              : Text('Сеуште нема никој')
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              onTap: () => openCall(call),
-            ),
-            const SizedBox(
-              height: 20,
-            )
-          ],
-        ),
-      ),
+    return CustomCardWidget(
+      call: call,
+      onTapOpenCall: () {
+        openCall(call);
+      },
     );
+
+    // Center(
+    //   child: Card(
+    //     elevation: 25,
+    //     shape: RoundedRectangleBorder(
+    //       borderRadius: BorderRadius.circular(4),
+    //     ),
+    //     child: Column(
+    //       children: <Widget>[
+    //         ListTile(
+    //           title: Text(call.title.toString()),
+    //           subtitle: Row(
+    //             mainAxisAlignment: MainAxisAlignment.start,
+    //             children: [
+    //               Column(
+    //                 crossAxisAlignment: CrossAxisAlignment.start,
+    //                 children: [
+    //                   SizedBox(
+    //                     height: 4,
+    //                   ),
+    //                   Row(
+    //                     children: [
+    //                       Icon(
+    //                         Icons.description,
+    //                         size: 16,
+    //                       ),
+    //                       Text(
+    //                         ' ${trimString(call.description)}',
+    //                         softWrap: true,
+    //                         textAlign: TextAlign.center,
+    //                       ),
+    //                     ],
+    //                   ),
+    //                   Row(
+    //                     children: [
+    //                       Icon(Icons.access_time, size: 16),
+    //                       Text(
+    //                           ' ${DateFormat("yyyy-MM-dd hh:mm").format(call.startDate)}'),
+    //                       SizedBox(
+    //                         width: 24,
+    //                       ),
+    //                       call.open == true
+    //                           ? Text(
+    //                               'Некој ве чека веќе',
+    //                               textAlign: TextAlign.center,
+    //                               style: TextStyle(color: Colors.green),
+    //                             )
+    //                           : Text('Сеуште нема никој')
+    //                     ],
+    //                   ),
+    //                 ],
+    //               ),
+    //             ],
+    //           ),
+    //           onTap: () => openCall(call),
+    //         ),
+    //         const SizedBox(
+    //           height: 20,
+    //         )
+    //       ],
+    //     ),
+    //   ),
+    // );
   }
 }

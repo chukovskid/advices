@@ -86,7 +86,7 @@ class FormBuilder extends StatelessWidget {
                   question.type == QuestionType.text
                       ? TextFormField(
                           decoration: InputDecoration(
-                            labelText: question.questionText ?? '',
+                            labelText: question.questionText,
                           ),
                         )
                       : question.type == QuestionType.dropdown
@@ -94,7 +94,7 @@ class FormBuilder extends StatelessWidget {
                               builder: (FormFieldState<String> state) {
                                 return InputDecorator(
                                   decoration: InputDecoration(
-                                    labelText: question.questionText ?? '',
+                                    labelText: question.questionText,
                                     errorText:
                                         state.hasError ? state.errorText : null,
                                   ),

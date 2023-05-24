@@ -7,6 +7,7 @@ import '../chat/screens/mobile_layout_screen.dart';
 import '../chat/screens/web_layout_screen.dart';
 import '../chat/utils/responsive_layout.dart';
 import '../shared_widgets/base_app_bar.dart';
+import '../shared_widgets/comingSoon.dart';
 
 class IframeWidget extends StatefulWidget {
   final String src;
@@ -26,24 +27,25 @@ class _IframeWidgetState extends State<IframeWidget> {
     _initializeWidgetWithToken();
   }
 
-Future<String?> _getAuthToken() async {
-  final AuthProvider _auth = AuthProvider();
-  User? user = await  _auth.getCurrentUser();
+  Future<String?> _getAuthToken() async {
+    final AuthProvider _auth = AuthProvider();
+    User? user = await _auth.getCurrentUser();
 
-  if (user == null) {
-    return null;
-  }
+    if (user == null) {
+      return null;
+    }
 
-  try {
-    HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('getCustomToken');
-    HttpsCallableResult result = await callable.call();
-    String? token = result.data['token'];
-    return token;
-  } catch (error) {
-    print('Error fetching custom token: $error');
-    return null;
+    try {
+      HttpsCallable callable =
+          FirebaseFunctions.instance.httpsCallable('getCustomToken');
+      HttpsCallableResult result = await callable.call();
+      String? token = result.data['token'];
+      return token;
+    } catch (error) {
+      print('Error fetching custom token: $error');
+      return null;
+    }
   }
-}
 
   void _initializeWidgetWithToken() async {
     String? token = await _getAuthToken();
@@ -87,32 +89,40 @@ Future<String?> _getAuthToken() async {
       ),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          return Stack(
-            children: [
-              SafeArea(
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: _isChatVisible ? 2 : 3,
-                      child: Container(
-                        width: double.infinity,
-                        height: double.infinity,
-                        child: _widget,
-                      ),
-                    ),
-                    if (_isChatVisible && constraints.maxWidth > 600)
-                      Expanded(
-                        flex: 1,
-                        child: MobileLayoutScreen(
-                          null,
-                          isDrawer: true,
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ],
+          return ComingSoonWidget(
+            onBackButtonPressed: () {
+              Navigator.pop(context);
+            },
+            description:
+                'Научете го вашиот персонален GPT-3.5 со ваши книги, скрипти, документи, а он ќе ви помогне да пишувате побрзо и попаметно.',
           );
+
+          // Stack(
+          //   children: [
+          //     SafeArea(
+          //       child: Row(
+          //         children: [
+          //           Expanded(
+          //             flex: _isChatVisible ? 2 : 3,
+          //             child: Container(
+          //               width: double.infinity,
+          //               height: double.infinity,
+          //               child: _widget,
+          //             ),
+          //           ),
+          //           if (_isChatVisible && constraints.maxWidth > 600)
+          //             Expanded(
+          //               flex: 1,
+          //               child: MobileLayoutScreen(
+          //                 null,
+          //                 isDrawer: true,
+          //               ),
+          //             ),
+          //         ],
+          //       ),
+          //     ),
+          //   ],
+          // );
         },
       ),
     );

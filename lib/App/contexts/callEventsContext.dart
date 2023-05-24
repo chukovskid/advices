@@ -105,72 +105,47 @@ class CallEventsContext {
     return dataDateTime;
   }
 
-  static Stream<List<EventModel>> getAllEventsStream() async* {
+  static Stream<List<EventModel>> getAllEventsStream() {
     CollectionReference events =
         FirebaseFirestore.instance.collection('events');
     final snapshots = events.orderBy('title').snapshots();
 
-    await for (var snapshot in snapshots) {
+    return snapshots.map((snapshot) async {
       var events = <EventModel>[];
       for (var doc in snapshot.docs) {
         var detailsDoc =
-            await doc.reference.collection('details').doc('details').get();
+            await doc.reference.collection('details').doc(doc.id).get();
         events.add(EventModel.fromJson(doc.data(), detailsDoc.data()));
       }
-      yield events;
-    }
+      return events;
+    }).asyncMap((event) => event);
   }
 
-static Stream<Iterable<EventModel>> getAllEvents(uid) {
-  CollectionReference calls = FirebaseFirestore.instance
-      .collection("users")
-      .doc(uid)
-      .collection('pendingCalls');
-
-  final snapshots = calls.snapshots();
-
-  return snapshots.transform<Iterable<EventModel>>(
-    StreamTransformer<QuerySnapshot<Map<String, dynamic>>,
-        Iterable<EventModel>>.fromHandlers(
-      handleData: (QuerySnapshot<Map<String, dynamic>> data,
-          EventSink<Iterable<EventModel>> sink) async {
-        List<EventModel> eventModels = [];
-
-        for (var doc in data.docs) {
-          var detailsDoc =
-              await doc.reference.collection('details').doc(doc.id).get();
-          
-          if (detailsDoc.exists) {
-            eventModels.add(EventModel.fromJson(doc.data(), detailsDoc.data()));
-          } else {
-            print("No details document for document ID: ${doc.id}");
-          }
-        }
-
-        sink.add(eventModels);
-      },
-    ),
-  );
-}
-
-  static Stream<Iterable<EventModel>> getAllUrgentEvents(uid) {
+  static Stream<Iterable<EventModel>> getAllEvents(uid) {
     CollectionReference calls = FirebaseFirestore.instance
         .collection("users")
         .doc(uid)
         .collection('pendingCalls');
 
-    final snapshots = calls.where("urgent", isEqualTo: true).snapshots();
+    final snapshots = calls.snapshots();
 
-    return snapshots.transform(
-      StreamTransformer<QuerySnapshot, Iterable<EventModel>>.fromHandlers(
-        handleData:
-            (QuerySnapshot data, EventSink<Iterable<EventModel>> sink) async {
+    return snapshots.transform<Iterable<EventModel>>(
+      StreamTransformer<QuerySnapshot<Map<String, dynamic>>,
+          Iterable<EventModel>>.fromHandlers(
+        handleData: (QuerySnapshot<Map<String, dynamic>> data,
+            EventSink<Iterable<EventModel>> sink) async {
           List<EventModel> eventModels = [];
 
           for (var doc in data.docs) {
             var detailsDoc =
-                await doc.reference.collection('details').doc('details').get();
-            eventModels.add(EventModel.fromJson(doc.data(), detailsDoc.data()));
+                await doc.reference.collection('details').doc(doc.id).get();
+
+            if (detailsDoc.exists) {
+              eventModels
+                  .add(EventModel.fromJson(doc.data(), detailsDoc.data()));
+            } else {
+              print("No details document for document ID: ${doc.id}");
+            }
           }
 
           sink.add(eventModels);
@@ -179,7 +154,75 @@ static Stream<Iterable<EventModel>> getAllEvents(uid) {
     );
   }
 
-static Future<EventModel> getEvent(String channelName) async {
+  static Future<List<EventModel>> fetchUserEvents(String userId) async {
+    List<EventModel> events = [];
+    final firestoreInstance = FirebaseFirestore.instance;
+
+    // Fetch all pending calls for this user
+    QuerySnapshot querySnapshot = await firestoreInstance
+        .collection("users")
+        .doc(userId)
+        .collection("pendingCalls")
+        .get();
+
+    for (var doc in querySnapshot.docs) {
+      print('Pending call data: ${doc.data()}');
+      Map<String, dynamic> mainData = doc.data() as Map<String, dynamic>;
+
+      // Fetch the details of each pending call
+      QuerySnapshot detailsQuerySnapshot =
+          await doc.reference.collection("details").get();
+
+      for (var detailDoc in detailsQuerySnapshot.docs) {
+        print('Details data: ${detailDoc.data()}');
+        Map<String, dynamic> detailsData =
+            detailDoc.data() as Map<String, dynamic>;
+
+        // Merge the mainData and detailsData to form the EventModel
+        EventModel event = EventModel.fromJson(mainData, detailsData);
+
+        // Add to events list
+        events.add(event);
+      }
+    }
+
+    return events;
+  }
+
+  // ...
+
+  static Stream<Iterable<EventModel>> getAllUrgentEvents(uid) {
+    CollectionReference calls = FirebaseFirestore.instance
+        .collection("users")
+        .doc(uid)
+        .collection('pendingCalls');
+    final snapshots = calls.where("urgent", isEqualTo: true).snapshots();
+    return snapshots.transform(
+      StreamTransformer<QuerySnapshot<Map<String, dynamic>>,
+          Iterable<EventModel>>.fromHandlers(
+        handleData: (QuerySnapshot<Map<String, dynamic>> data,
+            EventSink<Iterable<EventModel>> sink) async {
+          List<EventModel> eventModels = [];
+          for (var doc in data.docs) {
+            var docId = doc.id;
+            var combinedId = "$docId-$uid";
+            var detailsDoc = await FirebaseFirestore.instance
+                .collection("users")
+                .doc(uid)
+                .collection('pendingCalls')
+                .doc(docId)
+                .collection('details')
+                .doc(combinedId)
+                .get();
+            eventModels.add(EventModel.fromJson(doc.data(), detailsDoc.data()));
+          }
+          sink.add(eventModels);
+        },
+      ),
+    );
+  }
+
+  static Future<EventModel> getEvent(String channelName) async {
     // get logged user uid
     final AuthProvider _auth = AuthProvider();
     User? user = await _auth.getCurrentUser();

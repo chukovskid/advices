@@ -377,7 +377,7 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                Lawyers(service: "buyAndSaleId"))),
+                                Calls())),
                     child: Card(
                       color: advokatGreenColor,
                       elevation: 5,

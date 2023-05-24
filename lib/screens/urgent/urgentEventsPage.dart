@@ -11,6 +11,8 @@ import '../shared_widgets/BottomBar.dart';
 import '../shared_widgets/base_app_bar.dart';
 import 'package:intl/intl.dart';
 
+import '../shared_widgets/comingSoon.dart';
+
 class UrgentEvents extends StatefulWidget {
   const UrgentEvents({
     Key? key,
@@ -53,7 +55,8 @@ class _UrgentEventsState extends State<UrgentEvents>
     if (user == null) {
       return null;
     }
-    Map<String, dynamic>? result = await CallMethods.makeCloudCall(call.channelName);
+    Map<String, dynamic>? result =
+        await CallMethods.makeCloudCall(call.channelName);
     if (result!['token'] != null) {
       setState(() {
         isLoading = false;
@@ -73,42 +76,50 @@ class _UrgentEventsState extends State<UrgentEvents>
   }
 
   String trimString(String str) {
-  return str.length > 45 ? '${str.substring(0, 42)}...' : str;
-}
+    return str.length > 45 ? '${str.substring(0, 42)}...' : str;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BaseAppBar(
-        appBar: AppBar(),
-        redirectToHome: true,
-      ),
-      bottomNavigationBar: BottomBar(
-        fabLocation: FloatingActionButtonLocation.endDocked,
-        shape: CircularNotchedRectangle(),
-      ),
-      body: Container(
-        height: double.maxFinite,
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: backgroundColor,
-            stops: [-1, 1, 2],
-          ),
+        appBar: BaseAppBar(
+          appBar: AppBar(),
+          redirectToHome: true,
         ),
-        child: isLoading
-            ? Center(
-                child: Icon(
-                  Icons.hourglass_bottom,
-                  color: Colors.white,
-                  size: 100,
-                ),
-              )
-            : _cardsList(),
-      ),
-    );
+        bottomNavigationBar: BottomBar(
+          fabLocation: FloatingActionButtonLocation.endDocked,
+          shape: CircularNotchedRectangle(),
+        ),
+        body: ComingSoonWidget(
+          onBackButtonPressed: () {
+            Navigator.pop(context);
+          },
+          description:
+              'Многу скоро, ние воведуваме нова функционалност која ќе ви овозможи директен пристап до информации од клиентите за тоа кога и каква помош им е потребна. Ова ќе ви даде можност да се пријавите за да решите конкретни проблеми на клиентите.',
+        )
+
+        // Container( // TODO uncoment when finished
+        //   height: double.maxFinite,
+        //   width: double.infinity,
+        //   decoration: const BoxDecoration(
+        //     gradient: LinearGradient(
+        //       begin: Alignment.topLeft,
+        //       end: Alignment.bottomRight,
+        //       colors: backgroundColor,
+        //       stops: [-1, 1, 2],
+        //     ),
+        //   ),
+        //   child: isLoading
+        //       ? Center(
+        //           child: Icon(
+        //             Icons.hourglass_bottom,
+        //             color: Colors.white,
+        //             size: 100,
+        //           ),
+        //         )
+        //       : _cardsList(),
+        // ),
+        );
   }
 
   Widget _cardsList() {
