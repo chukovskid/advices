@@ -4,6 +4,7 @@ import 'package:advices/screens/urgent/urgentEventsPage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../call/calls.dart';
 import '../webView/IframeWidget.dart';
@@ -161,7 +162,7 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    IframeWidget(src: 'http://advices.chat/'))),
+                    IframeWidget(src: dotenv.env['AI_CHAT_URL'].toString()))),
       },
       child: MouseRegion(
         onEnter: (PointerEvent details) {
@@ -442,7 +443,7 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                IframeWidget(src: 'http://advices.chat/',))),
+                                IframeWidget(src: dotenv.env['AI_CHAT_URL'].toString(),))),
                     child: Card(
                       color: advokatGreenColor,
                       elevation: 5,

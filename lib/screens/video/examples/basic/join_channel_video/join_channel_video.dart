@@ -10,6 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../../../call/callMethods.dart';
 import '../../../../call/calls.dart';
@@ -407,7 +408,7 @@ class _State extends State<JoinChannelVideo> {
                 docAi
                     ? Expanded(
                         flex: 1,
-                        child: IframeWidget(src: "http://advices.chat/"),
+                        child: IframeWidget(src: dotenv.env['AI_CHAT_URL'].toString()),
                       )
                     : Container(),
                 Expanded(

@@ -10,6 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../../../call/callMethods.dart';
 import '../../../../call/calls.dart';
@@ -307,7 +308,7 @@ class _State extends State<JoinChannelVideo> {
                 right: 0,
                 bottom: 0,
                 width: screenWidth * 0.85,
-                child: IframeWidget(src: "http://advices.chat/"),
+                child: IframeWidget(src: dotenv.env['AI_CHAT_URL'].toString()),
               ),
             if (chatOn && isMobileLayout)
               Positioned(
