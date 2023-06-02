@@ -15,6 +15,10 @@ class WorkingHoursScreen extends StatefulWidget {
 }
 
 class _WorkingHoursScreenState extends State<WorkingHoursScreen> {
+  bool isLargeScreen =
+      MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width >
+          850.0;
+  bool isExpanded = false;
   List<Map<String, dynamic>> _workingHours = [];
 
   @override
@@ -149,7 +153,7 @@ class _WorkingHoursScreenState extends State<WorkingHoursScreen> {
     // Show time picker for end time
     selectedEndTime = await showCustomTimePicker(
         context: context, initialTime: TimeOfDay(hour: 18, minute: 0));
-        
+
     if (selectedEndTime == null) {
       return;
     }
@@ -174,37 +178,52 @@ class _WorkingHoursScreenState extends State<WorkingHoursScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text('Намести недостапни термини'),
-        backgroundColor: lightGreenColor,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => _addWorkingHours(context),
-          ),
-        ],
-      ),
-      body: ListView.builder(
-        itemCount: _workingHours.length,
-        itemBuilder: (context, index) {
-          Map<String, dynamic> workingHour = _workingHours[index];
-          return ListTile(
-            title: Text(workingHour['day']),
-            subtitle:
-                Text("${workingHour['startTime']} - ${workingHour['endTime']}"),
+    isLargeScreen = MediaQuery.of(context).size.width > 850.0;
+    return Container(
+      height: isLargeScreen
+          ? MediaQuery.of(context).size.height
+          : (isExpanded ? MediaQuery.of(context).size.height : 50.0),
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: GestureDetector(
             onTap: () {
-              _updateWorkingHours(context, workingHour);
+              if (!isLargeScreen) {
+                setState(() {
+                  isExpanded = !isExpanded;
+                });
+              }
             },
-            trailing: IconButton(
-              icon: Icon(Icons.close),
-              onPressed: () {
-                _removeWorkingHours(workingHour['day']);
-              },
+            child: Text('Намести недостапни термини'),
+          ),
+          backgroundColor: lightGreenColor,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () => _addWorkingHours(context),
             ),
-          );
-        },
+          ],
+        ),
+        body: ListView.builder(
+          itemCount: _workingHours.length,
+          itemBuilder: (context, index) {
+            Map<String, dynamic> workingHour = _workingHours[index];
+            return ListTile(
+              title: Text(workingHour['day']),
+              subtitle: Text(
+                  "${workingHour['startTime']} - ${workingHour['endTime']}"),
+              onTap: () {
+                _updateWorkingHours(context, workingHour);
+              },
+              trailing: IconButton(
+                icon: Icon(Icons.close),
+                onPressed: () {
+                  _removeWorkingHours(workingHour['day']);
+                },
+              ),
+            );
+          },
+        ),
       ),
     );
   }
