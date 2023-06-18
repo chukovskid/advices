@@ -308,7 +308,7 @@ class _State extends State<JoinChannelVideo> {
                 right: 0,
                 bottom: 0,
                 width: screenWidth * 0.85,
-                child: IframeWidget(src: dotenv.env['AI_CHAT_URL'].toString()),
+                child: IframeWidget(src: "https://advices.chat/"),
               ),
             if (chatOn && isMobileLayout)
               Positioned(

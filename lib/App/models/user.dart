@@ -15,6 +15,7 @@ class FlutterUser {
   String lawField;
   String photoURL;
   double minPriceEuro;
+  int? subscriptionLvl; // Add this line
 //  final DateTime lastMessageTime;
 
   FlutterUser({
@@ -34,6 +35,7 @@ class FlutterUser {
     this.description = "",
     this.photoURL = "",
     this.minPriceEuro = 1,
+    this.subscriptionLvl, // And this line
     // this.lastMessageTime = DateTime.now(),
   });
 
@@ -55,28 +57,10 @@ class FlutterUser {
       'lawField': lawField,
       'photoURL': photoURL,
       'minPriceEuro': minPriceEuro,
+      'subscriptionLvl': subscriptionLvl, // And this line
       // 'lastMessageTime': lastMessageTime,
     };
   }
-
-  // FlutterUser.fromJson(json)
-  //   : this(
-  //     uid:json['uid']! as String,
-  //     email:json['email']! as String,
-  //     displayName:json['displayName']! as String,
-  //     password:json['password']! as String,
-  //     name:json['name']! as String,
-  //     surname:json['surname']! as String,
-  //     phoneNumber:json['phoneNumber']! as String,
-  //     lawyerId:json['lawyerId']! as String,
-  //     isLawyer:json['isLawyer']! as bool,
-  //     description:json['description']! as String,
-  //     experience:json['experience']! as String,
-  //     yearsOfExperience:json['yearsOfExperience']! as String,
-  //     education:json['education']! as String,
-  //     lawField:json['lawField']! as String,
-  //     photoURL:json['photoURL']! as String,
-  //     );
 
   static FlutterUser fromJson(json) => FlutterUser(
         uid: json['uid'] as String? ?? "",
@@ -94,6 +78,7 @@ class FlutterUser {
         lawField: json['lawField'] as String? ?? "",
         photoURL: json['photoURL'] as String? ?? "",
         minPriceEuro: json['minPriceEuro'] as double? ?? 1.0,
+        subscriptionLvl: json['subscriptionLvl'] as int?, // And this line
         // lastMessageTime: json['lastMessageTime'].toDate(),
       );
 }

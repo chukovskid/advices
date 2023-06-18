@@ -37,6 +37,7 @@ class UsersContext {
       'phoneNumber': user.phoneNumber,
       'isLawyer': user.isLawyer,
       'photoURL': user.photoURL,
+      'subscriptionLvl': isLawyer ? 1 : 0,
     });
     return user;
   }

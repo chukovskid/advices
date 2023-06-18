@@ -61,7 +61,8 @@ class LawyersContext {
     CollectionReference lawyers =
         FirebaseFirestore.instance.collection("lawyers");
     // var filteredLawyers = lawyers.where("services", arrayContains: lawId);
-    var filteredLawyers = lawyers;
+    var filteredLawyers = lawyers.where("public", isEqualTo: true);
+    // var filteredLawyers = lawyers;
     final snapshots = filteredLawyers.snapshots();
     var flutterUsers = snapshots.map((snapshot) =>
         snapshot.docs.map((doc) => FlutterUser.fromJson(doc.data())));

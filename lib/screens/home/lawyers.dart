@@ -36,7 +36,6 @@ class Lawyers extends StatefulWidget {
 
 class _LawyersState extends State<Lawyers> {
   bool mkLanguage = true;
-  List<String> filterOptions = ['Option 1', 'Option 2', 'Option 3'];
   String? selectedFilter = list.first;
 
   @override

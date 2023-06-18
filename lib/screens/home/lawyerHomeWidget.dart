@@ -162,7 +162,7 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    IframeWidget(src: dotenv.env['AI_CHAT_URL'].toString()))),
+                    IframeWidget(src: "https://advices.chat/"))),
       },
       child: MouseRegion(
         onEnter: (PointerEvent details) {
@@ -443,7 +443,7 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                IframeWidget(src: dotenv.env['AI_CHAT_URL'].toString(),))),
+                                IframeWidget(src: "https://advices.chat/",))),
                     child: Card(
                       color: advokatGreenColor,
                       elevation: 5,

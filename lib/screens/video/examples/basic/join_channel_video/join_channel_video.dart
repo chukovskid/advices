@@ -408,7 +408,7 @@ class _State extends State<JoinChannelVideo> {
                 docAi
                     ? Expanded(
                         flex: 1,
-                        child: IframeWidget(src: dotenv.env['AI_CHAT_URL'].toString()),
+                        child: IframeWidget(src: "https://advices.chat/"),
                       )
                     : Container(),
                 Expanded(

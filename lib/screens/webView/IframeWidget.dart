@@ -89,40 +89,42 @@ class _IframeWidgetState extends State<IframeWidget> {
       ),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          return ComingSoonWidget(
-            onBackButtonPressed: () {
-              Navigator.pop(context);
-            },
-            description:
-                'Научете го вашиот персонален GPT-3.5 со ваши книги, скрипти, документи, а он ќе ви помогне да пишувате побрзо и попаметно.',
-          );
-
-          // Stack(
-          //   children: [
-          //     SafeArea(
-          //       child: Row(
-          //         children: [
-          //           Expanded(
-          //             flex: _isChatVisible ? 2 : 3,
-          //             child: Container(
-          //               width: double.infinity,
-          //               height: double.infinity,
-          //               child: _widget,
-          //             ),
-          //           ),
-          //           if (_isChatVisible && constraints.maxWidth > 600)
-          //             Expanded(
-          //               flex: 1,
-          //               child: MobileLayoutScreen(
-          //                 null,
-          //                 isDrawer: true,
-          //               ),
-          //             ),
-          //         ],
-          //       ),
-          //     ),
-          //   ],
+          return 
+          
+          // ComingSoonWidget(
+          //   onBackButtonPressed: () {
+          //     Navigator.pop(context);
+          //   },
+          //   description:
+          //       'Научете го вашиот персонален GPT-3.5 со ваши книги, скрипти, документи, а он ќе ви помогне да пишувате побрзо и попаметно.',
           // );
+
+          Stack(
+            children: [
+              SafeArea(
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: _isChatVisible ? 2 : 3,
+                      child: Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        child: _widget,
+                      ),
+                    ),
+                    if (_isChatVisible && constraints.maxWidth > 600)
+                      Expanded(
+                        flex: 1,
+                        child: MobileLayoutScreen(
+                          null,
+                          isDrawer: true,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          );
         },
       ),
     );

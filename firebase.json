@@ -3,7 +3,7 @@
     "source": "functions"
   },
   "hosting": {
-    "site": "advices-prod",
+    "site": "advices-app",
     "public": "build/web",
     "ignore": [
       "firebase.json",
