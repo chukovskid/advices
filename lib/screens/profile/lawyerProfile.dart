@@ -74,7 +74,6 @@ class _LawyerProfileState extends State<LawyerProfile> {
 
   Future<void> _updateServices() async {
     if (lawyer?.uid != null) {
-
       await LawyersContext.saveServicesForLawyer(lawyer!.uid, selectedServices);
     }
     selectedServices = [];
@@ -251,11 +250,14 @@ class _LawyerProfileState extends State<LawyerProfile> {
                     const SizedBox(
                       height: 45,
                     ),
+                    isLoggedUserTheLawyer ? _dropdownLawSelect() : SizedBox(),
+                    const SizedBox(
+                      height: 45,
+                    ),
                     _text(),
                     const SizedBox(
                       height: 45,
                     ),
-                    isLoggedUserTheLawyer ? _dropdownLawSelect() : SizedBox(),
                   ],
                 ),
               ),
@@ -277,7 +279,7 @@ class _LawyerProfileState extends State<LawyerProfile> {
           //   style: helpTextStyle,
           //   textAlign: TextAlign.justify,
           // ),
-          // SizedBox(height: 15),
+          SizedBox(height: 15),
           Text(mkLanguage ? "Кратко био" : "Short bio", style: profileHeader),
           SizedBox(height: 15),
           Text(
@@ -353,8 +355,8 @@ class _LawyerProfileState extends State<LawyerProfile> {
                         listType: MultiSelectListType.LIST,
                         searchable: true,
                         buttonText: const Text(
-                          "Select laws",
-                          style: TextStyle(color: Colors.white),
+                          "Смени ги твоите правни области",
+                          style: TextStyle(color: Color.fromARGB(192, 0, 0, 0)),
                         ),
                         title: const Text("Права"),
                         validator: (values) {
@@ -396,14 +398,14 @@ class _LawyerProfileState extends State<LawyerProfile> {
                   ));
                 })),
         const SizedBox(
-          height: 100,
+          height: 20,
         ),
         ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: orangeColor,
             ),
             child: const Text(
-              'Submit2',
+              'Зачувај',
               style: TextStyle(color: Colors.white),
             ),
             onPressed: () {
