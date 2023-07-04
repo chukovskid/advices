@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:advices/App/contexts/lawyersContext.dart';
 import 'package:advices/screens/authentication/lawyerBasedRedirect.dart';
 import 'package:advices/screens/chat/screens/mobile_chat_screen.dart';
@@ -6,8 +8,14 @@ import 'package:advices/screens/profile/unavailablePeriods.dart';
 import 'package:advices/screens/profile/workingHours.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_select_flutter/chip_display/multi_select_chip_display.dart';
+import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
+import 'package:multi_select_flutter/util/multi_select_item.dart';
+import 'package:multi_select_flutter/util/multi_select_list_type.dart';
+import '../../App/contexts/servicesContext.dart';
 import '../../App/contexts/usersContext.dart';
 import '../../App/helpers/CustomCircularProgressIndicator.dart';
+import '../../App/models/service.dart';
 import '../../App/models/user.dart';
 import '../../App/providers/auth_provider.dart';
 import '../../App/providers/chat_provider.dart';
@@ -39,6 +47,9 @@ class _LawyerProfileState extends State<LawyerProfile> {
   var imageUrl =
       "https://devshift.biz/wp-content/uploads/2017/04/profile-icon-png-898.png"; //you can use a image
   bool isLoggedUserTheLawyer = false;
+  var selectedLawAreaName;
+  List<Service?> selectedServices = [];
+  var setDefaultMake = true;
 
   @override
   void initState() {
@@ -59,6 +70,14 @@ class _LawyerProfileState extends State<LawyerProfile> {
         loading = false;
       });
     }
+  }
+
+  Future<void> _updateServices() async {
+    if (lawyer?.uid != null) {
+
+      await LawyersContext.saveServicesForLawyer(lawyer!.uid, selectedServices);
+    }
+    selectedServices = [];
   }
 
   Future<void> _startChatConversation() async {
@@ -232,7 +251,11 @@ class _LawyerProfileState extends State<LawyerProfile> {
                     const SizedBox(
                       height: 45,
                     ),
-                    _text()
+                    _text(),
+                    const SizedBox(
+                      height: 45,
+                    ),
+                    isLoggedUserTheLawyer ? _dropdownLawSelect() : SizedBox(),
                   ],
                 ),
               ),
@@ -247,6 +270,14 @@ class _LawyerProfileState extends State<LawyerProfile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Text(mkLanguage ? "Права" : "Laws", style: profileHeader),
+          // SizedBox(height: 15),
+          // Text(
+          //   "${lawyer?.services}",
+          //   style: helpTextStyle,
+          //   textAlign: TextAlign.justify,
+          // ),
+          // SizedBox(height: 15),
           Text(mkLanguage ? "Кратко био" : "Short bio", style: profileHeader),
           SizedBox(height: 15),
           Text(
@@ -295,6 +326,92 @@ class _LawyerProfileState extends State<LawyerProfile> {
           return CustomCircularProgressIndicator();
         }
       },
+    );
+  }
+
+  Widget _dropdownLawSelect() {
+    return Column(
+      children: [
+        DropdownButtonHideUnderline(
+            child: StreamBuilder<Iterable<Service>>(
+                stream: ServicesContext.getAllLaws(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) return Container();
+                  if (setDefaultMake) {
+                    selectedLawAreaName = snapshot.data?.first.name;
+                  }
+                  final laws = snapshot.data!;
+                  return Container(
+                      child: Column(
+                    children: <Widget>[
+                      MultiSelectDialogField(
+                        dialogWidth: MediaQuery.of(context).size.width * 0.7,
+                        decoration: const BoxDecoration(
+                          border:
+                              Border(bottom: BorderSide(color: orangeColor)),
+                        ),
+                        listType: MultiSelectListType.LIST,
+                        searchable: true,
+                        buttonText: const Text(
+                          "Select laws",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        title: const Text("Права"),
+                        validator: (values) {
+                          if (values == null || values.isEmpty) {
+                            return "Required";
+                          }
+                          return null;
+                        },
+                        initialValue: [],
+                        items: laws
+                            .map((e) => MultiSelectItem(e, e.name))
+                            .toList(),
+                        onConfirm: (values) {
+                          selectedServices.remove(values);
+                          selectedServices.clear();
+                          print(selectedServices);
+                          for (int i = 0; i < values.length; i++) {
+                            var val = values[i];
+                            Service selectedService = Service.fromJson(
+                                jsonDecode(values[i].toString()));
+                            selectedServices.add(selectedService);
+                          }
+                          print(selectedServices);
+                        },
+                        chipDisplay: MultiSelectChipDisplay(
+                          items: selectedServices
+                              .map((e) => MultiSelectItem(e, e!.name))
+                              .toList(),
+                          onTap: (value) {
+                            setState(() {
+                              selectedServices.remove(value);
+                              selectedServices.clear();
+                            });
+                            return selectedServices;
+                          },
+                        ),
+                      ),
+                    ],
+                  ));
+                })),
+        const SizedBox(
+          height: 100,
+        ),
+        ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: orangeColor,
+            ),
+            child: const Text(
+              'Submit2',
+              style: TextStyle(color: Colors.white),
+            ),
+            onPressed: () {
+              setState(() {
+                _updateServices();
+              });
+            })
+      ],
     );
   }
 }

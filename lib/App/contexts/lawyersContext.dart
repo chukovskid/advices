@@ -40,11 +40,11 @@ class LawyersContext {
         selectedServicesIds.add(selectedService.id);
 
         // TODO delete the collection before adding the this
-        await services.doc(selectedService.id).set({
-          "id": selectedService.id,
-          "area": selectedService.area,
-          "name": selectedService.name,
-        });
+        // await services.doc(selectedService.id).set({
+        //   "id": selectedService.id,
+        //   "area": selectedService.area,
+        //   "name": selectedService.name,
+        // });
       }
       print(selectedServicesIds);
       await saveServicesForLawyerAsArray(selectedServicesIds, uid);
