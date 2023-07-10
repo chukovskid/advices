@@ -7,16 +7,21 @@ class Message {
   final String senderId;
   final DateTime createdAt;
   final bool open;
+  final int price;
+  final bool payed;
 
-  Message(
-      {this.id,
+  Message({
+      this.id,
       required this.chatId,
       required this.message,
       required this.senderId,
       required this.displayName,
       required this.photoURL,
       required this.createdAt,
-      required this.open});
+      required this.open,
+      required this.price,
+      required this.payed,
+  });
 
   factory Message.fromMap(Map data) {
     return Message(
@@ -27,6 +32,8 @@ class Message {
       photoURL: data['photoURL'],
       createdAt: data['createdAt'],
       open: data['open'],
+      price: data['price'],
+      payed: data['payed'],
     );
   }
 
@@ -40,6 +47,8 @@ class Message {
       photoURL: data['photoURL'],
       createdAt: data['createdAt'].toDate(),
       open: data['open'],
+      price: data['price'],
+      payed: data['payed'],
     );
   }
 
@@ -52,6 +61,8 @@ class Message {
         createdAt: json['createdAt'].toDate(),
         photoURL: json['photoURL'] as String? ?? "",
         open: json['open'] as bool? ?? false,
+        price: json['price'] as int? ?? 0,
+        payed: json['payed'] as bool? ?? false,
       );
 
   Map<String, dynamic> toMap() {
@@ -64,6 +75,8 @@ class Message {
       "createdAt": createdAt,
       "id": id,
       "open": open,
+      "price": price,
+      "payed": payed,
     };
   }
 }

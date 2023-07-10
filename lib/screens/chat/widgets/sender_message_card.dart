@@ -1,14 +1,26 @@
+import 'package:advices/screens/chat/widgets/payment_dialog.dart';
 import 'package:flutter/material.dart';
+import '../../../App/providers/chat_provider.dart';
 import '../colors.dart';
 
 class SenderMessageCard extends StatelessWidget {
-  const SenderMessageCard({
+  SenderMessageCard({
     Key? key,
     required this.message,
     required this.date,
+    required this.price,
+    required this.payed,
+    required this.messageId,
+    required this.chatId,
   }) : super(key: key);
   final String message;
   final String date;
+  final int price;
+  final bool payed;
+  final String messageId;
+  final String chatId;
+
+  final ChatProvider _chatProvider = ChatProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -18,56 +30,101 @@ class SenderMessageCard extends StatelessWidget {
         constraints: BoxConstraints(
           maxWidth: MediaQuery.of(context).size.width - 45,
         ),
-        child: Card(
-          elevation: 1,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          color: senderMessageColor,
-          margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-          child: Stack(
-           children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 6,
-                  right: 70,
-                  top: 5,
-                  bottom: 20,
+        child: payed == false
+            ? InkWell(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => PaymentDialog(
+                      price: price,
+                      onPayment: () {
+                        print('chatId: $chatId, messageId: $messageId');
+                        _chatProvider.payForMessage(chatId, messageId);
+                        print('The message is paid');
+                      },
+                    ),
+                  );
+                },
+                child: Card(
+                  elevation: 1,
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Color.fromARGB(255, 255, 255, 206), width: 2),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  color: Color.fromARGB(255, 245, 179, 179),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                  child: buildCardContent(isPaid: false),
                 ),
-                child: Text(
+              )
+            : Card(
+                elevation: 1,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
+                color: senderMessageColor,
+                margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                child: buildCardContent(isPaid: true),
+              ),
+      ),
+    );
+  }
+
+  Widget buildCardContent({required bool isPaid}) {
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(
+            left: 6,
+            right: 70,
+            top: 5,
+            bottom: 20,
+          ),
+          child: isPaid
+              ? Text(
                   message,
                   style: const TextStyle(
                     fontSize: 18,
                     color: Colors.white60,
                   ),
-                ),
-              ),
-              Positioned(
-                bottom: 4,
-                right: 10,
-                child: Row(
+                )
+              : Row(
                   children: [
+                    Icon(Icons.attach_money, color: Colors.white, size: 18),
+                    SizedBox(width: 4),
                     Text(
-                      date,
+                      'Цената нa оваа порака е: $price денари',
                       style: const TextStyle(
-                        fontSize: 10,
-                        color: Color.fromARGB(255, 185, 185, 185),
-
+                        fontSize: 18,
+                        color: Colors.white,
                       ),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    const Icon(
-                      Icons.done_all,
-                      size: 20,
-                      color: Colors.white60,
                     ),
                   ],
                 ),
+        ),
+        Positioned(
+          bottom: 4,
+          right: 10,
+          child: Row(
+            children: [
+              Text(
+                date,
+                style: const TextStyle(
+                  fontSize: 10,
+                  color: Color.fromARGB(255, 185, 185, 185),
+                ),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              const Icon(
+                Icons.done_all,
+                size: 20,
+                color: Colors.white60,
               ),
             ],
           ),
         ),
-      ),
+      ],
     );
   }
 }

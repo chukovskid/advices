@@ -55,11 +55,17 @@ class ChatList extends StatelessWidget {
       return MyMessageCard(
         message: message.message,
         date: timeago.format(message.createdAt, locale: 'en_short'),
+        price: message.price,
+        payed: message.payed,
       );
     } else {
       return SenderMessageCard(
         message: message.message,
         date: timeago.format(message.createdAt, locale: 'en_short'),
+        price: message.price,
+        payed: message.payed,
+        messageId: message.id!,
+        chatId: message.chatId,
       );
     }
   }

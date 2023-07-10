@@ -4,8 +4,15 @@ import '../colors.dart';
 class MyMessageCard extends StatelessWidget {
   final String message;
   final String date;
+  final int price;
+  final bool payed;
 
-  const MyMessageCard({Key? key, required this.message, required this.date})
+  const MyMessageCard(
+      {Key? key,
+      required this.message,
+      required this.date,
+      required this.price,
+      required this.payed})
       : super(key: key);
 
   @override
@@ -43,12 +50,35 @@ class MyMessageCard extends StatelessWidget {
                 right: 10,
                 child: Row(
                   children: [
+                    price > 0
+                        ? Row(
+                            children: [
+                              Text(
+                                "$price ден",
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.white60,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              payed
+                                  ? Icon(Icons.lock_open,
+                                      color: Colors.green[50], size: 16)
+                                  : Icon(Icons.lock,
+                                      color: Colors.red[100], size: 16),
+                            ],
+                          )
+                        : SizedBox(width: 4),
+                    const SizedBox(
+                      width: 5,
+                    ),
                     Text(
                       date,
                       style: const TextStyle(
                         fontSize: 10,
                         color: Color.fromARGB(255, 185, 185, 185),
-
                       ),
                     ),
                     const SizedBox(

@@ -20,6 +20,7 @@ class IframeWidget extends StatefulWidget {
 
 class _IframeWidgetState extends State<IframeWidget> {
   late HtmlWidget _widget;
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -53,9 +54,8 @@ class _IframeWidgetState extends State<IframeWidget> {
         token != null ? '${widget.src}?token=$token' : widget.src;
 
     setState(() {
-      _widget = HtmlWidget(
-        '<iframe src="$urlWithToken"></iframe>',
-      );
+      _widget = HtmlWidget('<iframe src="$urlWithToken"></iframe>');
+      _isLoading = false;
     });
   }
 
@@ -89,42 +89,46 @@ class _IframeWidgetState extends State<IframeWidget> {
       ),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          return 
-          
-          // ComingSoonWidget(
-          //   onBackButtonPressed: () {
-          //     Navigator.pop(context);
-          //   },
-          //   description:
-          //       'Научете го вашиот персонален GPT-3.5 со ваши книги, скрипти, документи, а он ќе ви помогне да пишувате побрзо и попаметно.',
-          // );
-
-          Stack(
-            children: [
-              SafeArea(
-                child: Row(
-                  children: [
-                    Expanded(
-                      flex: _isChatVisible ? 2 : 3,
-                      child: Container(
-                        width: double.infinity,
-                        height: double.infinity,
-                        child: _widget,
-                      ),
-                    ),
-                    if (_isChatVisible && constraints.maxWidth > 600)
+          if (_isLoading) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            return Stack(
+              children: [
+                SafeArea(
+                  child: Row(
+                    children: [
                       Expanded(
-                        flex: 1,
-                        child: MobileLayoutScreen(
-                          null,
-                          isDrawer: true,
+                        flex: _isChatVisible ? 2 : 3,
+                        child: Container(
+                          width: double.infinity,
+                          height: double.infinity,
+                          child: _widget,
                         ),
                       ),
-                  ],
+                      if (_isChatVisible && constraints.maxWidth > 600)
+                        Expanded(
+                          flex: 1,
+                          child: MobileLayoutScreen(
+                            null,
+                            isDrawer: true,
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          );
+              ],
+            );
+          }
         },
       ),
     );

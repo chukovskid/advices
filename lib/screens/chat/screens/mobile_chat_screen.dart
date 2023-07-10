@@ -24,7 +24,7 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
   final TextEditingController _messageController = TextEditingController();
   final AuthProvider _auth = AuthProvider();
   final ChatProvider _chatProvider = ChatProvider();
-  int? price;
+  int price = 0;
 
   List<Message> messages = [];
   User? user;
@@ -54,10 +54,13 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
   }
 
   _submitMessage(String message) async {
+    if (message.isEmpty) {
+      return;
+    }
     _messageController.clear();
-    print("_submitMessage ${widget.chatId}");
-    await _chatProvider.sendMessage(user!.uid, message, widget.chatId);
-    print("Submitet $message");
+    await _chatProvider.sendMessage(user!.uid, message, widget.chatId,
+        price: price);
+    price = 0;
   }
 
   _nextFocus(FocusNode focusNode) {
@@ -114,6 +117,7 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
                   alignment: Alignment.bottomCenter,
                   child: SizedBox(
                     height: 56,
+                    width: 120,
                     child: Container(
                       color: mobileChatBoxColor,
                       child: Row(
@@ -192,26 +196,32 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
   }
 
   Widget _buildPriceButton() {
-    return price != null
-        ? Row(
-            children: [
-              Icon(
-                Icons.lock,
-                color: Colors.white,
-                size: 10,
+    return Container(
+      width: null, // Now it will take as much width as available
+      child: price != 0
+          ? Expanded(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.lock,
+                    color: Colors.white,
+                    size: 10,
+                  ),
+                  Text(
+                    ' \$${price}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12, // Set the font size as needed
+                    ),
+                  ),
+                ],
               ),
-              Text(
-                ' \$${price}',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12, // Set the font size as needed
-                ),
-              ),
-            ],
-          )
-        : Icon(
-            Icons.payment,
-            color: tabColor,
-          );
+            )
+          : Icon(
+              Icons.payment,
+              color: tabColor,
+            ),
+    );
   }
 }

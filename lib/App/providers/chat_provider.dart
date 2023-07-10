@@ -14,14 +14,17 @@ class ChatProvider with ChangeNotifier {
   final UsersContext _usersContext = UsersContext();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<void> sendMessage(
-      String userId, String message, String? chatId) async {
+  Future<void> sendMessage(String userId, String message, String? chatId,
+      {int price = 0}) async {
+    print(price);
     try {
       final fUser = await UsersContext.getUser(userId);
       final refMessages =
           _firestore.collection('conversation/messages/$chatId');
       final now = DateTime.now();
+      final messageId = now.microsecondsSinceEpoch.toString();
       final newMessage = Message(
+        id: messageId,
         chatId: chatId!,
         message: message,
         senderId: userId,
@@ -29,17 +32,34 @@ class ChatProvider with ChangeNotifier {
         open: false,
         photoURL: "",
         displayName: fUser.displayName,
+        price: price,
+        payed: price > 0 ? false : true,
       );
-      await refMessages
-          .doc(now.microsecondsSinceEpoch.toString())
-          .set(newMessage.toMap());
+      await refMessages.doc(messageId).set(newMessage.toMap());
       print(chatId);
       final refChat = _firestore.collection('conversation/groups/chats');
+      String lastMessage = price > 0 ? "Платена порака" : message;
       await refChat.doc(chatId).update({
         "senderId": userId,
-        "lastMessage": message,
+        "lastMessage": lastMessage,
         "lastMessageTime": DateTime.now(),
       });
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> payForMessage(String? chatId, String? messageId) async {
+    if (chatId == null || messageId == null) {
+      print('chatId or messageId was null');
+      return;
+    }
+    try {
+      final refMessages =
+          _firestore.collection('conversation/messages/$chatId');
+      await refMessages.doc(messageId).update({"payed": true});
+      print("Payment successful");
       notifyListeners();
     } catch (e) {
       print(e);
@@ -148,5 +168,4 @@ class ChatProvider with ChangeNotifier {
       throw Exception('Current user ID not found in chat ID');
     }
   }
-
 }
