@@ -46,7 +46,7 @@ const backgroundColorLawsMobile = [Color(0xff1c4746),darkGreenColor];
 
 // const backgroundColor = [orangeColor,lightBlueColor, darkGreenColor];
 const backgroundColor = [
-  Colors.white60,
+  urgentColor,
   Color.fromARGB(255, 211, 218, 228),
   darkGreenColor
 ];

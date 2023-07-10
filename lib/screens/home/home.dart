@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:advices/screens/authentication/authentication.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:advices/App/contexts/callEventsContext.dart';
@@ -15,9 +16,13 @@ import 'package:flutter/material.dart';
 import '../../App/contexts/usersContext.dart';
 import '../../App/models/event.dart';
 import '../../App/models/user.dart';
+import '../authentication/authentication_redirect.dart';
 import '../authentication/lawyerBasedRedirect.dart';
 import '../authentication/register.dart';
+import '../authentication/sign_in.dart';
+import '../call/callMethods.dart';
 import '../payment/web/calls_timer_popup.dart';
+import '../video/examples/basic/join_channel_video/join_channel_video.dart';
 import 'homeWidget.dart';
 import 'lawyerHomeWidget.dart';
 
@@ -87,15 +92,18 @@ class _HomeState extends State<Home> {
 
     if (kIsWeb) {
       uri = Uri.base.toString();
-      if (uri.contains("/calls")) {
+      if (uri.contains("/call")) {
+        String url = uri;
+        var parts = url.split("/call/");
+        String channelName = parts[1];
+        print(channelName);
+
+        openCallNew(channelName);
+      } else if (uri.contains("/calls")) {
         Future.delayed(Duration(seconds: 2), () {
           showPopup(context);
         });
 
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => Calls()),
-        // );
         return;
       } else if (uri.contains("/register")) {
         Navigator.push(
@@ -122,6 +130,24 @@ class _HomeState extends State<Home> {
           MaterialPageRoute(builder: (context) => LawyerProfile(lawyerId, "")),
         );
       }
+    }
+  }
+
+  Future<void> openCallNew(channelName) async {
+    print("Jou will join with this channelName : $channelName");
+    Map<String, dynamic>? result = await CallMethods.makeCloudCall(channelName);
+    if (result!['token'] != null) {
+      // THIS IS WORKING ON WEB AND ANDROID!
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => AuthRedirect(
+                  authenticatedWidget: JoinChannelVideo(
+                    token: result['token'],
+                    channelId: result['channelId'],
+                  ),
+                )),
+      );
     }
   }
 

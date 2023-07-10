@@ -206,6 +206,7 @@ class _LawyerProfileState extends State<LawyerProfile> {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 4),
                     Row(
                       children: [
                         ElevatedButton(
@@ -247,10 +248,10 @@ class _LawyerProfileState extends State<LawyerProfile> {
                             : SizedBox(),
                       ],
                     ),
-                    const SizedBox(
-                      height: 45,
-                    ),
-                    isLoggedUserTheLawyer ? _dropdownLawSelect() : SizedBox(),
+                    // const SizedBox( 
+                    //   height: 45,
+                    // ),
+                    // isLoggedUserTheLawyer ? _dropdownLawSelect() : SizedBox(), // TODO: add this back
                     const SizedBox(
                       height: 45,
                     ),

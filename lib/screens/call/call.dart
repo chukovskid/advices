@@ -1,25 +1,19 @@
 import 'package:advices/App/providers/auth_provider.dart';
 import 'package:advices/screens/call/callMethods.dart';
 import 'package:advices/screens/call/calls.dart';
-import 'package:advices/screens/call/testCall.dart';
 import 'package:advices/screens/home/home.dart';
 import 'package:advices/screens/profile/lawyerProfile.dart';
-import 'package:advices/App/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../App/contexts/callEventsContext.dart';
 import '../../App/models/event.dart';
-import '../video/examples/advanced/enable_virtualbackground/enable_virtualbackground.dart';
 import '../video/examples/basic/join_channel_video/join_channel_video.dart';
 import '../video/examples/advanced/index.dart';
 import '../video/examples/basic/index.dart';
-import '../video/config/agora.config.dart' as config;
 import '../../assets/utilities/constants.dart';
 import '../authentication/authentication.dart';
-import '../shared_widgets/base_app_bar.dart';
 import 'EventDesctiprion.dart';
 
 /// This widget is the root of your application.
