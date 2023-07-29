@@ -468,7 +468,7 @@ class _State extends State<JoinChannelVideo> {
         ));
       case 2:
         return Container(
-            child: Column(
+            child: Row(
           children: <Widget>[
             _expandedVideoRow([views[0]]),
             _expandedVideoRow([views[1]])

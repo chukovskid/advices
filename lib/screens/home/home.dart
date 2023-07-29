@@ -21,6 +21,7 @@ import '../authentication/lawyerBasedRedirect.dart';
 import '../authentication/register.dart';
 import '../authentication/sign_in.dart';
 import '../call/callMethods.dart';
+import '../call/demoCall.dart';
 import '../payment/web/calls_timer_popup.dart';
 import '../video/examples/basic/join_channel_video/join_channel_video.dart';
 import 'homeWidget.dart';
@@ -142,10 +143,11 @@ class _HomeState extends State<Home> {
         context,
         MaterialPageRoute(
             builder: (context) => AuthRedirect(
-                  authenticatedWidget: JoinChannelVideo(
-                    token: result['token'],
-                    channelId: result['channelId'],
-                  ),
+                  authenticatedWidget: DemoCall(channelName),
+                  // JoinChannelVideo(
+                  //   token: result['token'],
+                  //   channelId: result['channelId'],
+                  // ),
                 )),
       );
     }

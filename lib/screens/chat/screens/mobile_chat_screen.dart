@@ -68,155 +68,163 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            child: ChatAppBar(widget.chatId),
-          ),
-          Expanded(
-            child: ChatList(user!, widget.chatId),
-          ),
-          Container(
-            color: mobileChatBoxColor,
-            child: Row(
-              children: [
-                Expanded(
-                  child: ResizableWidget(
-                    minHeight: 56,
-                    maxHeight: MediaQuery.of(context).size.height / 2,
-                    child: Container(
-                      color: mobileChatBoxColor,
-                      child: TextFormField(
-                        keyboardType: TextInputType.multiline,
-                        maxLines: null,
-                        focusNode: _messageFocusNode,
-                        controller: _messageController,
-                        style: const TextStyle(color: Colors.white),
-                        decoration: InputDecoration(
-                          alignLabelWithHint: true,
-                          filled: true,
-                          fillColor: mobileChatBoxColor,
-                          hintStyle: TextStyle(color: Colors.grey[700]),
-                          hintText: 'Напиши порака!',
-                          border: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
-                            ),
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: Column(
+      children: [
+        Container(
+          width: double.infinity,
+          child: ChatAppBar(widget.chatId),
+        ),
+        Expanded(
+          child: ChatList(user!, widget.chatId),
+        ),
+        Container(
+          color: mobileChatBoxColor,
+          child: Row(
+            children: [
+              Expanded(
+                child: ResizableWidget(
+                  minHeight: 56,
+                  maxHeight: MediaQuery.of(context).size.height / 2,
+                  child: Container(
+                    color: mobileChatBoxColor,
+                    child: TextFormField(
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      focusNode: _messageFocusNode,
+                      controller: _messageController,
+                      style: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        alignLabelWithHint: true,
+                        filled: true,
+                        fillColor: mobileChatBoxColor,
+                        hintStyle: TextStyle(color: Colors.grey[700]),
+                        hintText: 'Напиши порака!',
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            width: 0,
+                            style: BorderStyle.none,
                           ),
-                          contentPadding: const EdgeInsets.all(12),
                         ),
+                        contentPadding: const EdgeInsets.all(12),
                       ),
                     ),
                   ),
                 ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: SizedBox(
-                    height: 56,
-                    width: 120,
-                    child: Container(
-                      color: mobileChatBoxColor,
-                      child: Row(
-                        children: [
-                          IconButton(
-                            icon: _buildPriceButton(),
-                            onPressed: () {
-                              _showPriceBottomSheet();
-                            },
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.send, color: Colors.white),
-                            onPressed: () {
-                              _nextFocus(_messageFocusNode);
-                              _submitMessage(_messageController.text);
-                            },
-                          ),
-                        ],
-                      ),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: SizedBox(
+                  height: 56,
+                  width: 120,
+                  child: Container(
+                    color: mobileChatBoxColor,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _showPriceDialog();
+                          },
+                          child: _buildPriceButton(),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.send, color: Colors.white),
+                          onPressed: () {
+                            _nextFocus(_messageFocusNode);
+                            _submitMessage(_messageController.text);
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+  void _showPriceDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        TextEditingController priceController = TextEditingController();
+
+        return Dialog(
+          child: Container(
+            width: 200,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Внесете цена во денари',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 16),
+                  TextField(
+                    controller: priceController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: 'Цена',
+                      hintText: 'Внесете цена',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      int? enteredPrice =
+                          int.tryParse(priceController.text.trim());
+                      if (enteredPrice != null) {
+                        setState(() {
+                          price = enteredPrice;
+                        });
+                        Navigator.pop(context);
+                      } else {
+                        // Show error message or handle invalid price input
+                      }
+                    },
+                    child: Text('Зачувај'),
+                  ),
+                ],
+              ),
             ),
           ),
-        ],
-      ),
+        );
+      },
     );
-  }
-
-  void _showPriceBottomSheet() {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext context) {
-          TextEditingController priceController = TextEditingController();
-
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Внесете цена во денари',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 16),
-                TextField(
-                  controller: priceController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: 'Цена',
-                    hintText: 'Внесете цена',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    int? enteredPrice =
-                        int.tryParse(priceController.text.trim());
-                    if (enteredPrice != null) {
-                      setState(() {
-                        price = enteredPrice;
-                      });
-                      Navigator.pop(context);
-                    } else {
-                      // Show error message or handle invalid price input
-                    }
-                  },
-                  child: Text('Зачувај'),
-                ),
-              ],
-            ),
-          );
-        });
   }
 
   Widget _buildPriceButton() {
     return Container(
-      width: null, // Now it will take as much width as available
+      width: null,
       child: price != 0
-          ? Expanded(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.lock,
-                    color: Colors.white,
-                    size: 10,
-                  ),
-                  Text(
-                    ' \$${price}',
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Icon(
+                  Icons.lock,
+                  color: Colors.white,
+                  size: 10,
+                ),
+                SizedBox(
+                  width: 60,
+                  child: Text(
+                    '${price} ден.',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 12, // Set the font size as needed
+                      fontSize: 12,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             )
           : Icon(
               Icons.payment,
