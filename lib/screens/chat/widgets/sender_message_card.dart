@@ -1,4 +1,5 @@
 import 'package:advices/screens/chat/widgets/payment_dialog.dart';
+import 'package:advices/screens/webView/IframeWidget.dart';
 import 'package:flutter/material.dart';
 import '../../../App/providers/chat_provider.dart';
 import '../colors.dart';
@@ -36,10 +37,9 @@ class SenderMessageCard extends StatelessWidget {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) => PaymentDialog(
+                      path: "$chatId/$messageId",
                       price: price,
                       onPayment: () {
-                        print('chatId: $chatId, messageId: $messageId');
-                        _chatProvider.payForMessage(chatId, messageId);
                         print('The message is paid');
                       },
                     ),
@@ -48,22 +48,26 @@ class SenderMessageCard extends StatelessWidget {
                 child: Card(
                   elevation: 1,
                   shape: RoundedRectangleBorder(
-                    side: BorderSide(color: Color.fromARGB(255, 255, 255, 206), width: 2),
+                    side: BorderSide(
+                        color: Color.fromARGB(255, 255, 255, 206), width: 2),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   color: Color.fromARGB(255, 245, 179, 179),
                   margin:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                  child: buildCardContent(isPaid: false),
+                  child: buildCardContent(isPaid: payed),
                 ),
               )
             : Card(
                 elevation: 1,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8)),
+                  side: BorderSide(
+                      color: (price > 0) ? Colors.lightGreen : Colors.transparent, width: 2),
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 color: senderMessageColor,
                 margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                child: buildCardContent(isPaid: true),
+                child: buildCardContent(isPaid: payed),
               ),
       ),
     );

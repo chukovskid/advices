@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:advices/screens/authentication/authentication.dart';
+import 'package:advices/App/providers/chat_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:advices/App/contexts/callEventsContext.dart';
@@ -15,15 +15,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import '../../App/contexts/usersContext.dart';
 import '../../App/models/event.dart';
-import '../../App/models/user.dart';
 import '../authentication/authentication_redirect.dart';
 import '../authentication/lawyerBasedRedirect.dart';
 import '../authentication/register.dart';
-import '../authentication/sign_in.dart';
 import '../call/callMethods.dart';
 import '../call/demoCall.dart';
 import '../payment/web/calls_timer_popup.dart';
-import '../video/examples/basic/join_channel_video/join_channel_video.dart';
 import 'homeWidget.dart';
 import 'lawyerHomeWidget.dart';
 
@@ -93,7 +90,22 @@ class _HomeState extends State<Home> {
 
     if (kIsWeb) {
       uri = Uri.base.toString();
-      if (uri.contains("/call")) {
+      if (uri.contains("/success_payment")) {
+        // Not used but custom dynamic links are working (publish function)
+        String url = uri;
+        var parts = url.split("/success_payment/");
+        if (parts.length > 1) {
+          var ids = parts[1].split("/");
+          if (ids.length > 1) {
+            String chatId = ids[0];
+            String messageId = ids[1];
+            print(chatId);
+            print(messageId);
+            final ChatProvider _chatProvider = ChatProvider();
+            // _chatProvider.payForMessage(chatId, messageId);
+          }
+        }
+      } else if (uri.contains("/call")) {
         String url = uri;
         var parts = url.split("/call/");
         String channelName = parts[1];
