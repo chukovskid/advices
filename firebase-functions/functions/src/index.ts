@@ -1,9 +1,13 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import { sendEmail } from './services/email';
+import { payForMessage } from './services/stripe_payment';
+
 const agora_access_token_1 = require('agora-access-token');
+const crypto = require('crypto-js');
 
 import axios from 'axios';
+import Stripe from 'stripe';
 
 
 admin.initializeApp();
@@ -11,6 +15,163 @@ admin.initializeApp();
 const db = admin.firestore();
 const fcm = admin.messaging();
 
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2022-08-01' });
+
+// export const handlePaymentIntentSucceeded = functions.https.onRequest((req, res) => {
+//  NOT USED
+//   const data = req.body; // This is the data sent in the POST request
+
+//   console.log('Data received: ', data);
+
+//   const event = stripe.webhooks.constructEvent(
+//     req.rawBody,
+//     req.headers['stripe-signature'] || '',
+//     'YOUR_WEBHOOK_SECRET'
+//   );
+
+//   if (event.type === 'payment_intent.succeeded') {
+//     const paymentIntent = event.data.object as Stripe.PaymentIntent;
+//     console.log('PaymentIntent was successful!');
+//     console.log('PaymentIntent data: ', data);
+//     console.log('PaymentIntent : ', paymentIntent);
+//   }
+
+//   res.sendStatus(200);
+// });
+
+
+// export const createCheckoutSession = functions.https.onCall(async (data, context) => {
+//  NOT USED
+//console.log('Creating checkout session...');
+//   const session = await stripe.checkout.sessions.create({
+//     payment_method_types: ['card'],
+//     line_items: [
+//       {
+//         price: 'price_1LrkUPH6waKuk26ucUMu99hm', // this is the price ID
+//         quantity: 1,
+//       },
+//     ],
+//     mode: 'payment',
+//     success_url: 'https://advices.page.link/success_payment',
+//     cancel_url: 'https://advices.page.link/cancel_payment',
+//   });
+//   console.log('Checkout session created: ', session.id);
+//   const sessionResponse = await stripe.checkout.sessions.retrieve(session.id);
+//   if (sessionResponse) {
+//     console.log('Session exists:', sessionResponse.id);
+//     console.log('Session status:', sessionResponse.payment_status);
+//     // You can check more properties here if needed
+//     // For example, you might want to check if the session has been paid
+//     return { id: sessionResponse.id };
+//   } else {
+//     console.log('Session does not exist');
+//   }
+//   return { id: session.id };
+// });
+
+export const stripeWebhook = functions.https.onRequest(async (request, response) => {
+  const sig = request.headers['stripe-signature'];
+  let event = request.body;
+
+  if (!sig || !process.env.STRIPE_SECRET_KEY) {
+    response.status(400).send('Missing Stripe Signature');
+    return;
+  }
+
+  console.log('request.body.type', event.type);
+  switch (event.type) {
+    case 'payment_intent.created':
+      // const paymentIntent = event.data.object;
+      console.log('PaymentIntent was created!');
+      break;
+    case 'payment_link.created':
+      // const paymentLink = event.data.object;
+      console.log('PaymentLink was created!');
+      break;
+    case 'charge.succeeded':
+      // const chargeSuccess = event.data.object;
+      console.log('Charge was successful!');
+      break;
+    case 'payment_intent.succeeded':
+      // const paymentIntentSucess = event.data.object;
+      console.log('PaymentIntent was successful!');
+      break;
+    case 'payment_intent.created':
+      // const paymentIntentCreated = event.data.object;
+      console.log('PaymentIntent was created!');
+      break;
+    case 'checkout.session.completed':
+      const paymentSuccess = event.data.object;
+      console.log('Payment was successful!');
+      const bytes = crypto.AES.decrypt(paymentSuccess.metadata.messagePath, process.env.STRIPE_SECRET_KEY);
+      const originalProductId = bytes.toString(crypto.enc.Utf8);
+      await payForMessage(admin, originalProductId);
+      break;
+    case 'payment_method.attached':
+      const paymentMethod = event.data.object;
+      console.log('PaymentMethod was attached to a Customer!', paymentMethod);
+      // Then define and call a method to handle the successful attachment of a PaymentMethod.
+      // handlePaymentMethodAttached(paymentMethod);
+      break;
+    // ... handle other event types
+    default:
+      console.log(`Unhandled event type ${event.type}`);
+  }
+
+  response.json({ received: true });
+});
+
+export const createPaymentLink = functions.https.onCall(async (data, context) => {
+  const path = data.path;
+  const encryptedProductId = crypto.AES.encrypt(path, process.env.STRIPE_SECRET_KEY).toString();
+  const paymentLink = await stripe.paymentLinks.create({
+    currency: 'usd',
+    line_items: [
+      {
+        price: 'price_1LrkUPH6waKuk26ucUMu99hm', // this is the price ID
+        quantity: 1,
+      },
+    ],
+    metadata: {
+      messagePath: encryptedProductId
+    }
+  });
+  return paymentLink.url;
+});
+
+// export const createDynamicLink = functions.https.onCall(async (data, context) => {
+//   // This function is not used, but it WORKS
+//   const productId = data.productId;
+//   const link = `http://localhost:8000/#/success_payment/${productId}`;
+
+//   const dynamicLink = {
+//     dynamicLinkInfo: {
+//       domainUriPrefix: 'https://advices.page.link',
+//       link: link,
+//       androidInfo: {
+//         androidPackageName: 'com.yourcompany.yourappname',//TODO dev and prod 
+//       },
+//       iosInfo: {
+//         iosBundleId: 'com.yourcompany.yourappname',
+//       },
+//     },
+//     suffix: {
+//       option: 'SHORT',
+//     },
+//   }
+
+//   const requestUri = `https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=AIzaSyAMiXYCdnUTqZItvme_QYds_TTNCLXGmac`;
+
+//   try {
+//     const response = await axios.post(requestUri, dynamicLink);
+//     console.log('Dynamic link created: ', response.data.shortLink);
+//     return { dynamicLink: response.data.shortLink };
+//   } catch (error) {
+//     console.error('Error creating dynamic link: ', error);
+//     throw error;
+//   }
+// });
 
 export const getCustomToken = functions.https.onCall(async (data, context) => {
   if (!context.auth) {
@@ -27,7 +188,6 @@ export const getCustomToken = functions.https.onCall(async (data, context) => {
     throw new functions.https.HttpsError('internal', 'Error creating custom token');
   }
 });
-
 
 export const callUser = functions.https.onCall(async (data, context) => {
   // let callerId = context.auth?.uid;
@@ -61,7 +221,6 @@ export const callUser = functions.https.onCall(async (data, context) => {
   };
   return fcm.sendToDevice(tokens, payload);
 });
-
 
 export const notifyNewCalls = functions.firestore
   .document('users/{callerId}/pendingCalls/{channelName}')
@@ -119,7 +278,7 @@ export const notificationForNewMessage = functions.firestore.document('/conversa
 });
 
 async function callGPT(prompt: string) {
-  const apiKey = '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';
+  const apiKey = 'sk----this key is removed for security reasons---- add new one';
   const url = 'https://api.openai.com/v1/engines/text-davinci-003/completions';
 
   const headers = {
@@ -208,29 +367,29 @@ export const createCallsWithTokens = functions.https.onCall((data, context) => {
   // console.log("context.auth.uid===========: ", context.auth.uid);
   console.log("context.auth.data=========: ", data);
   try {
-  const appId = "03f0c2c7973949b3afe5e475f15a350e";
-  const appCertificate = "3c274947f08447ebb0a83f1ecc43beda";
-  const role = agora_access_token_1.RtcRole.PUBLISHER;
-  const expirationTimeInSeconds = 3600;
-  const currentTimestamp = Math.floor(Date.now() / 1000);
-  const privilegeExpired = currentTimestamp + expirationTimeInSeconds;
-  const uid = 0;
-  // const channelName = Math.floor(Math.random() * 100).toString();
-  const channelName = data.channelName.toString();
-  const token = agora_access_token_1.RtcTokenBuilder.buildTokenWithUid(appId, appCertificate, channelName, uid, role, privilegeExpired);
-  return {
-  data: {
-  token: token,
-  channelId: channelName,
-  },
-  };
+    const appId = "03f0c2c7973949b3afe5e475f15a350e";
+    const appCertificate = "3c274947f08447ebb0a83f1ecc43beda";
+    const role = agora_access_token_1.RtcRole.PUBLISHER;
+    const expirationTimeInSeconds = 3600;
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+    const privilegeExpired = currentTimestamp + expirationTimeInSeconds;
+    const uid = 0;
+    // const channelName = Math.floor(Math.random() * 100).toString();
+    const channelName = data.channelName.toString();
+    const token = agora_access_token_1.RtcTokenBuilder.buildTokenWithUid(appId, appCertificate, channelName, uid, role, privilegeExpired);
+    return {
+      data: {
+        token: token,
+        channelId: channelName,
+      },
+    };
   }
   catch (error) {
-  console.log(error);
+    console.log(error);
   }
   return null;
- });
- 
+});
+
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////

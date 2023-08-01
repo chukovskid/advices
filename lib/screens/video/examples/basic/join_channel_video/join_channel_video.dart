@@ -539,10 +539,10 @@ class _State extends State<JoinChannelVideo> {
   }
 }
 
-_confirmPayment(BuildContext context) {
-  showPopup(context);
-  redirectToCheckout(context);
-}
+// _confirmPayment(BuildContext context) {
+//   showPopup(context);
+//   redirectToCheckout(context);
+// }
 
 void showPopup(BuildContext context) {
   ScaffoldMessenger.of(context).showSnackBar(

@@ -45,6 +45,8 @@ dependencies:
   flutter_dotenv: ^5.0.2
   timeago: ^3.3.0
   flutter_widget_from_html: ^0.9.1
+  flutter_stripe: ^9.3.0
+
 
 
 
