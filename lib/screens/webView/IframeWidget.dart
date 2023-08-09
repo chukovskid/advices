@@ -11,8 +11,9 @@ import '../shared_widgets/comingSoon.dart';
 
 class IframeWidget extends StatefulWidget {
   final String src;
+  final VoidCallback? onClose;
 
-  IframeWidget({required this.src});
+  IframeWidget({required this.src, this.onClose});
 
   @override
   _IframeWidgetState createState() => _IframeWidgetState();
@@ -83,8 +84,19 @@ class _IframeWidgetState extends State<IframeWidget> {
       appBar: BaseAppBar(
         appBar: AppBar(),
         openChat: true,
+        onBackPressed: () {
+          if (widget.onClose != null) {
+            widget.onClose!(); // If callback exists, call it.
+          } else {
+            Navigator.pop(context);
+          }
+        },
         onChatPressed: () {
-          _navigateToChat(context);
+          if (widget.onClose != null) {
+            widget.onClose!(); // If callback exists, call it.
+          } else {
+            _navigateToChat(context);
+          }
         },
       ),
       body: LayoutBuilder(

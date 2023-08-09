@@ -439,7 +439,7 @@ class _CreateEventState extends State<CreateEvent> {
                         child: Row(
                           children: [
                             Text(
-                              _isFormEmpty() ? "Уреди" : "Поднеси",
+                              _isFormEmpty() ? "Закажи" : "Поднеси",
                               style: TextStyle(
                                   color: Color.fromARGB(255, 255, 255, 255),
                                   fontWeight: FontWeight.bold),

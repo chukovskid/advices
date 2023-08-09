@@ -8,8 +8,9 @@ import '../colors.dart';
 
 class ChatAppBar extends StatefulWidget {
   final String chatId;
+  final VoidCallback? onClose;
 
-  ChatAppBar(this.chatId, {Key? key}) : super(key: key);
+  ChatAppBar(this.chatId, {Key? key, this.onClose}) : super(key: key);
 
   @override
   State<ChatAppBar> createState() => _ChatAppBarState();
@@ -125,16 +126,22 @@ class _ChatAppBarState extends State<ChatAppBar> {
   }
 
   Widget _iconButton() {
+    IconData iconData;
+    VoidCallback action;
+    if (widget.onClose != null) {
+      iconData = Icons.arrow_forward_ios_outlined;
+      action = widget.onClose!;
+    } else {
+      iconData = Icons.arrow_back_ios_outlined;
+      action = () => Navigator.pop(context);
+    }
     return IconButton(
       icon: Icon(
-        Icons.arrow_back_ios_outlined,
+        iconData,
         size: 26,
         color: whiteColor,
       ),
-      onPressed: () {
-        // Handle button press here
-        Navigator.pop(context);
-      },
+      onPressed: action,
     );
   }
 }

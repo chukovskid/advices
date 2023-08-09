@@ -8,10 +8,16 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
   bool redirectToHome;
   bool openChat;
   final VoidCallback? onChatPressed;
+  final VoidCallback? onBackPressed;
 
   /// you can add more fields that meet your needs
 
-  BaseAppBar({required this.appBar, this.redirectToHome = false, this.openChat = false, this.onChatPressed});
+  BaseAppBar(
+      {required this.appBar,
+      this.redirectToHome = false,
+      this.openChat = false,
+      this.onChatPressed,
+      this.onBackPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +44,8 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
       if (Navigator.canPop(context)) {
         return IconButton(
           icon: Icon(Icons.arrow_back_ios),
-          onPressed: _navigateBack,
+          onPressed: () =>
+              {if (onBackPressed != null) onBackPressed!() else _navigateBack},
         );
       } else {
         return null;
@@ -55,7 +62,9 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
           style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(Colors.white)),
           // textColor: Colors.white,
-          icon: openChat ? Icon(Icons.chat) : (redirectToHome ? Icon(Icons.home): Icon(Icons.person)),
+          icon: openChat
+              ? Icon(Icons.chat)
+              : (redirectToHome ? Icon(Icons.home) : Icon(Icons.person)),
           label: Text(''),
           onPressed: openChat ? onChatPressed : _navigate,
         ),

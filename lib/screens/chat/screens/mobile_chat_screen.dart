@@ -12,8 +12,10 @@ import '../widgets/chat_appbar.dart';
 
 class MobileChatScreen extends StatefulWidget {
   final String chatId;
+  final VoidCallback? onClose;
 
-  const MobileChatScreen(this.chatId, {Key? key}) : super(key: key);
+  const MobileChatScreen(this.chatId, {Key? key, this.onClose})
+      : super(key: key);
 
   @override
   State<MobileChatScreen> createState() => _MobileChatScreenState();
@@ -68,86 +70,86 @@ class _MobileChatScreenState extends State<MobileChatScreen> {
   }
 
   @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    body: Column(
-      children: [
-        Container(
-          width: double.infinity,
-          child: ChatAppBar(widget.chatId),
-        ),
-        Expanded(
-          child: ChatList(user!, widget.chatId),
-        ),
-        Container(
-          color: mobileChatBoxColor,
-          child: Row(
-            children: [
-              Expanded(
-                child: ResizableWidget(
-                  minHeight: 56,
-                  maxHeight: MediaQuery.of(context).size.height / 2,
-                  child: Container(
-                    color: mobileChatBoxColor,
-                    child: TextFormField(
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                      focusNode: _messageFocusNode,
-                      controller: _messageController,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        alignLabelWithHint: true,
-                        filled: true,
-                        fillColor: mobileChatBoxColor,
-                        hintStyle: TextStyle(color: Colors.grey[700]),
-                        hintText: 'Напиши порака!',
-                        border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            child: ChatAppBar(widget.chatId, onClose: widget.onClose),
+          ),
+          Expanded(
+            child: ChatList(user!, widget.chatId),
+          ),
+          Container(
+            color: mobileChatBoxColor,
+            child: Row(
+              children: [
+                Expanded(
+                  child: ResizableWidget(
+                    minHeight: 56,
+                    maxHeight: MediaQuery.of(context).size.height / 2,
+                    child: Container(
+                      color: mobileChatBoxColor,
+                      child: TextFormField(
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
+                        focusNode: _messageFocusNode,
+                        controller: _messageController,
+                        style: const TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          alignLabelWithHint: true,
+                          filled: true,
+                          fillColor: mobileChatBoxColor,
+                          hintStyle: TextStyle(color: Colors.grey[700]),
+                          hintText: 'Напиши порака!',
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              width: 0,
+                              style: BorderStyle.none,
+                            ),
                           ),
+                          contentPadding: const EdgeInsets.all(12),
                         ),
-                        contentPadding: const EdgeInsets.all(12),
                       ),
                     ),
                   ),
                 ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: SizedBox(
-                  height: 56,
-                  width: 120,
-                  child: Container(
-                    color: mobileChatBoxColor,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            _showPriceDialog();
-                          },
-                          child: _buildPriceButton(),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.send, color: Colors.white),
-                          onPressed: () {
-                            _nextFocus(_messageFocusNode);
-                            _submitMessage(_messageController.text);
-                          },
-                        ),
-                      ],
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SizedBox(
+                    height: 56,
+                    width: 120,
+                    child: Container(
+                      color: mobileChatBoxColor,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              _showPriceDialog();
+                            },
+                            child: _buildPriceButton(),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.send, color: Colors.white),
+                            onPressed: () {
+                              _nextFocus(_messageFocusNode);
+                              _submitMessage(_messageController.text);
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
-    ),
-  );
-}
+        ],
+      ),
+    );
+  }
 
   void _showPriceDialog() {
     showDialog(
