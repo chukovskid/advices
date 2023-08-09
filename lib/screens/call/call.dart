@@ -170,12 +170,9 @@ class _CallState extends State<Call> {
       ),
       body: isLoading
           ? Center(
-              child: Icon(
-                Icons.hourglass_bottom,
-                color: Colors.white,
-                size: 100,
-              ),
-            )
+              child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+            ))
           : SafeArea(
               child: Container(
                 width: double.infinity,

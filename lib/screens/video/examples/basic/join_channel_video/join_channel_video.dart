@@ -50,6 +50,9 @@ class _State extends State<JoinChannelVideo> {
   late String token = widget.token;
   late String channelName = widget.channelId;
   bool get isSmallScreen => MediaQuery.of(context).size.width < 600;
+  int firstScreen = 0;
+  int secondScreen = 1;
+  int tempSwap = 0;
 
   @override
   void initState() {
@@ -156,7 +159,7 @@ class _State extends State<JoinChannelVideo> {
   Widget _toolbarWeb() {
     return Container(
       alignment: Alignment.bottomCenter,
-      padding: const EdgeInsets.symmetric(vertical: 48),
+      padding: const EdgeInsets.symmetric(vertical: 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
@@ -503,12 +506,42 @@ class _State extends State<JoinChannelVideo> {
         ));
       case 2:
         return Container(
-            child: Row(
-          children: <Widget>[
-            _expandedVideoRow([views[0]]),
-            _expandedVideoRow([views[1]])
+            // margin: EdgeInsets.only(bottom: 50),
+            child: Stack(
+          children: [
+            _expandedVideoRow([views[secondScreen]]),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 10, bottom: 10),
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        tempSwap = firstScreen;
+                        firstScreen = secondScreen;
+                        secondScreen = tempSwap;
+                      });
+                    },
+                    child: SizedBox(
+                        height: 200,
+                        width: 100,
+                        child: _expandedVideoRow([views[firstScreen]])),
+                  ),
+                ),
+              ),
+            ),
           ],
         ));
+
+      // return Container(
+      //     child: Row(
+      //   children: <Widget>[
+      //     _expandedVideoRow([views[0]]),
+      //     _expandedVideoRow([views[1]])
+      //   ],
+      // ));
       case 3:
         return Container(
             child: Column(
