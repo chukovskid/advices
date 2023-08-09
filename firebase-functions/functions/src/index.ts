@@ -140,6 +140,39 @@ export const createPaymentLink = functions.https.onCall(async (data, context) =>
   return paymentLink.url;
 });
 
+export const createLawyerProfileDynamicLink = functions.https.onCall(async (data, context) => {
+  // This function is not used, but it WORKS
+  const lawyerId = data.lawyerId;
+  const link = `http://localhost:8000/#/lawyers/${lawyerId}`;
+
+  const dynamicLink = {
+    dynamicLinkInfo: {
+      domainUriPrefix: 'https://advices.page.link',
+      link: link,
+      androidInfo: {
+        androidPackageName: 'com.yourcompany.yourappname',//TODO dev and prod 
+      },
+      iosInfo: {
+        iosBundleId: 'com.yourcompany.yourappname',
+      },
+    },
+    suffix: {
+      option: 'SHORT',
+    },
+  }
+
+  const requestUri = `https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=${process.env.APP_ID_FIREBASE}`;
+
+  try {
+    const response = await axios.post(requestUri, dynamicLink);
+    console.log('Dynamic link created: ', response.data.shortLink);
+    return { dynamicLink: response.data.shortLink };
+  } catch (error) {
+    console.error('Error creating dynamic link: ', error);
+    throw error;
+  }
+});
+
 // export const createDynamicLink = functions.https.onCall(async (data, context) => {
 //   // This function is not used, but it WORKS
 //   const productId = data.productId;

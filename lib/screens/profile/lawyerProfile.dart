@@ -8,10 +8,12 @@ import 'package:advices/screens/profile/unavailablePeriods.dart';
 import 'package:advices/screens/profile/workingHours.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:multi_select_flutter/chip_display/multi_select_chip_display.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:multi_select_flutter/util/multi_select_list_type.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../App/contexts/servicesContext.dart';
 import '../../App/contexts/usersContext.dart';
 import '../../App/helpers/CustomCircularProgressIndicator.dart';
@@ -19,12 +21,14 @@ import '../../App/models/service.dart';
 import '../../App/models/user.dart';
 import '../../App/providers/auth_provider.dart';
 import '../../App/providers/chat_provider.dart';
+import '../../App/services/firebase_dynamic_links.dart';
 import '../../App/services/googleAuth.dart';
 import '../../assets/utilities/constants.dart';
 import '../authentication/sign_in.dart';
 import '../chat/screens/web_layout_screen.dart';
 import '../chat/utils/responsive_layout.dart';
 import '../shared_widgets/base_app_bar.dart';
+import 'package:rich_clipboard/rich_clipboard.dart';
 
 class LawyerProfile extends StatefulWidget {
   final String uid;
@@ -50,6 +54,7 @@ class _LawyerProfileState extends State<LawyerProfile> {
   var selectedLawAreaName;
   List<Service?> selectedServices = [];
   var setDefaultMake = true;
+  String? lawyerProfileURL = "";
 
   @override
   void initState() {
@@ -110,9 +115,28 @@ class _LawyerProfileState extends State<LawyerProfile> {
   Future<void> _isLoggedUserTheLawyer() async {
     User? user = await _auth.getCurrentUser();
     if (user != null && user.uid == widget.uid) {
+      lawyerProfileURL =
+          await FirebaseDynamicLinkService.createLawyerProfileDynamicLink(
+              user.uid);
       setState(() {
         isLoggedUserTheLawyer = true;
       });
+    }
+  }
+
+  void _shareLawyerProfileLink() async {
+    final screenSize = MediaQuery.of(context).size;
+    if (lawyerProfileURL != null && lawyerProfileURL!.isNotEmpty) {
+      if (screenSize.width < 600) {
+        Share.share(lawyerProfileURL!);
+      } else {
+        Clipboard.setData(ClipboardData(text: lawyerProfileURL));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Успешно го копиравте линкот од вашиот профил!"),
+          ),
+        );
+      }
     }
   }
 
@@ -229,26 +253,51 @@ class _LawyerProfileState extends State<LawyerProfile> {
                           width: 8,
                         ),
                         isLoggedUserTheLawyer
-                            ? ElevatedButton(
-                                onPressed: _signOut,
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(
-                                      Icons.logout,
-                                      size: 15,
+                            ? Row(
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: _signOut,
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          Icons.logout,
+                                          size: 15,
+                                        ),
+                                        Text("Одјави се"),
+                                      ],
                                     ),
-                                    Text("Одјави се"),
-                                  ],
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                    textStyle: const TextStyle(fontSize: 15),
-                                    backgroundColor: orangeColor),
+                                    style: ElevatedButton.styleFrom(
+                                        textStyle:
+                                            const TextStyle(fontSize: 15),
+                                        backgroundColor: orangeColor),
+                                  ),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: _shareLawyerProfileLink,
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          Icons.share,
+                                          size: 15,
+                                        ),
+                                        Text("Сподели"),
+                                      ],
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                        textStyle:
+                                            const TextStyle(fontSize: 15),
+                                        backgroundColor: Colors.greenAccent),
+                                  ),
+                                ],
                               )
                             : SizedBox(),
                       ],
                     ),
-                    // const SizedBox( 
+                    // const SizedBox(
                     //   height: 45,
                     // ),
                     // isLoggedUserTheLawyer ? _dropdownLawSelect() : SizedBox(), // TODO: add this back

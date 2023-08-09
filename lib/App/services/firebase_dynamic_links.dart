@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -10,6 +12,19 @@ import '../models/service.dart';
 FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
 class FirebaseDynamicLinkService {
+
+static Future<String?> createLawyerProfileDynamicLink(String lawyerId) async {
+  try {
+    await Firebase.initializeApp();
+    final functions = FirebaseFunctions.instance;
+    final result = await functions.httpsCallable('createLawyerProfileDynamicLink').call({'lawyerId': lawyerId});
+    return result.data['dynamicLink'];
+  } catch (e) {
+    print('Error calling the Firebase Function: $e');
+    return null;
+  }
+}
+
   static Future<String> createDynamicLink(bool short) async {
     String _linkMessage;
 
