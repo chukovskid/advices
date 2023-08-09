@@ -96,7 +96,7 @@ class SenderMessageCard extends StatelessWidget {
                     Icon(Icons.attach_money, color: Colors.white, size: 18),
                     SizedBox(width: 4),
                     Text(
-                      'Цената нa оваа порака е: $price денари',
+                      'Цена: $price денари',
                       style: const TextStyle(
                         fontSize: 18,
                         color: Colors.white,

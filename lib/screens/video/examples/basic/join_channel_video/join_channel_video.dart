@@ -159,102 +159,121 @@ class _State extends State<JoinChannelVideo> {
       padding: const EdgeInsets.symmetric(vertical: 48),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Tooltip(
-            message: 'End Call',
-            child: RawMaterialButton(
-              onPressed: () => _onCallEnd(context),
-              child: Icon(
-                Icons.call_end,
-                color: Colors.white,
-                size: 20.0,
+          Container(
+            width: 60,
+            child: Tooltip(
+              message: 'End Call',
+              child: RawMaterialButton(
+                onPressed: () => _onCallEnd(context),
+                child: Icon(
+                  Icons.call_end,
+                  color: Colors.white,
+                  size: 22.0,
+                ),
+                shape: CircleBorder(),
+                elevation: 2.0,
+                fillColor: Colors.redAccent,
+                padding: const EdgeInsets.all(8.0),
               ),
-              shape: CircleBorder(),
-              elevation: 2.0,
-              fillColor: Colors.redAccent,
-              padding: const EdgeInsets.all(12.0),
             ),
           ),
-          Tooltip(
-            message: muted ? 'Unmute' : 'Mute',
-            child: RawMaterialButton(
-              onPressed: _onToggleMute,
-              child: Icon(
-                muted ? Icons.mic_off : Icons.mic,
-                color: muted ? Colors.white : Colors.blueAccent,
-                size: 20.0,
+          Container(
+            width: 60,
+            child: Tooltip(
+              message: muted ? 'Unmute' : 'Mute',
+              child: RawMaterialButton(
+                onPressed: _onToggleMute,
+                child: Icon(
+                  muted ? Icons.mic_off : Icons.mic,
+                  color: muted ? Colors.white : Colors.blueAccent,
+                  size: 22.0,
+                ),
+                shape: CircleBorder(),
+                elevation: 2.0,
+                fillColor: muted ? Colors.blueAccent : Colors.white,
+                padding: const EdgeInsets.all(8.0),
               ),
-              shape: CircleBorder(),
-              elevation: 2.0,
-              fillColor: muted ? Colors.blueAccent : Colors.white,
-              padding: const EdgeInsets.all(12.0),
             ),
           ),
           kIsWeb
               ? SizedBox()
-              : Tooltip(
-                  message: 'Switch Camera',
-                  child: RawMaterialButton(
-                    onPressed: _onSwitchCamera,
-                    child: Icon(
-                      Icons.switch_camera,
-                      color: Colors.blueAccent,
-                      size: 20.0,
+              : Container(
+                  width: 60,
+                  child: Tooltip(
+                    message: 'Switch Camera',
+                    child: RawMaterialButton(
+                      onPressed: _onSwitchCamera,
+                      child: Icon(
+                        Icons.switch_camera,
+                        color: Colors.blueAccent,
+                        size: 22.0,
+                      ),
+                      shape: CircleBorder(),
+                      elevation: 2.0,
+                      fillColor: Colors.white,
+                      padding: const EdgeInsets.all(8.0),
                     ),
-                    shape: CircleBorder(),
-                    elevation: 2.0,
-                    fillColor: Colors.white,
-                    padding: const EdgeInsets.all(12.0),
                   ),
                 ),
-          Tooltip(
-            message: cameraOn ? 'Turn off camera' : 'Turn on camera',
-            child: RawMaterialButton(
-              onPressed: _onToggleCamera,
-              child: Icon(
-                cameraOn ? Icons.videocam : Icons.videocam_off,
-                color: cameraOn ? Colors.blueAccent : Colors.white,
-                size: 20.0,
-              ),
-              shape: CircleBorder(),
-              elevation: 2.0,
-              fillColor: cameraOn ? Colors.white : Colors.blueAccent,
-              padding: const EdgeInsets.all(12.0),
-            ),
-          ),
-          LawyerBasedRedirect(
-              lawyerWidget: Tooltip(
-                message: docAi ? 'Disable Document AI' : 'Enable Document AI',
-                child: RawMaterialButton(
-                  onPressed: _onToggleDocAi,
-                  child: Icon(
-                    docAi
-                        ? Icons.edit_document
-                        : Icons.document_scanner_outlined,
-                    color: docAi ? Colors.blueAccent : Colors.white,
-                    size: 20.0,
-                  ),
-                  shape: CircleBorder(),
-                  elevation: 2.0,
-                  fillColor: docAi ? Colors.white : Colors.blueAccent,
-                  padding: const EdgeInsets.all(12.0),
-                ),
-              ),
-              nonLawyerWidget: SizedBox()),
-          Tooltip(
-              message: chatOn ? 'Disable Chat' : 'Enable Chat',
+          Container(
+            width: 60,
+            child: Tooltip(
+              message: cameraOn ? 'Turn off camera' : 'Turn on camera',
               child: RawMaterialButton(
-                onPressed: _onToggleChat,
+                onPressed: _onToggleCamera,
                 child: Icon(
-                  chatOn ? Icons.chat_outlined : Icons.subtitles_off_outlined,
-                  color: chatOn ? Colors.blueAccent : Colors.white,
-                  size: 20.0,
+                  cameraOn ? Icons.videocam : Icons.videocam_off,
+                  color: cameraOn ? Colors.blueAccent : Colors.white,
+                  size: 22.0,
                 ),
                 shape: CircleBorder(),
                 elevation: 2.0,
-                fillColor: chatOn ? Colors.white : Colors.blueAccent,
-                padding: const EdgeInsets.all(12.0),
-              )),
+                fillColor: cameraOn ? Colors.white : Colors.blueAccent,
+                padding: const EdgeInsets.all(8.0),
+              ),
+            ),
+          ),
+          LawyerBasedRedirect(
+              lawyerWidget: Container(
+                width: 60,
+                child: Tooltip(
+                  message: docAi ? 'Disable Document AI' : 'Enable Document AI',
+                  child: RawMaterialButton(
+                    onPressed: _onToggleDocAi,
+                    child: Icon(
+                      docAi
+                          ? Icons.edit_document
+                          : Icons.document_scanner_outlined,
+                      color: docAi ? Colors.blueAccent : Colors.white,
+                      size: 22.0,
+                    ),
+                    shape: CircleBorder(),
+                    elevation: 2.0,
+                    fillColor: docAi ? Colors.white : Colors.blueAccent,
+                    padding: const EdgeInsets.all(8.0),
+                  ),
+                ),
+              ),
+              nonLawyerWidget: SizedBox()),
+          Container(
+            width: 60,
+            child: Tooltip(
+                message: chatOn ? 'Disable Chat' : 'Enable Chat',
+                child: RawMaterialButton(
+                  onPressed: _onToggleChat,
+                  child: Icon(
+                    chatOn ? Icons.chat_outlined : Icons.subtitles_off_outlined,
+                    color: chatOn ? Colors.blueAccent : Colors.white,
+                    size: 22.0,
+                  ),
+                  shape: CircleBorder(),
+                  elevation: 2.0,
+                  fillColor: chatOn ? Colors.white : Colors.blueAccent,
+                  padding: const EdgeInsets.all(8.0),
+                )),
+          ),
           // RawMaterialButton(
           //   onPressed: () => _confirmPayment(context),
           //   child: Icon(

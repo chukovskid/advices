@@ -115,12 +115,12 @@ class _LawyerProfileState extends State<LawyerProfile> {
   Future<void> _isLoggedUserTheLawyer() async {
     User? user = await _auth.getCurrentUser();
     if (user != null && user.uid == widget.uid) {
-      lawyerProfileURL =
-          await FirebaseDynamicLinkService.createLawyerProfileDynamicLink(
-              user.uid);
       setState(() {
         isLoggedUserTheLawyer = true;
       });
+      lawyerProfileURL =
+          await FirebaseDynamicLinkService.createLawyerProfileDynamicLink(
+              user.uid);
     }
   }
 

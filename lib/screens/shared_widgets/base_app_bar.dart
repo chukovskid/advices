@@ -45,7 +45,7 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
         return IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () =>
-              {if (onBackPressed != null) onBackPressed!() else _navigateBack},
+              {onBackPressed != null ?onBackPressed!() : _navigateBack()},
         );
       } else {
         return null;
