@@ -2,33 +2,35 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CLIENT_ID</key>
-	<string>968596221490-28hi03nage2rsni8kl1k0998oka6dg0p.apps.googleusercontent.com</string>
-	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.968596221490-28hi03nage2rsni8kl1k0998oka6dg0p</string>
 	<key>API_KEY</key>
-	<string>AIzaSyC2jeGN8TewtAY27yKsiqvNME5eAruxqtw</string>
+	<string>AIzaSyBVP_mV2EHY-QXzQfVbWGWw8qLZXySoymo</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.793184649946-991le3jj67gkcoirbhjdo3cu38qis0i7</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>793184649946-73809u4lilv8vllsl1i79f89550c7pti.apps.googleusercontent.com</string>
+	<key>CLIENT_ID</key>
+	<string>793184649946-991le3jj67gkcoirbhjdo3cu38qis0i7.apps.googleusercontent.com</string>
 	<key>GCM_SENDER_ID</key>
-	<string>968596221490</string>
+	<string>793184649946</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>io.agora.agoraRtcEngineExample</string>
+	<string>io.advices.virtualOffice</string>
 	<key>PROJECT_ID</key>
-	<string>advices-prod</string>
+	<string>advices-dev</string>
 	<key>STORAGE_BUCKET</key>
-	<string>advices-prod.appspot.com</string>
+	<string>advices-dev.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<false></false>
+	<false/>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false></false>
+	<false/>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_GCM_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:968596221490:ios:2e2893b0a35b068380962b</string>
+	<string>1:793184649946:ios:59896fbd53061ee3cd9be3</string>
 </dict>
 </plist>

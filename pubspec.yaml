@@ -4,6 +4,7 @@ description: Demonstrates how to use the agora_rtc_engine plugin.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.0
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -34,7 +35,7 @@ dependencies:
   pointer_interceptor: ^0.9.3+2
   flutter_secure_storage: ^7.0.1
   google_sign_in: ^5.3.0
-  flutter_facebook_auth: ^5.0.7
+  # flutter_facebook_auth: ^5.0.7
   twitter_login: ^4.0.1
   # get: ^4.6.5
   url_launcher: ^6.1.0
