@@ -10,7 +10,7 @@ let transporter = nodemailer.createTransport({
   }
 });
 
-export async function sendEmail(recipient: String, subject: String, body: any, html: any) {
+export async function sendEmail(recipient: any, subject: String, body: any, html: any) {
 
   const options = {
     from: {
@@ -19,17 +19,18 @@ export async function sendEmail(recipient: String, subject: String, body: any, h
     },
     to: recipient,
     subject: subject,
-    html: String,
+    // html: String, // TODO uncomment for html
     text: String,
-
-
   };
+  options.text = body || ""
+  console.log("options", options)
 
-  if ((html || "").toString().length === 0) {
-    options.text = body || ""
-  } else {
-    options.html = html || ""
-  }
+  // TODO uncomment for html
+  // if ((html || "").toString().length === 0) { 
+  //   options.text = body || ""
+  // } else {
+  //   options.html = html || ""
+  // }
 
   return await transporter.sendMail(options);
 }

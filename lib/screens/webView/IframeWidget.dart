@@ -89,17 +89,17 @@ class _IframeWidgetState extends State<IframeWidget> {
       ),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          return 
-          
-          // ComingSoonWidget(
-          //   onBackButtonPressed: () {
-          //     Navigator.pop(context);
-          //   },
-          //   description:
-          //       'Научете го вашиот персонален GPT-3.5 со ваши книги, скрипти, документи, а он ќе ви помогне да пишувате побрзо и попаметно.',
-          // );
+          return
 
-          Stack(
+              // ComingSoonWidget(
+              //   onBackButtonPressed: () {
+              //     Navigator.pop(context);
+              //   },
+              //   description:
+              //       'Научете го вашиот персонален GPT-3.5 со ваши книги, скрипти, документи, а он ќе ви помогне да пишувате побрзо и попаметно.',
+              // );
+
+              Stack(
             children: [
               SafeArea(
                 child: Row(

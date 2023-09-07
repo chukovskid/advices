@@ -114,7 +114,22 @@ export const notificationForNewMessage = functions.firestore.document('/conversa
       senderPhotoURL: senderPhotoURL ? senderPhotoURL : '',
     }
   };
+  //senderName, lastMessage, lastMessageTime, senderPhotoURL
+  let receaverData : any;
 
+  const receaverRef = await db.collection('users').doc(receiverId);
+  await receaverRef.get().then((doc) => {
+    if (doc.exists) {
+      receaverData = doc.data()
+      console.log("receaverData: ", receaverData);
+    } else {
+      console.log("No such document!");
+    }
+  }).catch((error) => {
+    console.log("Error getting document:", error);
+  });
+  
+await sendEmail(receaverData!.email, "advokat.mk: Имате нова порака!", "Имате нова порака од " + senderName + ":\n  " + lastMessage, "");
   return fcm.sendToDevice(tokens, payload);
 });
 

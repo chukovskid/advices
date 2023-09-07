@@ -229,7 +229,7 @@ class _CallState extends State<Call> {
                       SizedBox(height: 20),
 
                       Container(
-                        width: MediaQuery.of(context).size.width * 0.55,
+                        width: 200,
                         child: MaterialButton(
                           onPressed: onJoin,
                           height: 60,
