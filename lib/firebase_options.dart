@@ -21,7 +21,10 @@ class DefaultFirebaseOptions {
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return android;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for android - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
@@ -53,33 +56,29 @@ class DefaultFirebaseOptions {
     measurementId: 'G-QPSYB5REK5',
   );
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCxQB46UzQC_tOe8kdMkt7FIA4SnQdOa44',
-    appId: '1:793184649946:android:d270d7ce1f7b80e3cd9be3',
-    messagingSenderId: '793184649946',
-    projectId: 'advices-dev',
-    storageBucket: 'advices-dev.appspot.com',
-  );
-
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBVP_mV2EHY-QXzQfVbWGWw8qLZXySoymo',
-    appId: '1:793184649946:ios:24fd3d8f1d398e20cd9be3',
+    appId: '1:793184649946:ios:59896fbd53061ee3cd9be3',
     messagingSenderId: '793184649946',
     projectId: 'advices-dev',
     storageBucket: 'advices-dev.appspot.com',
-    androidClientId: '793184649946-73809u4lilv8vllsl1i79f89550c7pti.apps.googleusercontent.com',
-    iosClientId: '793184649946-f4v5k8rn5a63qf58v8u77759bou95ieg.apps.googleusercontent.com',
-    iosBundleId: 'io.agora.agoraRtcEngineExample',
+    androidClientId:
+        '793184649946-73809u4lilv8vllsl1i79f89550c7pti.apps.googleusercontent.com',
+    iosClientId:
+        '793184649946-991le3jj67gkcoirbhjdo3cu38qis0i7.apps.googleusercontent.com',
+    iosBundleId: 'io.advices.virtualOffice',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyBVP_mV2EHY-QXzQfVbWGWw8qLZXySoymo',
-    appId: '1:793184649946:ios:24fd3d8f1d398e20cd9be3',
+    appId: '1:793184649946:ios:59896fbd53061ee3cd9be3',
     messagingSenderId: '793184649946',
     projectId: 'advices-dev',
     storageBucket: 'advices-dev.appspot.com',
-    androidClientId: '793184649946-73809u4lilv8vllsl1i79f89550c7pti.apps.googleusercontent.com',
-    iosClientId: '793184649946-f4v5k8rn5a63qf58v8u77759bou95ieg.apps.googleusercontent.com',
-    iosBundleId: 'io.agora.agoraRtcEngineExample',
+    androidClientId:
+        '793184649946-73809u4lilv8vllsl1i79f89550c7pti.apps.googleusercontent.com',
+    iosClientId:
+        '793184649946-991le3jj67gkcoirbhjdo3cu38qis0i7.apps.googleusercontent.com',
+    iosBundleId: 'io.advices.virtualOffice',
   );
 }

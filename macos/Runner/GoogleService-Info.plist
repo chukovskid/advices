@@ -13,11 +13,11 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>io.agora.agoraRtcEngineExample</string>
+	<string>io.advices.virtualOffice</string>
 	<key>PROJECT_ID</key>
-	<string>advices-prod</string>
+	<string>advices-dev</string>
 	<key>STORAGE_BUCKET</key>
-	<string>advices-prod.appspot.com</string>
+	<string>advices-dev.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
