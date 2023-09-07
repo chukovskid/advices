@@ -130,7 +130,7 @@ class _LawyerProfileState extends State<LawyerProfile> {
       if (screenSize.width < 600) {
         Share.share(lawyerProfileURL!);
       } else {
-        Clipboard.setData(ClipboardData(text: lawyerProfileURL));
+        Clipboard.setData(ClipboardData(text: lawyerProfileURL.toString()));
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Успешно го копиравте линкот од вашиот профил!"),
