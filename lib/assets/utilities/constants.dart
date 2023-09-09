@@ -41,16 +41,25 @@ const orangeColor = const Color.fromRGBO(225, 103, 104, 1);
 const darkGreenColor = const Color(0xff032229);
 const lightGreenColor = const Color(0xff5bc9bf);
 const advokatGreenColor = const Color(0xff1c4746);
-const backgroundColorLaws = [advokatGreenColor,Color.fromARGB(255, 254, 254, 254)];
-const backgroundColorLawsMobile = [Color(0xff1c4746),darkGreenColor];
+const backgroundColorLaws = [
+  advokatGreenColor,
+  Color.fromARGB(255, 254, 254, 254)
+];
+const backgroundColorLawsMobile = [Color(0xff1c4746), darkGreenColor];
 
 // const backgroundColor = [orangeColor,lightBlueColor, darkGreenColor];
 const backgroundColor = [
-  urgentColor,
+  // urgentColor,
   Color.fromARGB(255, 211, 218, 228),
-  darkGreenColor
+  Color.fromARGB(255, 211, 218, 228),
+  Color.fromARGB(255, 211, 218, 228),
+  // darkGreenColor
 ];
-const backgroundColor2 = [  Color(0xFFC1C1C1),  Color(0xFF9A9A9A),  Color(0xFF757575),];
+const backgroundColor2 = [
+  Color(0xFFC1C1C1),
+  Color(0xFF9A9A9A),
+  Color(0xFF757575),
+];
 
 const urgentColor = Color.fromARGB(255, 218, 144, 109);
 const greyGreenColor = Color.fromARGB(255, 188, 190, 182);

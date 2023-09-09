@@ -7,24 +7,41 @@ import '../../App/contexts/lawyersContext.dart';
 import '../../App/models/user.dart';
 import '../shared_widgets/BottomBar.dart';
 
-const List<String> list = <String>[
-  'Сите области',
-  'Уставно и управно право',
-  'Прекршочно право',
-  'Подароци',
-  'Распределба на имот',
-  "Општо право",
-  "Закон за облигациони односи",
-  "Меѓународно право",
-  "Купо-продажба",
-  "Кривично право",
-  "Имотно право",
-  "Закон за деца и млади",
-  "Семејно право",
-  "Еднаквост и доверба",
-  "Закон за приватизација",
-  "Друго",
-];
+// const List<String> list = <String>[
+//   'Сите области',
+//   'Уставно и управно право',
+//   'Прекршочно право',
+//   'Подароци',
+//   'Распределба на имот',
+//   "Општо право",
+//   "Закон за облигациони односи",
+//   "Меѓународно право",
+//   "Купо-продажба",
+//   "Кривично право",
+//   "Имотно право",
+//   "Закон за деца и млади",
+//   "Семејно право",
+//   "Еднаквост и доверба",
+//   "Закон за приватизација",
+//   "Друго",
+// ];
+
+const Map<String, String> serviceMap = {
+  'allFields': 'Сите области',
+  'ednakvostId': 'Еднаквост и доверба',
+  'imotnoId': 'Имотно право',
+  'krivicnoId': 'Кривично право',
+  'kupoProdazbaId': 'Купо-продажба',
+  'megunarodnoId': 'Меѓународно право',
+  'obligacioniId': 'Закон за облигациони односи',
+  'opstoId': 'Општо право',
+  'paspredelbaNaImotId': 'Распределба на имот',
+  'podarociId': 'Подароци',
+  'prekrsocnoId': 'Прекршочно право',
+  'ustavnoId': 'Уставно и управно право',
+  'buyAndSaleId': 'Купо-продажба',
+  // Add other mappings as needed
+};
 
 class Lawyers extends StatefulWidget {
   final String service;
@@ -36,7 +53,8 @@ class Lawyers extends StatefulWidget {
 
 class _LawyersState extends State<Lawyers> {
   bool mkLanguage = true;
-  String? selectedFilter = list.first;
+  String allFields = "allFields";
+  String selectedFilter = "allFields";
 
   @override
   void initState() {
@@ -91,30 +109,30 @@ class _LawyersState extends State<Lawyers> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: DropdownButton<String>(
-                      value: selectedFilter,
-                      icon: const Icon(Icons.arrow_drop_down),
-                      iconSize: 24,
-                      elevation: 16,
-                      style: const TextStyle(color: darkGreenColor),
-                      underline: Container(
-                        height: 2,
-                        color: darkGreenColor,
-                      ),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedFilter = newValue;
-                        });
-                      },
-                      items: list.map<DropdownMenuItem<String>>(
-                        (String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
+                        value: selectedFilter,
+                        icon: const Icon(Icons.arrow_drop_down),
+                        iconSize: 24,
+                        elevation: 16,
+                        style: const TextStyle(color: darkGreenColor),
+                        underline: Container(
+                          height: 2,
+                          color: darkGreenColor,
+                        ),
+                        onChanged: (String? newValue) {
+                          print("newValue: $newValue");
+                          setState(() {
+                            selectedFilter = newValue ?? allFields;
+                          });
                         },
-                      ).toList(),
-                    ),
-                  ),
+                        items: serviceMap.entries.map<DropdownMenuItem<String>>(
+                          (MapEntry<String, String> entry) {
+                            return DropdownMenuItem<String>(
+                              value: entry.key,
+                              child: Text(entry.value),
+                            );
+                          },
+                        ).toList()),
+                  )
                 ],
               ),
               _cardsList(),
@@ -127,7 +145,7 @@ class _LawyersState extends State<Lawyers> {
 
   Widget _cardsList() {
     return StreamBuilder<Iterable<FlutterUser>>(
-      stream: LawyersContext.getFilteredLawyers(widget.service),
+      stream: LawyersContext.getFilteredLawyers(selectedFilter!),
       builder: ((context, snapshot) {
         if (!snapshot.hasData) {
           return Center(
@@ -212,7 +230,8 @@ class _LawyersState extends State<Lawyers> {
                                     fUser.photoURL.isNotEmpty
                                 ? Image.network(fUser.photoURL)
                                 : Text(
-                                    fUser.name[0].toUpperCase() +  fUser.surname[0].toUpperCase(),
+                                    fUser.name[0].toUpperCase() +
+                                        fUser.surname[0].toUpperCase(),
                                     style: TextStyle(color: whiteColor),
                                   ),
                           ),

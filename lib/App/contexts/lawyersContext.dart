@@ -13,7 +13,6 @@ import 'package:flutter/rendering.dart';
 import '../models/call.dart';
 
 class LawyersContext {
-
   static Future<FlutterUser?> getLawyer(String lawyerId) async {
     CollectionReference users =
         FirebaseFirestore.instance.collection('lawyers');
@@ -25,7 +24,8 @@ class LawyersContext {
     // return null;
   }
 
-  static Future<void> saveServicesForLawyer(String uid, List<Service?> newServices) async {
+  static Future<void> saveServicesForLawyer(
+      String uid, List<Service?> newServices) async {
     CollectionReference services = FirebaseFirestore.instance
         .collection('lawyers')
         .doc(uid)
@@ -51,7 +51,8 @@ class LawyersContext {
     }
   }
 
-  static Future<void> saveServicesForLawyerAsArray(List<String> servicesIds, String uid) async {
+  static Future<void> saveServicesForLawyerAsArray(
+      List<String> servicesIds, String uid) async {
     DocumentReference lawyerRef =
         FirebaseFirestore.instance.collection('lawyers').doc(uid);
     await lawyerRef.update({"services": servicesIds});
@@ -60,13 +61,15 @@ class LawyersContext {
   static Stream<Iterable<FlutterUser>> getFilteredLawyers(String lawId) {
     CollectionReference lawyers =
         FirebaseFirestore.instance.collection("lawyers");
-    // var filteredLawyers = lawyers.where("services", arrayContains: lawId);
+    print("lawId: $lawId");
+    var filteredLawyers = lawId == "allFields"
+        ? lawyers
+        : lawyers.where("services", arrayContains: lawId);
     // var filteredLawyers = lawyers.where("public", isEqualTo: true);
-    var filteredLawyers = lawyers;
+    // var filteredLawyers = lawyers;
     final snapshots = filteredLawyers.snapshots();
     var flutterUsers = snapshots.map((snapshot) =>
         snapshot.docs.map((doc) => FlutterUser.fromJson(doc.data())));
     return flutterUsers;
   }
-
 }
