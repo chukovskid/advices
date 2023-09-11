@@ -1,4 +1,3 @@
-import 'package:advices/App/services/database.dart';
 import 'package:flutter/material.dart';
 
 import 'package:date_time_picker/date_time_picker.dart';
@@ -86,9 +85,7 @@ class _AddEventPageState extends State<AddEventPage> {
           //     _selectedEventMinutes +
           //     ':00.000'),
           // print(_eventTime.hour),
-          setState(() => {
-                selectedTime = time?.format(context),
-              }),
+          setState(() => selectedTime = time?.format(context),),
         });
   }
 
@@ -291,8 +288,6 @@ class _AddEventPageState extends State<AddEventPage> {
           onSaved: (val) => print(val),
         );
 
-        List<int> _availableHours = [1, 4, 6, 8, 12];
-        List<int> _availableMinutes = [0, 10, 30, 45, 50];
         await showCustomTimePicker(
             context: context,
             // It is a must if you provide selectableTimePredicate

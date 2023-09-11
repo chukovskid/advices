@@ -50,7 +50,7 @@ class GoogleAuthService {
           photoURL: userCredential.user?.photoURL ?? "No photoUrl",
           uid: userCredential.user?.uid ?? "googleUser.id",
         );
-        FlutterUser? fUser = await UsersContext.updateUserData(newUser);
+        await UsersContext.updateUserData(newUser);
       } catch (e) {
         print(e);
       }
@@ -77,7 +77,7 @@ class GoogleAuthService {
             photoURL: googleUser.photoUrl ?? "No photoUrl",
             uid: userCredential.user?.uid ?? googleUser.id,
           );
-          FlutterUser? fUser = await UsersContext.updateUserData(newUser);
+          await UsersContext.updateUserData(newUser);
           return user;
         } on FirebaseAuthException catch (e) {
           if (e.code == 'account-exists-with-different-credential') {

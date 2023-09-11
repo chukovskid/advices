@@ -20,10 +20,7 @@ class CalendarWidget extends StatefulWidget {
 class _CalendarWidgetState extends State<CalendarWidget> {
   List<EventModel> events = [];
   List<EventModel> selectedEvents = [];
-  DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
-  DateTime _firstDay = DateTime(DateTime.now().year - 1);
-  DateTime _lastDay = DateTime(DateTime.now().year + 1);
 
   @override
   void initState() {
@@ -92,7 +89,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
             setState(() {
               _focusedDay = focusedDay;
-              _selectedDay = selectedDay;
               selectedEvents = events
                   .where((event) =>
                       event.startDate.year == selectedDay.year &&

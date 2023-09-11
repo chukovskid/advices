@@ -1,24 +1,10 @@
 import 'dart:collection';
-
 import 'package:advices/App/models/event.dart';
-import 'package:advices/screens/calendar/add_event.dart';
-import 'package:advices/App/services/database.dart';
-// import 'package:firebase_helpers/firebase_helpers.dart';
-// import 'package:firebasestarter/core/presentation/providers/providers.dart';
-// import 'package:firebasestarter/features/events/data/models/app_event.dart';
-// import 'package:firebasestarter/features/events/data/services/event_firestore_service.dart';
 import 'package:flutter/material.dart';
-// import 'package:firebasestarter/core/presentation/res/routes.dart';
-// import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
-
 import '../../App/contexts/callEventsContext.dart';
 import '../../App/helpers/CustomCircularProgressIndicator.dart';
-
-// import '../../../../core/presentation/res/colors.dart';
-// import '../../../../core/presentation/res/sizes.dart';
 
 final kNow = DateTime.now();
 final kFirstDay = DateTime(kNow.year, kNow.month - 3, kNow.day);
@@ -35,7 +21,6 @@ class _CalendarPageState extends State<CalendarPage> {
   DateTime _selectedDay = DateTime.now();
   @override
   void didChangeDependencies() {
-    // context.read(pnProvider).init();
     super.didChangeDependencies();
   }
 
@@ -64,7 +49,6 @@ class _CalendarPageState extends State<CalendarPage> {
         title: Text('Firebase starter'),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.person), onPressed: () => {}
-              //Navigator.pushNamed(context, AppRoutes.profile),
               )
         ],
       ),
@@ -107,8 +91,6 @@ class _CalendarPageState extends State<CalendarPage> {
                         ),
                         formatButtonDecoration: BoxDecoration(
                           border: Border.all(color: Colors.white),
-                          // borderRadius:
-                          //     BorderRadius.circular(Size.zero),
                         ),
                         formatButtonTextStyle: TextStyle(color: Colors.white),
                         leftChevronIcon: Icon(
@@ -142,16 +124,9 @@ class _CalendarPageState extends State<CalendarPage> {
                         subtitle: Text(DateFormat("EEEE, dd MMMM, yyyy")
                             .format(event.startDate)),
                         onTap: () => {},
-                        // // Navigator.pushNamed(
-                        //     context, AppRoutes.viewEvent,
-                        //     arguments: event),
                         trailing: IconButton(
                             icon: Icon(Icons.edit), onPressed: () => {}
-                            // Navigator.pushNamed(
-                            //   context,
-                            //   AppRoutes.editEvent,
-                            //   arguments: event,
-                            // ),
+                            
                             ),
                       );
                     },
@@ -166,12 +141,6 @@ class _CalendarPageState extends State<CalendarPage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => AddEventPage()),
-          // );
-          //   Navigator.pushNamed(context, Router.addEvent,
-          //       arguments: _selectedDay);
         },
       ),
     );

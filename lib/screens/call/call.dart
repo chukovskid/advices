@@ -33,7 +33,6 @@ class _CallState extends State<Call> {
   User? user;
   final myController = TextEditingController();
   bool _validateError = false;
-  final _data = [...basic, ...advanced];
 
   @override
   void initState() {
