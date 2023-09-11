@@ -16,6 +16,7 @@ class HelpScreenState extends State<HelpScreen> {
 
   @override
   void initState() {
+    super.initState();
     _getLanguagePreference();
   }
 

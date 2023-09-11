@@ -58,8 +58,7 @@ class ServicesProvider with ChangeNotifier {
     );
 
     try {
-      FlutterUser? createdUser =
-          await auth.registerWithEmailAndPassword(fUser, selectedServices);
+      await auth.registerWithEmailAndPassword(fUser, selectedServices);
       // navigateToAuth();
     } catch (e) {
       print(e);

@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import '../../App/models/user.dart';
 import '../home/home.dart';
 import '../shared_widgets/base_app_bar.dart';
-import 'authentication.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SignIn extends StatefulWidget {

@@ -1,15 +1,11 @@
 import 'package:advices/assets/utilities/constants.dart';
-import 'package:advices/screens/services/book_advice.dart';
 import 'package:advices/screens/urgent/urgentEventsPage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../call/calls.dart';
 import '../webView/IframeWidget.dart';
-import 'laws.dart';
-import 'lawyers.dart';
 
 class LawyerHomeWidget extends StatefulWidget {
   const LawyerHomeWidget({Key? key}) : super(key: key);

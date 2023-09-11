@@ -2,22 +2,15 @@ import 'package:advices/App/providers/auth_provider.dart';
 import 'package:advices/screens/call/callMethods.dart';
 import 'package:advices/screens/call/calls.dart';
 import 'package:advices/screens/home/home.dart';
-import 'package:advices/screens/profile/lawyerProfile.dart';
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../App/contexts/callEventsContext.dart';
-import '../../App/models/event.dart';
 import '../video/examples/basic/join_channel_video/join_channel_video.dart';
-import '../video/examples/advanced/index.dart';
-import '../video/examples/basic/index.dart';
 import '../../assets/utilities/constants.dart';
 import '../authentication/authentication.dart';
-import '../video/examples/basic/join_channel_video/local_view.dart';
-import 'EventDesctiprion.dart';
-import 'package:agora_rtc_engine/rtc_local_view.dart' as rtc_local_view;
 import 'package:advices/screens/video/config/agora.config.dart' as config;
 
 /// This widget is the root of your application.
@@ -36,7 +29,6 @@ class _DemoCallState extends State<DemoCall> {
   User? user;
   final myController = TextEditingController();
   bool _validateError = false;
-  final _data = [...basic, ...advanced];
   late final RtcEngine _engine;
 
   @override

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:advices/App/models/event.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -274,13 +273,7 @@ class CallEventsContext {
   static Future<Map<String, dynamic>?> callUser(
       String channelName, String receiverId) async {
     try {
-      HttpsCallable callable =
-          FirebaseFunctions.instance.httpsCallable('callUser');
       // dynamic resp = await callable.call();
-      dynamic resp = await callable.call(<String, dynamic>{
-        "receiverId": receiverId,
-        "channelName": channelName,
-      });
       Map<String, dynamic> res = {
         "receiverId": receiverId,
         "channelName": channelName,

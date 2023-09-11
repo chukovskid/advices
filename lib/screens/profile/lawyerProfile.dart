@@ -1,10 +1,8 @@
 import 'dart:convert';
 
 import 'package:advices/App/contexts/lawyersContext.dart';
-import 'package:advices/screens/authentication/lawyerBasedRedirect.dart';
 import 'package:advices/screens/chat/screens/mobile_chat_screen.dart';
 import 'package:advices/screens/profile/createEvent.dart';
-import 'package:advices/screens/profile/unavailablePeriods.dart';
 import 'package:advices/screens/profile/workingHours.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +19,6 @@ import '../../App/models/service.dart';
 import '../../App/models/user.dart';
 import '../../App/providers/auth_provider.dart';
 import '../../App/providers/chat_provider.dart';
-import '../../App/providers/services_provider.dart';
 import '../../App/services/firebase_dynamic_links.dart';
 import '../../App/services/googleAuth.dart';
 import '../../assets/utilities/constants.dart';
@@ -29,7 +26,6 @@ import '../authentication/sign_in.dart';
 import '../chat/screens/web_layout_screen.dart';
 import '../chat/utils/responsive_layout.dart';
 import '../shared_widgets/base_app_bar.dart';
-import 'package:rich_clipboard/rich_clipboard.dart';
 
 class LawyerProfile extends StatefulWidget {
   final String uid;

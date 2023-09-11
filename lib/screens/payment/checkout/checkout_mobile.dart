@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:advices/assets/utilities/constants.dart';
 import 'package:advices/screens/payment/checkout/server_stub.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

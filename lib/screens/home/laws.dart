@@ -4,7 +4,6 @@ import 'package:advices/assets/utilities/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 import '../../App/contexts/servicesContext.dart';
-import '../../App/services/database.dart';
 import '../shared_widgets/BottomBar.dart';
 import 'lawyers.dart';
 

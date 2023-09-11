@@ -1,8 +1,6 @@
 import 'package:advices/screens/authentication/register.dart';
 import 'package:advices/screens/authentication/sign_in.dart';
 import 'package:advices/screens/profile/lawyerProfile.dart';
-import 'package:advices/screens/services/form_builder.dart';
-import 'package:advices/screens/services/personal_info_form.dart';
 import 'package:flutter/material.dart';
 import '../../screens/home/home.dart';
 import '../../screens/home/laws.dart';

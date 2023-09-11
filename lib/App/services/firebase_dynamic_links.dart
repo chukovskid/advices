@@ -1,13 +1,10 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import '../models/service.dart';
 
 FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
@@ -27,34 +24,6 @@ static Future<String?> createLawyerProfileDynamicLink(String lawyerId) async {
 
   static Future<String> createDynamicLink(bool short) async {
     String _linkMessage;
-
-    String link = "https://example.com/myapp?id=123";
-
-    // DynamicLinkParameters parameters = DynamicLinkParameters(
-    //   uriPrefix: 'https://example.app.goo.gl',
-    //   link: Uri.parse(link),
-    //   androidParameters: AndroidParameters(
-    //     packageName: 'com.example.myapp',
-    //   ),
-    //   // iosParameters: IosParameters(
-    //   //   bundleId: 'com.example.myapp',
-    //   //   minimumVersion: '1.0.1',
-    //   // ),
-    // );
-
-
-    final DynamicLinkParameters parameters = DynamicLinkParameters(
-      uriPrefix: 'https://advices.page.link',
-      link: Uri.parse('https://advices.web.app/#/register?id=123321'),
-      androidParameters: AndroidParameters(
-        packageName: 'com.chukovski.advices',
-        minimumVersion: 125,
-      ),
-    );
-
-    // Uri dynamicUrl = await parameters.buildUrl();
-
-
 
     String? url;
     if (short) {
@@ -86,7 +55,7 @@ static Future<String?> createLawyerProfileDynamicLink(String lawyerId) async {
     }).then(
       (http.Response response) {
         final int statusCode = response.statusCode;
-        if (statusCode < 200 || statusCode > 400 || response == null) {
+        if (statusCode < 200 || statusCode > 400) {
           throw new Exception("Error while fetching data");
         }
         var decoded = json.decode(response.body);

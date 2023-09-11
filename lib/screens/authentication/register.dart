@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import '../../App/models/user.dart';
 import '../../assets/utilities/constants.dart';
-import '../home/home.dart';
 import 'authentication.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -80,8 +79,7 @@ class _RegisterState extends State<Register> {
       );
 
       try {
-        FlutterUser? createdUser =
-            await _auth.registerWithEmailAndPassword(fUser, selectedServices);
+        await _auth.registerWithEmailAndPassword(fUser, selectedServices);
         _navigateToAuth();
       } catch (e) {
         print(e);
@@ -635,7 +633,6 @@ class _RegisterState extends State<Register> {
                           selectedServices.clear();
                           print(selectedServices);
                           for (int i = 0; i < values.length; i++) {
-                            var val = values[i];
                             Service selectedService = Service.fromJson(
                                 jsonDecode(values[i].toString()));
                             selectedServices.add(selectedService);

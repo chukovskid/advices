@@ -6,12 +6,10 @@ import 'package:advices/App/models/chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/message.dart';
-import '../models/userChat.dart';
 import 'auth_provider.dart';
 
 class ChatProvider with ChangeNotifier {
   final AuthProvider _auth = AuthProvider();
-  final UsersContext _usersContext = UsersContext();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<void> sendMessage(String userId, String message, String? chatId,
@@ -130,8 +128,6 @@ class ChatProvider with ChangeNotifier {
     CollectionReference userChats =
         FirebaseFirestore.instance.collection('conversation/userChats/$userId');
     QuerySnapshot querySnapshot = await userChats.get();
-    List<UserChat> allData =
-        querySnapshot.docs.map((doc) => UserChat.fromJson(doc.data())).toList();
     List<String> chatIds = querySnapshot.docs.map((doc) => doc.id).toList();
     return chatIds;
   }

@@ -204,16 +204,6 @@ class _CreateEventState extends State<CreateEvent> {
   }
 
   Future<void> showTimePickerWidget(StateSetter setStateDialog) async {
-    DateTime selectedDateTime = DateFormat("yyyy-MM-dd").parse(_selectedDate);
-    String selectedDay = DateFormat('EEEE').format(selectedDateTime);
-    Map<String, dynamic>? workingHourForSelectedDate = _workingHours.firstWhere(
-      (workingHour) => workingHour['day'] == selectedDay,
-      orElse: () => <String, dynamic>{},
-    );
-    TimeOfDay initialTime = workingHourForSelectedDate != null
-        ? TimeOfDay.fromDateTime(
-            DateFormat("HH:mm").parse(workingHourForSelectedDate['startTime']))
-        : _availableTimeSlots.first;
     return await showCustomTimePicker(
         context: context,
         builder: (BuildContext context, Widget? child) {
@@ -228,12 +218,8 @@ class _CreateEventState extends State<CreateEvent> {
             time!.minute % 10 == 0 && _availableTimeSlots.contains(time)).then(
         (time) => {
               print(time?.format(context)),
-              setState(() => {
-                    selectedTime = time!.format(context),
-                  }),
-              setStateDialog(() => {
-                    selectedTime = time!.format(context),
-                  }),
+              setState(() => selectedTime = time!.format(context),),
+              setStateDialog(() => selectedTime = time!.format(context),),
             });
   }
 

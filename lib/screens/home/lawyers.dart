@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:advices/screens/profile/lawyerProfile.dart';
 import 'package:advices/screens/shared_widgets/base_app_bar.dart';
 import 'package:advices/assets/utilities/constants.dart';
@@ -145,7 +144,7 @@ class _LawyersState extends State<Lawyers> {
 
   Widget _cardsList() {
     return StreamBuilder<Iterable<FlutterUser>>(
-      stream: LawyersContext.getFilteredLawyers(selectedFilter!),
+      stream: LawyersContext.getFilteredLawyers(selectedFilter),
       builder: ((context, snapshot) {
         if (!snapshot.hasData) {
           return Center(
@@ -226,8 +225,7 @@ class _LawyersState extends State<Lawyers> {
                           leading: CircleAvatar(
                             backgroundColor: lightGreenColor,
                             radius: 20,
-                            child: fUser.photoURL != null &&
-                                    fUser.photoURL.isNotEmpty
+                            child: fUser.photoURL.isNotEmpty
                                 ? Image.network(fUser.photoURL)
                                 : Text(
                                     fUser.name[0].toUpperCase() +

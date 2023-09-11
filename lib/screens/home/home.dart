@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'package:advices/App/providers/chat_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import 'package:advices/App/contexts/callEventsContext.dart';
 import 'package:flutter/foundation.dart';
 import 'package:advices/App/providers/auth_provider.dart';
@@ -64,8 +62,6 @@ class _HomeState extends State<Home> {
   }
 
   final AuthProvider _auth = AuthProvider();
-  final FirebaseMessaging _fcm = FirebaseMessaging.instance;
-
   _saveDeviceToken() async {
     user = await _auth.getCurrentUser();
     if (user != null) {
@@ -85,7 +81,6 @@ class _HomeState extends State<Home> {
   }
 
   void initDynamicLinks(BuildContext context) async {
-    var currentUri = Uri.base;
     String uri = '';
 
     if (kIsWeb) {
@@ -101,7 +96,6 @@ class _HomeState extends State<Home> {
             String messageId = ids[1];
             print(chatId);
             print(messageId);
-            final ChatProvider _chatProvider = ChatProvider();
             // _chatProvider.payForMessage(chatId, messageId);
           }
         }

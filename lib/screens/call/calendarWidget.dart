@@ -1,8 +1,6 @@
 import 'package:advices/screens/call/call.dart';
 import 'package:advices/screens/call/customCallCard.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:advices/App/models/event.dart';
 import '../../App/contexts/callEventsContext.dart';

@@ -1,16 +1,8 @@
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:advices/App/models/event.dart';
 import 'package:advices/App/models/service.dart';
 import 'package:advices/App/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/rendering.dart';
-
-import '../models/call.dart';
 
 class LawyersContext {
   static Future<FlutterUser?> getLawyer(String lawyerId) async {
@@ -25,12 +17,7 @@ class LawyersContext {
   }
 
   static Future<void> saveServicesForLawyer(
-      String uid, List<Service?> newServices) async {
-    CollectionReference services = FirebaseFirestore.instance
-        .collection('lawyers')
-        .doc(uid)
-        .collection("services");
-
+    String uid, List<Service?> newServices) async {
     if (newServices.isNotEmpty) {
       List<String> selectedServicesIds = [];
       for (int i = 0; i < newServices.length; i++) {

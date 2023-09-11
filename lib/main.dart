@@ -7,7 +7,6 @@ import 'package:advices/App/providers/payment_provider.dart';
 import 'package:advices/App/providers/services_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'App/helpers/router.dart' as router;
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';

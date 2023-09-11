@@ -1,9 +1,5 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:cloud_functions/cloud_functions.dart';
 
-import '../../../assets/utilities/constants.dart';
 
 /// Only for demo purposes!
 /// Don't you dare do it in real apps!

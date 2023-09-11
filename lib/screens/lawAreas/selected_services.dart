@@ -2,7 +2,6 @@ import 'package:advices/App/contexts/servicesContext.dart';
 import 'package:advices/App/models/service.dart';
 import 'package:advices/assets/utilities/constants.dart';
 import 'package:flutter/material.dart';
-import '../../App/services/database.dart';
 import '../home/lawyers.dart';
 import '../shared_widgets/BottomBar.dart';
 
@@ -20,7 +19,9 @@ class _SelectedServicesState extends State<SelectedServices>
   bool mkLanguage = true;
 
   @override
-  void initState() {}
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
