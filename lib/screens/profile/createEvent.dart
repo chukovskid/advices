@@ -450,14 +450,7 @@ class _CreateEventState extends State<CreateEvent> {
             // shadowColor: Color.fromARGB(227, 255, 255, 255),
             // elevation: 5,
             color: whiteColor,
-            margin: EdgeInsets.only(
-                top: MediaQueryData.fromView(WidgetsBinding.instance.window)
-                        .size
-                        .height /
-                    6,
-                left: 30,
-                right: 50,
-                bottom: 0),
+            margin: EdgeInsets.only(top: 0, left: 30, right: 50, bottom: 0),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(6.0),
             ),

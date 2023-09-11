@@ -216,7 +216,7 @@ class BottomBar extends StatelessWidget {
               nonLawyerWidget: IconButton(
                 iconSize: 32.0,
                 tooltip: 'Состаноци',
-                icon: const Icon(Icons.call),
+                icon: const Icon(Icons.calendar_month),
                 onPressed: () {
                   _navigationProvider.privateNav(Calls());
                 },
