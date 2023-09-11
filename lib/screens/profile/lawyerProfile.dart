@@ -21,6 +21,7 @@ import '../../App/models/service.dart';
 import '../../App/models/user.dart';
 import '../../App/providers/auth_provider.dart';
 import '../../App/providers/chat_provider.dart';
+import '../../App/providers/services_provider.dart';
 import '../../App/services/firebase_dynamic_links.dart';
 import '../../App/services/googleAuth.dart';
 import '../../assets/utilities/constants.dart';
@@ -43,7 +44,6 @@ class LawyerProfile extends StatefulWidget {
 class _LawyerProfileState extends State<LawyerProfile> {
   final ChatProvider _chatProvider = ChatProvider();
   final AuthProvider _auth = AuthProvider();
-
   bool mkLanguage = true;
   FlutterUser? lawyer;
   String minPriceEuro = "30";
@@ -55,6 +55,7 @@ class _LawyerProfileState extends State<LawyerProfile> {
   List<Service?> selectedServices = [];
   var setDefaultMake = true;
   String? lawyerProfileURL = "";
+  bool showCreateEvent = true;
 
   @override
   void initState() {
@@ -182,7 +183,11 @@ class _LawyerProfileState extends State<LawyerProfile> {
                       child: isLoggedUserTheLawyer
                           ? WorkingHoursScreen(lawyerId: widget.uid)
                           : CreateEvent(
-                              widget.uid, widget.serviceId, minPriceEuro)),
+                              widget.uid, widget.serviceId, minPriceEuro))
+
+              // ,: (showCreateEvent
+              // ? CreateEvent(widget.uid, serviceId, minPriceEuro)
+              // : SizedBox())),
             ],
           )),
     );
@@ -191,7 +196,7 @@ class _LawyerProfileState extends State<LawyerProfile> {
   Widget _card() {
     return loading
         ? Center(
-            child: CircularProgressIndicator(
+            child: CustomCircularProgressIndicator(
             color: darkGreenColor,
           ))
         : Container(
@@ -233,25 +238,6 @@ class _LawyerProfileState extends State<LawyerProfile> {
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        ElevatedButton(
-                          onPressed: _startChatConversation,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.mail,
-                                size: 15,
-                              ),
-                              Text(" Пораки"),
-                            ],
-                          ),
-                          style: ElevatedButton.styleFrom(
-                              textStyle: const TextStyle(fontSize: 15),
-                              backgroundColor: lightGreenColor),
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
                         isLoggedUserTheLawyer
                             ? Row(
                                 children: [
@@ -294,13 +280,39 @@ class _LawyerProfileState extends State<LawyerProfile> {
                                   ),
                                 ],
                               )
-                            : SizedBox(),
+                            : ElevatedButton(
+                                onPressed: _startChatConversation,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.mail,
+                                      size: 15,
+                                    ),
+                                    Text(" Пораки"),
+                                  ],
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                    textStyle: const TextStyle(fontSize: 15),
+                                    backgroundColor: lightGreenColor),
+                              ),
                       ],
                     ),
-                    // const SizedBox(
-                    //   height: 45,
-                    // ),
-                    // isLoggedUserTheLawyer ? _dropdownLawSelect() : SizedBox(), // TODO: add this back
+                    const SizedBox(
+                      height: 45,
+                    ),
+                    isLoggedUserTheLawyer
+                        ? _dropdownLawSelect()
+                        : SizedBox(), // TODO: add this back
+                    const SizedBox(
+                      height: 45,
+                    ),
+                    Text("Правни области", style: profileHeader),
+                    SizedBox(
+                      child: _lawyerServices(),
+                      height: 100,
+                      width: 1000,
+                    ),
                     const SizedBox(
                       height: 45,
                     ),
@@ -464,6 +476,37 @@ class _LawyerProfileState extends State<LawyerProfile> {
               });
             })
       ],
+    );
+  }
+
+  Widget _lawyerServices() {
+    return FutureBuilder<List<Service>>(
+      future: LawyersContext.getServicesForLawyer(widget.uid),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CustomCircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text("Error: ${snapshot.error}");
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Text("No services found for this lawyer.");
+        } else {
+          List<Service> services = snapshot.data!;
+
+          return GridView.extent(
+            maxCrossAxisExtent:
+                150, // Each card will have a maximum width of 150
+            childAspectRatio: 150 / 50, // width / height
+            children: List.generate(services.length, (index) {
+              return Card(
+                elevation: 5.0, // Add shadow to the card
+                child: Center(
+                  child: Text(services[index].name),
+                ),
+              );
+            }),
+          );
+        }
+      },
     );
   }
 }

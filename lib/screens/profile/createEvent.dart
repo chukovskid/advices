@@ -2,6 +2,7 @@ import 'package:advices/App/contexts/callEventsContext.dart';
 import 'package:advices/App/contexts/servicesContext.dart';
 import 'package:advices/App/models/service.dart';
 import 'package:advices/App/providers/auth_provider.dart';
+import 'package:advices/App/providers/services_provider.dart';
 import 'package:advices/assets/utilities/constants.dart';
 import 'package:advices/screens/authentication/sign_in.dart';
 import 'package:advices/screens/call/calls.dart';
@@ -54,7 +55,6 @@ class _CreateEventState extends State<CreateEvent> {
       MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width >
           850.0;
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-  late bool processing;
   String selectedTime = "13:00";
   String _selectedDate = "";
   TimeOfDay firstAvailableTimeSlot = TimeOfDay(hour: 14, minute: 0);
@@ -68,7 +68,6 @@ class _CreateEventState extends State<CreateEvent> {
   void initState() {
     super.initState();
     _getService();
-    processing = false;
     _fetchWorkingHours();
     _getFreeTimePeriodsForDate();
   }
@@ -294,7 +293,8 @@ class _CreateEventState extends State<CreateEvent> {
     setState(() {
       // serviceName = "${mkLanguage ? service.nameMk : service.name}";
       service = service;
-      _title = TextEditingController(text: "${mkLanguage ? service.nameMk : service.name}");
+      _title = TextEditingController(
+          text: "${mkLanguage ? service.nameMk : service.name}");
     });
   }
 
@@ -368,7 +368,7 @@ class _CreateEventState extends State<CreateEvent> {
                           Row(
                             children: [
                               Text(
-                                "Тема:", // TODO selectedTime Should be here 
+                                "Тема:", // TODO selectedTime Should be here
                                 style: TextStyle(
                                     // color: Colors.white,
                                     fontSize: 14,
@@ -654,7 +654,6 @@ class _CreateEventState extends State<CreateEvent> {
                       const SizedBox(height: 10.0),
                       // payingOptions(),
                       SizedBox(height: 50.0),
-                      // processing ? Center(child: CircularProgressIndicator()):
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: Material(

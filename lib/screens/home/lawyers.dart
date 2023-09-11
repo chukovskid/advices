@@ -247,22 +247,22 @@ class _LawyersState extends State<Lawyers> {
                             "${fUser.displayName}",
                             style: const TextStyle(fontSize: 25),
                           ),
-                          subtitle: Row(
-                            children: [
-                              Text("${fUser.minPriceEuro}€"),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              Icon(
-                                Icons.star_half,
-                                size: 20,
-                                color: const Color.fromARGB(255, 214, 214, 126),
-                              ),
-                              Text((Random().nextDouble() + 4)
-                                  .toString()
-                                  .substring(0, 4)),
-                            ],
-                          ),
+                          // subtitle: Row(
+                          //   children: [
+                          //     Text("${fUser.minPriceEuro}€"),
+                          //     const SizedBox(
+                          //       width: 20,
+                          //     ),
+                          //     // Icon(
+                          //     //   Icons.star_half,
+                          //     //   size: 20,
+                          //     //   color: const Color.fromARGB(255, 214, 214, 126),
+                          //     // ),
+                          //     // Text((Random().nextDouble() + 4)
+                          //     //     .toString()
+                          //     //     .substring(0, 4)),
+                          //   ],
+                          // ),
                         ),
                         _text(fUser)
                       ],

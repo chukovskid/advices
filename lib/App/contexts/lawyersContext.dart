@@ -72,4 +72,20 @@ class LawyersContext {
         snapshot.docs.map((doc) => FlutterUser.fromJson(doc.data())));
     return flutterUsers;
   }
+
+  static Future<List<Service>> getServicesForLawyer(String uid) async {
+    List<Service> servicesList = [];
+    CollectionReference services = FirebaseFirestore.instance
+        .collection('lawyers')
+        .doc(uid)
+        .collection("services");
+
+    QuerySnapshot snapshot = await services.get();
+    for (QueryDocumentSnapshot document in snapshot.docs) {
+      Service service =
+          Service.fromJson(document.data() as Map<String, dynamic>);
+      servicesList.add(service);
+    }
+    return servicesList;
+  }
 }

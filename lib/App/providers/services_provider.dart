@@ -41,12 +41,9 @@ class ServicesProvider with ChangeNotifier {
   var carMake, carMakeModel;
   var setDefaultMake = true, setDefaultMakeModel = true;
   bool showSelectService = false;
-
-
-
+  String selectedServiceId = "";
 
   submitForm() async {
-
     FlutterUser fUser = FlutterUser(
       email: emailController.text,
       password: passwordController.text,
@@ -68,50 +65,26 @@ class ServicesProvider with ChangeNotifier {
       print(e);
     }
 
-
     formKey.currentState?.save();
     formKey.currentState?.reset();
     // _nextFocus(_emailFocusNode);
   }
 
   String? validateInput(String value) {
-  if (value.trim().isEmpty) {
-    return 'Field required';
+    if (value.trim().isEmpty) {
+      return 'Field required';
+    }
+    return null;
   }
-  return null;
-}
 
-
-
-
-
-
-final formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   final textController1 = TextEditingController();
   final textController2 = TextEditingController();
   final textController3 = TextEditingController();
 
- 
-
-
- final FocusNode _focusNode = FocusNode();
+  final FocusNode _focusNode = FocusNode();
   final TextEditingController _controller = TextEditingController();
 
   FocusNode get focusNode => _focusNode;
   TextEditingController get controller => _controller;
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
-
-
