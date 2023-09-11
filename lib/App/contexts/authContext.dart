@@ -1,9 +1,9 @@
+import 'package:advices/App/contexts/servicesContext.dart';
 import 'package:advices/App/contexts/usersContext.dart';
 import 'package:advices/App/models/service.dart';
 import 'package:advices/App/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '../contexts/lawyersContext.dart';
 import '../services/googleAuth.dart';
 
 class AuthContext {
@@ -88,7 +88,7 @@ class AuthContext {
       print(user.uid);
       newFUser.uid = user.uid;
       await UsersContext.updateUserData(newFUser);
-      await LawyersContext.saveServicesForLawyer(user.uid, services);
+      await ServicesContext.saveServicesForLawyer(user.uid, services);
 
       return newFUser;
     } catch (error) {

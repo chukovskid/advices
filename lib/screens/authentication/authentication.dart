@@ -43,7 +43,7 @@ class _AuthenticateState extends State<Authenticate> {
         toggleView: () {
           // You can leave this empty if you don't need any specific actions here.
         },
-        fromAuth: true, // Add this line
+        fromAuth: false, // Add this line
       );
     }
   }

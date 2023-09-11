@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:advices/screens/home/lawyers.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:advices/App/contexts/callEventsContext.dart';
 import 'package:flutter/foundation.dart';
@@ -196,16 +197,23 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomBar(
-        fabLocation: FloatingActionButtonLocation.endDocked,
-        shape: CircularNotchedRectangle(),
+      bottomNavigationBar: LawyerBasedRedirect(
+        lawyerWidget: BottomBar(
+          fabLocation: FloatingActionButtonLocation.endDocked,
+          shape: CircularNotchedRectangle(),
+        ),
+        nonLawyerWidget: Lawyers(
+          service: '',
+        ),
       ),
       body: Container(
         height: double.infinity,
         width: double.infinity,
         child: LawyerBasedRedirect(
           lawyerWidget: LawyerHomeWidget(),
-          nonLawyerWidget: HomeWidget(),
+          nonLawyerWidget: Lawyers(
+            service: '',
+          ),
         ),
       ),
     );

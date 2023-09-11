@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../contexts/lawyersContext.dart';
+import '../contexts/servicesContext.dart';
 import '../contexts/usersContext.dart';
 import '../models/service.dart';
 import '../models/user.dart';
@@ -88,7 +88,7 @@ class AuthProvider with ChangeNotifier {
       print(user.uid);
       newFUser.uid = user.uid;
       await UsersContext.updateUserData(newFUser);
-      await LawyersContext.saveServicesForLawyer(user.uid, services);
+      await ServicesContext.saveServicesForLawyer(user.uid, services);
 
       return newFUser;
     } catch (error) {

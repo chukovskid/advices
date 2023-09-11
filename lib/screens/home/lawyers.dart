@@ -6,25 +6,6 @@ import '../../App/contexts/lawyersContext.dart';
 import '../../App/models/user.dart';
 import '../shared_widgets/BottomBar.dart';
 
-// const List<String> list = <String>[
-//   'Сите области',
-//   'Уставно и управно право',
-//   'Прекршочно право',
-//   'Подароци',
-//   'Распределба на имот',
-//   "Општо право",
-//   "Закон за облигациони односи",
-//   "Меѓународно право",
-//   "Купо-продажба",
-//   "Кривично право",
-//   "Имотно право",
-//   "Закон за деца и млади",
-//   "Семејно право",
-//   "Еднаквост и доверба",
-//   "Закон за приватизација",
-//   "Друго",
-// ];
-
 const Map<String, String> serviceMap = {
   'allFields': 'Сите области',
   'ednakvostId': 'Еднаквост и доверба',
@@ -104,7 +85,7 @@ class _LawyersState extends State<Lawyers> {
                     padding:
                         EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Colors.transparent,
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: DropdownButton<String>(
@@ -112,10 +93,12 @@ class _LawyersState extends State<Lawyers> {
                         icon: const Icon(Icons.arrow_drop_down),
                         iconSize: 24,
                         elevation: 16,
-                        style: const TextStyle(color: darkGreenColor),
+                        style: const TextStyle(
+                            color: lightGreenColor,
+                            fontWeight: FontWeight.bold),
                         underline: Container(
                           height: 2,
-                          color: darkGreenColor,
+                          color: whiteColor,
                         ),
                         onChanged: (String? newValue) {
                           print("newValue: $newValue");
@@ -193,7 +176,7 @@ class _LawyersState extends State<Lawyers> {
   }
 
   Widget _card(FlutterUser fUser) {
-    return SizedBox(
+    return Container(
       height: 300,
       width: 300,
       child: InkWell(
@@ -226,41 +209,20 @@ class _LawyersState extends State<Lawyers> {
                             backgroundColor: lightGreenColor,
                             radius: 20,
                             child: fUser.photoURL.isNotEmpty
-                                ? Image.network(fUser.photoURL)
+                                ? ClipOval(
+                                    child: Image.network(fUser.photoURL),
+                                  )
                                 : Text(
                                     fUser.name[0].toUpperCase() +
                                         fUser.surname[0].toUpperCase(),
                                     style: TextStyle(color: whiteColor),
                                   ),
                           ),
-                          //  ClipOval(
-                          //   child: Image.network(
-                          //     // fUser.photoURL.length > 20
-                          //     //     ? fUser.photoURL
-                          //     //     :
-                          //     'https://st.depositphotos.com/2069323/2156/i/600/depositphotos_21568785-stock-photo-man-pointing.jpg',
-                          //   ),
-                          // ),
                           title: Text(
                             "${fUser.displayName}",
                             style: const TextStyle(fontSize: 25),
                           ),
-                          // subtitle: Row(
-                          //   children: [
-                          //     Text("${fUser.minPriceEuro}€"),
-                          //     const SizedBox(
-                          //       width: 20,
-                          //     ),
-                          //     // Icon(
-                          //     //   Icons.star_half,
-                          //     //   size: 20,
-                          //     //   color: const Color.fromARGB(255, 214, 214, 126),
-                          //     // ),
-                          //     // Text((Random().nextDouble() + 4)
-                          //     //     .toString()
-                          //     //     .substring(0, 4)),
-                          //   ],
-                          // ),
+                          // subtitle:
                         ),
                         _text(fUser)
                       ],
@@ -278,8 +240,8 @@ class _LawyersState extends State<Lawyers> {
   Widget _text(FlutterUser fUser) {
     return Padding(
       padding: const EdgeInsets.all(10),
-      child: Container(
-        height: 200,
+      child: LimitedBox(
+        maxHeight: 200, // set your desired maximum height
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -287,12 +249,14 @@ class _LawyersState extends State<Lawyers> {
               Text(mkLanguage ? "Кратко био" : "Short bio",
                   style: lawyersCardHeader),
               const SizedBox(height: 12),
-              Text("${fUser.description}", style: lawyersCardTextStyle),
+              Text("${fUser.description}",
+                  style: lawyersCardTextStyle, overflow: TextOverflow.clip),
               const SizedBox(height: 15),
               Text(mkLanguage ? "Искуство" : "Experience",
                   style: lawyersCardHeader),
               const SizedBox(height: 15),
-              Text("${fUser.experience}", style: lawyersCardTextStyle),
+              Text("${fUser.experience}",
+                  style: lawyersCardTextStyle, overflow: TextOverflow.clip),
             ],
           ),
         ),

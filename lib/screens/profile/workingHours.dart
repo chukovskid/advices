@@ -95,43 +95,43 @@ class _WorkingHoursScreenState extends State<WorkingHoursScreen> {
               onPressed: () {
                 Navigator.pop(context, 'Monday');
               },
-              child: const Text('Monday'),
+              child: const Text('Понеделник'),
             ),
             SimpleDialogOption(
               onPressed: () {
                 Navigator.pop(context, 'Tuesday');
               },
-              child: const Text('Tuesday'),
+              child: const Text('Вторник'),
             ),
             SimpleDialogOption(
               onPressed: () {
                 Navigator.pop(context, 'Wednesday');
               },
-              child: const Text('Wednesday'),
+              child: const Text('Среда'),
             ),
             SimpleDialogOption(
               onPressed: () {
                 Navigator.pop(context, 'Thursday');
               },
-              child: const Text('Thursday'),
+              child: const Text('Четврток'),
             ),
             SimpleDialogOption(
               onPressed: () {
                 Navigator.pop(context, 'Friday');
               },
-              child: const Text('Friday'),
+              child: const Text('Петок'),
             ),
             SimpleDialogOption(
               onPressed: () {
                 Navigator.pop(context, 'Saturday');
               },
-              child: const Text('Saturday'),
+              child: const Text('Сабота'),
             ),
             SimpleDialogOption(
               onPressed: () {
                 Navigator.pop(context, 'Sunday');
               },
-              child: const Text('Sunday'),
+              child: const Text('Недела'),
             ),
           ],
         );
@@ -194,7 +194,7 @@ class _WorkingHoursScreenState extends State<WorkingHoursScreen> {
                 });
               }
             },
-            child: Text('Намести недостапни термини'),
+            child: Text('Намести слободни термини'),
           ),
           backgroundColor: lightGreenColor,
           actions: [

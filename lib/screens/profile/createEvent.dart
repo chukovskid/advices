@@ -218,8 +218,12 @@ class _CreateEventState extends State<CreateEvent> {
             time!.minute % 10 == 0 && _availableTimeSlots.contains(time)).then(
         (time) => {
               print(time?.format(context)),
-              setState(() => selectedTime = time!.format(context),),
-              setStateDialog(() => selectedTime = time!.format(context),),
+              setState(
+                () => selectedTime = time!.format(context),
+              ),
+              setStateDialog(
+                () => selectedTime = time!.format(context),
+              ),
             });
   }
 
@@ -443,13 +447,19 @@ class _CreateEventState extends State<CreateEvent> {
   Widget _webView() {
     return SingleChildScrollView(
         child: Card(
-            shadowColor: Color(0xff5bc9bf),
-            elevation: 10.0,
+            // shadowColor: Color.fromARGB(227, 255, 255, 255),
+            // elevation: 5,
             color: whiteColor,
-            margin:
-                const EdgeInsets.only(top: 35, left: 30, right: 50, bottom: 10),
+            margin: EdgeInsets.only(
+                top: MediaQueryData.fromView(WidgetsBinding.instance.window)
+                        .size
+                        .height /
+                    6,
+                left: 30,
+                right: 50,
+                bottom: 0),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(6.0),
             ),
             child: openEventForm
                 ? _dialogFields(setState)
@@ -461,16 +471,17 @@ class _CreateEventState extends State<CreateEvent> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
-          // color: Color.fromRGBO(253, 240, 240, 1),
+          color: Colors.transparent,
           width: 500,
-          height: 500,
+          height: 400,
           child: Scaffold(
+            backgroundColor: Colors.transparent,
             key: _key,
             body: Form(
               key: _formKey,
               child: Center(
                 child: Container(
-                  color: whiteColor,
+                  color: Colors.transparent,
                   alignment: Alignment.center,
                   child: ListView(
                     children: <Widget>[
@@ -488,20 +499,23 @@ class _CreateEventState extends State<CreateEvent> {
                               : null,
                           style: style,
                           decoration: InputDecoration(
-                              labelText: mkLanguage ? "Наслов" : "Title",
-                              filled: true,
-                              fillColor: Colors.white,
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10))),
+                            labelText: mkLanguage ? "Наслов" : "Title",
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.white, width: 2.0),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
                         ),
                       ),
+
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16.0, vertical: 8.0),
                         child: TextFormField(
                           controller: _description,
                           minLines: 3,
-                          maxLines: 5,
+                          maxLines: 4,
                           validator: (value) => (value!.isEmpty)
                               ? (mkLanguage
                                   ? "Ве молиме внесете опис"
@@ -509,11 +523,15 @@ class _CreateEventState extends State<CreateEvent> {
                               : null,
                           style: style,
                           decoration: InputDecoration(
-                              labelText: mkLanguage
-                                  ? "Опис на проблемот..."
-                                  : "Description...",
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10))),
+                            labelText: mkLanguage
+                                ? "Опис на проблемот..."
+                                : "Description...",
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.white, width: 2.0),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
                         ),
                       ),
                       const SizedBox(height: 10.0),
@@ -627,9 +645,8 @@ class _CreateEventState extends State<CreateEvent> {
                                         ),
                                         labelText:
                                             mkLanguage ? "Време" : "time",
-                                        labelStyle: TextStyle(
-                                          color: Color.fromARGB(209, 0, 0, 0),
-                                        )),
+                                        labelStyle:
+                                            TextStyle(color: Colors.black)),
                                   ),
                                 ),
                               ),

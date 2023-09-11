@@ -221,9 +221,9 @@ class _SignInState extends State<SignIn> {
         validator: (value) => _validateInput(value.toString()),
         style: const TextStyle(color: Colors.white),
         decoration: const InputDecoration(
-            fillColor: Colors.orange,
+            fillColor: lightGreenColor,
             enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Color.fromRGBO(225, 103, 104, 1)),
+              borderSide: BorderSide(color: lightGreenColor),
             ),
             focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: Color.fromARGB(255, 255, 255, 255)),
@@ -246,9 +246,9 @@ class _SignInState extends State<SignIn> {
         style: const TextStyle(color: Colors.white),
         obscureText: true,
         decoration: const InputDecoration(
-            fillColor: Colors.orange,
+            fillColor: lightGreenColor,
             enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Color.fromRGBO(225, 103, 104, 1)),
+              borderSide: BorderSide(color: lightGreenColor),
             ),
             focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: Color.fromARGB(255, 255, 255, 255)),
@@ -261,7 +261,7 @@ class _SignInState extends State<SignIn> {
       SizedBox(height: 30.0),
       ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: orangeColor,
+            backgroundColor: lightGreenColor,
           ),
 
           // color: Color.fromRGBO(225, 103, 104, 1),

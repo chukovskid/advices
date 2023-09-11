@@ -38,7 +38,8 @@ const lightBlueColor = Color.fromRGBO(107, 119, 141, 1);
 const mediumBlueColor = Color.fromRGBO(38, 56, 89, 1);
 const darkBlueColor = const Color.fromRGBO(23, 34, 59, 1);
 const orangeColor = const Color.fromRGBO(225, 103, 104, 1);
-const darkGreenColor = const Color(0xff032229);
+const darkGreenColor = Colors.black;
+// const darkGreenColor = const Color(0xff032229);
 const lightGreenColor = const Color(0xff5bc9bf);
 const advokatGreenColor = const Color(0xff1c4746);
 const backgroundColorLaws = [
@@ -47,14 +48,17 @@ const backgroundColorLaws = [
 ];
 const backgroundColorLawsMobile = [Color(0xff1c4746), darkGreenColor];
 
-// const backgroundColor = [orangeColor,lightBlueColor, darkGreenColor];
 const backgroundColor = [
-  // urgentColor,
-  Color.fromARGB(255, 211, 218, 228),
-  Color.fromARGB(255, 211, 218, 228),
-  Color.fromARGB(255, 211, 218, 228),
-  // darkGreenColor
+  Colors.black,
+  lightBlueColor,
+  mediumBlueColor,
 ];
+const backgroundColorReverse = [
+  Colors.white,
+  lightBlueColor,
+  lightBlueColor,
+];
+
 const backgroundColor2 = [
   Color(0xFFC1C1C1),
   Color(0xFF9A9A9A),
@@ -64,7 +68,7 @@ const backgroundColor2 = [
 const urgentColor = Color.fromARGB(255, 218, 144, 109);
 const greyGreenColor = Color.fromARGB(255, 188, 190, 182);
 const transperentBlackColor = Color.fromARGB(83, 41, 41, 41);
-const whiteColor = Color.fromARGB(255, 241, 245, 255);
+const whiteColor = Color.fromARGB(255, 241, 245, 245);
 
 // Text Style
 const textStylePayingOptions = TextStyle(

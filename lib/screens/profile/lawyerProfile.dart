@@ -76,7 +76,8 @@ class _LawyerProfileState extends State<LawyerProfile> {
 
   Future<void> _updateServices() async {
     if (lawyer?.uid != null) {
-      await LawyersContext.saveServicesForLawyer(lawyer!.uid, selectedServices);
+      await ServicesContext.saveServicesForLawyer(
+          lawyer!.uid, selectedServices);
     }
     selectedServices = [];
   }
@@ -160,12 +161,8 @@ class _LawyerProfileState extends State<LawyerProfile> {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [
-                Colors.white60,
-                Color.fromARGB(255, 211, 218, 228),
-                darkGreenColor
-              ],
-              stops: [-1, 1, 1.1],
+              colors: backgroundColorReverse,
+              stops: [-1, 1, 3],
             ),
           ),
           child: Row(
@@ -231,7 +228,7 @@ class _LawyerProfileState extends State<LawyerProfile> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 8),
                     Row(
                       children: [
                         isLoggedUserTheLawyer
@@ -252,7 +249,7 @@ class _LawyerProfileState extends State<LawyerProfile> {
                                     style: ElevatedButton.styleFrom(
                                         textStyle:
                                             const TextStyle(fontSize: 15),
-                                        backgroundColor: orangeColor),
+                                        backgroundColor: Colors.black),
                                   ),
                                   SizedBox(
                                     width: 8,
@@ -272,7 +269,7 @@ class _LawyerProfileState extends State<LawyerProfile> {
                                     style: ElevatedButton.styleFrom(
                                         textStyle:
                                             const TextStyle(fontSize: 15),
-                                        backgroundColor: Colors.greenAccent),
+                                        backgroundColor: lightGreenColor),
                                   ),
                                 ],
                               )
@@ -295,22 +292,7 @@ class _LawyerProfileState extends State<LawyerProfile> {
                       ],
                     ),
                     const SizedBox(
-                      height: 45,
-                    ),
-                    isLoggedUserTheLawyer
-                        ? _dropdownLawSelect()
-                        : SizedBox(), // TODO: add this back
-                    const SizedBox(
-                      height: 45,
-                    ),
-                    Text("Правни области", style: profileHeader),
-                    SizedBox(
-                      child: _lawyerServices(),
-                      height: 100,
-                      width: 1000,
-                    ),
-                    const SizedBox(
-                      height: 45,
+                      height: 20,
                     ),
                     _text(),
                     const SizedBox(
@@ -330,13 +312,24 @@ class _LawyerProfileState extends State<LawyerProfile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Text(mkLanguage ? "Права" : "Laws", style: profileHeader),
-          // SizedBox(height: 15),
-          // Text(
-          //   "${lawyer?.services}",
-          //   style: helpTextStyle,
-          //   textAlign: TextAlign.justify,
-          // ),
+          Text(mkLanguage ? "Правни области" : "Laws", style: profileHeader),
+          const SizedBox(
+            height: 5,
+          ),
+          SizedBox(
+            child: _lawyerServices(),
+            height: 140,
+            width: 1000,
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          isLoggedUserTheLawyer
+              ? _dropdownLawSelect()
+              : SizedBox(), // TODO: add this back
+          const SizedBox(
+            height: 5,
+          ),
           SizedBox(height: 15),
           Text(mkLanguage ? "Кратко био" : "Short bio", style: profileHeader),
           SizedBox(height: 15),
@@ -394,7 +387,7 @@ class _LawyerProfileState extends State<LawyerProfile> {
       children: [
         DropdownButtonHideUnderline(
             child: StreamBuilder<Iterable<Service>>(
-                stream: ServicesContext.getAllLaws(),
+                stream: ServicesContext.getAllServices(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) return Container();
                   if (setDefaultMake) {
@@ -408,7 +401,7 @@ class _LawyerProfileState extends State<LawyerProfile> {
                         dialogWidth: MediaQuery.of(context).size.width * 0.7,
                         decoration: const BoxDecoration(
                           border:
-                              Border(bottom: BorderSide(color: orangeColor)),
+                              Border(bottom: BorderSide(color: Colors.black)),
                         ),
                         listType: MultiSelectListType.LIST,
                         searchable: true,
@@ -460,7 +453,7 @@ class _LawyerProfileState extends State<LawyerProfile> {
         ),
         ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: orangeColor,
+              backgroundColor: Colors.black,
             ),
             child: const Text(
               'Зачувај',
@@ -490,13 +483,16 @@ class _LawyerProfileState extends State<LawyerProfile> {
 
           return GridView.extent(
             maxCrossAxisExtent:
-                150, // Each card will have a maximum width of 150
+                200, // Each card will have a maximum width of 150
             childAspectRatio: 150 / 50, // width / height
             children: List.generate(services.length, (index) {
               return Card(
                 elevation: 5.0, // Add shadow to the card
                 child: Center(
-                  child: Text(services[index].name),
+                  child: Text(
+                    services[index].name,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               );
             }),

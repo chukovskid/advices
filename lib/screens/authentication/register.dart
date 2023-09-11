@@ -574,7 +574,7 @@ class _RegisterState extends State<Register> {
           const SizedBox(height: 20.0),
           ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: orangeColor,
+                backgroundColor: lightGreenColor,
               ),
               child: Text(
                 '$registerAsText',
@@ -609,7 +609,7 @@ class _RegisterState extends State<Register> {
                         dialogWidth: MediaQuery.of(context).size.width * 0.7,
                         decoration: const BoxDecoration(
                           border:
-                              Border(bottom: BorderSide(color: orangeColor)),
+                              Border(bottom: BorderSide(color: lightGreenColor)),
                         ),
                         listType: MultiSelectListType.LIST,
                         searchable: true,
@@ -660,7 +660,7 @@ class _RegisterState extends State<Register> {
         ),
         ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: orangeColor,
+              backgroundColor: lightGreenColor,
             ),
             child: const Text(
               'Submit2',

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:advices/App/models/service.dart';
 import 'package:advices/App/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,28 +12,6 @@ class LawyersContext {
     return flutterUser;
     // }
     // return null;
-  }
-
-  static Future<void> saveServicesForLawyer(
-    String uid, List<Service?> newServices) async {
-    if (newServices.isNotEmpty) {
-      List<String> selectedServicesIds = [];
-      for (int i = 0; i < newServices.length; i++) {
-        Service selectedService =
-            Service.fromJson(jsonDecode(newServices[i].toString()));
-        print(selectedService);
-        selectedServicesIds.add(selectedService.id);
-
-        // TODO delete the collection before adding the this
-        // await services.doc(selectedService.id).set({
-        //   "id": selectedService.id,
-        //   "area": selectedService.area,
-        //   "name": selectedService.name,
-        // });
-      }
-      print(selectedServicesIds);
-      await saveServicesForLawyerAsArray(selectedServicesIds, uid);
-    }
   }
 
   static Future<void> saveServicesForLawyerAsArray(

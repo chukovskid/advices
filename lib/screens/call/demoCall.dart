@@ -43,8 +43,8 @@ class _DemoCallState extends State<DemoCall> {
     await _engine.startPreview();
     await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
     await _engine.setClientRole(ClientRole.Broadcaster);
-
   }
+
   Future<void> _checkAuthentication() async {
     user = await _auth.getCurrentUser();
     setState(() {
@@ -109,8 +109,7 @@ class _DemoCallState extends State<DemoCall> {
             stops: [-1, 1, 2],
           ),
         ),
-        child: _joinChannelButton()
-        );
+        child: _joinChannelButton());
   }
 
   Widget _joinChannelButton() {
@@ -243,5 +242,4 @@ class _DemoCallState extends State<DemoCall> {
     });
     await openCall(widget.channelName);
   }
-
 }

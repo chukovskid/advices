@@ -126,15 +126,6 @@ class _IframeWidgetState extends State<IframeWidget> {
                   ),
                   if (_isChatVisible && constraints.maxWidth > 600)
                     Expanded(
-                      flex: _isChatVisible ? 2 : 3,
-                      child: Container(
-                        width: double.infinity,
-                        height: double.infinity,
-                        child: _widget,
-                      ),
-                    ),
-                  if (_isChatVisible && constraints.maxWidth > 600)
-                    Expanded(
                       flex: 1,
                       child: MobileLayoutScreen(
                         null,
