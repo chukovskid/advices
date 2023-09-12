@@ -21,10 +21,7 @@ class DefaultFirebaseOptions {
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for android - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return android;
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
@@ -47,38 +44,40 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAMiXYCdnUTqZItvme_QYds_TTNCLXGmac',
-    appId: '1:793184649946:web:9551788cf7f51068cd9be3',
-    messagingSenderId: '793184649946',
-    projectId: 'advices-dev',
-    authDomain: 'advices-dev.firebaseapp.com',
-    storageBucket: 'advices-dev.appspot.com',
-    measurementId: 'G-QPSYB5REK5',
+    apiKey: 'AIzaSyCIiAEEwDoeQx_Q1_Kj94RyxbVOJR02ifo',
+    appId: '1:968596221490:web:2b4163af286075dc80962b',
+    messagingSenderId: '968596221490',
+    projectId: 'advices-prod',
+    authDomain: 'advices-prod.firebaseapp.com',
+    storageBucket: 'advices-prod.appspot.com',
+    measurementId: 'G-3BJ9SPYJEJ',
+  );
+
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyB2YNLDG1iyhp7CvcIsahiY2pJAwCNdmNI',
+    appId: '1:968596221490:android:bef2f61a12920d5780962b',
+    messagingSenderId: '968596221490',
+    projectId: 'advices-prod',
+    storageBucket: 'advices-prod.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBVP_mV2EHY-QXzQfVbWGWw8qLZXySoymo',
-    appId: '1:793184649946:ios:59896fbd53061ee3cd9be3',
-    messagingSenderId: '793184649946',
-    projectId: 'advices-dev',
-    storageBucket: 'advices-dev.appspot.com',
-    androidClientId:
-        '793184649946-73809u4lilv8vllsl1i79f89550c7pti.apps.googleusercontent.com',
-    iosClientId:
-        '793184649946-991le3jj67gkcoirbhjdo3cu38qis0i7.apps.googleusercontent.com',
+    apiKey: 'AIzaSyC2jeGN8TewtAY27yKsiqvNME5eAruxqtw',
+    appId: '1:968596221490:ios:bd57621e9b1971b680962b',
+    messagingSenderId: '968596221490',
+    projectId: 'advices-prod',
+    storageBucket: 'advices-prod.appspot.com',
+    iosClientId: '968596221490-4q2csh9d19bfvivv5l0c16qc3ck5tsk5.apps.googleusercontent.com',
     iosBundleId: 'io.advices.virtualOffice',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBVP_mV2EHY-QXzQfVbWGWw8qLZXySoymo',
-    appId: '1:793184649946:ios:59896fbd53061ee3cd9be3',
-    messagingSenderId: '793184649946',
-    projectId: 'advices-dev',
-    storageBucket: 'advices-dev.appspot.com',
-    androidClientId:
-        '793184649946-73809u4lilv8vllsl1i79f89550c7pti.apps.googleusercontent.com',
-    iosClientId:
-        '793184649946-991le3jj67gkcoirbhjdo3cu38qis0i7.apps.googleusercontent.com',
+    apiKey: 'AIzaSyC2jeGN8TewtAY27yKsiqvNME5eAruxqtw',
+    appId: '1:968596221490:ios:bd57621e9b1971b680962b',
+    messagingSenderId: '968596221490',
+    projectId: 'advices-prod',
+    storageBucket: 'advices-prod.appspot.com',
+    iosClientId: '968596221490-4q2csh9d19bfvivv5l0c16qc3ck5tsk5.apps.googleusercontent.com',
     iosBundleId: 'io.advices.virtualOffice',
   );
 }

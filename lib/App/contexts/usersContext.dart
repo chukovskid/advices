@@ -3,6 +3,7 @@ import 'package:advices/App/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import '../services/firebase_dynamic_links.dart';
 
 class UsersContext {
   static Future<FlutterUser?> updateUserData(FlutterUser user) async {
@@ -12,6 +13,9 @@ class UsersContext {
 
     bool isLawyer = user.isLawyer;
     if (isLawyer) {
+      var lawyerProfileURL =
+          await FirebaseDynamicLinkService.createLawyerProfileDynamicLink(
+              user.uid);
       await lawyers.doc(user.uid).set({
         'uid': user.uid,
         'email': user.email,
@@ -24,6 +28,8 @@ class UsersContext {
         'yearsOfExperience': user.yearsOfExperience,
         'education': user.education,
         'lawField': user.lawField,
+        'public': true,
+        'lawyerProfileURL': lawyerProfileURL,
       });
     }
     await users.doc(user.uid).set({
@@ -38,18 +44,15 @@ class UsersContext {
       'isLawyer': user.isLawyer,
       'photoURL': user.photoURL,
       'subscriptionLvl': isLawyer ? 1 : 0,
-    });
+    }, SetOptions(merge: true));
     return user;
   }
 
   static Future<FlutterUser> getUser(String userId) async {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     final snapshot = await users.doc(userId).get();
-    // if (snapshot.exists) {
     var flutterUser = FlutterUser.fromJson(snapshot.data()!);
     return flutterUser;
-    // }
-    // return null;
   }
 
   static Stream<Iterable<FlutterUser>> getAllUsers() {
@@ -67,7 +70,6 @@ class UsersContext {
 
     String? fcmToken = await _fcm.getToken();
 
-    // Save it to Firestore
     if (fcmToken != null) {
       var tokens = users.doc(uid).collection('tokens');
 

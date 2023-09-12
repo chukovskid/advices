@@ -25,11 +25,10 @@ class LawyersContext {
     CollectionReference lawyers =
         FirebaseFirestore.instance.collection("lawyers");
     print("lawId: $lawId");
-    var filteredLawyers = lawId == "allFields"
-        ? lawyers
-        : lawyers.where("services", arrayContains: lawId);
-    // var filteredLawyers = lawyers.where("public", isEqualTo: true);
-    // var filteredLawyers = lawyers;
+    var filteredLawyers = lawyers.where("public", isNotEqualTo: false);
+    filteredLawyers = lawId == "allFields"
+        ? filteredLawyers
+        : filteredLawyers.where("services", arrayContains: lawId);
     final snapshots = filteredLawyers.snapshots();
     var flutterUsers = snapshots.map((snapshot) =>
         snapshot.docs.map((doc) => FlutterUser.fromJson(doc.data())));

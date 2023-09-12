@@ -140,7 +140,7 @@ class _ProfileState extends State<Profile> {
                 RichText(
                   text: TextSpan(children: [
                     const WidgetSpan(
-                      child: Icon(Icons.phone, size: 14),
+                      child: Icon(Icons.mail, size: 14),
                     ),
                     TextSpan(
                       text: "  ${_fireUser?.email}",
@@ -152,41 +152,10 @@ class _ProfileState extends State<Profile> {
                     ),
                   ]),
                 ),
-                const SizedBox(height: 20.0),
-                RichText(
-                  text: TextSpan(children: [
-                    const WidgetSpan(
-                      child: Icon(Icons.web, size: 14),
-                    ),
-                    TextSpan(
-                      text: "  ${_fireUser?.phoneNumber}",
-                      style: const TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Color.fromRGBO(23, 34, 59, 1),
-                        fontSize: 18,
-                      ),
-                    ),
-                  ]),
-                ),
-                const SizedBox(height: 20.0),
-                RichText(
-                  text: TextSpan(children: [
-                    const WidgetSpan(
-                      child: Icon(Icons.email, size: 14),
-                    ),
-                    TextSpan(
-                      text: "  ${_fireUser?.uid}",
-                      style: const TextStyle(
-                        fontWeight: FontWeight.normal,
-                        color: Color.fromRGBO(23, 34, 59, 1),
-                        fontSize: 12,
-                      ),
-                    ),
-                  ]),
-                ),
+                const SizedBox(height: 40.0),
                 ElevatedButton(
                     style: ButtonStyle(
-                        foregroundColor:
+                        backgroundColor:
                             MaterialStateProperty.all<Color>(Colors.black)),
                     // color: Color.fromRGBO(23, 34, 59, 1),
                     child: const Text(

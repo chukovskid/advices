@@ -308,7 +308,7 @@ class _CreateEventState extends State<CreateEvent> {
         : Container(
             height: 100,
             decoration: BoxDecoration(
-              color: Color(0xffc2cee4),
+              color: lightGreenColor,
               boxShadow: [
                 BoxShadow(
                   color: Colors.blueGrey,
@@ -350,51 +350,63 @@ class _CreateEventState extends State<CreateEvent> {
                                       ),
                                     ))
                           }),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "Тема:", // TODO selectedTime Should be here
-                                style: TextStyle(
-                                    // color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                width: 1,
-                              ),
-                              Text(_title.text),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "$_selectedDate $selectedTime",
-                                style: TextStyle(
-                                    decoration: TextDecoration.underline,
-                                    color: selectedTime == 'time'
-                                        ? Color(0xff5bc9bf)
-                                        : Colors.black),
-                              ),
-                            ],
-                          ),
-                        ],
+                      child: Card(
+                        color: Colors.white,
+                        elevation: 4,
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  "Тема:", // TODO selectedTime Should be here
+                                  style: TextStyle(
+                                      // color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  width: 1,
+                                ),
+                                Text(_title.text),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  "$_selectedDate $selectedTime",
+                                  style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      color: selectedTime == 'time'
+                                          ? Color(0xff5bc9bf)
+                                          : Colors.black),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     )),
                 Flexible(
                     flex: 1,
                     child: SizedBox(
-                      height: 50,
+                      height: 90,
                       width: 180,
                       child: ElevatedButton(
                         style: ButtonStyle(
+                            shadowColor:
+                                MaterialStateProperty.all(Colors.white),
                             backgroundColor:
                                 MaterialStateProperty.all(Color(0xff5bc9bf))),
                         onPressed: () {
@@ -492,13 +504,14 @@ class _CreateEventState extends State<CreateEvent> {
                               : null,
                           style: style,
                           decoration: InputDecoration(
-                            labelText: mkLanguage ? "Наслов" : "Title",
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 2.0),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
+                              labelText: mkLanguage ? "Наслов" : "Title",
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Color.fromARGB(255, 255, 255, 255)),
+                              ),
+                              labelStyle: TextStyle(
+                                color: Colors.grey,
+                              )),
                         ),
                       ),
 
@@ -519,10 +532,12 @@ class _CreateEventState extends State<CreateEvent> {
                             labelText: mkLanguage
                                 ? "Опис на проблемот..."
                                 : "Description...",
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.white, width: 2.0),
-                              borderRadius: BorderRadius.circular(10),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color.fromARGB(255, 255, 255, 255)),
+                            ),
+                            labelStyle: TextStyle(
+                              color: Colors.grey,
                             ),
                           ),
                         ),
@@ -665,16 +680,16 @@ class _CreateEventState extends State<CreateEvent> {
                                 if (_isFormEmpty()) {
                                   return;
                                 }
+                                if (asPopup || !openEventForm) {
+                                  Navigator.pop(context);
+                                }
                                 setState(() {
                                   openEventForm = false;
                                 });
                               }
-                              if (asPopup) {
-                                Navigator.pop(context);
-                              }
                             },
                             child: Text(
-                              mkLanguage ? "Зачувај" : "Save",
+                              mkLanguage ? "Зачувај" : "Save", /////////////
                               style: style.copyWith(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
@@ -707,7 +722,7 @@ class _CreateEventState extends State<CreateEvent> {
           children: <TableRow>[
             TableRow(
               decoration: BoxDecoration(
-                color: Color.fromRGBO(1, 38, 65, 1),
+                color: Colors.transparent,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20)),
@@ -718,18 +733,10 @@ class _CreateEventState extends State<CreateEvent> {
                   child: Center(
                     child: Text(
                       mkLanguage ? "Сервис" : "Service",
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      style: TextStyle(color: Colors.black, fontSize: 20),
                     ),
                   ),
                 ),
-                // TableCell(
-                //   verticalAlignment: TableCellVerticalAlignment.top,
-                //   child: Container(
-                //     height: 32,
-                //     width: 32,
-                //     color: Colors.red,
-                //   ),
-                // ),
                 Center(
                   child: ElevatedButton(
                     style: ButtonStyle(
@@ -761,7 +768,7 @@ class _CreateEventState extends State<CreateEvent> {
             ),
             TableRow(
               decoration: const BoxDecoration(
-                color: Color.fromRGBO(1, 38, 65, 1),
+                color: Colors.transparent,
               ),
               children: <Widget>[
                 Container(
@@ -769,7 +776,7 @@ class _CreateEventState extends State<CreateEvent> {
                   child: Center(
                     child: Text(
                       mkLanguage ? "Дата и време" : "Select a date",
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      style: TextStyle(color: Colors.black, fontSize: 20),
                     ),
                   ),
                 ),
@@ -805,15 +812,15 @@ class _CreateEventState extends State<CreateEvent> {
             ),
             TableRow(
               decoration: const BoxDecoration(
-                color: Color.fromRGBO(1, 38, 65, 1),
-              ),
+                  // color: Colors.transparent,
+                  ),
               children: <Widget>[
                 Container(
                   height: 100,
                   child: Center(
                     child: Text(
                       mkLanguage ? "Цена" : "Total",
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      style: TextStyle(color: Colors.black, fontSize: 20),
                     ),
                   ),
                 ),
@@ -823,7 +830,7 @@ class _CreateEventState extends State<CreateEvent> {
                     "Цената ќе биде пресметана според комплексноста на случајот",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                         fontSize: 14,
                         fontWeight: FontWeight.bold),
                   ),

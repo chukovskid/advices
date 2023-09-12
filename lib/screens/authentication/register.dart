@@ -595,7 +595,7 @@ class _RegisterState extends State<Register> {
       children: [
         DropdownButtonHideUnderline(
             child: StreamBuilder<Iterable<Service>>(
-                stream: ServicesContext.getAllLaws(),
+                stream: ServicesContext.getAllServices(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) return Container();
                   if (setDefaultMake) {

@@ -143,17 +143,17 @@ export const createPaymentLink = functions.https.onCall(async (data, context) =>
 export const createLawyerProfileDynamicLink = functions.https.onCall(async (data, context) => {
   // This function is not used, but it WORKS
   const lawyerId = data.lawyerId;
-  const link = `http://localhost:8000/#/lawyers/${lawyerId}`;
+  const link = `https://advices-app.web.app/#/lawyers/${lawyerId}`;
 
   const dynamicLink = {
     dynamicLinkInfo: {
-      domainUriPrefix: 'https://advices.page.link',
+      domainUriPrefix: 'https://advokat.page.link',
       link: link,
       androidInfo: {
-        androidPackageName: 'com.yourcompany.yourappname',//TODO dev and prod 
+        androidPackageName: 'com.chukovski.advices',//TODO dev and prod 
       },
       iosInfo: {
-        iosBundleId: 'com.yourcompany.yourappname',
+        iosBundleId: 'io.agora.agoraRtcEngineExample',
       },
     },
     suffix: {

@@ -80,6 +80,7 @@ class _LawyerProfileState extends State<LawyerProfile> {
           lawyer!.uid, selectedServices);
     }
     selectedServices = [];
+    initState();
   }
 
   Future<void> _startChatConversation() async {
@@ -116,8 +117,9 @@ class _LawyerProfileState extends State<LawyerProfile> {
       setState(() {
         isLoggedUserTheLawyer = true;
       });
-      lawyerProfileURL =
-          await FirebaseDynamicLinkService.createLawyerProfileDynamicLink(
+      lawyerProfileURL = (lawyer!.lawyerProfileURL.isNotEmpty)
+          ? lawyer?.lawyerProfileURL
+          : await FirebaseDynamicLinkService.createLawyerProfileDynamicLink(
               user.uid);
     }
   }

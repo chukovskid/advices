@@ -15,8 +15,9 @@ class FlutterUser {
   String lawField;
   String photoURL;
   double minPriceEuro;
-  int? subscriptionLvl; // Add this line
-//  final DateTime lastMessageTime;
+  int? subscriptionLvl;
+  bool public = true;
+  String lawyerProfileURL = "";
 
   FlutterUser({
     this.uid = "",
@@ -35,8 +36,9 @@ class FlutterUser {
     this.description = "",
     this.photoURL = "",
     this.minPriceEuro = 1,
-    this.subscriptionLvl, // And this line
-    // this.lastMessageTime = DateTime.now(),
+    this.subscriptionLvl,
+    this.public = true,
+    this.lawyerProfileURL = "",
   });
 
   Map<String, dynamic> toMap() {
@@ -57,8 +59,9 @@ class FlutterUser {
       'lawField': lawField,
       'photoURL': photoURL,
       'minPriceEuro': minPriceEuro,
-      'subscriptionLvl': subscriptionLvl, // And this line
-      // 'lastMessageTime': lastMessageTime,
+      'subscriptionLvl': subscriptionLvl,
+      'public': public,
+      'lawyerProfileURL': lawyerProfileURL,
     };
   }
 
@@ -78,7 +81,8 @@ class FlutterUser {
         lawField: json['lawField'] as String? ?? "",
         photoURL: json['photoURL'] as String? ?? "",
         minPriceEuro: json['minPriceEuro'] as double? ?? 1.0,
-        subscriptionLvl: json['subscriptionLvl'] as int?, // And this line
-        // lastMessageTime: json['lastMessageTime'].toDate(),
+        subscriptionLvl: json['subscriptionLvl'] as int?,
+        public: json['public'] as bool? ?? true,
+        lawyerProfileURL: json['lawyerProfileURL'] as String? ?? "",
       );
 }
