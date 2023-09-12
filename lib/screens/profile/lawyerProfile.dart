@@ -490,7 +490,7 @@ class _LawyerProfileState extends State<LawyerProfile> {
                 elevation: 5.0, // Add shadow to the card
                 child: Center(
                   child: Text(
-                    services[index].name,
+                    services[index].nameMk,
                     textAlign: TextAlign.center,
                   ),
                 ),

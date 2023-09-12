@@ -8,19 +8,20 @@ import '../shared_widgets/BottomBar.dart';
 
 const Map<String, String> serviceMap = {
   'allFields': 'Сите области',
-  'ednakvostId': 'Еднаквост и доверба',
-  'imotnoId': 'Имотно право',
-  'krivicnoId': 'Кривично право',
-  'kupoProdazbaId': 'Купо-продажба',
-  'megunarodnoId': 'Меѓународно право',
-  'obligacioniId': 'Закон за облигациони односи',
-  'opstoId': 'Општо право',
-  'paspredelbaNaImotId': 'Распределба на имот',
+  'megusebniOdnosiId': 'Меѓусебни односи',
+  'nedvizniniId': 'Недвижнини',
   'podarociId': 'Подароци',
-  'prekrsocnoId': 'Прекршочно право',
-  'ustavnoId': 'Уставно и управно право',
-  'buyAndSaleId': 'Купо-продажба',
-  // Add other mappings as needed
+  'propertyDistributionId': 'Распределба на имот',
+  'proppertyInvesmentId': 'Инвестиции во имот',
+  'raspredelbaId': 'Распределба',
+  'realEstateId': 'Недвижен имот',
+  'registrationId': 'Регистрација',
+  'rentalsId': 'Закуп',
+  'residencePermitsId': 'Дозволи за престој',
+  'startingCompanyId': 'Започнување на компанија',
+  'travelingVisaId': 'Патна виза',
+  'workPermitsId': 'Дозволи за работа',
+  'zaednickaGradbaId': 'Заедничка градба',
 };
 
 class Lawyers extends StatefulWidget {
