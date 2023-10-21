@@ -43,7 +43,7 @@ class _MobileLayoutScreenState extends State<MobileLayoutScreen> {
   }
 
   _navigateToAuth() {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => Authenticate()),
     );

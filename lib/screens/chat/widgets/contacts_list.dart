@@ -27,8 +27,6 @@ class _ContactsListState extends State<ContactsList> {
     widget.callback(chatId);
   }
 
-
-
   Future<void> getLoggedUser() async {
     // bool loggedIn = await _auth.isSignIn();
     FlutterUser? user = await _auth.getMyProfileInfo();
