@@ -423,7 +423,7 @@ class _LawyerProfileState extends State<LawyerProfile> {
                         },
                         initialValue: [],
                         items: laws
-                            .map((e) => MultiSelectItem(e, e.name))
+                            .map((e) => MultiSelectItem(e, e.nameMk))
                             .toList(),
                         onConfirm: (values) {
                           selectedServices.remove(values);
