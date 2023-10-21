@@ -1,11 +1,11 @@
-import 'package:advices/models/user.dart';
-import 'package:advices/screens/authentication/register.dart';
+import 'package:advices/App/providers/auth_provider.dart';
+import 'package:advices/screens/authentication/lawyerBasedRedirect.dart';
 import 'package:advices/screens/authentication/sign_in.dart';
-import 'package:advices/screens/profile.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:advices/screens/profile/lawyerProfile.dart';
 import 'package:flutter/material.dart';
 
-import '../../services/auth.dart';
+import '../../App/models/user.dart';
+import '../home/profile.dart';
 
 class Authenticate extends StatefulWidget {
   @override
@@ -13,28 +13,38 @@ class Authenticate extends StatefulWidget {
 }
 
 class _AuthenticateState extends State<Authenticate> {
-  final AuthService _auth = AuthService();
-  bool showSignIn = true;
-  bool isLoggedIn = true;
+  final AuthProvider _auth = AuthProvider();
+  bool isLoggedIn = false;
+  FlutterUser loggedUser = FlutterUser();
   @override
   void initState() {
     super.initState();
-    toggleView();
-  }
-
-  Future<void> toggleView() async {
-    // bool loggedIn = await _auth.isSignIn();
-    User? user = await _auth.getCurrentUser();
-    bool userExist = user != null? true : false;
-    setState(() => {showSignIn = !showSignIn, isLoggedIn = userExist});
+    _auth.user.listen((user) {
+      setState(() {
+        isLoggedIn = user != null;
+      });
+      if (user != null) {
+        loggedUser = FlutterUser(
+          email: user.email,
+          uid: user.uid,
+        );
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     if (isLoggedIn) {
-      return Profile();
+      return LawyerBasedRedirect(
+          lawyerWidget: LawyerProfile(loggedUser.uid, "serviceId"),
+          nonLawyerWidget: Profile());
     } else {
-        return SignIn(toggleView: toggleView);
+      return SignIn(
+        toggleView: () {
+          // You can leave this empty if you don't need any specific actions here.
+        },
+        fromAuth: false, // Add this line
+      );
     }
   }
 }

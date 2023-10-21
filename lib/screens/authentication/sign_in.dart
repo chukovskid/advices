@@ -1,32 +1,32 @@
-// ignore_for_file: deprecated_member_use
-
+import 'package:advices/App/providers/auth_provider.dart';
+import 'package:advices/App/services/googleAuth.dart';
 import 'package:advices/screens/authentication/register.dart';
-import 'package:advices/screens/home.dart';
+import 'package:advices/assets/utilities/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../models/user.dart';
-import '../../services/auth.dart';
-import 'authentication.dart';
+import '../../App/models/user.dart';
+import '../home/home.dart';
+import '../shared_widgets/base_app_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SignIn extends StatefulWidget {
   final Function? toggleView;
-  SignIn({this.toggleView});
+  final bool fromAuth;
+
+  SignIn({this.toggleView, this.fromAuth = false});
 
   @override
   _SignInState createState() => _SignInState();
 }
 
 class _SignInState extends State<SignIn> {
-  final AuthService _auth = AuthService();
+  bool mkLanguage = true;
+
+  final AuthProvider _auth = AuthProvider();
   final _formKey = GlobalKey<FormState>();
 
-  // final FocusNode _nameFocusNode = FocusNode();
-  // final FocusNode _phoneFocusNode = FocusNode();
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
-
-  // final TextEditingController _nameController = TextEditingController();
-  // final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -34,26 +34,19 @@ class _SignInState extends State<SignIn> {
     FocusScope.of(context).requestFocus(focusNode);
   }
 
-  _submitForm() {
-    // if (_formKey.currentState!.validate()) {
-      var user = {
-        'email': _emailController.text,
-        'password': _passwordController.text,
-      };
-      FlutterUser fUser = FlutterUser(
-          email: _emailController.text, password: _passwordController.text);
-      print(user.toString());
+  _submitForm() async {
+    var user = {
+      'email': _emailController.text,
+      'password': _passwordController.text,
+    };
+    FlutterUser fUser = FlutterUser(
+        email: _emailController.text, password: _passwordController.text);
+    print(user.toString());
 
-      _signInUser(fUser);
-
-      // If the form passes validation, display a Snackbar.
-      Scaffold.of(context)
-          .showSnackBar(SnackBar(content: Text('Registration sent')));
-
-      _formKey.currentState?.save();
-      _formKey.currentState?.reset();
-      _nextFocus(_emailFocusNode);
-    // }
+    await _signInUser(fUser);
+    _formKey.currentState?.save();
+    _formKey.currentState?.reset();
+    _nextFocus(_emailFocusNode);
   }
 
   String? _validateInput(String value) {
@@ -63,7 +56,6 @@ class _SignInState extends State<SignIn> {
     return null;
   }
 
-  // text field state
   String email = '';
   String password = '';
   bool _showEmailInputs = false;
@@ -71,20 +63,6 @@ class _SignInState extends State<SignIn> {
 
   void goBack() {
     Navigator.pop(context);
-  }
-
-  _navigateToAuth() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Authenticate()),
-    );
-  }
-
-  _navigateToHome() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Home()),
-    );
   }
 
   _navigateToRegister() {
@@ -96,31 +74,39 @@ class _SignInState extends State<SignIn> {
 
   Future<void> _signInUser(FlutterUser flutUser) async {
     var user = await _auth.signInWithEmailAndPassword(flutUser);
-    if (user != null) _navigateToAuth();
+    if (user != null) {
+      if (widget.fromAuth) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Home()),
+        );
+      } else {
+        goBack();
+      }
+    }
   }
 
   Future<void> _googleSignIn() async {
-    await _auth.googleSignIn();
-    _navigateToAuth();
-    print(email);
+    User? user = await GoogleAuthService.signInWithGoogle(context: context);
+    if (user != null) {
+      if (widget.fromAuth) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Home()),
+        );
+      } else {
+        goBack();
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        // backgroundColor: Color.fromRGBO(23, 34, 59, 1),
-        backgroundColor: Color.fromRGBO(23, 34, 59, 1),
-        elevation: 0.0,
-        actions: <Widget>[
-          FlatButton.icon(
-            textColor: Colors.white,
-            icon: Icon(Icons.home),
-            label: Text(''),
-            onPressed: _navigateToHome,
-          ),
-        ],
+      appBar: BaseAppBar(
+        appBar: AppBar(),
+        redirectToHome: true,
       ),
       backgroundColor: Color.fromARGB(255, 226, 146, 100),
       body: Container(
@@ -130,11 +116,8 @@ class _SignInState extends State<SignIn> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Color.fromRGBO(107, 119, 141, 1),
-              Color.fromRGBO(38, 56, 89, 1),
-            ],
-            stops: [-1, 2],
+            colors: backgroundColor,
+            stops: [-1, 1, 2],
           ),
         ),
         child: _form(),
@@ -146,12 +129,13 @@ class _SignInState extends State<SignIn> {
     return Form(
       child: Container(
         height: 60,
+        width: 100,
         margin: EdgeInsets.all(35),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              "Sign In",
+            Text(
+              mkLanguage ? "Најави се" : "Sign In",
               style: TextStyle(
                 fontWeight: FontWeight.normal,
                 color: Colors.white,
@@ -159,23 +143,15 @@ class _SignInState extends State<SignIn> {
               ),
             ),
             const SizedBox(height: 35.0),
-            _showEmailInputs ? _showEmailSignIn() : SizedBox(),
-            !_showEmailInputs
-                ? RaisedButton(
-                    color: Color.fromRGBO(23, 34, 59, 1),
-                    child: const Text(
-                      ' Email log In ',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () async {
-                      setState(() {
-                        _showEmailInputs = true;
-                      });
-                    })
-                : SizedBox(),
+            SizedBox(
+              child: _showEmailSignIn(),
+              width: 660,
+            ),
             const SizedBox(height: 50.0),
-            const Text(
-              "Or Sign up using social media",
+            Text(
+              mkLanguage
+                  ? "Или пријавете се со помош на Google"
+                  : "Or Sign up using social media",
               style: TextStyle(
                 fontWeight: FontWeight.normal,
                 color: Colors.white,
@@ -190,53 +166,16 @@ class _SignInState extends State<SignIn> {
                 Container(
                   height: 60,
                   width: 60,
-                  child: RaisedButton(
-                      textColor: Color.fromARGB(255, 184, 15, 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(40.0),
-                      ),
-                      color: Color.fromARGB(255, 255, 255, 255),
-                      child: const Center(
-                          child: FaIcon(FontAwesomeIcons.googlePlusG)),
-                      onPressed: () async {
-                        _googleSignIn();
-                      }),
-                ),
-                const SizedBox(width: 15.0),
-                Container(
-                  height: 60,
-                  width: 60,
-                  child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(40.0),
-                      ),
-                      color: Color.fromARGB(255, 255, 255, 255),
-                      child: const Center(
-                        child:
-                            // FaIcon(FontAwesomeIcons.arrowLeft)
-
-                            Icon(
-                          Icons.facebook,
-                          size: 30.0,
-                          color: Color.fromARGB(255, 22, 28, 87),
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        onPrimary: Color.fromARGB(255, 184, 15, 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(40.0),
                         ),
                       ),
-                      onPressed: () async {
-                        _googleSignIn();
-                      }),
-                ),
-                const SizedBox(width: 15.0),
-                Container(
-                  height: 60,
-                  width: 60,
-                  child: RaisedButton(
-                      textColor: Color.fromARGB(255, 54, 107, 187),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(40.0),
-                      ),
-                      color: Color.fromARGB(255, 255, 255, 255),
-                      child:
-                          const Center(child: FaIcon(FontAwesomeIcons.twitter)),
+                      child: const Center(
+                          child: FaIcon(FontAwesomeIcons.googlePlusG)),
                       onPressed: () async {
                         _googleSignIn();
                       }),
@@ -244,12 +183,21 @@ class _SignInState extends State<SignIn> {
               ],
             ),
             const SizedBox(height: 50.0),
-            RaisedButton(
-                color: Colors.transparent,
-                elevation: 0.0,
-                child: const Text(
-                  'No account? Create one!',
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(40.0),
+                  ),
+                  elevation: 0.0,
+                ),
+                // color: Colors.transparent,
+                child: Text(
+                  mkLanguage
+                      ? "Почни со регистрација!"
+                      : 'No account? Create one!',
                   style: TextStyle(color: Colors.white),
+                  textAlign: TextAlign.center,
                 ),
                 onPressed: _navigateToRegister),
           ],
@@ -273,18 +221,17 @@ class _SignInState extends State<SignIn> {
         validator: (value) => _validateInput(value.toString()),
         style: const TextStyle(color: Colors.white),
         decoration: const InputDecoration(
-            fillColor: Colors.orange,
+            fillColor: lightGreenColor,
             enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Color.fromRGBO(225, 103, 104, 1)),
+              borderSide: BorderSide(color: lightGreenColor),
             ),
             focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: Color.fromARGB(255, 255, 255, 255)),
             ),
-            labelText: "Email",
+            labelText: "Е-маил",
             labelStyle: TextStyle(
               color: Color.fromARGB(209, 255, 255, 255),
             )),
-
       ),
       const SizedBox(height: 20.0),
       TextFormField(
@@ -299,28 +246,31 @@ class _SignInState extends State<SignIn> {
         style: const TextStyle(color: Colors.white),
         obscureText: true,
         decoration: const InputDecoration(
-            fillColor: Colors.orange,
+            fillColor: lightGreenColor,
             enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Color.fromRGBO(225, 103, 104, 1)),
+              borderSide: BorderSide(color: lightGreenColor),
             ),
             focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: Color.fromARGB(255, 255, 255, 255)),
             ),
-            labelText: "Password",
+            labelText: "Лозинка",
             labelStyle: TextStyle(
               color: Color.fromARGB(209, 255, 255, 255),
             )),
       ),
       SizedBox(height: 30.0),
-      RaisedButton(
-          color: Color.fromRGBO(225, 103, 104, 1),
-          child: const Text(
-            ' Log In ',
+      ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: lightGreenColor,
+          ),
+
+          // color: Color.fromRGBO(225, 103, 104, 1),
+          child: Text(
+            mkLanguage ? "Логирај се" : ' Log In ',
             style: TextStyle(color: Colors.white),
           ),
           onPressed: () async {
             await _submitForm();
-
           })
     ]);
   }

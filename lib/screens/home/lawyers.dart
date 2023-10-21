@@ -1,0 +1,267 @@
+import 'package:advices/screens/profile/lawyerProfile.dart';
+import 'package:advices/screens/shared_widgets/base_app_bar.dart';
+import 'package:advices/assets/utilities/constants.dart';
+import 'package:flutter/material.dart';
+import '../../App/contexts/lawyersContext.dart';
+import '../../App/models/user.dart';
+import '../shared_widgets/BottomBar.dart';
+
+const Map<String, String> serviceMap = {
+  'allFields': 'Сите области',
+  'megusebniOdnosiId': 'Меѓусебни односи',
+  'nedvizniniId': 'Недвижнини',
+  'podarociId': 'Подароци',
+  'propertyDistributionId': 'Распределба на имот',
+  'proppertyInvesmentId': 'Инвестиции во имот',
+  'raspredelbaId': 'Распределба',
+  'realEstateId': 'Недвижен имот',
+  'registrationId': 'Регистрација',
+  'rentalsId': 'Закуп',
+  'residencePermitsId': 'Дозволи за престој',
+  'startingCompanyId': 'Започнување на компанија',
+  'travelingVisaId': 'Патна виза',
+  'workPermitsId': 'Дозволи за работа',
+  'zaednickaGradbaId': 'Заедничка градба',
+};
+
+class Lawyers extends StatefulWidget {
+  final String service;
+  const Lawyers({Key? key, required this.service}) : super(key: key);
+
+  @override
+  State<Lawyers> createState() => _LawyersState();
+}
+
+class _LawyersState extends State<Lawyers> {
+  bool mkLanguage = true;
+  String allFields = "allFields";
+  String selectedFilter = "allFields";
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: BaseAppBar(
+        redirectToHome: true,
+        appBar: AppBar(),
+      ),
+      bottomNavigationBar: BottomBar(
+        fabLocation: FloatingActionButtonLocation.endDocked,
+        shape: const CircularNotchedRectangle(),
+      ),
+      body: Container(
+        height: double.infinity,
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: backgroundColor,
+            stops: [-1, 1, 2],
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Icon(
+                    Icons.filter_alt_rounded,
+                    color: darkGreenColor,
+                  ),
+                  Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: DropdownButton<String>(
+                        value: selectedFilter,
+                        icon: const Icon(Icons.arrow_drop_down),
+                        iconSize: 24,
+                        elevation: 16,
+                        style: const TextStyle(
+                            color: lightGreenColor,
+                            fontWeight: FontWeight.bold),
+                        underline: Container(
+                          height: 2,
+                          color: whiteColor,
+                        ),
+                        onChanged: (String? newValue) {
+                          print("newValue: $newValue");
+                          setState(() {
+                            selectedFilter = newValue ?? allFields;
+                          });
+                        },
+                        items: serviceMap.entries.map<DropdownMenuItem<String>>(
+                          (MapEntry<String, String> entry) {
+                            return DropdownMenuItem<String>(
+                              value: entry.key,
+                              child: Text(entry.value),
+                            );
+                          },
+                        ).toList()),
+                  )
+                ],
+              ),
+              _cardsList(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _cardsList() {
+    return StreamBuilder<Iterable<FlutterUser>>(
+      stream: LawyersContext.getFilteredLawyers(selectedFilter),
+      builder: ((context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: Icon(
+              Icons.hourglass_bottom,
+              color: Colors.white,
+              size: 100,
+            ),
+          );
+        }
+        if (snapshot.hasData) {
+          final users = snapshot.data!;
+          return Container(
+            margin:
+                const EdgeInsets.only(top: 35, left: 30, right: 50, bottom: 10),
+            child: MediaQuery.of(context).size.width < 850.0
+                ? ListView(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10.0,
+                      vertical: 50.0,
+                    ),
+                    shrinkWrap: true,
+                    children: users.map(_card).toList())
+                : GridView.count(
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    crossAxisCount:
+                        (MediaQuery.of(context).size.width < 1050.0 ? 3 : 4),
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    primary: false,
+                    children: users.map(_card).toList(),
+                  ),
+          );
+        } else {
+          return Center(
+            child: Icon(
+              Icons.hourglass_bottom,
+              color: Colors.white,
+              size: 100,
+            ),
+          );
+        }
+      }),
+    );
+  }
+
+  Widget _card(FlutterUser fUser) {
+    return Container(
+      height: 300,
+      width: 300,
+      child: InkWell(
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => LawyerProfile(fUser.uid, widget.service)),
+        ),
+        child: Card(
+          elevation: 30,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                child: SingleChildScrollView(
+                  child: Card(
+                    elevation: 0,
+                    color: Colors.transparent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: lightGreenColor,
+                            radius: 20,
+                            child: fUser.photoURL.isNotEmpty
+                                ? ClipOval(
+                                    child: Image.network(fUser.photoURL),
+                                  )
+                                : Text(
+                                    fUser.name[0].toUpperCase() +
+                                        fUser.surname[0].toUpperCase(),
+                                    style: TextStyle(color: whiteColor),
+                                  ),
+                          ),
+                          title: Text(
+                            "${fUser.displayName}",
+                            style: const TextStyle(fontSize: 25),
+                          ),
+                          // subtitle:
+                        ),
+                        _text(fUser)
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _text(FlutterUser fUser) {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: LimitedBox(
+        maxHeight: 200, // set your desired maximum height
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(mkLanguage ? "Кратко био" : "Short bio",
+                  style: lawyersCardHeader),
+              const SizedBox(height: 12),
+              Text("${fUser.description}",
+                  style: lawyersCardTextStyle, overflow: TextOverflow.clip),
+              const SizedBox(height: 15),
+              Text(mkLanguage ? "Искуство" : "Experience",
+                  style: lawyersCardHeader),
+              const SizedBox(height: 15),
+              Text("${fUser.experience}",
+                  style: lawyersCardTextStyle, overflow: TextOverflow.clip),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
