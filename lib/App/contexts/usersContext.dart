@@ -64,11 +64,13 @@ class UsersContext {
   }
 
   static Future<void> saveDeviceToken(String uid) async {
-    final FirebaseMessaging _fcm = FirebaseMessaging.instance;
-
-    CollectionReference users = FirebaseFirestore.instance.collection("users");
-
-    String? fcmToken = await _fcm.getToken();
+    final FirebaseMessaging fcm = FirebaseMessaging.instance;
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    var tokenDoc = await users.doc(uid).collection('tokens').get();
+    if (tokenDoc.docs.isNotEmpty) {
+      return;
+    }
+    String? fcmToken = await fcm.getToken();
 
     if (fcmToken != null) {
       var tokens = users.doc(uid).collection('tokens');

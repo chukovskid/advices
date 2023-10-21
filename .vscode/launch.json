@@ -15,7 +15,7 @@
             "request": "launch",
             "name": "Launch Chrome against localhost",
             "url": "http://localhost:8080",
-            "webRoot": "${workspaceFolder}",
+            "webRoot": "${workspaceFolder}"
         },
         {
             "name": "Flutter (lib\\main.dart)",
@@ -26,10 +26,14 @@
                 "-d",
                 "chrome",
                 "--web-port",
-                // "--web-renderer",
-                // "html",
                 "8000"
-            ],
+            ]
+        },
+        {
+            "name": "Flutter (lib/main.dart)",
+            "type": "dart",
+            "request": "launch",
+            "program": "lib/main.dart"
         }
     ]
 }

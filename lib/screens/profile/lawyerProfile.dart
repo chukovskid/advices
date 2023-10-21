@@ -117,10 +117,13 @@ class _LawyerProfileState extends State<LawyerProfile> {
       setState(() {
         isLoggedUserTheLawyer = true;
       });
-      lawyerProfileURL = (lawyer!.lawyerProfileURL.isNotEmpty)
-          ? lawyer?.lawyerProfileURL
-          : await FirebaseDynamicLinkService.createLawyerProfileDynamicLink(
-              user.uid);
+      if (lawyerProfileURL != null && lawyerProfileURL!.isNotEmpty) {
+        lawyerProfileURL = lawyerProfileURL;
+      } else {
+        lawyerProfileURL =
+            await FirebaseDynamicLinkService.createLawyerProfileDynamicLink(
+                user.uid);
+      }
     }
   }
 
