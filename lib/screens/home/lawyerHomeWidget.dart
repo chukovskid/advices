@@ -353,7 +353,7 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
               //       ),
               //     ),
               //   ),
-              // ),             
+              // ),
               Expanded(
                 child: MouseRegion(
                   onEnter: (PointerEvent details) {
@@ -370,13 +370,10 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
                   },
                   child: InkWell(
                     onHover: (value) => {},
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                Calls())),
+                    onTap: () => Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Calls())),
                     child: Card(
-                      color: advokatGreenColor,
+                      color: primaryBlue,
                       elevation: 5,
                       child: Container(
                         width: double.infinity,
@@ -438,10 +435,11 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                IframeWidget(src: "https://advices.chat/",))),
+                            builder: (context) => IframeWidget(
+                                  src: "https://advices.chat/",
+                                ))),
                     child: Card(
-                      color: advokatGreenColor,
+                      color: primaryBlue,
                       elevation: 5,
                       child: Container(
                         width: double.infinity,
@@ -452,7 +450,9 @@ class _LawyerHomeWidgetState extends State<LawyerHomeWidget>
                               Column(
                                 children: [
                                   Text(
-                                    mkLanguage ? "Комуницирај со документ" : "Meets",
+                                    mkLanguage
+                                        ? "Комуницирај со документ"
+                                        : "Meets",
                                     style: TextStyle(
                                         fontSize: 25,
                                         color:

@@ -24,14 +24,14 @@ final kBoxDecorationStyle = BoxDecoration(
 );
 
 const profileHeader =
-    TextStyle(color: Colors.black, fontSize: 16.0, fontWeight: FontWeight.bold);
+    TextStyle(color: primaryBlue, fontSize: 16.0, fontWeight: FontWeight.bold);
 const helpTextStyle = TextStyle(
   color: Colors.black,
   fontSize: 16.0,
 );
 
 const lawyersCardHeader =
-    TextStyle(color: Colors.black, fontSize: 14.0, fontWeight: FontWeight.bold);
+    TextStyle(color: primaryBlue, fontSize: 14.0, fontWeight: FontWeight.bold);
 const lawyersCardTextStyle = TextStyle(color: Colors.black, fontSize: 12.0);
 
 const lightBlueColor = Color.fromRGBO(107, 119, 141, 1);
@@ -40,23 +40,22 @@ const darkBlueColor = const Color.fromRGBO(23, 34, 59, 1);
 const orangeColor = const Color.fromRGBO(225, 103, 104, 1);
 const darkGreenColor = Color.fromARGB(255, 1, 9, 7);
 // const darkGreenColor = const Color(0xff032229);
-const lightGreenColor = const Color(0xff5bc9bf);
+const lightGreenColor = secondaryYellow;
 const advokatGreenColor = const Color(0xff1c4746);
-const backgroundColorLaws = [
-  advokatGreenColor,
-  Color.fromARGB(255, 254, 254, 254)
-];
-const backgroundColorLawsMobile = [Color(0xff1c4746), darkGreenColor];
+const primaryBlue = const Color(0xff015073);
+const secondaryYellow = const Color(0xffFDC57F);
+const backgroundColorLaws = [primaryBlue, Color.fromARGB(255, 254, 254, 254)];
+const backgroundColorLawsMobile = [primaryBlue, Colors.white];
 
 const backgroundColor = [
-  Colors.black,
-  lightBlueColor,
-  mediumBlueColor,
+  primaryBlue,
+  Colors.white,
+  secondaryYellow,
 ];
 const backgroundColorReverse = [
   Colors.white,
-  lightBlueColor,
-  lightBlueColor,
+  primaryBlue,
+  primaryBlue,
 ];
 
 const backgroundColor2 = [

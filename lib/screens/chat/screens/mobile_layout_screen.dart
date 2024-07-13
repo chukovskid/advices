@@ -86,7 +86,7 @@ class _MobileLayoutScreenState extends State<MobileLayoutScreen> {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: darkGreenColor,
+          backgroundColor: primaryBlue,
           centerTitle: false,
           leading: widget.isDrawer && showChat
               ? IconButton(

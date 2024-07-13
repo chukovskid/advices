@@ -60,7 +60,7 @@ class _ChatAppBarState extends State<ChatAppBar> {
             }
             return Center(
                 child: CircularProgressIndicator(
-              color: darkGreenColor,
+              color: primaryBlue,
             ));
           }),
     );

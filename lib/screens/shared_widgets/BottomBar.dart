@@ -182,7 +182,7 @@ class BottomBar extends StatelessWidget {
 
     return BottomAppBar(
       shape: const CircularNotchedRectangle(),
-      color: darkGreenColor,
+      color: Colors.white,
       child: IconTheme(
         data: IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
         child: Row(
@@ -208,6 +208,7 @@ class BottomBar extends StatelessWidget {
               lawyerWidget: IconButton(
                 iconSize: 32.0,
                 tooltip: 'Нови случаи',
+                color: primaryBlue,
                 icon: const Icon(Icons.notification_important_outlined),
                 onPressed: () {
                   _navigationProvider.privateNav(UrgentEvents());
@@ -216,6 +217,7 @@ class BottomBar extends StatelessWidget {
               nonLawyerWidget: IconButton(
                 iconSize: 32.0,
                 tooltip: 'Состаноци',
+                color: primaryBlue,
                 icon: const Icon(Icons.calendar_month),
                 onPressed: () {
                   _navigationProvider.privateNav(Calls());
@@ -225,6 +227,7 @@ class BottomBar extends StatelessWidget {
             IconButton(
               iconSize: 32.0,
               tooltip: 'Пораки',
+              color: primaryBlue,
               icon: const Icon(Icons.chat),
               onPressed: () {
                 _navigationProvider.privateNav(ResponsiveLayout(
@@ -235,6 +238,7 @@ class BottomBar extends StatelessWidget {
             if (centerLocations.contains(fabLocation)) const Spacer(),
             IconButton(
               tooltip: 'Профил',
+              color: primaryBlue,
               icon: const Icon(Icons.person),
               onPressed: () {
                 Navigator.push(

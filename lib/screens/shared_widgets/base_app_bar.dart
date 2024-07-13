@@ -44,8 +44,9 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
       if (Navigator.canPop(context)) {
         return IconButton(
           icon: Icon(Icons.arrow_back_ios),
+          color: primaryBlue,
           onPressed: () =>
-              {onBackPressed != null ?onBackPressed!() : _navigateBack()},
+              {onBackPressed != null ? onBackPressed!() : _navigateBack()},
         );
       } else {
         return null;
@@ -54,13 +55,13 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       leading: _returnLeading(),
-      backgroundColor: darkGreenColor,
+      backgroundColor: Colors.white,
       // automaticallyImplyLeading : appBar.automaticallyImplyLeading,
       elevation: 10.0,
       actions: <Widget>[
         TextButton.icon(
           style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.white)),
+              foregroundColor: MaterialStateProperty.all<Color>(primaryBlue)),
           // textColor: Colors.white,
           icon: openChat
               ? Icon(Icons.chat)
